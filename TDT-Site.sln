@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDT.Music", "TDT.Site\TDT.Music.csproj", "{49AAC771-F176-4A2C-AAF7-36312EF8B3BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDT.Site", "TDT.Site\TDT.Site.csproj", "{49AAC771-F176-4A2C-AAF7-36312EF8B3BB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDT.Core", "TDT.Core\TDT.Core.csproj", "{707850DC-10A3-43DE-9B8A-3791E147902F}"
 EndProject
