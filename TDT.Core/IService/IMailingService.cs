@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TDT.Core.Models
+namespace TDT.Core.IService
 {
-    internal class TestModel
+    public interface IMailingService<T>
     {
+        public void MailSender(T mailObj);
     }
 }

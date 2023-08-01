@@ -1,6 +1,6 @@
 using System;
 
-namespace zadmin_mvc.Models
+namespace TDT.CAdmin.Models
 {
     public class ErrorViewModel
     {

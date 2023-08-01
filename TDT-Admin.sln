@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDT.CAdmin", "TDT.CAdmin\TDT.CAdmin.csproj", "{ED5ECDAD-4C2F-4C76-8AFC-FC88E56BB5E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TDT.Core", "TDT.Core\TDT.Core.csproj", "{A3F67509-2358-4BAE-9ED6-4E07C450F98E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDT.Core", "TDT.Core\TDT.Core.csproj", "{A3F67509-2358-4BAE-9ED6-4E07C450F98E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

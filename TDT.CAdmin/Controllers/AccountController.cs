@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace zadmin_mvc.Controllers
+namespace TDT.CAdmin.Controllers
 {
     public class AccountController : Controller
     {

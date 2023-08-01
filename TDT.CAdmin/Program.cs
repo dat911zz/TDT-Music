@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace zadmin_mvc
+namespace TDT.CAdmin
 {
     public class Program
     {

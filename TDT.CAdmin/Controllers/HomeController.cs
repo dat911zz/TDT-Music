@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using zadmin_mvc.Models;
+using TDT.CAdmin.Models;
 
-namespace zadmin_mvc.Controllers
+namespace TDT.CAdmin.Controllers
 {
     public class HomeController : Controller
     {
@@ -24,7 +25,7 @@ namespace zadmin_mvc.Controllers
             _logger.LogCritical("Shieetttttt!");
             return View();
         }
-
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
