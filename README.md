@@ -17,7 +17,7 @@
 
 **Tên dự án:** TDT-Devil - Ứng dụng nghe nhạc trực tuyến
 
-**Mô tả dự án:** TDT-Devil là một hệ thống ứng dụng đa nền tảng cho phép người dùng nghe nhạc trực tuyến. Ứng dụng cung cấp thư viện nhạc đa dạng, cho phép tìm kiếm, thêm bài hát vào danh sách yêu thích và tạo playlist cá nhân. Mục tiêu của dự án là cung cấp một trải nghiệm nghe nhạc tốt nhất cho người dùng và phát triển cộng đồng yêu nhạc.
+**Mô tả dự án:** <p align="justify">TDT-Devil là một hệ thống ứng dụng đa nền tảng cho phép người dùng nghe nhạc trực tuyến. Ứng dụng cung cấp thư viện nhạc đa dạng, cho phép tìm kiếm, thêm bài hát vào danh sách yêu thích và tạo playlist cá nhân. Mục tiêu của dự án là cung cấp một trải nghiệm nghe nhạc tốt nhất cho người dùng và phát triển cộng đồng yêu nhạc.</p>
 
 **Công nghệ sử dụng:** Ứng dụng được xây dựng trên nhiều nền tảng khác nhau:
 - Frontend: ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=flat&logo=css3&logoColor=white) ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=flat&logo=html5&logoColor=white) ![Bootstrap](https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=flat&logo=bootstrap&logoColor=white)
