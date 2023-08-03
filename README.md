@@ -1,4 +1,4 @@
-# ĐÁNH GIÁ NHÓM, DỰ ÁN VÀ MỤC TIÊU
+# DỰ ÁN VÀ MỤC TIÊU,  ĐÁNH GIÁ NHÓM, ĐỒ ÁN CHUYÊN NGÀNH
 
 ## Nhóm:
 
