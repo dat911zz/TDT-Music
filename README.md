@@ -34,8 +34,8 @@
 **Mô tả dự án:** TDT-Music là một ứng dụng di động cho phép người dùng nghe nhạc trực tuyến. Ứng dụng cung cấp thư viện nhạc đa dạng, cho phép tìm kiếm, thêm bài hát vào danh sách yêu thích và tạo playlist cá nhân. Mục tiêu của dự án là cung cấp một trải nghiệm nghe nhạc tốt nhất cho người dùng và phát triển cộng đồng yêu nhạc.
 
 **Công nghệ sử dụng:** Ứng dụng được xây dựng trên nền tảng di động sử dụng các công nghệ sau:
-- Frontend: HTML, CSS, JS
-- Backend: SQL Serve, C#, .NET CORE 5 MVC
+- Frontend: ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=flat&logo=css3&logoColor=white) ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=flat&logo=html5&logoColor=white) ![Bootstrap](https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=flat&logo=bootstrap&logoColor=white)
+- Backend: ![MicrosoftSQLServer](https://img.shields.io/badge/Microsoft%20SQL%20Sever-CC2927?style=flat&logo=microsoft%20sql%20server&logoColor=white) ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=flat&logo=c-sharp&logoColor=white) ![.Net](https://img.shields.io/badge/.NET-5C2D91?style=flat&logo=.net&logoColor=white)
 
 **Mục tiêu dự án:** Hoàn thành TDT-Music với các tính năng cơ bản và triển khai ứng dụng trên cửa hàng ứng dụng vào cuối năm nay. Dự án sẽ được phân chia thành các giai đoạn cụ thể và các milestone để đảm bảo tiến độ và chất lượng sản phẩm.
 
