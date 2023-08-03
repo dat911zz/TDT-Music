@@ -66,7 +66,7 @@
 
 ## Mục tiêu:
 
-**Mục tiêu ngắn hạn:** Hoàn thành các tính năng cơ bản của ứng dụng TDT-Music vào cuối quý 4 năm nay và triển khai thử nghiệm với một số người dùng thử.
+**Mục tiêu ngắn hạn:** Hoàn thành các tính năng cơ bản của ứng dụng TDT-Music vào cuối năm nay và triển khai thử nghiệm với một số người dùng thử.
 
 **Mục tiêu dài hạn:** Xây dựng một ứng dụng TDT-Music hoàn chỉnh, tích hợp thêm các tính năng mới và mở rộng áp dụng cho nhiều cộng đồng và địa điểm.
 
