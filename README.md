@@ -10,9 +10,9 @@
 3. Mai Trung Tiến - Thành viên
 
 
-![Châu Văn](https://github.com/dat911zz/TDT-Music/assets/86876887/45a62e48-4cde-45a3-b135-0ae7de4e89b7 | width=100)
-![Vũ Ngô Đạt](https://github.com/dat911zz/TDT-Music/assets/86876887/ea80ea7b-999f-4832-a09c-740793bd4341 | width=100)
-![Mai Trung Tiến](https://github.com/dat911zz/TDT-Music/assets/86876887/73deabd0-19a3-46aa-95f3-beb0c4209f2a | width=100)
+![Châu Văn Thịnh](https://github.com/dat911zz/TDT-Music/assets/86876887/3d89da59-a470-4d41-94c1-741f6cba077f)
+![Vũ Ngô Đạt](https://github.com/dat911zz/TDT-Music/assets/86876887/ecf35226-eccf-403f-bd87-3bb017fc5af2)
+![Mai Trung Tiến](https://github.com/dat911zz/TDT-Music/assets/86876887/752b8b52-0d5b-4be1-b8c2-7cabc026c387)
 
 
 ## Dự án:
