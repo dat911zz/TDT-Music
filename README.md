@@ -5,10 +5,9 @@
 **Tên nhóm:** Super Coders
 
 **Thành viên nhóm:**
-1. Nguyễn Thị Minh - Nhóm trưởng
-2. Trần Văn An - Thành viên
-3. Lê Thị Hà - Thành viên
-4. Hoàng Văn Đức - Thành viên
+1. Châu Văn  - Nhóm trưởng
+2. Vũ Ngô Đạt - Thành viên
+3. Mai Trung Tiến - Thành viên
 
 ## Dự án:
 
