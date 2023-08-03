@@ -10,7 +10,7 @@
 3. Mai Trung Tiến - Thành viên
 
 <div align="center">
-  <img src="https://github.com/dat911zz/TDT-Music/assets/86876887/8bad29b9-e50b-49c1-b478-391fe8bb4418" alt="Châu Văn Thịnh" width="15%"><img width="10%"><img src="https://github.com/dat911zz/TDT-Music/assets/86876887/dcb4c9d2-aaf2-4915-a040-9a63220bd4d7" alt="Vũ Ngô Đạt" width="16%"><img width="10%"><img src="https://github.com/dat911zz/TDT-Music/assets/86876887/df9e7dcb-d542-42ab-a87a-a2466f903516" alt="Mai Trung Tiến" width="14%">
+  <img src="https://github.com/dat911zz/TDT-Music/assets/86876887/8bad29b9-e50b-49c1-b478-391fe8bb4418" alt="Châu Văn Thịnh" width="15%"><img width="100px"><img src="https://github.com/dat911zz/TDT-Music/assets/86876887/dcb4c9d2-aaf2-4915-a040-9a63220bd4d7" alt="Vũ Ngô Đạt" width="16%"><img width="100px"><img src="https://github.com/dat911zz/TDT-Music/assets/86876887/df9e7dcb-d542-42ab-a87a-a2466f903516" alt="Mai Trung Tiến" width="14%">
 </div>
 
 ## Dự án:
