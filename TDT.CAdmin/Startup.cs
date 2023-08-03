@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TDT.CAdmin.Areas.Identity.Data;
+using TDT.CAdmin.Services;
 using TDT.Core.IService;
+using TDT.Core.Models;
 using TDT.Core.ServiceImp;
 
 namespace TDT.CAdmin
@@ -42,8 +45,8 @@ namespace TDT.CAdmin
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
-
-            //services.AddTransient<IMailingService, MailingService>
+            services.AddTransient<IEmailSender, MailingService>();
+            //services.Configure<IdentityEmailService>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

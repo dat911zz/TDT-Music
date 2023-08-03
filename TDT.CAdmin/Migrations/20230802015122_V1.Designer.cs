@@ -10,7 +10,7 @@ using TDT.CAdmin.Areas.Identity.Data;
 namespace TDT.CAdmin.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230801091019_V1")]
+    [Migration("20230802015122_V1")]
     partial class V1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

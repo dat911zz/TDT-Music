@@ -10,6 +10,7 @@ using TDT.CAdmin.Models;
 
 namespace TDT.CAdmin.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -22,10 +23,8 @@ namespace TDT.CAdmin.Controllers
         public IActionResult Index()
         {
             _logger.LogInformation("Start session");
-            _logger.LogCritical("Shieetttttt!");
             return View();
         }
-        [Authorize]
         public IActionResult Privacy()
         {
             return View();
