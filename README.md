@@ -21,7 +21,7 @@
 
 **Công nghệ sử dụng:** Ứng dụng được xây dựng trên nhiều nền tảng khác nhau:
 - Frontend: ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=flat&logo=css3&logoColor=white) ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=flat&logo=html5&logoColor=white) ![Bootstrap](https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=flat&logo=bootstrap&logoColor=white)
-- Backend: ![MicrosoftSQLServer](https://img.shields.io/badge/Microsoft%20SQL%20Sever-CC2927?style=flat&logo=microsoft%20sql%20server&logoColor=white) ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=flat&logo=c-sharp&logoColor=white) ![.Net](https://img.shields.io/badge/.NET-5C2D91?style=flat&logo=.net&logoColor=white)
+- Backend: ![Firebase](https://img.shields.io/badge/Firebase-1A73E8?style=flat&logo=firebase) ![MicrosoftSQLServer](https://img.shields.io/badge/Microsoft%20SQL%20Sever-CC2927?style=flat&logo=microsoft%20sql%20server&logoColor=white) ![.Net](https://img.shields.io/badge/NET%20Core-512bd4?style=flat&logo=csharp)
 
 **Mục tiêu dự án:** Hoàn thành TDT-Devil với các tính năng cơ bản và triển khai ứng dụng trên cửa hàng ứng dụng vào cuối năm nay. Dự án sẽ được phân chia thành các giai đoạn cụ thể và các milestone để đảm bảo tiến độ và chất lượng sản phẩm.
 
