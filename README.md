@@ -8,9 +8,11 @@
 1. Châu Văn  - Nhóm trưởng
 2. Vũ Ngô Đạt - Thành viên
 3. Mai Trung Tiến - Thành viên
-![Châu Văn](https://github.com/dat911zz/TDT-Music/assets/86876887/45a62e48-4cde-45a3-b135-0ae7de4e89b7)
-![Vũ Ngô Đạt](https://github.com/dat911zz/TDT-Music/assets/86876887/ea80ea7b-999f-4832-a09c-740793bd4341)
-![Mai Trung Tiến](https://github.com/dat911zz/TDT-Music/assets/86876887/73deabd0-19a3-46aa-95f3-beb0c4209f2a)
+
+
+![Châu Văn](https://github.com/dat911zz/TDT-Music/assets/86876887/45a62e48-4cde-45a3-b135-0ae7de4e89b7 | width=100)
+![Vũ Ngô Đạt](https://github.com/dat911zz/TDT-Music/assets/86876887/ea80ea7b-999f-4832-a09c-740793bd4341 | width=100)
+![Mai Trung Tiến](https://github.com/dat911zz/TDT-Music/assets/86876887/73deabd0-19a3-46aa-95f3-beb0c4209f2a | width=100)
 
 
 ## Dự án:
