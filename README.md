@@ -54,6 +54,3 @@
 
 **Mục tiêu chất lượng:** Đảm bảo chất lượng sản phẩm bằng việc kiểm thử kỹ lưỡng và lắng nghe ý kiến từ người dùng để cải thiện liên tục.
 
----
-
-Lưu ý: Đây chỉ là một ví dụ và nội dung được sử dụng chỉ mang tính chất minh họa. Bạn có thể thay đổi nội dung và thêm thông tin cụ thể về nhóm, dự án và mục tiêu của bạn. Sau đó, sao chép nội dung trên và lưu thành một file có đuôi .md (ví dụ: project_review.md). Bạn có thể đẩy tệp này lên GitHub hoặc chia
