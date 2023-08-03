@@ -9,7 +9,7 @@
 2. Vũ Ngô Đạt - Thành viên
 3. Mai Trung Tiến - Thành viên
    
-<div style="display: flex; flex-direction: row;">
+<div style="display: flex;">
   <div style="text-align: center; margin-right: 20px;">
     <img src="https://github.com/dat911zz/TDT-Music/assets/86876887/8bad29b9-e50b-49c1-b478-391fe8bb4418" alt="Châu Văn Thịnh" width="100" style="border-radius: 50%;">
     <p>Châu Văn Thịnh</p>
@@ -23,6 +23,8 @@
     <p>Mai Trung Tiến</p>
   </div>
 </div>
+
+
 
 
 ## Dự án:
