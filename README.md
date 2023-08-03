@@ -9,9 +9,21 @@
 2. Vũ Ngô Đạt - Thành viên
 3. Mai Trung Tiến - Thành viên
 
-![Châu Văn Thịnh](https://github.com/dat911zz/TDT-Music/assets/86876887/8bad29b9-e50b-49c1-b478-391fe8bb4418)
-![Mai Trung Tiến](https://github.com/dat911zz/TDT-Music/assets/86876887/37389663-ac6d-4131-b94b-95f7f9754dcc)
-![Vũ Ngô Đạt](https://github.com/dat911zz/TDT-Music/assets/86876887/dcb4c9d2-aaf2-4915-a040-9a63220bd4d7)
+
+<div style="display: flex; flex-direction: row;">
+  <div style="text-align: center; margin-right: 20px;">
+    <img src="https://github.com/dat911zz/TDT-Music/assets/86876887/8bad29b9-e50b-49c1-b478-391fe8bb4418" alt="Châu Văn Thịnh" width="100" style="border-radius: 50%;">
+    <p>Châu Văn Thịnh</p>
+  </div>
+  <div style="text-align: center; margin-right: 20px;">
+    <img src="https://github.com/dat911zz/TDT-Music/assets/86876887/dcb4c9d2-aaf2-4915-a040-9a63220bd4d7" alt="Vũ Ngô Đạt" width="100" style="border-radius: 50%;">
+    <p>Vũ Ngô Đạt</p>
+  </div>
+  <div style="text-align: center;">
+    <img src="https://github.com/dat911zz/TDT-Music/assets/86876887/37389663-ac6d-4131-b94b-95f7f9754dcc" alt="Mai Trung Tiến" width="100" style="border-radius: 50%;">
+    <p>Mai Trung Tiến</p>
+  </div>
+</div>
 
 ## Dự án:
 
