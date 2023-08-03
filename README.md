@@ -34,7 +34,7 @@
 **Mô tả dự án:** TDT-Music là một ứng dụng di động cho phép người dùng nghe nhạc trực tuyến. Ứng dụng cung cấp thư viện nhạc đa dạng, cho phép tìm kiếm, thêm bài hát vào danh sách yêu thích và tạo playlist cá nhân. Mục tiêu của dự án là cung cấp một trải nghiệm nghe nhạc tốt nhất cho người dùng và phát triển cộng đồng yêu nhạc.
 
 **Công nghệ sử dụng:** Ứng dụng được xây dựng trên nền tảng di động sử dụng các công nghệ sau:
-- Frontend: HTML, CSS
+- Frontend: HTML, CSS, JS
 - Backend: SQL Serve, C#, .NET CORE 5 MVC
 
 **Mục tiêu dự án:** Hoàn thành TDT-Music với các tính năng cơ bản và triển khai ứng dụng trên cửa hàng ứng dụng vào cuối năm nay. Dự án sẽ được phân chia thành các giai đoạn cụ thể và các milestone để đảm bảo tiến độ và chất lượng sản phẩm.
