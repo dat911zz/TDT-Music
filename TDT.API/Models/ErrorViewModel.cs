@@ -1,6 +1,6 @@
 using System;
 
-namespace WebApplication1.Models
+namespace TDT.API.Models
 {
     public class ErrorViewModel
     {

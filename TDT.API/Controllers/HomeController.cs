@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApplication1.Models;
+using TDT.API.Models;
 
-namespace WebApplication1.Controllers
+namespace TDT.API.Controllers
 {
     public class HomeController : Controller
     {
