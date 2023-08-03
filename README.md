@@ -9,11 +9,9 @@
 2. Vũ Ngô Đạt - Thành viên
 3. Mai Trung Tiến - Thành viên
 
-
-![Châu Văn Thịnh](https://github.com/dat911zz/TDT-Music/assets/86876887/3d89da59-a470-4d41-94c1-741f6cba077f)
-![Vũ Ngô Đạt](https://github.com/dat911zz/TDT-Music/assets/86876887/ecf35226-eccf-403f-bd87-3bb017fc5af2)
-![Mai Trung Tiến](https://github.com/dat911zz/TDT-Music/assets/86876887/752b8b52-0d5b-4be1-b8c2-7cabc026c387)
-
+![Châu Văn Thịnh](https://github.com/dat911zz/TDT-Music/assets/86876887/8bad29b9-e50b-49c1-b478-391fe8bb4418)
+![Mai Trung Tiến](https://github.com/dat911zz/TDT-Music/assets/86876887/37389663-ac6d-4131-b94b-95f7f9754dcc)
+![Vũ Ngô Đạt](https://github.com/dat911zz/TDT-Music/assets/86876887/dcb4c9d2-aaf2-4915-a040-9a63220bd4d7)
 
 ## Dự án:
 
