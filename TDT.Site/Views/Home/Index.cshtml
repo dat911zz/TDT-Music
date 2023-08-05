@@ -1,4 +1,133 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<link rel="stylesheet" href="~/css/gallery.css" />
+<div class="gallery">
+    <div class="gallery-container" style="height: 209.663px;">
+        <div class="zm-gallery-prev">
+            <button class="zm-btn zm-carousel-control-prev button" tabindex="0" fdprocessedid="7cz72a5"><i class="icon ic-go-left"></i></button>
+        </div>
+        <div class="gallery-item gallery-item-first">
+            <div class="zm-card">
+                <a title="" href="/bai-hat/Dam-Truong-Tuong-Tu-Dee-Tran/Z6DWCOCO.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/64367f8f78305417bd6ce4d25946e44c.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-previous">
+            <div class="zm-card">
+                <a title="" href="/playlist/Today-s-K-Pop-Hits/ZWZCOE6B.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/545d4b731a3c2bcb6a713d8bdecb5205.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-selected">
+            <div class="zm-card">
+                <a title="" href="/bai-hat/Gui-Vo-Chua-Quen-Ho-Quang-Hieu/Z6DO6F7W.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/1b92c0d134eaa7011d810a50ec3522a5.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-next">
+            <div class="zm-card">
+                <a title="" href="/playlist/Trao-Luu-Nhac-Hot/60B8U0OB.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/5801b444f6dd1707dadf34a482fa84f2.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-last">
+            <div class="zm-card">
+                <a title="" href="/bai-hat/Dam-Truong-Tuong-Tu-Dee-Tran/Z6DWCOCO.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image//gallery/64367f8f78305417bd6ce4d25946e44c.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-add">
+            <div class="zm-card">
+                <a title="" href="/playlist/Today-s-K-Pop-Hits/ZWZCOE6B.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/545d4b731a3c2bcb6a713d8bdecb5205.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-add">
+            <div class="zm-card">
+                <a title="" href="/bai-hat/Gui-Vo-Chua-Quen-Ho-Quang-Hieu/Z6DO6F7W.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/1b92c0d134eaa7011d810a50ec3522a5.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-add">
+            <div class="zm-card">
+                <a title="" href="/playlist/Trao-Luu-Nhac-Hot/60B8U0OB.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/5801b444f6dd1707dadf34a482fa84f2.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="zm-gallery-next">
+            <button class="zm-btn zm-carousel-control-next button" tabindex="0" fdprocessedid="4ycqx8"><i class="icon ic-go-right"></i></button>
+        </div>
+    </div>
+</div>
 
+
+<script>
+    $i = 5;
+    setInterval(function () { 
+        var gal = $('.gallery-item');
+        $('.gallery-item-first').removeClass('gallery-item-first').addClass('gallery-item-add');
+        $('.gallery-item-previous').removeClass('gallery-item-previous').addClass('gallery-item-first');
+        $('.gallery-item-selected').removeClass('gallery-item-selected').addClass('gallery-item-previous');
+        $('.gallery-item-next').removeClass('gallery-item-next').addClass('gallery-item-selected');
+        $('.gallery-item-last').removeClass('gallery-item-last').addClass('gallery-item-next');
+        $(gal).eq($i).removeClass('gallery-item-add').addClass('gallery-item-last');
+        $i = $i + 1 >= $(gal).length ? 0 : $i + 1;
+    }, 5000);
+</script>
