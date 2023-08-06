@@ -5,7 +5,7 @@
 <div class="gallery">
     <div class="gallery-container" style="height: 209.663px;">
         <div class="zm-gallery-prev">
-            <button class="zm-btn zm-carousel-control-prev button" tabindex="0" fdprocessedid="7cz72a5"><i class="icon ic-go-left"></i></button>
+            <button class="zm-btn zm-carousel-control-prev button" tabindex="0" fdprocessedid="7cz72a5"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
         </div>
         <div class="gallery-item gallery-item-first">
             <div class="zm-card">
@@ -112,22 +112,52 @@
             </div>
         </div>
         <div class="zm-gallery-next">
-            <button class="zm-btn zm-carousel-control-next button" tabindex="0" fdprocessedid="4ycqx8"><i class="icon ic-go-right"></i></button>
+            <button class="zm-btn zm-carousel-control-next button" tabindex="0" fdprocessedid="4ycqx8"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
         </div>
     </div>
 </div>
 
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    $i = 5;
-    setInterval(function () { 
+    $(document).ready(function() {
+        var change = true;
         var gal = $('.gallery-item');
-        $('.gallery-item-first').removeClass('gallery-item-first').addClass('gallery-item-add');
-        $('.gallery-item-previous').removeClass('gallery-item-previous').addClass('gallery-item-first');
-        $('.gallery-item-selected').removeClass('gallery-item-selected').addClass('gallery-item-previous');
-        $('.gallery-item-next').removeClass('gallery-item-next').addClass('gallery-item-selected');
-        $('.gallery-item-last').removeClass('gallery-item-last').addClass('gallery-item-next');
-        $(gal).eq($i).removeClass('gallery-item-add').addClass('gallery-item-last');
-        $i = $i + 1 >= $(gal).length ? 0 : $i + 1;
-    }, 5000);
+        $i = 5;
+        $i_prev = $(gal).length;
+        function nextGallery() {
+            change = false;
+            $('.gallery-item-first').removeClass('gallery-item-first').addClass('gallery-item-add');
+            $('.gallery-item-previous').removeClass('gallery-item-previous').addClass('gallery-item-first');
+            $('.gallery-item-selected').removeClass('gallery-item-selected').addClass('gallery-item-previous');
+            $('.gallery-item-next').removeClass('gallery-item-next').addClass('gallery-item-selected');
+            $('.gallery-item-last').removeClass('gallery-item-last').addClass('gallery-item-next');
+            $(gal).eq($i).removeClass('gallery-item-add').addClass('gallery-item-last');
+            $i = $i + 1 >= $(gal).length ? 0 : $i + 1;
+            $i_prev = $i_prev + 1 >= $(gal).length ? 0 : $i_prev + 1;
+            change = true;
+        }
+        function prevGallery() {
+            change = false;
+            $('.gallery-item-last').removeClass('gallery-item-last').addClass('gallery-item-add');
+            $('.gallery-item-next').removeClass('gallery-item-next').addClass('gallery-item-last');
+            $('.gallery-item-selected').removeClass('gallery-item-selected').addClass('gallery-item-next');
+            $('.gallery-item-previous').removeClass('gallery-item-previous').addClass('gallery-item-selected');
+            $('.gallery-item-first').removeClass('gallery-item-first').addClass('gallery-item-previous');
+            $(gal).eq($i_prev).removeClass('gallery-item-add').addClass('gallery-item-first');
+            $i = $i - 1 < 0 ? $(gal).length - 1 : $i - 1;
+            $i_prev = $i_prev - 1 < 0 ? $(gal).length - 1 : $i_prev - 1;
+            change = true;
+        }
+        setInterval(function () {
+            if(change) {
+                nextGallery();
+            }
+        }, 10000);
+        $('.zm-carousel-control-prev').on('click', function () {
+            prevGallery();
+        })
+        $('.zm-carousel-control-next').on('click', function () {
+            nextGallery();
+        })
+    });
 </script>

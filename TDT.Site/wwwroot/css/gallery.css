@@ -320,7 +320,10 @@
     position: absolute;
     height: 100%;
     z-index: 10;
-    cursor: pointer
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-top:55px;
 }
 
     .zm-gallery-next .zm-carousel-control-next, .zm-gallery-next .zm-carousel-control-prev, .zm-gallery-prev .zm-carousel-control-next, .zm-gallery-prev .zm-carousel-control-prev {
@@ -353,7 +356,7 @@
 }
 
 .zm-gallery-prev {
-    left: 0
+    left: 25px
 }
 
     .zm-gallery-prev .zm-carousel-control-prev {
@@ -365,7 +368,7 @@
         }
 
 .zm-gallery-next {
-    right: 0
+    right: 25px
 }
 
 @media screen and (max-width: 1024px) {

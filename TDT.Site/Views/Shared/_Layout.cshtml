@@ -327,82 +327,111 @@
             </div>
             <div class="player_mid">
                 <div class="audio-player">
-                    <div id="jquery_jplayer_1" class="jp-jplayer"></div>
-                    <div id="jp_container_1" class="jp-audio" role="application" aria-label="media player">
+                    <div id="jquery_tdtplayer_1" class="tdt-tdtplayer">
+                        <audio id="tdt-audio" src=""></audio>
+                    </div>
+                    <div id="tdt_container_1" class="tdt-audio" role="application" aria-label="media player">
                         <div class="player_left">
                             <div class="ms_play_song">
                                 <div class="play_song_name">
                                     <a href="javascript:void(0);" id="playlist-text">
-                                        <div class="jp-now-playing flex-item">
-                                            <div class="jp-track-name"></div>
-                                            <div class="jp-artist-name"></div>
+                                        <div class="tdt-now-playing flex-item">
+                                            <div class="tdt-track-name"></div>
+                                            <div class="tdt-artist-name"></div>
                                         </div>
                                     </a>
                                 </div>
                             </div>
                             <div class="play_song_options">
                                 <ul>
-                                    <li><a href="#"><span class="song_optn_icon"><i class="ms_icon icon_download"></i></span>Tải xuống</a></li>
-                                    <li><a href="#"><span class="song_optn_icon"><i class="ms_icon icon_fav"></i></span>Add To Favourites</a></li>
-                                    <li><a href="#"><span class="song_optn_icon"><i class="ms_icon icon_playlist"></i></span>Add To Playlist</a></li>
-                                    <li><a href="#"><span class="song_optn_icon"><i class="ms_icon icon_share"></i></span>Share</a></li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="song_optn_icon"><i class="ms_icon icon_download"></i></span>Tải xuống
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="song_optn_icon"><i class="ms_icon icon_fav"></i></span>Add To Favourites
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="song_optn_icon"><i class="ms_icon icon_playlist"></i></span>Add To Playlist
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="song_optn_icon"><i class="ms_icon icon_share"></i></span>Share
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <span class="play-left-arrow"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
                         </div>
                         <!----Right Queue---->
-                        <div class="jp_queue_wrapper">
+                        <div class="tdt_queue_wrapper">
                             <span class="que_text" id="myPlaylistQueue"><i class="fa fa-angle-up" aria-hidden="true"></i> queue</span>
-                            <div id="playlist-wrap" class="jp-playlist">
-                                <div class="jp_queue_cls"><i class="fa fa-times" aria-hidden="true"></i></div>
+                            <div id="playlist-wrap" class="tdt-playlist" style="display: none;">
+                                <div class="tdt_queue_cls"><i class="fa fa-times" aria-hidden="true"></i></div>
                                 <h2>queue</h2>
-                                <div class="jp_queue_list_inner">
-                                    <ul>
-                                        <li>&nbsp;</li>
-                                    </ul>
+                                <div class="tdt_queue_list_inner mCustomScrollbar _mCS_2 mCS-autoHide mCS_no_scrollbar" style="height: 345px; position: relative; overflow: visible;">
+                                    <div id="mCSB_2" class="mCustomScrollBox mCS-minimal mCSB_vertical mCSB_outside" tabindex="0" style="max-height: 345px;">
+                                        <div id="mCSB_2_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style="position: relative; top: 0; left: 0;" dir="ltr">
+                                            <ul>
+                                                <li>&nbsp;</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div id="mCSB_2_scrollbar_vertical" class="mCSB_scrollTools mCSB_2_scrollbar mCS-minimal mCSB_scrollTools_vertical" style="display: none;">
+                                        <div class="mCSB_draggerContainer">
+                                            <div id="mCSB_2_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; top: 0px;">
+                                                <div class="mCSB_dragger_bar" style="line-height: 50px;"></div>
+                                                <div class="mCSB_draggerRail"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="jp_queue_btn">
+                                <div class="tdt_queue_btn">
                                     <a href="javascript:;" class="ms_clear" data-toggle="modal" data-target="#clear_modal">clear</a>
                                     <a href="clear_modal.html" class="ms_save" data-toggle="modal" data-target="#save_modal">save</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="jp-type-playlist">
-                            <div class="jp-gui jp-interface flex-wrap">
-                                <div class="jp-controls flex-item">
-                                    <button class="jp-previous" tabindex="0">
+                        <div class="tdt-type-playlist">
+                            <div class="tdt-gui tdt-interface flex-wrap">
+                                <div class="tdt-controls flex-item">
+                                    <button class="tdt-previous" tabindex="0" fdprocessedid="ecmpfa">
                                         <i class="ms_play_control"></i>
                                     </button>
-                                    <button class="jp-play" tabindex="0">
+                                    <button class="tdt-play" tabindex="0" fdprocessedid="msst8">
                                         <i class="ms_play_control"></i>
                                     </button>
-                                    <button class="jp-next" tabindex="0">
+                                    <button class="tdt-next" tabindex="0" fdprocessedid="0xr3li">
                                         <i class="ms_play_control"></i>
                                     </button>
                                 </div>
-                                <div class="jp-progress-container flex-item">
-                                    <div class="jp-time-holder">
-                                        <span class="jp-current-time" role="timer" aria-label="time">&nbsp;</span>
-                                        <span class="jp-duration" role="timer" aria-label="duration">&nbsp;</span>
+                                <div class="tdt-progress-container flex-item">
+                                    <div class="tdt-time-holder">
+                                        <span class="tdt-current-time" role="timer" aria-label="time">&nbsp;</span>
+                                        <span class="tdt-duration" role="timer" aria-label="duration">&nbsp;</span>
                                     </div>
-                                    <div class="jp-progress">
-                                        <div class="jp-seek-bar">
-                                            <div class="jp-play-bar">
-                                                <div class="bullet">
-                                                </div>
+                                    <div class="tdt-progress">
+                                        <div class="tdt-seek-bar">
+                                            <div class="tdt-play-bar">
+                                                <div class="bullet"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="jp-volume-controls flex-item">
+                                <div class="tdt-volume-controls flex-item">
                                     <div class="widget knob-container">
                                         <div class="knob-wrapper-outer">
                                             <div class="knob-wrapper">
                                                 <div class="knob-mask">
-                                                    <div class="knob d3"><span></span></div>
-                                                    <div class="handle"></div>
+                                                    <div class="knob d3" style="transform: rotateZ(270deg);"><span></span></div>
+                                                    <div class="handle" style="transform: rotateZ(270deg);"></div>
                                                     <div class="round">
-                                                        <img src="~/image/svg/volume.svg" alt="">
+                                                        <img src="/image/svg/volume.svg" alt="" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -410,25 +439,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="jp-toggles flex-item">
-                                    <button class="jp-shuffle" tabindex="0" title="Shuffle">
+                                <div class="tdt-toggles flex-item">
+                                    <button class="tdt-shuffle" tabindex="0" title="Shuffle" fdprocessedid="ftm2ci">
                                         <i class="ms_play_control"></i>
                                     </button>
-                                    <button class="jp-repeat" tabindex="0" title="Repeat"><i class="ms_play_control"></i></button>
-                                </div>
-                                <div class="jp_quality_optn custom_select">
-                                    <select>
-                                        <option>quality</option>
-                                        <option value="1">HD</option>
-                                        <option value="2">High</option>
-                                        <option value="3">medium</option>
-                                        <option value="4">low</option>
-                                    </select>
+                                    <button class="tdt-repeat" tabindex="0" title="Repeat" fdprocessedid="nzyb6"><i class="ms_play_control"></i></button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <!--main div-->
@@ -585,9 +606,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="~/js/plugins/swiper/js/swiper.min.js"></script>
-    <script type="text/javascript" src="~/js/plugins/player/jplayer.playlist.min.js"></script>
-    <script type="text/javascript" src="~/js/plugins/player/jquery.jplayer.min.js"></script>
-    <script type="text/javascript" src="~/js/plugins/player/audio-player.js"></script>
+    <script type="text/javascript" src="~/js/plugins/player/tdt-player.js"></script>
     <script type="text/javascript" src="~/js/plugins/player/volume.js"></script>
     <script type="text/javascript" src="~/js/plugins/nice_select/jquery.nice-select.min.js"></script>
     <script type="text/javascript" src="~/js/plugins/scroll/jquery.mCustomScrollbar.js"></script>
