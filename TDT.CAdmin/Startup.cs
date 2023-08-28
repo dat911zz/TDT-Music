@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +46,13 @@ namespace TDT.CAdmin
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddApiVersioning(cfg =>
+            {
+                cfg.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+                cfg.AssumeDefaultVersionWhenUnspecified = true;
+                cfg.ReportApiVersions = true;
+                cfg.ApiVersionReader = new HeaderApiVersionReader("api-version");
+            });
             services.AddTransient<IEmailSender, MailingService>();
             //services.Configure<IdentityEmailService>(Configuration);
         }
