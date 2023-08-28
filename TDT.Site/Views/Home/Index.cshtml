@@ -1,8 +1,163 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Trang Chủ TDT Music</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<link rel="stylesheet" href="~/css/gallery.css" />
+<div class="gallery">
+    <div class="gallery-container" style="height: 209.663px;">
+        <div class="zm-gallery-prev">
+            <button class="zm-btn zm-carousel-control-prev button" tabindex="0" fdprocessedid="7cz72a5"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+        </div>
+        <div class="gallery-item gallery-item-first">
+            <div class="zm-card">
+                <a title="" href="/bai-hat/Dam-Truong-Tuong-Tu-Dee-Tran/Z6DWCOCO.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/64367f8f78305417bd6ce4d25946e44c.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-previous">
+            <div class="zm-card">
+                <a title="" href="/playlist/Today-s-K-Pop-Hits/ZWZCOE6B.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/545d4b731a3c2bcb6a713d8bdecb5205.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-selected">
+            <div class="zm-card">
+                <a title="" href="/bai-hat/Gui-Vo-Chua-Quen-Ho-Quang-Hieu/Z6DO6F7W.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/1b92c0d134eaa7011d810a50ec3522a5.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-next">
+            <div class="zm-card">
+                <a title="" href="/playlist/Trao-Luu-Nhac-Hot/60B8U0OB.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/5801b444f6dd1707dadf34a482fa84f2.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-last">
+            <div class="zm-card">
+                <a title="" href="/bai-hat/Dam-Truong-Tuong-Tu-Dee-Tran/Z6DWCOCO.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image//gallery/64367f8f78305417bd6ce4d25946e44c.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-add">
+            <div class="zm-card">
+                <a title="" href="/playlist/Today-s-K-Pop-Hits/ZWZCOE6B.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/545d4b731a3c2bcb6a713d8bdecb5205.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-add">
+            <div class="zm-card">
+                <a title="" href="/bai-hat/Gui-Vo-Chua-Quen-Ho-Quang-Hieu/Z6DO6F7W.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/1b92c0d134eaa7011d810a50ec3522a5.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="gallery-item gallery-item-add">
+            <div class="zm-card">
+                <a title="" href="/playlist/Trao-Luu-Nhac-Hot/60B8U0OB.html">
+                    <div class="zm-card-image">
+                        <figure class="image is-48x48"><img src="/image/gallery/5801b444f6dd1707dadf34a482fa84f2.jpg" alt="" /></figure>
+                    </div>
+                    <div class="zm-card-content">
+                        <div class="title"></div>
+                        <h3 class="subtitle"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="zm-gallery-next">
+            <button class="zm-btn zm-carousel-control-next button" tabindex="0" fdprocessedid="4ycqx8"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+        </div>
+    </div>
 </div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var change = true;
+        var gal = $('.gallery-item');
+        $i = 5;
+        $i_prev = $(gal).length;
+        function nextGallery() {
+            change = false;
+            $('.gallery-item-first').removeClass('gallery-item-first').addClass('gallery-item-add');
+            $('.gallery-item-previous').removeClass('gallery-item-previous').addClass('gallery-item-first');
+            $('.gallery-item-selected').removeClass('gallery-item-selected').addClass('gallery-item-previous');
+            $('.gallery-item-next').removeClass('gallery-item-next').addClass('gallery-item-selected');
+            $('.gallery-item-last').removeClass('gallery-item-last').addClass('gallery-item-next');
+            $(gal).eq($i).removeClass('gallery-item-add').addClass('gallery-item-last');
+            $i = $i + 1 >= $(gal).length ? 0 : $i + 1;
+            $i_prev = $i_prev + 1 >= $(gal).length ? 0 : $i_prev + 1;
+            change = true;
+        }
+        function prevGallery() {
+            change = false;
+            $('.gallery-item-last').removeClass('gallery-item-last').addClass('gallery-item-add');
+            $('.gallery-item-next').removeClass('gallery-item-next').addClass('gallery-item-last');
+            $('.gallery-item-selected').removeClass('gallery-item-selected').addClass('gallery-item-next');
+            $('.gallery-item-previous').removeClass('gallery-item-previous').addClass('gallery-item-selected');
+            $('.gallery-item-first').removeClass('gallery-item-first').addClass('gallery-item-previous');
+            $(gal).eq($i_prev).removeClass('gallery-item-add').addClass('gallery-item-first');
+            $i = $i - 1 < 0 ? $(gal).length - 1 : $i - 1;
+            $i_prev = $i_prev - 1 < 0 ? $(gal).length - 1 : $i_prev - 1;
+            change = true;
+        }
+        setInterval(function () {
+            if(change) {
+                nextGallery();
+            }
+        }, 10000);
+        $('.zm-carousel-control-prev').on('click', function () {
+            prevGallery();
+        })
+        $('.zm-carousel-control-next').on('click', function () {
+            nextGallery();
+        })
+    });
+</script>
