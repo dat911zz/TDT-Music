@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 using TDT.Core.DTO;
+using TDT.Core.ServiceImp;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,9 +17,9 @@ namespace TDT.API.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            var item = new SongDTO();
-            item.alias = "hehe-CVT-test";
-            return new JsonResult(item);
+            var list = FirebaseService.Instance.get().Result;
+            list = list.OrderByDescending(x => long.Parse(x.Object.releasedAt)).ToList();
+            return new JsonResult(list);
         }
 
         // GET api/<SongController>/5
