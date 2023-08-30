@@ -1,0 +1,12 @@
+﻿.dot-bg-color {
+    width: 30px;
+    height: 30px;
+    display: block;
+    border-radius: 50%;
+    border: 3px solid #1260e9;
+    margin-right:4px;
+}
+
+.dot-bg-color:hover {
+    cursor:pointer;
+}
