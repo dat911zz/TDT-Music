@@ -7,12 +7,6 @@
     <link rel="stylesheet" href="~/css/base.css" />
     <link rel="stylesheet" href="~/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/vendors/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
-    <link rel="stylesheet" href="~/vendors/jvectormap/jquery-jvectormap.css">
-    <link rel="stylesheet" href="~/vendors/flag-icon-css/css/flag-icon.min.css">
-    <link rel="stylesheet" href="~/vendors/owl-carousel-2/owl.carousel.min.css">
-    <link rel="stylesheet" href="~/vendors/owl-carousel-2/owl.theme.default.min.css">
     <link rel="stylesheet" href="~/css/style.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -34,7 +28,7 @@
                 <li class="nav-item menu-items">
                     <a class="nav-link">
                         <span class="menu-icon">
-                            <i class="mdi mdi-chart-pie"></i>
+                            <i class="fa fa-product-hunt" aria-hidden="true"></i>
                         </span>
                         <span class="menu-title">Products</span>
                     </a>
@@ -42,10 +36,10 @@
                 <li class="nav-item menu-items">
                     <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
                         <span class="menu-icon">
-                            <i class="mdi mdi-security"></i>
+                            <i class="fa fa-shield" aria-hidden="true"></i>
                         </span>
                         <span class="menu-title">User Pages</span>
-                        <i class="menu-arrow"></i>
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
                     </a>
                     <div class="collapse" id="auth">
                         <ul class="nav flex-column sub-menu">
@@ -83,14 +77,9 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav navbar-nav-right">
-                        <li class="nav-item nav-settings d-none d-lg-block">
-                            <a class="nav-link" href="#">
-                                <i class="mdi mdi-view-grid"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown border-left">
+                        <li class="nav-item dropdown">
                             <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-                                <i class="mdi mdi-email"></i>
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
                                 <span class="count bg-success"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
@@ -131,7 +120,7 @@
                         </li>
                         <li class="nav-item dropdown border-left">
                             <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-                                <i class="mdi mdi-bell"></i>
+                                <i class="fa fa-bell" aria-hidden="true"></i>
                                 <span class="count bg-danger"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
@@ -180,13 +169,13 @@
                             <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                                 <div class="navbar-profile">
                                     <p class="mb-0 d-none d-sm-block navbar-profile-name">Hehe</p>
-                                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                                    <i class="fa fa-caret-down d-none d-sm-block" style="font-size:10px;"></i>
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                                 <a href="@Url.Action("Profile", "Admin")" class="dropdown-item preview-item user-item">
                                     <div class="preview-thumbnail">
-                                        <i class="mdi mdi-account text-success"></i>
+                                        <i class="fa fa-user text-success"></i>
                                     </div>
                                     <div class="preview-item-content">
                                         <p class="preview-subject mb-1">My account</p>
@@ -195,7 +184,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a href="@Url.Action("PasswordSwitch", "Admin")" class="dropdown-item preview-item user-item">
                                     <div class="preview-thumbnail">
-                                        <i class="mdi mdi-settings text-success"></i>
+                                        <i class="fa fa-cogs text-success"></i>
                                     </div>
                                     <div class="preview-item-content">
                                         <p class="preview-subject mb-1">Password switch</p>
@@ -204,7 +193,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a href="@Url.Action("Login", "Account")" id="log-out" class="dropdown-item preview-item user-item">
                                     <div class="preview-thumbnail">
-                                        <i class="mdi mdi-logout text-danger"></i>
+                                        <i class="fa fa-sign-out text-danger"></i>
                                     </div>
                                     <div class="preview-item-content">
                                         <p class="preview-subject mb-1">Log out</p>
@@ -219,8 +208,9 @@
                     </button>
                 </div>
             </nav>
-            <div style="margin-top:70px; width:100%;">
+            <div id="main-content" style="margin-top:70px; width:100%;">
                 @RenderBody()
+                hehe
             </div>
         </div>
     </div>
