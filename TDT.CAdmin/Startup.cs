@@ -46,6 +46,7 @@ namespace TDT.CAdmin
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddTransient<IEmailSender, MailingService>();
+            services.AddSignalR();
             //services.Configure<IdentityEmailService>(Configuration);
         }
 
@@ -73,6 +74,7 @@ namespace TDT.CAdmin
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapHub<RealtimeHub>("/TDTRealtime");
                 endpoints.MapControllerRoute(
                     name: "default",
                     //pattern: "{controller=Home}/{action=Index}/{id?}");

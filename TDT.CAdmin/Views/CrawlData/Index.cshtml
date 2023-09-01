@@ -1,1 +1,43 @@
 ﻿
+<link href="~/css/crawl_data.css" rel="stylesheet" />
+<div>
+    <div style="display:flex; justify-content:space-around; margin-top: 20px;">
+
+        <div id="new">
+            <div class="title">Tạo mới</div>
+            <div id="type_playlist" class="btn btn-primary">TypePlaylist</div>
+            <div class="btn btn-primary">Playlist In TypePlaylist</div>
+            <div class="btn btn-primary">Artist In Playlist</div>
+            <div class="btn btn-primary">Song In Playlist</div>
+            <div class="btn btn-primary">Stream In Song</div>
+            <div class="btn btn-primary">Artist In Song</div>
+            <div class="btn btn-primary">Composer In Song</div>
+            <div class="btn btn-primary">Lyric In Song</div>
+            <div class="btn btn-primary">Genre In Song</div>
+            <div class="btn btn-primary">Album In Song</div>
+        </div>
+
+        <div id="update" class="header">
+            <div class="title">Cập nhật</div>
+            <div class="btn btn-warning">Update Stream Status</div>
+        </div>
+
+    </div>
+    <div id="console">
+
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/signalR.js"></script>
+<script>
+    $(document).ready(function() {
+        var c = $('#console');
+        startSignalR_Clone(c);
+        $('#type_playlist').on('click', function () {
+            $.ajax({
+                url: "/CrawlData/GenerateAndSendRealtimeContent"
+            });
+        });
+    });
+</script>

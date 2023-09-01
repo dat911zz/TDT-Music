@@ -9,11 +9,11 @@ using System.Collections.Generic;
 using System;
 using TDT.Core.DTO;
 
-namespace TDT.Core.ServiceImp
+namespace TDT.Core.Helper
 {
     public class FirebaseService
     {
-        private static string PATH_PARENT = System.Environment.CurrentDirectory.ToString();
+        private static string PATH_PARENT = Environment.CurrentDirectory.ToString();
         private static string API_KEY = "AIzaSyDwp_ckD5x1m6WI_rWN9e1y18XKTr7o_j8";
         private static string BUCKET = "cross-platform-music.appspot.com";
         private static string AuthMail = "thinh.chauvan2405@gmail.com";
@@ -39,14 +39,14 @@ namespace TDT.Core.ServiceImp
             firebase = new FirebaseClient(PATH_DB,
                 new FirebaseOptions
                 {
-                    AuthTokenAsyncFactory = () => Task.FromResult(this._TOKEN)
+                    AuthTokenAsyncFactory = () => Task.FromResult(_TOKEN)
                 });
             auth = new FirebaseAuthProvider(new FirebaseConfig(API_KEY));
             login().Wait();
             storage = new FirebaseStorage(BUCKET,
                          new FirebaseStorageOptions
                          {
-                             AuthTokenAsyncFactory = () => Task.FromResult(this._TOKEN),
+                             AuthTokenAsyncFactory = () => Task.FromResult(_TOKEN),
                              ThrowOnCancel = true,
                          });
         }
@@ -100,7 +100,7 @@ namespace TDT.Core.ServiceImp
             }
             catch (FirebaseAuthException ex)
             {
-                
+
             }
         }
 
@@ -111,7 +111,8 @@ namespace TDT.Core.ServiceImp
                 var result = storage.Child(path).GetDownloadUrlAsync();
                 return result.Result;
             }
-            catch {
+            catch
+            {
                 return "";
             }
         }
@@ -125,7 +126,7 @@ namespace TDT.Core.ServiceImp
                     var task = await storage.Child(nameParent).PutAsync(stream);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
