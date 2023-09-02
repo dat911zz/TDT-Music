@@ -2,24 +2,22 @@
     e.scrollTop(e.prop("scrollHeight"));
 }
 
-function appendConsole(c, html) {
-    $(c).append(html);
-    scrollToBottom(c);
+String.isNullOrEmpty = function (value) {
+    return !value || value === undefined || value == "" || value.length == 0;
 }
 
+function getColor(strColor) {
+    var s = new Option().style;
+    s.color = strColor;
+    return String.isNullOrEmpty(s.color) ? "" : s.color;
+}
 
-function startSignalR_Clone(c) {
-    const connect = new signalR.HubConnectionBuilder().withUrl("/TDTRealtime").build();
-    connect.start().then(function () {
-        console.log("SignalR connected");
-        connect.on("ReceiveRealtimeContent", function (htmlContent) {
-            appendConsole(c, htmlContent);
-        });
-    }).catch(function (error) {
-        appendConsole(c, `<div style="color:red; font-weight:bold;">` + error.toString() + `</div>`);
+function ajaxUpdateViewColor(input) {
+    $.ajax({
+        type: "POST",
+        url: "/api/helper/SetViewColor",
+        data: {
+            value:input
+        }
     });
-}
-
-function ChangeContentJS() {
-    DotNet.invokeMethodAsync('InvokeFromJsApp', "ChangeParaContentValue", "New Content");
 }

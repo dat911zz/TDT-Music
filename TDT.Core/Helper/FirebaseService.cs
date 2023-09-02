@@ -116,7 +116,7 @@ namespace TDT.Core.Helper
                 return "";
             }
         }
-        public async Task pushFile(string url, string nameParent)
+        public async Task<string> pushFile(string url, string nameParent)
         {
             try
             {
@@ -124,11 +124,13 @@ namespace TDT.Core.Helper
                 if (stream != null)
                 {
                     var task = await storage.Child(nameParent).PutAsync(stream);
+                    return task;
                 }
+                return "Creat stream error: " + nameParent;
             }
             catch (Exception ex)
             {
-                throw ex;
+                return ex.Message;
             }
         }
 

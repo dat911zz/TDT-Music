@@ -57,8 +57,8 @@
             <div>
                 <span class="nav-link">Background Color</span>
                 <div style="display:flex; align-items:center; justify-content: center;">
-                    <span class="dot-bg-color black" style="background-color:var(--gray-dark);"></span>
-                    <span class="dot-bg-color white" style="background-color:var(--white);"></span>
+                    <span id="temp_black" class="dot-bg-color" style="background-color:var(--gray-dark);"></span>
+                    <span id="temp_white" class="dot-bg-color" style="background-color:var(--white);"></span>
                 </div>
             </div>
         </nav>
@@ -247,35 +247,34 @@
                 "--border-temp": "1px solid #efebeb", "--popup-shadow": "0px 0px 35px -3px #eae4e4"
             };
 
-            if(`@DataHelper.VIEW_COLOR` == `BLACK`) {
+            $('#temp_black').on('click', function () {
                 setTempViewColor_Black();
-            }
-            else {
+            });
+            $('#temp_white').on('click', function () {
                 setTempViewColor_White();
-            }
-
-            $('.dot-bg-color').on('click', function () {
-                if ($(this).hasClass('white')) {
-                    setTempViewColor_White();
-                }
-                else {
-                    setTempViewColor_Black();
-                }
             });
             function setTempViewColor_Black() {
-                @{
-                    DataHelper.VIEW_COLOR = ViewColor.BLACK;
-                }
+                ajaxUpdateViewColor(0);
                 $(":root").css(temp_black);
                 $('.sidebar-brand-wrapper img').attr("src", '../image/logo_TDT_Devil-transparent.png');
             }
             function setTempViewColor_White() {
-                @{
-                    DataHelper.VIEW_COLOR = ViewColor.WHITE;
-                }
+                ajaxUpdateViewColor(1);
                 $(":root").css(temp_white);
                 $('.sidebar-brand-wrapper img').attr("src", '../image/logo_TDT_Devil_red.png');
             }
+            $.ajax({
+                type: "GET",
+                url: "api/helper/GetViewColor",
+                success: function(data) {
+                    if (data == "0") {
+                        $('#temp_black').trigger('click');
+                    }
+                    else {
+                        $('#temp_white').trigger('click');
+                    }
+                }
+            });
         });
     </script>
     <!--End of Tawk.to Script-->

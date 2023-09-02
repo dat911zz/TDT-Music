@@ -8,7 +8,7 @@ namespace TDT.Core.Enum
 {
     public enum ViewColor
     {
-        BLACK,
-        WHITE
+        BLACK = 0,
+        WHITE = 1
     }
 }

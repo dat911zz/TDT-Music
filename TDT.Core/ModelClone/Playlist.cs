@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using TDT.Core.DTO;
 
-namespace TDT.Core.DTO
+namespace TDT.Core.ModelClone
 {
-    public class PlaylistDTO
+    public class Playlist
     {
         private string _encodeId;
         private string _title;
@@ -16,7 +16,7 @@ namespace TDT.Core.DTO
         private string _releasedAt;
         private List<string> _genreIds;
         private bool _PR;
-        private Dictionary<string, string> _artists;
+        private List<Artist> _artists;
         private string _artistsNames;
         private int _playItemMode;
         private int _subType;
@@ -33,7 +33,9 @@ namespace TDT.Core.DTO
         private string _aliasTitle;
         private string _sectionId;
         private int _contentLastUpdate;
-        private Dictionary<string, string> _songs;
+        private Artist _artist;
+        private List<Genre> _genres;
+        private SongIntermediary _song;
         private object _bannerAdaptiveId;
         private int _like;
         private int _listen;
@@ -50,7 +52,7 @@ namespace TDT.Core.DTO
         public string releasedAt { get => _releasedAt; set => _releasedAt = value; }
         public List<string> genreIds { get => _genreIds; set => _genreIds = value; }
         public bool PR { get => _PR; set => _PR = value; }
-        public Dictionary<string, string> artists { get => _artists; set => _artists = value; }
+        public List<Artist> artists { get => _artists; set => _artists = value; }
         public string artistsNames { get => _artistsNames; set => _artistsNames = value; }
         public int playItemMode { get => _playItemMode; set => _playItemMode = value; }
         public int subType { get => _subType; set => _subType = value; }
@@ -67,24 +69,12 @@ namespace TDT.Core.DTO
         public string aliasTitle { get => _aliasTitle; set => _aliasTitle = value; }
         public string sectionId { get => _sectionId; set => _sectionId = value; }
         public int contentLastUpdate { get => _contentLastUpdate; set => _contentLastUpdate = value; }
-        public Dictionary<string, string> songs { get => _songs; set => _songs = value; }
+        public Artist artist { get => _artist; set => _artist = value; }
+        public List<Genre> genres { get => _genres; set => _genres = value; }
+        public SongIntermediary song { get => _song; set => _song = value; }
         public object bannerAdaptiveId { get => _bannerAdaptiveId; set => _bannerAdaptiveId = value; }
         public int like { get => _like; set => _like = value; }
         public int listen { get => _listen; set => _listen = value; }
         public bool liked { get => _liked; set => _liked = value; }
-
-        public bool compare(PlaylistDTO other)
-        {
-            if(this.title != other.title || this.releasedAt != other.releasedAt || this.artistsNames != other.artistsNames ||
-                this.description != other.description || this.sortDescription != other.sortDescription || 
-                this.aliasTitle != other.aliasTitle || this.songs.Count != other.songs.Count)
-                return false;
-            foreach(var song in this.songs)
-            {
-                if(!other.songs.Contains(song))
-                    return false;
-            }
-            return true;
-        }
     }
 }

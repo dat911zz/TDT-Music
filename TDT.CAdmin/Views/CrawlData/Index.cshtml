@@ -19,6 +19,8 @@
 
         <div id="update" class="header">
             <div class="title">Cập nhật</div>
+            <div id="u_type_playlist" class="btn btn-warning">Update TypePlaylist</div>
+            <div id="u_playlist" class="btn btn-warning">Update Playlist</div>
             <div class="btn btn-warning">Update Stream Status</div>
         </div>
 
@@ -30,13 +32,37 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/signalR.js"></script>
+<script src="~/js/setup_view_console.js"></script>
 <script>
     $(document).ready(function() {
         var c = $('#console');
         startSignalR_Clone(c);
         $('#type_playlist').on('click', function () {
+            showStart(c);
             $.ajax({
-                url: "/CrawlData/GenerateAndSendRealtimeContent"
+                url: "/CrawlData/GenerateAndSendRealtimeContent",
+                success: function (data) {
+                    showEnd(c);
+                }
+            });
+        });
+
+        $('#u_type_playlist').on('click', function () {
+            showStart(c);
+            $.ajax({
+                url: "/CrawlData/UpdateTypePlaylist",
+                success: function (data) {
+                    showEnd(c);
+                }
+            });
+        });
+        $('#u_playlist').on('click', function () {
+            showStart(c);
+            $.ajax({
+                url: "/CrawlData/UpdatePlaylist",
+                success: function (data) {
+                    showEnd(c);
+                }
             });
         });
     });

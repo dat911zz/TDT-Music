@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace TDT.Core.DTO
 {
@@ -20,5 +21,18 @@ namespace TDT.Core.DTO
         public string sectionId { get => _sectionId; set => _sectionId = value; }
         public Dictionary<string, string> playlists { get => _playlists; set => _playlists = value; }
         public Genre genre { get => _genre; set => _genre = value; }
+
+        public bool compare(TypePlaylistDTO other)
+        {
+            if (this.sectionType != other.sectionType || this.viewType != other.viewType ||
+                this.sectionId != other.sectionId || this.playlists.Count != other.playlists.Count)
+                return false;
+            foreach (var item in other.playlists)
+            {
+                if (!this.playlists.Keys.Contains(item.Key))
+                    return false;
+            }
+            return genre.compare(other.genre);
+        }
     }
 }
