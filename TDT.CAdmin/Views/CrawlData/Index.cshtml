@@ -21,6 +21,7 @@
             <div class="title">Cập nhật</div>
             <div id="u_type_playlist" class="btn btn-warning">Update TypePlaylist</div>
             <div id="u_playlist" class="btn btn-warning">Update Playlist</div>
+            <div id="u_artist_in_playlist" class="btn btn-warning">Update Artist In Playlist</div>
             <div class="btn btn-warning">Update Stream Status</div>
         </div>
 
@@ -60,6 +61,15 @@
             showStart(c);
             $.ajax({
                 url: "/CrawlData/UpdatePlaylist",
+                success: function (data) {
+                    showEnd(c);
+                }
+            });
+        });
+        $('#u_artist_in_playlist').on('click', function () {
+            showStart(c);
+            $.ajax({
+                url: "/CrawlData/UpdateArtistInPlaylist",
                 success: function (data) {
                     showEnd(c);
                 }

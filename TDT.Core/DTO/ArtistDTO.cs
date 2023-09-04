@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace TDT.Core.DTO
 {
@@ -43,5 +44,20 @@ namespace TDT.Core.DTO
         public Dictionary<string, SectionDTO> sections { get => _sections; set => _sections = value; }
         public string sectionId { get => _sectionId; set => _sectionId = value; }
         public bool hasOA { get => _hasOA; set => _hasOA = value; }
+
+        public bool compare(ArtistDTO other)
+        {
+            if(this.name != other.name || this.alias != other.alias || this.realname != other.realname ||
+                this.sections.Count != other.sections.Count)
+                return false;
+            if (this.sections == null)
+                return other.sections == null || other.sections.Count == 0;
+            foreach(var section in this.sections)
+            {
+                if(other.sections.Select(x => x.Key == section.Key && x.Value.compare(section.Value)).ToList().Count <= 0)
+                    return false;
+            }
+            return true;
+        }
     }
 }

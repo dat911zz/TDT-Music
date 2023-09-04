@@ -48,8 +48,9 @@ namespace TDT.Core.Helper
             }
             return list;
         }
-        public async void pushArtist(Artist artist)
+        public async Task<List<string>> pushArtist(Artist artist)
         {
+            List<string> list = new List<string>();
             if (artist != null)
             {
                 string thumbnail = artist.thumbnail.Split("/").Last();
@@ -57,20 +58,21 @@ namespace TDT.Core.Helper
                 string cover = artist.cover.Split("/").Last();
                 if (String.IsNullOrEmpty(thumbnail) || String.IsNullOrEmpty(thumbnailM) || String.IsNullOrEmpty(cover))
                 {
-                    return;
+                    return list;
                 }
                 string path_thumbnail = "Images/Artist/0/" + thumbnail;
                 string path_thumbnailM = "Images/Artist/1/" + thumbnailM;
                 string path_cover = "Images/Artist/cover/" + cover;
-                await FirebaseService.Instance.pushFile(artist.thumbnail, path_thumbnail);
-                await FirebaseService.Instance.pushFile(artist.thumbnailM, path_thumbnailM);
-                await FirebaseService.Instance.pushFile(artist.cover, path_cover);
+                list.Add(await FirebaseService.Instance.pushFile(artist.thumbnail, path_thumbnail));
+                list.Add(await FirebaseService.Instance.pushFile(artist.thumbnailM, path_thumbnailM));
+                list.Add(await FirebaseService.Instance.pushFile(artist.cover, path_cover));
                 artist.thumbnail = path_thumbnail;
                 artist.thumbnailM = path_thumbnailM;
                 artist.cover = path_cover;
                 var artist_push = ConvertService.Instance.convertToArtistDTO(artist);
                 FirebaseService.Instance.push("Artist/" + artist_push.id, artist_push);
             }
+            return list;
         }
         public async Task<List<string>> pushSong(Song song)
         {
