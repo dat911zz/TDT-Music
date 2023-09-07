@@ -5,7 +5,7 @@
 **Tên nhóm:** TDT Devil
 
 **Thành viên nhóm:**
-1. Châu Văn  - Nhóm trưởng
+1. Châu Văn Thịnh - Nhóm trưởng
 2. Vũ Ngô Đạt - Thành viên
 3. Mai Trung Tiến - Thành viên
 
