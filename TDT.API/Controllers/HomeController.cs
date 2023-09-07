@@ -20,6 +20,7 @@ namespace TDT.API.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Index?");
             return View();
         }
 

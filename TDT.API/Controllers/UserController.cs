@@ -4,11 +4,10 @@ using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace TDT.CAdmin.Controllers
+namespace TDT.API.Controllers
 {
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize]
     public class UserController : ControllerBase
     {
         [HttpGet]

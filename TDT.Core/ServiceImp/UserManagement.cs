@@ -31,7 +31,7 @@ namespace TDT.Core.ServiceImp
 
         public List<User> GetDetails()
         {
-            return 
+            return null;
         }
 
         public User GetDetails(int id)
