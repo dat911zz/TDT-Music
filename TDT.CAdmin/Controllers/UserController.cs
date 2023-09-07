@@ -18,6 +18,8 @@ namespace TDT.CAdmin.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(typeof(string), 400)]
         public string Get(int id)
         {
             return "value";
