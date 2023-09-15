@@ -73,7 +73,7 @@
   </p>
   <p>
     <img height="15px" width="18px" src="https://github.com/dat911zz/TDT-Music/assets/89382643/c9a28fe6-53e5-4909-8846-465f37c766c7" />
-    <span>Quản lí album/playlist cá nhân: Nghiệp vụ này có chức năng cho phép quản lý dữ liệu riêng của từng tài khoản.</span>
+    <span>Quản lý album/playlist cá nhân: Nghiệp vụ này có chức năng cho phép quản lý dữ liệu riêng của từng tài khoản.</span>
   </p>
 
   **3. Áp dụng AI: Cảnh báo tài khoản vi phạm nguyên tắc cộng đồng**
