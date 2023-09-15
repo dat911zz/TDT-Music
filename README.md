@@ -36,7 +36,7 @@
 
 **Đánh giá tổng quan về dự án:** Dự án có tiềm năng phát triển thành công. Tuy còn một số hạn chế, nhưng nhóm đã nhận biết được và sẵn lòng cải thiện để đảm bảo dự án tiến triển đúng hướng.
 
-# MỰC TIÊU
+# MỤC TIÊU
 
 ### Yêu cầu chức năng
  
@@ -66,7 +66,7 @@
     <span>Quản lý tin tức, sự kiện: Nghiệp vụ này có chức năng quản lý tin tức, sự kiện mà hệ thống cập nhật được trên thị trường âm nhạc gửi đến người dùng.</span>
   </p>
   
-  **2. Hệ thống người dùng: Triển khai trên website và desktop (aplication)**
+  **2. Hệ thống người dùng: Triển khai trên website và desktop (application)**
   <p>
     <img height="15px" width="18px" src="https://github.com/dat911zz/TDT-Music/assets/89382643/c9a28fe6-53e5-4909-8846-465f37c766c7" />
     <span>Quản lý thông tin cá nhân: Nghiệp vụ này có chức năng cho phép tự quản lý thông tin của chủ tài khoản.</span>
