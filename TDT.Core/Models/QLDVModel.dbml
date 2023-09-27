@@ -18,6 +18,15 @@
       <Association Name="Role_LNK_GroupRole" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.LNK_RolePermission" Member="LNK_RolePermissions">
+    <Type Name="LNK_RolePermission">
+      <Column Name="RoleId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PermissionId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ClaimDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Permission_LNK_RolePermission" Member="Permission" ThisKey="PermissionId" OtherKey="Id" Type="Permission" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Role_LNK_RolePermission" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.LNK_UserGroup" Member="LNK_UserGroups">
     <Type Name="LNK_UserGroup">
       <Column Name="GroupId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -36,6 +45,15 @@
       <Association Name="User_LNK_UserRole" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.Permissions" Member="Permissions">
+    <Type Name="Permission">
+      <Column Name="Id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Permission_LNK_RolePermission" Member="LNK_RolePermissions" ThisKey="Id" OtherKey="PermissionId" Type="LNK_RolePermission" />
+    </Type>
+  </Table>
   <Table Name="dbo.Roles" Member="Roles">
     <Type Name="Role">
       <Column Name="Id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -43,6 +61,7 @@
       <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="Role_LNK_GroupRole" Member="LNK_GroupRoles" ThisKey="Id" OtherKey="RoleId" Type="LNK_GroupRole" />
+      <Association Name="Role_LNK_RolePermission" Member="LNK_RolePermissions" ThisKey="Id" OtherKey="RoleId" Type="LNK_RolePermission" />
       <Association Name="Role_LNK_UserRole" Member="LNK_UserRoles" ThisKey="Id" OtherKey="RoleId" Type="LNK_UserRole" />
     </Type>
   </Table>

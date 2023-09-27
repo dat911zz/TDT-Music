@@ -36,12 +36,18 @@ namespace TDT.Core.Models
     partial void InsertLNK_GroupRole(LNK_GroupRole instance);
     partial void UpdateLNK_GroupRole(LNK_GroupRole instance);
     partial void DeleteLNK_GroupRole(LNK_GroupRole instance);
+    partial void InsertLNK_RolePermission(LNK_RolePermission instance);
+    partial void UpdateLNK_RolePermission(LNK_RolePermission instance);
+    partial void DeleteLNK_RolePermission(LNK_RolePermission instance);
     partial void InsertLNK_UserGroup(LNK_UserGroup instance);
     partial void UpdateLNK_UserGroup(LNK_UserGroup instance);
     partial void DeleteLNK_UserGroup(LNK_UserGroup instance);
     partial void InsertLNK_UserRole(LNK_UserRole instance);
     partial void UpdateLNK_UserRole(LNK_UserRole instance);
     partial void DeleteLNK_UserRole(LNK_UserRole instance);
+    partial void InsertPermission(Permission instance);
+    partial void UpdatePermission(Permission instance);
+    partial void DeletePermission(Permission instance);
     partial void InsertRole(Role instance);
     partial void UpdateRole(Role instance);
     partial void DeleteRole(Role instance);
@@ -90,6 +96,14 @@ namespace TDT.Core.Models
 			}
 		}
 		
+		public System.Data.Linq.Table<LNK_RolePermission> LNK_RolePermissions
+		{
+			get
+			{
+				return this.GetTable<LNK_RolePermission>();
+			}
+		}
+		
 		public System.Data.Linq.Table<LNK_UserGroup> LNK_UserGroups
 		{
 			get
@@ -103,6 +117,14 @@ namespace TDT.Core.Models
 			get
 			{
 				return this.GetTable<LNK_UserRole>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Permission> Permissions
+		{
+			get
+			{
+				return this.GetTable<Permission>();
 			}
 		}
 		
@@ -473,6 +495,198 @@ namespace TDT.Core.Models
 					if ((value != null))
 					{
 						value.LNK_GroupRoles.Add(this);
+						this._RoleId = value.Id;
+					}
+					else
+					{
+						this._RoleId = default(System.Guid);
+					}
+					this.SendPropertyChanged("Role");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LNK_RolePermission")]
+	public partial class LNK_RolePermission : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _RoleId;
+		
+		private System.Guid _PermissionId;
+		
+		private System.Nullable<System.DateTime> _ClaimDate;
+		
+		private EntityRef<Permission> _Permission;
+		
+		private EntityRef<Role> _Role;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnRoleIdChanging(System.Guid value);
+    partial void OnRoleIdChanged();
+    partial void OnPermissionIdChanging(System.Guid value);
+    partial void OnPermissionIdChanged();
+    partial void OnClaimDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnClaimDateChanged();
+    #endregion
+		
+		public LNK_RolePermission()
+		{
+			this._Permission = default(EntityRef<Permission>);
+			this._Role = default(EntityRef<Role>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid RoleId
+		{
+			get
+			{
+				return this._RoleId;
+			}
+			set
+			{
+				if ((this._RoleId != value))
+				{
+					if (this._Role.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRoleIdChanging(value);
+					this.SendPropertyChanging();
+					this._RoleId = value;
+					this.SendPropertyChanged("RoleId");
+					this.OnRoleIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PermissionId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid PermissionId
+		{
+			get
+			{
+				return this._PermissionId;
+			}
+			set
+			{
+				if ((this._PermissionId != value))
+				{
+					if (this._Permission.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnPermissionIdChanging(value);
+					this.SendPropertyChanging();
+					this._PermissionId = value;
+					this.SendPropertyChanged("PermissionId");
+					this.OnPermissionIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> ClaimDate
+		{
+			get
+			{
+				return this._ClaimDate;
+			}
+			set
+			{
+				if ((this._ClaimDate != value))
+				{
+					this.OnClaimDateChanging(value);
+					this.SendPropertyChanging();
+					this._ClaimDate = value;
+					this.SendPropertyChanged("ClaimDate");
+					this.OnClaimDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Permission_LNK_RolePermission", Storage="_Permission", ThisKey="PermissionId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Permission Permission
+		{
+			get
+			{
+				return this._Permission.Entity;
+			}
+			set
+			{
+				Permission previousValue = this._Permission.Entity;
+				if (((previousValue != value) 
+							|| (this._Permission.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Permission.Entity = null;
+						previousValue.LNK_RolePermissions.Remove(this);
+					}
+					this._Permission.Entity = value;
+					if ((value != null))
+					{
+						value.LNK_RolePermissions.Add(this);
+						this._PermissionId = value.Id;
+					}
+					else
+					{
+						this._PermissionId = default(System.Guid);
+					}
+					this.SendPropertyChanged("Permission");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_LNK_RolePermission", Storage="_Role", ThisKey="RoleId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Role Role
+		{
+			get
+			{
+				return this._Role.Entity;
+			}
+			set
+			{
+				Role previousValue = this._Role.Entity;
+				if (((previousValue != value) 
+							|| (this._Role.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Role.Entity = null;
+						previousValue.LNK_RolePermissions.Remove(this);
+					}
+					this._Role.Entity = value;
+					if ((value != null))
+					{
+						value.LNK_RolePermissions.Add(this);
 						this._RoleId = value.Id;
 					}
 					else
@@ -889,6 +1103,168 @@ namespace TDT.Core.Models
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Permissions")]
+	public partial class Permission : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _Id;
+		
+		private string _Name;
+		
+		private string _Description;
+		
+		private System.Nullable<System.DateTime> _CreateDate;
+		
+		private EntitySet<LNK_RolePermission> _LNK_RolePermissions;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(System.Guid value);
+    partial void OnIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreateDateChanged();
+    #endregion
+		
+		public Permission()
+		{
+			this._LNK_RolePermissions = new EntitySet<LNK_RolePermission>(new Action<LNK_RolePermission>(this.attach_LNK_RolePermissions), new Action<LNK_RolePermission>(this.detach_LNK_RolePermissions));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(100)")]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(150)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CreateDate
+		{
+			get
+			{
+				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Permission_LNK_RolePermission", Storage="_LNK_RolePermissions", ThisKey="Id", OtherKey="PermissionId")]
+		public EntitySet<LNK_RolePermission> LNK_RolePermissions
+		{
+			get
+			{
+				return this._LNK_RolePermissions;
+			}
+			set
+			{
+				this._LNK_RolePermissions.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_LNK_RolePermissions(LNK_RolePermission entity)
+		{
+			this.SendPropertyChanging();
+			entity.Permission = this;
+		}
+		
+		private void detach_LNK_RolePermissions(LNK_RolePermission entity)
+		{
+			this.SendPropertyChanging();
+			entity.Permission = null;
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Roles")]
 	public partial class Role : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -904,6 +1280,8 @@ namespace TDT.Core.Models
 		private System.Nullable<System.DateTime> _CreateDate;
 		
 		private EntitySet<LNK_GroupRole> _LNK_GroupRoles;
+		
+		private EntitySet<LNK_RolePermission> _LNK_RolePermissions;
 		
 		private EntitySet<LNK_UserRole> _LNK_UserRoles;
 		
@@ -924,6 +1302,7 @@ namespace TDT.Core.Models
 		public Role()
 		{
 			this._LNK_GroupRoles = new EntitySet<LNK_GroupRole>(new Action<LNK_GroupRole>(this.attach_LNK_GroupRoles), new Action<LNK_GroupRole>(this.detach_LNK_GroupRoles));
+			this._LNK_RolePermissions = new EntitySet<LNK_RolePermission>(new Action<LNK_RolePermission>(this.attach_LNK_RolePermissions), new Action<LNK_RolePermission>(this.detach_LNK_RolePermissions));
 			this._LNK_UserRoles = new EntitySet<LNK_UserRole>(new Action<LNK_UserRole>(this.attach_LNK_UserRoles), new Action<LNK_UserRole>(this.detach_LNK_UserRoles));
 			OnCreated();
 		}
@@ -1021,6 +1400,19 @@ namespace TDT.Core.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_LNK_RolePermission", Storage="_LNK_RolePermissions", ThisKey="Id", OtherKey="RoleId")]
+		public EntitySet<LNK_RolePermission> LNK_RolePermissions
+		{
+			get
+			{
+				return this._LNK_RolePermissions;
+			}
+			set
+			{
+				this._LNK_RolePermissions.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Role_LNK_UserRole", Storage="_LNK_UserRoles", ThisKey="Id", OtherKey="RoleId")]
 		public EntitySet<LNK_UserRole> LNK_UserRoles
 		{
@@ -1061,6 +1453,18 @@ namespace TDT.Core.Models
 		}
 		
 		private void detach_LNK_GroupRoles(LNK_GroupRole entity)
+		{
+			this.SendPropertyChanging();
+			entity.Role = null;
+		}
+		
+		private void attach_LNK_RolePermissions(LNK_RolePermission entity)
+		{
+			this.SendPropertyChanging();
+			entity.Role = this;
+		}
+		
+		private void detach_LNK_RolePermissions(LNK_RolePermission entity)
 		{
 			this.SendPropertyChanging();
 			entity.Role = null;
