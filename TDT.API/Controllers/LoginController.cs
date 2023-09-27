@@ -54,7 +54,7 @@ namespace TDT.API.Controllers
 
             var token = new JwtSecurityToken(
                 _cfg["Jwt:Issuer"], 
-                _cfg["Jwt:Issuer"], 
+                _cfg["Jwt:Audience"], 
                 null, 
                 expires: DateTime.Now.AddMinutes(120), 
                 signingCredentials: credentials
