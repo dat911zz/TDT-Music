@@ -6,6 +6,8 @@ using System.Text;
 using TDT.Core.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System;
+using Microsoft.Extensions.Logging;
+using Azure.Core;
 
 namespace TDT.API.Controllers
 {
@@ -14,9 +16,11 @@ namespace TDT.API.Controllers
     public class LoginController : Controller
     {
         private IConfiguration _cfg;
-        public LoginController(IConfiguration cfg)
+        private readonly ILogger<HomeController> _logger;
+        public LoginController(IConfiguration cfg, ILogger<HomeController> logger)
         {
             _cfg = cfg;
+            _logger = logger;
         }
         [AllowAnonymous]
         [HttpPost]
@@ -28,6 +32,11 @@ namespace TDT.API.Controllers
             {
                 string token = GenerateJWT(user);
                 response = Ok(new { token = token });
+                _logger.LogInformation("{0} connected", HttpContext.Connection.RemoteIpAddress);
+            }
+            else
+            {
+                _logger.LogInformation("{0} failed to connect", HttpContext.Connection.RemoteIpAddress);
             }
 
             return response;
