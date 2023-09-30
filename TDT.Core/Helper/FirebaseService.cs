@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using TDT.Core.DTO;
+using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 
 namespace TDT.Core.Helper
 {
@@ -28,25 +30,22 @@ namespace TDT.Core.Helper
         public FirebaseClient firebase;
         public FirebaseStorage storage;
 
-        FirebaseAuthProvider auth;
-
-        //private static FirebaseAuthConfig config;
-        //private static FirebaseAuthClient client;
-        string _TOKEN;
+        private static FirebaseAuthProvider authProvider;
+        private static FirebaseAuthLink authLink;
 
         private FirebaseService()
         {
             firebase = new FirebaseClient(PATH_DB,
                 new FirebaseOptions
                 {
-                    AuthTokenAsyncFactory = () => Task.FromResult(_TOKEN)
+                    AuthTokenAsyncFactory = () => Task.FromResult(authLink.FirebaseToken)
                 });
-            auth = new FirebaseAuthProvider(new FirebaseConfig(API_KEY));
+            authProvider = new FirebaseAuthProvider(new FirebaseConfig(API_KEY));
             login().Wait();
             storage = new FirebaseStorage(BUCKET,
                          new FirebaseStorageOptions
                          {
-                             AuthTokenAsyncFactory = () => Task.FromResult(_TOKEN),
+                             AuthTokenAsyncFactory = () => Task.FromResult(authLink.FirebaseToken),
                              ThrowOnCancel = true,
                          });
         }
@@ -57,6 +56,13 @@ namespace TDT.Core.Helper
                 if (_instance == null)
                 {
                     _instance = new FirebaseService();
+                }
+                else
+                {
+                    if(authLink == null || authLink.IsExpired())
+                    {
+                        login().Wait();
+                    }
                 }
                 return _instance;
             }
@@ -89,14 +95,11 @@ namespace TDT.Core.Helper
             return await firebase.Child("Playlist").OrderBy("releasedAt").OnceAsync<PlaylistDTO>();
         }
 
-        private async Task login()
+        private static async Task login()
         {
             try
             {
-                //log in an existing user
-                var fbAuthLink = await auth
-                                .SignInWithEmailAndPasswordAsync(AuthMail, AuthPassword);
-                _TOKEN = fbAuthLink.FirebaseToken;
+                authLink = await authProvider.SignInWithEmailAndPasswordAsync(AuthMail, AuthPassword);
             }
             catch (FirebaseAuthException ex)
             {
@@ -138,7 +141,8 @@ namespace TDT.Core.Helper
         {
             //string str = "Top";
             //return await firebase.Child("Playlist").OrderBy("title").StartAt(str).EndAt(str + "\uf8ff").OnceAsync<PlaylistDTO>();
-            return await firebase.Child("Playlist").OrderBy("contentLastUpdate").OnceAsync<PlaylistDTO>();
+            return await firebase.Child("Playlist").OrderByKey().StartAt("(Single)").EndAt("(Single)" + "~").OnceAsync<PlaylistDTO>();
+            //return await firebase.Child("Playlist").OrderBy("contentLastUpdate").OnceAsync<PlaylistDTO>();
         }
     }
 }

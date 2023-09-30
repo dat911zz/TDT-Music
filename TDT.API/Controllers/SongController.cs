@@ -23,9 +23,10 @@ namespace TDT.API.Controllers
 
         // GET api/<SongController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public JsonResult Get(int id)
         {
-            return "value";
+            var list = FirebaseService.Instance.get1().Result;
+            return new JsonResult(list);
         }
 
         // POST api/<SongController>
