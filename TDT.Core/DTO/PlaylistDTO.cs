@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace TDT.Core.DTO
 {
@@ -71,5 +72,19 @@ namespace TDT.Core.DTO
         public int like { get => _like; set => _like = value; }
         public int listen { get => _listen; set => _listen = value; }
         public bool liked { get => _liked; set => _liked = value; }
+
+        public bool compare(PlaylistDTO other)
+        {
+            if(this.title != other.title || this.releasedAt != other.releasedAt || this.artistsNames != other.artistsNames ||
+                this.description != other.description || this.sortDescription != other.sortDescription || 
+                this.aliasTitle != other.aliasTitle || this.songs.Count != other.songs.Count)
+                return false;
+            foreach(var song in this.songs)
+            {
+                if(!other.songs.Contains(song))
+                    return false;
+            }
+            return true;
+        }
     }
 }

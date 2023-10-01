@@ -1,0 +1,31 @@
+﻿:root {
+    --height-logo: 100px;
+    --bg-temp: #12151e;
+    --icon-temp: #fff;
+    --bg-main-content: #12151e;
+    --color-temp: #6C7293;
+    --color-separate: #2c2e33;
+    --color-icon-nav: #fff;
+    --color-change: #fff;
+    --nav-link-hover: #0f1015;
+    --navbar-shadow: 20px 19px 34px -15px rgba(0, 0, 0, 0.5);
+    --popup-shadow: 0px 0px 35px -3px black;
+    --bg-popup: #191C24;
+    --bg-hover: #0F1015;
+    --border-temp: 1px px solid #2c2e33;
+}
+
+
+
+.dot-bg-color {
+    width: 30px;
+    height: 30px;
+    display: block;
+    border-radius: 50%;
+    border: 3px solid #1260e9;
+    margin-right:4px;
+}
+
+.dot-bg-color:hover {
+    cursor:pointer;
+}

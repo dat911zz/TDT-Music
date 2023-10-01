@@ -1,47 +1,223 @@
-﻿<!DOCTYPE html>
+﻿@using TDT.Core.Helper
+@using TDT.Core.Enum
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TDT Admin</title>
+    <link rel="stylesheet" href="~/css/base.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TDT Admin</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
+    <div class="container-scroller">
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+                <img src="~/image/logo_TDT_Devil-transparent.png" style="height:100%; object-fit:contain;" />
+            </div>
+            <ul class="nav mt-4">
+                <li class="nav-item menu-items">
+                    <a class="nav-link">
+                        <span class="menu-icon">
+                            <i class="fa fa-tachometer" aria-hidden="true"></i>
+                        </span>
+                        <span class="menu-title">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link">
+                        <span class="menu-icon">
+                            <i class="fa fa-product-hunt" aria-hidden="true"></i>
+                        </span>
+                        <span class="menu-title">Products</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
+                        <span class="menu-icon">
+                            <i class="fa fa-shield" aria-hidden="true"></i>
+                        </span>
+                        <span class="menu-title">User Pages</span>
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </a>
+                    <div class="collapse" id="auth">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            <div>
+                <span class="nav-link">Background Color</span>
+                <div style="display:flex; align-items:center; justify-content: center;">
+                    <span id="temp_black" class="dot-bg-color" style="background-color:var(--gray-dark);"></span>
+                    <span id="temp_white" class="dot-bg-color" style="background-color:var(--white);"></span>
                 </div>
             </div>
         </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - zadmin_mvc - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container-fluid page-body-wrapper">
+            <nav class="navbar p-0 fixed-top d-flex flex-row">
+                <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+                    <img src="~/image/logo_TDT_Devil-transparent.png" style="height:100%; object-fit:contain;" />
+                </div>
+                <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+                    <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                        <span class="mdi mdi-menu"></span>
+                    </button>
+                    <ul class="navbar-nav w-100">
+                        <li class="nav-item w-100">
+                            <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                                <input type="text" class="form-control" placeholder="Search products">
+                            </form>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav navbar-nav-right">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                                <span class="count bg-success"></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+                                <h6 class="p-3 mb-0">Messages</h6>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <img src="~/lib/img/Profile/user.png" alt="image" class="rounded-circle profile-pic">
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
+                                        <p class="text-muted mb-0"> 1 Minutes ago </p>
+                                    </div>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <img src="~/lib/img/Profile/user.png" alt="image" class="rounded-circle profile-pic">
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>
+                                        <p class="text-muted mb-0"> 15 Minutes ago </p>
+                                    </div>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <img src="~/lib/img/Profile/user.png" alt="image" class="rounded-circle profile-pic">
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
+                                        <p class="text-muted mb-0"> 18 Minutes ago </p>
+                                    </div>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <p class="p-3 mb-0 text-center">4 new messages</p>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown border-left">
+                            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                <span class="count bg-danger"></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                                <h6 class="p-3 mb-0">Notifications</h6>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-dark rounded-circle">
+                                            <i class="mdi mdi-calendar text-success"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <p class="preview-subject mb-1">Event today</p>
+                                        <p class="text-muted ellipsis mb-0"> Just a reminder that you have an event today </p>
+                                    </div>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-dark rounded-circle">
+                                            <i class="mdi mdi-settings text-danger"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <p class="preview-subject mb-1">Settings</p>
+                                        <p class="text-muted ellipsis mb-0"> Update dashboard </p>
+                                    </div>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-dark rounded-circle">
+                                            <i class="mdi mdi-link-variant text-warning"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <p class="preview-subject mb-1">Launch Admin</p>
+                                        <p class="text-muted ellipsis mb-0"> New admin wow! </p>
+                                    </div>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <p class="p-3 mb-0 text-center">See all notifications</p>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                                <div class="navbar-profile">
+                                    <p class="mb-0 d-none d-sm-block navbar-profile-name">Hehe</p>
+                                    <i class="fa fa-caret-down d-none d-sm-block" style="font-size:10px;"></i>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                                <a href="@Url.Action("Profile", "Admin")" class="dropdown-item preview-item user-item">
+                                    <div class="preview-thumbnail">
+                                        <i class="fa fa-user text-success"></i>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <p class="preview-subject mb-1">My account</p>
+                                    </div>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="@Url.Action("PasswordSwitch", "Admin")" class="dropdown-item preview-item user-item">
+                                    <div class="preview-thumbnail">
+                                        <i class="fa fa-cogs text-success"></i>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <p class="preview-subject mb-1">Password switch</p>
+                                    </div>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="@Url.Action("Login", "Account")" id="log-out" class="dropdown-item preview-item user-item">
+                                    <div class="preview-thumbnail">
+                                        <i class="fa fa-sign-out text-danger"></i>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <p class="preview-subject mb-1">Log out</p>
+                                    </div>
+                                </a>
+                                <p class="p-3 mb-0 text-center">Advanced settings</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+                        <span class="mdi mdi-format-line-spacing"></span>
+                    </button>
+                </div>
+            </nav>
+            <div id="main-content" style="margin-top:70px; width:100%;">
+                @RenderBody()
+            </div>
         </div>
-    </footer>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/settings.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <!--Start of Tawk.to Script-->
@@ -56,7 +232,53 @@
             s0.parentNode.insertBefore(s1, s0);
         })();
     </script>
+    <script>
+        $(document).ready(function () {
+            var temp_black = {
+                "--bg-temp": "#12151e", "--bg-main-content": "#12151e", "--nav-link-hover": "#0f1015",
+                "--navbar-shadow": "20px 19px 34px -15px rgba(0, 0, 0, 0.5)", "--color-separate": "#2c2e33",
+                "--color-icon-nav": "#fff", "--color-change": "#fff", "--bg-popup": "#191C24", "--bg-hover": "#0F1015",
+                "--border-temp": "1px px solid #2c2e33", "--popup-shadow": "0px 0px 35px -3px black"
+            };
+            var temp_white = {
+                "--bg-temp": "white", "--bg-main-content": "#F0F2F5", "--nav-link-hover": "#0f1015",
+                "--navbar-shadow": "4px 0 0px 2px rgba(0 0 0 / 0.03)", "--color-separate": "#eaecf0",
+                "--color-icon-nav": "#767676", "--color-change": "#000", "--bg-popup": "#fff", "--bg-hover": "#e5e7eb",
+                "--border-temp": "1px solid #efebeb", "--popup-shadow": "0px 0px 35px -3px #eae4e4"
+            };
+
+            $('#temp_black').on('click', function () {
+                setTempViewColor_Black();
+            });
+            $('#temp_white').on('click', function () {
+                setTempViewColor_White();
+            });
+            function setTempViewColor_Black() {
+                ajaxUpdateViewColor(0);
+                $(":root").css(temp_black);
+                $('.sidebar-brand-wrapper img').attr("src", '../image/logo_TDT_Devil-transparent.png');
+            }
+            function setTempViewColor_White() {
+                ajaxUpdateViewColor(1);
+                $(":root").css(temp_white);
+                $('.sidebar-brand-wrapper img').attr("src", '../image/logo_TDT_Devil_red.png');
+            }
+            $.ajax({
+                type: "GET",
+                url: "api/helper/GetViewColor",
+                success: function(data) {
+                    if (data == "0") {
+                        $('#temp_black').trigger('click');
+                    }
+                    else {
+                        $('#temp_white').trigger('click');
+                    }
+                }
+            });
+        });
+    </script>
     <!--End of Tawk.to Script-->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

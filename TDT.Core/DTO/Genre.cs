@@ -15,5 +15,10 @@ namespace TDT.Core.DTO
         public string title { get => _title; set => _title = value; }
         public string alias { get => _alias; set => _alias = value; }
         public string link { get => _link; set => _link = value; }
+
+        public bool compare(Genre other)
+        {
+            return this.name == other.name && this.title == other.title && this.alias == other.alias;
+        }
     }
 }

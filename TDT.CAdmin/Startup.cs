@@ -7,9 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TDT.CAdmin.Areas.Identity.Data;
-using TDT.CAdmin.Services;
-using TDT.Core.IService;
-using TDT.Core.Models;
+using TDT.CAdmin.Models;
 using TDT.Core.ServiceImp;
 
 namespace TDT.CAdmin
@@ -46,6 +44,7 @@ namespace TDT.CAdmin
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddTransient<IEmailSender, MailingService>();
+            services.AddSignalR();
             //services.Configure<IdentityEmailService>(Configuration);
         }
 
@@ -73,6 +72,7 @@ namespace TDT.CAdmin
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapHub<RealtimeHub>("/TDTRealtimeCrawlData");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

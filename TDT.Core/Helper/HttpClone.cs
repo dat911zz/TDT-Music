@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace TDT.Core.ServiceImp
+namespace TDT.Core.Helper
 {
     public class HttpClone
     {
@@ -16,7 +16,7 @@ namespace TDT.Core.ServiceImp
         {
             get
             {
-                if( _intance == null )
+                if (_intance == null)
                 {
                     _intance = new HttpClone();
                 }

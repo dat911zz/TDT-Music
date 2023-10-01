@@ -2,8 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using TDT.Core.DTO;
-using TDT.Core.ServiceImp;
+using TDT.Core.Helper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,15 +23,17 @@ namespace TDT.API.Controllers
 
         // GET api/<SongController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public JsonResult Get(int id)
         {
-            return "value";
+            var list = FirebaseService.Instance.get1().Result;
+            return new JsonResult(list);
         }
 
         // POST api/<SongController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromHeader] string value)
         {
+            int a = 0;
         }
 
         // PUT api/<SongController>/5
