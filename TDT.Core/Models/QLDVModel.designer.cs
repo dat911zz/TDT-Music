@@ -151,13 +151,13 @@ namespace TDT.Core.Models
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private System.Guid _Id;
+		private int _Id;
 		
 		private string _Name;
 		
 		private string _Description;
 		
-		private System.Nullable<System.DateTime> _CreateDate;
+		private System.Nullable<System.DateTime> _CreateDate = default(System.Nullable<System.DateTime>);
 		
 		private EntitySet<LNK_GroupRole> _LNK_GroupRoles;
 		
@@ -167,14 +167,12 @@ namespace TDT.Core.Models
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnIdChanging(System.Guid value);
+    partial void OnIdChanging(int value);
     partial void OnIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
-    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnCreateDateChanged();
     #endregion
 		
 		public Group()
@@ -184,8 +182,8 @@ namespace TDT.Core.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
 		{
 			get
 			{
@@ -244,23 +242,12 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> CreateDate
 		{
 			get
 			{
 				return this._CreateDate;
-			}
-			set
-			{
-				if ((this._CreateDate != value))
-				{
-					this.OnCreateDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreateDate = value;
-					this.SendPropertyChanged("CreateDate");
-					this.OnCreateDateChanged();
-				}
 			}
 		}
 		
@@ -341,11 +328,11 @@ namespace TDT.Core.Models
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private System.Guid _GroupId;
+		private int _GroupId;
 		
-		private System.Guid _RoleId;
+		private int _RoleId;
 		
-		private System.Nullable<System.DateTime> _ClaimDate;
+		private System.Nullable<System.DateTime> _ClaimDate = default(System.Nullable<System.DateTime>);
 		
 		private EntityRef<Group> _Group;
 		
@@ -355,12 +342,10 @@ namespace TDT.Core.Models
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnGroupIdChanging(System.Guid value);
+    partial void OnGroupIdChanging(int value);
     partial void OnGroupIdChanged();
-    partial void OnRoleIdChanging(System.Guid value);
+    partial void OnRoleIdChanging(int value);
     partial void OnRoleIdChanged();
-    partial void OnClaimDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnClaimDateChanged();
     #endregion
 		
 		public LNK_GroupRole()
@@ -370,8 +355,8 @@ namespace TDT.Core.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid GroupId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int GroupId
 		{
 			get
 			{
@@ -394,8 +379,8 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid RoleId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int RoleId
 		{
 			get
 			{
@@ -418,23 +403,12 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> ClaimDate
 		{
 			get
 			{
 				return this._ClaimDate;
-			}
-			set
-			{
-				if ((this._ClaimDate != value))
-				{
-					this.OnClaimDateChanging(value);
-					this.SendPropertyChanging();
-					this._ClaimDate = value;
-					this.SendPropertyChanged("ClaimDate");
-					this.OnClaimDateChanged();
-				}
 			}
 		}
 		
@@ -465,7 +439,7 @@ namespace TDT.Core.Models
 					}
 					else
 					{
-						this._GroupId = default(System.Guid);
+						this._GroupId = default(int);
 					}
 					this.SendPropertyChanged("Group");
 				}
@@ -499,7 +473,7 @@ namespace TDT.Core.Models
 					}
 					else
 					{
-						this._RoleId = default(System.Guid);
+						this._RoleId = default(int);
 					}
 					this.SendPropertyChanged("Role");
 				}
@@ -533,11 +507,11 @@ namespace TDT.Core.Models
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private System.Guid _RoleId;
+		private int _RoleId;
 		
-		private System.Guid _PermissionId;
+		private int _PermissionId;
 		
-		private System.Nullable<System.DateTime> _ClaimDate;
+		private System.Nullable<System.DateTime> _ClaimDate = default(System.Nullable<System.DateTime>);
 		
 		private EntityRef<Permission> _Permission;
 		
@@ -547,12 +521,10 @@ namespace TDT.Core.Models
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnRoleIdChanging(System.Guid value);
+    partial void OnRoleIdChanging(int value);
     partial void OnRoleIdChanged();
-    partial void OnPermissionIdChanging(System.Guid value);
+    partial void OnPermissionIdChanging(int value);
     partial void OnPermissionIdChanged();
-    partial void OnClaimDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnClaimDateChanged();
     #endregion
 		
 		public LNK_RolePermission()
@@ -562,8 +534,8 @@ namespace TDT.Core.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid RoleId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int RoleId
 		{
 			get
 			{
@@ -586,8 +558,8 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PermissionId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid PermissionId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PermissionId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int PermissionId
 		{
 			get
 			{
@@ -610,23 +582,12 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> ClaimDate
 		{
 			get
 			{
 				return this._ClaimDate;
-			}
-			set
-			{
-				if ((this._ClaimDate != value))
-				{
-					this.OnClaimDateChanging(value);
-					this.SendPropertyChanging();
-					this._ClaimDate = value;
-					this.SendPropertyChanged("ClaimDate");
-					this.OnClaimDateChanged();
-				}
 			}
 		}
 		
@@ -657,7 +618,7 @@ namespace TDT.Core.Models
 					}
 					else
 					{
-						this._PermissionId = default(System.Guid);
+						this._PermissionId = default(int);
 					}
 					this.SendPropertyChanged("Permission");
 				}
@@ -691,7 +652,7 @@ namespace TDT.Core.Models
 					}
 					else
 					{
-						this._RoleId = default(System.Guid);
+						this._RoleId = default(int);
 					}
 					this.SendPropertyChanged("Role");
 				}
@@ -725,11 +686,11 @@ namespace TDT.Core.Models
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private System.Guid _GroupId;
+		private int _GroupId;
 		
 		private System.Guid _UserId;
 		
-		private System.Nullable<System.DateTime> _ClaimDate;
+		private System.Nullable<System.DateTime> _ClaimDate = default(System.Nullable<System.DateTime>);
 		
 		private EntityRef<Group> _Group;
 		
@@ -739,12 +700,10 @@ namespace TDT.Core.Models
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnGroupIdChanging(System.Guid value);
+    partial void OnGroupIdChanging(int value);
     partial void OnGroupIdChanged();
     partial void OnUserIdChanging(System.Guid value);
     partial void OnUserIdChanged();
-    partial void OnClaimDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnClaimDateChanged();
     #endregion
 		
 		public LNK_UserGroup()
@@ -754,8 +713,8 @@ namespace TDT.Core.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid GroupId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int GroupId
 		{
 			get
 			{
@@ -802,23 +761,12 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> ClaimDate
 		{
 			get
 			{
 				return this._ClaimDate;
-			}
-			set
-			{
-				if ((this._ClaimDate != value))
-				{
-					this.OnClaimDateChanging(value);
-					this.SendPropertyChanging();
-					this._ClaimDate = value;
-					this.SendPropertyChanged("ClaimDate");
-					this.OnClaimDateChanged();
-				}
 			}
 		}
 		
@@ -849,7 +797,7 @@ namespace TDT.Core.Models
 					}
 					else
 					{
-						this._GroupId = default(System.Guid);
+						this._GroupId = default(int);
 					}
 					this.SendPropertyChanged("Group");
 				}
@@ -919,9 +867,9 @@ namespace TDT.Core.Models
 		
 		private System.Guid _UserId;
 		
-		private System.Guid _RoleId;
+		private int _RoleId;
 		
-		private System.Nullable<System.DateTime> _ClaimDate;
+		private System.Nullable<System.DateTime> _ClaimDate = default(System.Nullable<System.DateTime>);
 		
 		private EntityRef<Role> _Role;
 		
@@ -933,10 +881,8 @@ namespace TDT.Core.Models
     partial void OnCreated();
     partial void OnUserIdChanging(System.Guid value);
     partial void OnUserIdChanged();
-    partial void OnRoleIdChanging(System.Guid value);
+    partial void OnRoleIdChanging(int value);
     partial void OnRoleIdChanged();
-    partial void OnClaimDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnClaimDateChanged();
     #endregion
 		
 		public LNK_UserRole()
@@ -970,8 +916,8 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid RoleId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int RoleId
 		{
 			get
 			{
@@ -994,23 +940,12 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> ClaimDate
 		{
 			get
 			{
 				return this._ClaimDate;
-			}
-			set
-			{
-				if ((this._ClaimDate != value))
-				{
-					this.OnClaimDateChanging(value);
-					this.SendPropertyChanging();
-					this._ClaimDate = value;
-					this.SendPropertyChanged("ClaimDate");
-					this.OnClaimDateChanged();
-				}
 			}
 		}
 		
@@ -1041,7 +976,7 @@ namespace TDT.Core.Models
 					}
 					else
 					{
-						this._RoleId = default(System.Guid);
+						this._RoleId = default(int);
 					}
 					this.SendPropertyChanged("Role");
 				}
@@ -1109,13 +1044,13 @@ namespace TDT.Core.Models
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private System.Guid _Id;
+		private int _Id;
 		
 		private string _Name;
 		
 		private string _Description;
 		
-		private System.Nullable<System.DateTime> _CreateDate;
+		private System.Nullable<System.DateTime> _CreateDate = default(System.Nullable<System.DateTime>);
 		
 		private EntitySet<LNK_RolePermission> _LNK_RolePermissions;
 		
@@ -1123,14 +1058,12 @@ namespace TDT.Core.Models
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnIdChanging(System.Guid value);
+    partial void OnIdChanging(int value);
     partial void OnIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
-    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnCreateDateChanged();
     #endregion
 		
 		public Permission()
@@ -1139,8 +1072,8 @@ namespace TDT.Core.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
 		{
 			get
 			{
@@ -1199,23 +1132,12 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> CreateDate
 		{
 			get
 			{
 				return this._CreateDate;
-			}
-			set
-			{
-				if ((this._CreateDate != value))
-				{
-					this.OnCreateDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreateDate = value;
-					this.SendPropertyChanged("CreateDate");
-					this.OnCreateDateChanged();
-				}
 			}
 		}
 		
@@ -1271,13 +1193,13 @@ namespace TDT.Core.Models
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private System.Guid _Id;
+		private int _Id;
 		
 		private string _Name;
 		
 		private string _Description;
 		
-		private System.Nullable<System.DateTime> _CreateDate;
+		private System.Nullable<System.DateTime> _CreateDate = default(System.Nullable<System.DateTime>);
 		
 		private EntitySet<LNK_GroupRole> _LNK_GroupRoles;
 		
@@ -1289,14 +1211,12 @@ namespace TDT.Core.Models
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnIdChanging(System.Guid value);
+    partial void OnIdChanging(int value);
     partial void OnIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
-    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnCreateDateChanged();
     #endregion
 		
 		public Role()
@@ -1307,8 +1227,8 @@ namespace TDT.Core.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
 		{
 			get
 			{
@@ -1367,23 +1287,12 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> CreateDate
 		{
 			get
 			{
 				return this._CreateDate;
-			}
-			set
-			{
-				if ((this._CreateDate != value))
-				{
-					this.OnCreateDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreateDate = value;
-					this.SendPropertyChanged("CreateDate");
-					this.OnCreateDateChanged();
-				}
 			}
 		}
 		
@@ -1511,7 +1420,7 @@ namespace TDT.Core.Models
 		
 		private int _AccessFailedCount;
 		
-		private System.Nullable<System.DateTime> _CreateDate;
+		private System.Nullable<System.DateTime> _CreateDate = default(System.Nullable<System.DateTime>);
 		
 		private EntitySet<LNK_UserGroup> _LNK_UserGroups;
 		
@@ -1543,8 +1452,6 @@ namespace TDT.Core.Models
     partial void OnLockoutEnabledChanged();
     partial void OnAccessFailedCountChanging(int value);
     partial void OnAccessFailedCountChanged();
-    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnCreateDateChanged();
     #endregion
 		
 		public User()
@@ -1554,7 +1461,7 @@ namespace TDT.Core.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public System.Guid Id
 		{
 			get
@@ -1774,23 +1681,12 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<System.DateTime> CreateDate
 		{
 			get
 			{
 				return this._CreateDate;
-			}
-			set
-			{
-				if ((this._CreateDate != value))
-				{
-					this.OnCreateDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreateDate = value;
-					this.SendPropertyChanged("CreateDate");
-					this.OnCreateDateChanged();
-				}
 			}
 		}
 		

@@ -22,6 +22,8 @@ namespace TDT.Core.Enums
         [Description("Mật khẩu không đúng định dạng")]
         InvalidPassword,
         [Description("Tên đăng nhập đã tồn tại")]
-        ExistingAccount
+        ExistingAccount,
+        [Description("Đăng ký thành công!")]
+        Ok,
     }
 }

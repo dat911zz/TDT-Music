@@ -8,6 +8,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System;
 using Microsoft.Extensions.Logging;
 using Azure.Core;
+using TDT.API.Containers;
+using System.Linq;
 
 namespace TDT.API.Controllers
 {
@@ -24,7 +26,7 @@ namespace TDT.API.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromBody]Login login)
+        public IActionResult Login([FromBody]LoginModel login)
         {
             IActionResult response = Unauthorized();
             User user = Authenticate(login);
@@ -41,10 +43,20 @@ namespace TDT.API.Controllers
 
             return response;
         }
-        private User Authenticate(Login login)
+        private User Authenticate(LoginModel login)
         {
             User user = null;
             //Find user
+            user = Ultils.Instance.Db.Users.First(u => 
+            u.UserName.Equals(login.UserName)
+            );
+            if (user != null)
+            {
+                if (!IdentityCore.Utils.PasswordGenerator.VerifyHashedPassword(user.PasswordHash, login.Password))
+                {
+                    user = null;
+                }
+            }
             return user;
         }
         private string GenerateJWT(User userInfo)
@@ -53,10 +65,10 @@ namespace TDT.API.Controllers
             var credentials = new SigningCredentials(sercurityKey, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                _cfg["Jwt:Issuer"], 
-                _cfg["Jwt:Audience"], 
-                null, 
-                expires: DateTime.Now.AddMinutes(120), 
+                _cfg["Jwt:Issuer"],
+                _cfg["Jwt:Audience"],
+                null,
+                expires: DateTime.Now.AddMinutes(120),
                 signingCredentials: credentials
                 );
             return new JwtSecurityTokenHandler().WriteToken(token);

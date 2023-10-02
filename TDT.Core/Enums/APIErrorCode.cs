@@ -26,6 +26,6 @@ namespace TDT.Core.Enums
         [Description("Thao tác xóa không hợp lệ")]
         InvalidDelete,
         [Description("Có lỗi đã xảy ra")]
-        RequestFailed
+        RequestFailed = -1
     }
 }

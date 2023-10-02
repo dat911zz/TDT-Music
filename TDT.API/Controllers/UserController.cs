@@ -1,6 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Extensions;
 using System.Collections.Generic;
+using System.Linq;
+using TDT.API.Containers;
+using TDT.Core.Enums;
+using TDT.Core.Models;
+using TDT.Core.Ultils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,6 +16,7 @@ namespace TDT.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private QLDVModelDataContext _db = Ultils.Instance.Db;
         [HttpGet]
         public IEnumerable<string> Get()
         {
@@ -32,13 +39,32 @@ namespace TDT.API.Controllers
         //    return Ok(response);
         //}
 
-        //[AllowAnonymous]
-        //[HttpPost("register")]
-        //public IActionResult Register(RegisterRequest model)
-        //{
-        //    _userService.Register(model);
-        //    return Ok(new { message = "Registration successful" });
-        //}
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public IActionResult Register(RegisterModel model)
+        {
+            try
+            {
+                if (_db.Users.Any(u => u.UserName.Equals(model.UserName)))
+                {
+                    return new JsonResult(new { code = SignUpResult.ExistingAccount, msg = APIHelper.GetEnumDescription(SignUpResult.ExistingAccount)});
+                }
+                _db.Users.InsertOnSubmit(new Core.Models.User()
+                {
+                    UserName = model.UserName,
+                    Address = model.Address,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                    PasswordHash = IdentityCore.Utils.PasswordGenerator.HashPassword(model.Password)
+                });
+                _db.SubmitChanges();
+                return new JsonResult(new {code = SignUpResult.Ok, msg = APIHelper.GetEnumDescription(SignUpResult.Ok), data = model});
+            }
+            catch (System.Exception ex)
+            {
+                return new JsonResult(new {err = APIErrorCode.RequestFailed, msg = "Có lỗi xảy ra!" });
+            }
+        }
 
         //[HttpGet]
         //public IActionResult GetAll()
