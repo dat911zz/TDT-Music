@@ -8,7 +8,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System;
 using Microsoft.Extensions.Logging;
 using Azure.Core;
-using TDT.API.Containers;
 using System.Linq;
 using TDT.Core.Enums;
 using TDT.Core.Ultils;
@@ -25,10 +24,12 @@ namespace TDT.API.Controllers
     {
         private IConfiguration _cfg;
         private readonly ILogger<HomeController> _logger;
-        public LoginController(IConfiguration cfg, ILogger<HomeController> logger)
+        private readonly QLDVModelDataContext _db;
+        public LoginController(IConfiguration cfg, ILogger<HomeController> logger, QLDVModelDataContext db)
         {
             _cfg = cfg;
             _logger = logger;
+            _db = db;
         }
         [AllowAnonymous]
         [HttpPost]
@@ -64,7 +65,7 @@ namespace TDT.API.Controllers
         {
             User user = null;
             //Find user
-            user = Ultils.Instance.Db.Users.FirstOrDefault(u =>
+            user = _db.Users.FirstOrDefault(u =>
             u.UserName.Equals(login.UserName)
             );
             if (user != null)

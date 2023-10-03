@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -82,15 +84,51 @@ namespace TDT.IdentityCore.Utils
         {
             var sercurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]));
             var credentials = new SigningCredentials(sercurityKey, SecurityAlgorithms.HmacSha256);
-
+            var claims = new[] {
+                new Claim(JwtRegisteredClaimNames.Sub, userInfo.UserName),
+                new Claim(JwtRegisteredClaimNames.Email, userInfo.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
             var token = new JwtSecurityToken(
                 _cfg["Jwt:Issuer"],
                 _cfg["Jwt:Audience"],
-                null,
+                claims,
                 expires: isExpr ? DateTime.Now.AddMinutes(expr) : null,
                 signingCredentials: credentials
                 );
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        public static string ValidateToken(IConfiguration _cfg, string token)
+        {
+            if (token == null)
+            {
+                return null;
+            }
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var secirityKey = Encoding.ASCII.GetBytes(Convert.ToString(_cfg["Jwt:Key"]));
+            try
+            {       
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = _cfg["Jwt:Issuer"],
+                    ValidAudience = _cfg["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]))
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                var jti = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "jti").Value;
+                var userName = jwtToken.Claims.FirstOrDefault(sub => sub.Type == "sub").Value;
+
+                return userName;
+            }
+            catch (Exception ex)
+            {               
+                return null;
+            }
         }
     }
 }

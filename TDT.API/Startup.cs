@@ -13,8 +13,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.Extensions.Options;
+using System.Data.Linq;
+using TDT.Core.Models;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace TDT.API
 {
@@ -41,7 +45,7 @@ namespace TDT.API
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(cfg =>
                 {
-                    cfg.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    cfg.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
                         ValidateAudience = true,
@@ -96,6 +100,7 @@ namespace TDT.API
                 });
                 #endregion
             });
+            services.AddSingleton(new QLDVModelDataContext(Configuration.GetConnectionString("Local")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

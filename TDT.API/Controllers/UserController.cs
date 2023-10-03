@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Extensions;
-using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Linq;
-using TDT.API.Containers;
 using TDT.Core.Enums;
 using TDT.Core.ModelClone;
 using TDT.Core.Models;
@@ -18,11 +17,20 @@ namespace TDT.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private QLDVModelDataContext _db = Ultils.Instance.Db;
+        private readonly ILogger<UserController> _logger;
+        private readonly QLDVModelDataContext _db;
+        public UserController(ILogger<UserController> logger, QLDVModelDataContext db)
+        {
+            _logger = logger;
+            _db = db;
+        }
+
         [HttpGet]
         [Authorize]
         public IEnumerable<string> Get()
         {
+            var currentUser = HttpContext.User;
+
             return new string[] { "value1", "value2" };
         }
 
