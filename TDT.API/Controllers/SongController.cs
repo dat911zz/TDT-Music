@@ -13,11 +13,12 @@ namespace TDT.API.Controllers
     public class SongController : ControllerBase
     {
         // GET: api/<SongController>
+        [Route("release")]
         [HttpGet]
-        public JsonResult Get()
+        public JsonResult release()
         {
-            var list = FirebaseService.Instance.get().Result;
-            list = list.OrderByDescending(x => long.Parse(x.Object.releasedAt)).ToList();
+            var list = FirebaseService.Instance.getPlaylistRelease().Result;
+            list = list.OrderByDescending(x => long.Parse(x.Object.releasedAt)).Take(10).ToList();
             return new JsonResult(list);
         }
 
@@ -29,23 +30,23 @@ namespace TDT.API.Controllers
             return new JsonResult(list);
         }
 
-        // POST api/<SongController>
-        [HttpPost]
-        public void Post([FromHeader] string value)
-        {
-            int a = 0;
-        }
+        //// POST api/<SongController>
+        //[HttpPost]
+        //public void Post([FromHeader] string value)
+        //{
+        //    int a = 0;
+        //}
 
-        // PUT api/<SongController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        //// PUT api/<SongController>/5
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody] string value)
+        //{
+        //}
 
-        // DELETE api/<SongController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //// DELETE api/<SongController>/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     }
 }

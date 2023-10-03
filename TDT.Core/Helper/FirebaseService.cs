@@ -90,9 +90,9 @@ namespace TDT.Core.Helper
             await firebase.Child(nameNode).DeleteAsync();
         }
 
-        public async Task<IReadOnlyCollection<FirebaseObject<PlaylistDTO>>> get()
+        public async Task<IReadOnlyCollection<FirebaseObject<PlaylistDTO>>> getPlaylistRelease()
         {
-            return await firebase.Child("Playlist").OrderBy("releasedAt").OnceAsync<PlaylistDTO>();
+            return await firebase.Child("Playlist").OnceAsync<PlaylistDTO>();
         }
 
         private static async Task login()
