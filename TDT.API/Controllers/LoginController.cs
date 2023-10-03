@@ -47,7 +47,7 @@ namespace TDT.API.Controllers
         {
             User user = null;
             //Find user
-            user = Ultils.Instance.Db.Users.First(u => 
+            user = Ultils.Instance.Db.Users.FirstOrDefault(u => 
             u.UserName.Equals(login.UserName)
             );
             if (user != null)
