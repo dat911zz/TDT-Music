@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Extensions;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Linq;
 using TDT.API.Containers;
 using TDT.Core.Enums;
+using TDT.Core.ModelClone;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
 
@@ -18,6 +20,7 @@ namespace TDT.API.Controllers
     {
         private QLDVModelDataContext _db = Ultils.Instance.Db;
         [HttpGet]
+        [Authorize]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
@@ -49,20 +52,23 @@ namespace TDT.API.Controllers
                 {
                     return new JsonResult(new { code = SignUpResult.ExistingAccount, msg = APIHelper.GetEnumDescription(SignUpResult.ExistingAccount)});
                 }
-                _db.Users.InsertOnSubmit(new Core.Models.User()
+                _db.Users.InsertOnSubmit(new User()
                 {
                     UserName = model.UserName,
                     Address = model.Address,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
-                    PasswordHash = IdentityCore.Utils.PasswordGenerator.HashPassword(model.Password)
+                    PasswordHash = IdentityCore.Utils.SecurityHelper.HashPassword(model.Password)
                 });
                 _db.SubmitChanges();
-                return new JsonResult(new {code = SignUpResult.Ok, msg = APIHelper.GetEnumDescription(SignUpResult.Ok), data = model});
+                return APIHelper.GetJsonResult(SignUpResult.Ok, new Dictionary<string, object>()
+                {
+                    {"data", model}
+                });
             }
             catch (System.Exception ex)
             {
-                return new JsonResult(new {err = APIErrorCode.RequestFailed, msg = "Có lỗi xảy ra!" });
+                return Problem(ex.Message);
             }
         }
 

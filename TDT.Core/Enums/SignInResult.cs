@@ -13,8 +13,8 @@ namespace TDT.Core.Enums
         AccessGranted,
         [Description("Truy cập bị từ chối")]
         AccessDenied,
-        [Description("Mật khẩu không hợp lệ")]
-        InvalidPassword,  
+        [Description("Tài khoản hoặc mật khẩu không hợp lệ")]
+        Invalid,  
         [Description("Tài khoản không tồn tại")]
         AccountNotFound,
     }

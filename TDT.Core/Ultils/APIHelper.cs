@@ -1,11 +1,16 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TDT.Core.Enums;
+using TDT.Core.Models;
 
 namespace TDT.Core.Ultils
 {
@@ -21,6 +26,22 @@ namespace TDT.Core.Ultils
                 return attributes[0].Description;
             else
                 return value.ToString();
+        }
+        public static JsonResult GetJsonResult(Enum value, Dictionary<string, object> data = null)
+        {
+            var jsonData = new Dictionary<string, object>
+            {
+                { "code", value },
+                { "msg", APIHelper.GetEnumDescription(value) }
+            };
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    jsonData[item.Key] = item.Value;
+                }
+            }         
+            return new JsonResult(jsonData);
         }
     }
 }

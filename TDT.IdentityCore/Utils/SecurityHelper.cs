@@ -1,13 +1,17 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using TDT.Core.Models;
 
 namespace TDT.IdentityCore.Utils
 {
-    public class PasswordGenerator
+    public class SecurityHelper
     {
         private static readonly int SALT_SIZE = 32;
         private static readonly int ITERATIONS = 3000;
@@ -65,6 +69,28 @@ namespace TDT.IdentityCore.Utils
                 if (b1[i] != b2[i]) return false;
             }
             return true;
+        }
+        /// <summary>
+        /// Generate JWT for user authentication
+        /// </summary>
+        /// <param name="_cfg">Global config</param>
+        /// <param name="userInfo">User model</param>
+        /// <param name="isExpr">Is expire?</param>
+        /// <param name="expr">Expired time(Minutes)</param>
+        /// <returns>JWT</returns>
+        public static string GenerateJWT(IConfiguration _cfg, User userInfo, bool isExpr = true, double expr = 120)
+        {
+            var sercurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]));
+            var credentials = new SigningCredentials(sercurityKey, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                _cfg["Jwt:Issuer"],
+                _cfg["Jwt:Audience"],
+                null,
+                expires: isExpr ? DateTime.Now.AddMinutes(expr) : null,
+                signingCredentials: credentials
+                );
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

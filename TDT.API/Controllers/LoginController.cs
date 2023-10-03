@@ -10,6 +10,12 @@ using Microsoft.Extensions.Logging;
 using Azure.Core;
 using TDT.API.Containers;
 using System.Linq;
+using TDT.Core.Enums;
+using TDT.Core.Ultils;
+using SignInResult = TDT.Core.Enums.SignInResult;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using TDT.IdentityCore.Utils;
 
 namespace TDT.API.Controllers
 {
@@ -28,50 +34,47 @@ namespace TDT.API.Controllers
         [HttpPost]
         public IActionResult Login([FromBody]LoginModel login)
         {
-            IActionResult response = Unauthorized();
-            User user = Authenticate(login);
-            if (user != null)
+            try
             {
-                string token = GenerateJWT(user);
-                response = Ok(new { token = token });
-                _logger.LogInformation("{0} connected", HttpContext.Connection.RemoteIpAddress);
+                IActionResult response = Unauthorized();
+                User user = Authenticate(login);
+                if (user != null)
+                {
+                    string token = SecurityHelper.GenerateJWT(_cfg, user);
+                    response = APIHelper.GetJsonResult(SignInResult.AccessGranted, new Dictionary<string, object>()
+                    {
+                        {"token", token}
+                    });
+                    _logger.LogInformation("{0} connected", HttpContext.Connection.RemoteIpAddress);
+                }
+                else
+                {
+                    response = APIHelper.GetJsonResult(SignInResult.Invalid);
+                    _logger.LogInformation("{0} failed to connect", HttpContext.Connection.RemoteIpAddress);
+                }
+                return response;
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogInformation("{0} failed to connect", HttpContext.Connection.RemoteIpAddress);
+                return Problem(ex.Message);
             }
-
-            return response;
+            
         }
         private User Authenticate(LoginModel login)
         {
             User user = null;
             //Find user
-            user = Ultils.Instance.Db.Users.FirstOrDefault(u => 
+            user = Ultils.Instance.Db.Users.FirstOrDefault(u =>
             u.UserName.Equals(login.UserName)
             );
             if (user != null)
             {
-                if (!IdentityCore.Utils.PasswordGenerator.VerifyHashedPassword(user.PasswordHash, login.Password))
+                if (!SecurityHelper.VerifyHashedPassword(user.PasswordHash, login.Password))
                 {
                     user = null;
                 }
             }
             return user;
-        }
-        private string GenerateJWT(User userInfo)
-        {
-            var sercurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]));
-            var credentials = new SigningCredentials(sercurityKey, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                _cfg["Jwt:Issuer"],
-                _cfg["Jwt:Audience"],
-                null,
-                expires: DateTime.Now.AddMinutes(120),
-                signingCredentials: credentials
-                );
-            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
