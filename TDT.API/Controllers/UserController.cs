@@ -51,19 +51,32 @@ namespace TDT.API.Controllers
                     {"data", model}
                 }, "Đăng ký");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                return Problem(ex.Message);
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
             }
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Get()
         {
-            var users = _db.Users.AsEnumerable();
+            var users = from u in _db.Users select new { 
+                u.Id, 
+                u.UserName, 
+                u.PhoneNumber,
+                u.Email,
+                u.CreateDate,
+                u.LockoutEnabled,
+                u.LockoutEnd
+            };
             return Ok(users);
         }
 
+        [Authorize]
         [HttpGet("{username}")]
         public IActionResult Get(string username)
         {
@@ -71,28 +84,57 @@ namespace TDT.API.Controllers
             return Ok(user);
         }
 
+        [Authorize]
         [HttpPut("{username}")]
-        public IActionResult Update(string username, UserDetailModel model)
+        public IActionResult Update(string username, [FromBody]UserDetailModel model)
         {
-            User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
-            if (user == null || string.IsNullOrEmpty(user.UserName) == false)
+            try
             {
-                return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật");
-            }
-            user.Email = model.Email;
-            user.Address = model.Address;
-            user.PhoneNumber = model.PhoneNumber;
-            user.PasswordHash = SecurityHelper.HashPassword(model.Password);
+                User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
+                if (user == null || string.IsNullOrEmpty(user.UserName) == false)
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật tài khoản");
+                }
+                user.Email = model.Email;
+                user.Address = model.Address;
+                user.PhoneNumber = model.PhoneNumber;
+                user.PasswordHash = SecurityHelper.HashPassword(model.Password);
 
-            return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật");
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật tài khoản");
+            }
+            catch (Exception ex)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
+            }
+
 
         }
-
+        [Authorize]
         [HttpDelete("{username}")]
         public IActionResult Delete(string username)
         {
-            User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
-            return Ok(new { message = "User deleted successfully" });
+            try
+            {
+                User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
+                if (user == null)
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "xóa tài khoản");
+                }
+                _db.Users.DeleteOnSubmit(user);
+                _db.SubmitChanges();
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa tài khoản");
+            }
+            catch (Exception ex)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
+            }
+            
         }
 
     }

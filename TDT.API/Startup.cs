@@ -102,7 +102,7 @@ namespace TDT.API
                 });
                 #endregion
             });
-            services.AddSingleton(new QLDVModelDataContext(Configuration.GetConnectionString("Local")));
+            services.AddSingleton(new QLDVModelDataContext(Configuration.GetConnectionString("AdminConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
