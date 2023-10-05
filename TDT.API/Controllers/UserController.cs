@@ -2,18 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TDT.Core.Enums;
 using TDT.Core.ModelClone;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
+using TDT.IdentityCore.Utils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TDT.API.Controllers
 {
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -25,40 +27,15 @@ namespace TDT.API.Controllers
             _db = db;
         }
 
-        [HttpGet]
-        [Authorize]
-        public IEnumerable<string> Get()
-        {
-            var currentUser = HttpContext.User;
-
-            return new string[] { "value1", "value2" };
-        }
-
-        [HttpGet("{id}")]
-        [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        //[AllowAnonymous]
-        //[HttpPost("authenticate")]
-        //public IActionResult Authenticate(AuthenticateRequest model)
-        //{
-        //    var response = _userService.Authenticate(model);
-        //    return Ok(response);
-        //}
-
         [AllowAnonymous]
-        [HttpPost("register")]
-        public IActionResult Register(RegisterModel model)
+        [HttpPost]
+        public IActionResult Register([FromBody]UserIdentiyModel model)
         {
             try
             {
                 if (_db.Users.Any(u => u.UserName.Equals(model.UserName)))
                 {
-                    return new JsonResult(new { code = SignUpResult.ExistingAccount, msg = APIHelper.GetEnumDescription(SignUpResult.ExistingAccount)});
+                    return APIHelper.GetJsonResult(APIStatusCode.ExistingAccount);
                 }
                 _db.Users.InsertOnSubmit(new User()
                 {
@@ -66,13 +43,13 @@ namespace TDT.API.Controllers
                     Address = model.Address,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
-                    PasswordHash = IdentityCore.Utils.SecurityHelper.HashPassword(model.Password)
+                    PasswordHash = SecurityHelper.HashPassword(model.Password)
                 });
                 _db.SubmitChanges();
-                return APIHelper.GetJsonResult(SignUpResult.Ok, new Dictionary<string, object>()
+                return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
                 {
                     {"data", model}
-                });
+                }, "Đăng ký");
             }
             catch (System.Exception ex)
             {
@@ -80,33 +57,43 @@ namespace TDT.API.Controllers
             }
         }
 
-        //[HttpGet]
-        //public IActionResult GetAll()
-        //{
-        //    var users = _userService.GetAll();
-        //    return Ok(users);
-        //}
+        [HttpGet]
+        public IActionResult Get()
+        {
+            var users = _db.Users.AsEnumerable();
+            return Ok(users);
+        }
 
-        //[HttpGet("{id}")]
-        //public IActionResult GetById(int id)
-        //{
-        //    var user = _userService.GetById(id);
-        //    return Ok(user);
-        //}
+        [HttpGet("{username}")]
+        public IActionResult Get(string username)
+        {
+            var user = _db.Users.Where(u => u.UserName.Equals(username.Trim()));
+            return Ok(user);
+        }
 
-        //[HttpPut("{id}")]
-        //public IActionResult Update(int id, UpdateRequest model)
-        //{
-        //    _userService.Update(id, model);
-        //    return Ok(new { message = "User updated successfully" });
-        //}
+        [HttpPut("{username}")]
+        public IActionResult Update(string username, UserDetailModel model)
+        {
+            User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
+            if (user == null || string.IsNullOrEmpty(user.UserName) == false)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật");
+            }
+            user.Email = model.Email;
+            user.Address = model.Address;
+            user.PhoneNumber = model.PhoneNumber;
+            user.PasswordHash = SecurityHelper.HashPassword(model.Password);
 
-        //[HttpDelete("{id}")]
-        //public IActionResult Delete(int id)
-        //{
-        //    _userService.Delete(id);
-        //    return Ok(new { message = "User deleted successfully" });
-        //}
+            return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật");
+
+        }
+
+        [HttpDelete("{username}")]
+        public IActionResult Delete(string username)
+        {
+            User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
+            return Ok(new { message = "User deleted successfully" });
+        }
 
     }
 }

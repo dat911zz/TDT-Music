@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace TDT.Core.Models
 {
-    public class RegisterModel
+    public class UserDetailModel
     {
-        private string _UserName;
-
         private string _Address;
 
         private string _Email;
@@ -18,8 +16,6 @@ namespace TDT.Core.Models
 
         private string _PhoneNumber;
 
-
-        public string UserName { get => _UserName; set => _UserName = value; }
         public string Address { get => _Address; set => _Address = value; }
         public string Email { get => _Email; set => _Email = value; }
         public string Password { get => _Password; set => _Password = value; }

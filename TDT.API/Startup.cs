@@ -19,6 +19,8 @@ using TDT.Core.Models;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using TDT.IdentityCore.Filters;
+using TDT.Core.Extensions;
 
 namespace TDT.API
 {
@@ -122,6 +124,8 @@ namespace TDT.API
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

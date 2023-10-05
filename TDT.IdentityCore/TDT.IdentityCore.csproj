@@ -13,4 +13,8 @@
     <ProjectReference Include="..\TDT.Core\TDT.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>

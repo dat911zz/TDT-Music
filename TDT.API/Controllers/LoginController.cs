@@ -11,7 +11,6 @@ using Azure.Core;
 using System.Linq;
 using TDT.Core.Enums;
 using TDT.Core.Ultils;
-using SignInResult = TDT.Core.Enums.SignInResult;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using TDT.IdentityCore.Utils;
@@ -42,7 +41,7 @@ namespace TDT.API.Controllers
                 if (user != null)
                 {
                     string token = SecurityHelper.GenerateJWT(_cfg, user);
-                    response = APIHelper.GetJsonResult(SignInResult.AccessGranted, new Dictionary<string, object>()
+                    response = APIHelper.GetJsonResult(APIStatusCode.AccessGranted, new Dictionary<string, object>()
                     {
                         {"token", token}
                     });
@@ -50,14 +49,17 @@ namespace TDT.API.Controllers
                 }
                 else
                 {
-                    response = APIHelper.GetJsonResult(SignInResult.Invalid);
+                    response = APIHelper.GetJsonResult(APIStatusCode.InvalidAccount);
                     _logger.LogInformation("{0} failed to connect", HttpContext.Connection.RemoteIpAddress);
                 }
                 return response;
             }
             catch (Exception ex)
             {
-                return Problem(ex.Message);
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
             }
             
         }
