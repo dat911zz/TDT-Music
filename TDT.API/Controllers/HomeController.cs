@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using TDT.API.Containers;
 using TDT.API.Models;
+using TDT.Core.Models;
 
 namespace TDT.API.Controllers
 {
@@ -15,12 +16,13 @@ namespace TDT.API.Controllers
     {
         private readonly IConfiguration _cfg;
         private readonly ILogger<HomeController> _logger;
+        private readonly QLDVModelDataContext _db;
 
-        public HomeController(IConfiguration cfg, ILogger<HomeController> logger)
+        public HomeController(IConfiguration cfg, ILogger<HomeController> logger, QLDVModelDataContext db)
         {
             _logger = logger;
             _cfg = cfg;
-            Ultils.Instance.Init(cfg.GetConnectionString("Local"));
+            _db = db;
         }
 
         public IActionResult Index()
