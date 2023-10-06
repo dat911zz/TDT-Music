@@ -1,4 +1,6 @@
-﻿@{
+﻿@using TDT.Core.DTO;
+@using TDT.Core.Helper;
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -596,10 +598,14 @@
             <button class="zm-btn button" tabindex="0">Việt Nam</button>
             <button class="zm-btn button" tabindex="0">Quốc tế</button>
         </div>
-        <div class="columns is-multiline">
+        <div id="song_release" class="columns is-multiline">
             <div class="column mar-b-0 is-fullhd-4 is-widescreen-4 is-desktop-4 is-touch-6 is-tablet-6">
                 <div class="list">
-                    <div class="list-item hide-right media-item hide-right full-left">
+                    @* @foreach (var item in s1)
+                    {
+                        @await Html.PartialAsync("/views/partial/_itemsong.cshtml", item)
+                    } *@
+                    @* <div class="list-item hide-right media-item hide-right full-left">
                         <div class="media">
                             <div class="media-left">
                                 <div class="song-thumb">
@@ -1003,7 +1009,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> *@
                 </div>
             </div>
             <div class="column mar-b-0 is-fullhd-4 is-widescreen-4 is-desktop-4 is-touch-6 is-tablet-6">
@@ -5721,6 +5727,12 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
+        $.ajax({
+            url: "/Share/LoadSongRelease",
+            success: function(data) {
+                $('#song_release').html(data);
+            }
+        });
         var change = true;
         var gal = $('.gallery-item');
         $i = 5;

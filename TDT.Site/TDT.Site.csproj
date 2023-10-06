@@ -5,4 +5,8 @@
     <RootNamespace>TDT_Music</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TDT.Core\TDT.Core.csproj" />
+  </ItemGroup>
+
 </Project>
