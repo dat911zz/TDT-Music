@@ -18,6 +18,7 @@ namespace TDT.API
 {
     public class Startup
     {
+        readonly string MyCors = "_MyCors";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,6 +29,16 @@ namespace TDT.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyCors,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("https://localhost:44348")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod();
+                                  });
+            });
             services.AddControllersWithViews();
             services.AddApiVersioning(cfg =>
             {
@@ -88,6 +99,7 @@ namespace TDT.API
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseCors(MyCors);
 
             app.UseAuthorization();
 
