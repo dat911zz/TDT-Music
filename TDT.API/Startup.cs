@@ -13,6 +13,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using System.Data.Linq;
+using TDT.Core.Models;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using TDT.IdentityCore.Filters;
+using TDT.Core.Extensions;
 
 namespace TDT.API
 {
@@ -50,7 +58,7 @@ namespace TDT.API
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(cfg =>
                 {
-                    cfg.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    cfg.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
                         ValidateAudience = true,
@@ -79,7 +87,33 @@ namespace TDT.API
                         Url = new Uri("https://www.apache.org/licenses/LICENSE-2.0.html"),
                     }
                 });
+                #region Config for using JWT in Swagger
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Description = "Bearer Authentication with JWT Token",
+                    Type = SecuritySchemeType.Http
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Id = "Bearer",
+                                Type = ReferenceType.SecurityScheme
+                            }
+                        },
+                        new List<string>()
+                    }
+                });
+                #endregion
             });
+            services.AddSingleton(new QLDVModelDataContext(Configuration.GetConnectionString("AdminConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,13 +129,15 @@ namespace TDT.API
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
             app.UseCors(MyCors);
-
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

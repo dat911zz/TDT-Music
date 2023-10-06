@@ -1,98 +1,141 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using TDT.API.Containers;
 using TDT.Core.Enums;
+using TDT.Core.ModelClone;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
+using TDT.IdentityCore.Utils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TDT.API.Controllers
 {
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        private QLDVModelDataContext _db = Ultils.Instance.Db;
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly ILogger<UserController> _logger;
+        private readonly QLDVModelDataContext _db;
+        public UserController(ILogger<UserController> logger, QLDVModelDataContext db)
         {
-            return new string[] { "value1", "value2" };
+            _logger = logger;
+            _db = db;
         }
-
-        [HttpGet("{id}")]
-        [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        //[AllowAnonymous]
-        //[HttpPost("authenticate")]
-        //public IActionResult Authenticate(AuthenticateRequest model)
-        //{
-        //    var response = _userService.Authenticate(model);
-        //    return Ok(response);
-        //}
 
         [AllowAnonymous]
-        [HttpPost("register")]
-        public IActionResult Register(RegisterModel model)
+        [HttpPost]
+        public IActionResult Register([FromBody]UserIdentiyModel model)
         {
             try
             {
                 if (_db.Users.Any(u => u.UserName.Equals(model.UserName)))
                 {
-                    return new JsonResult(new { code = SignUpResult.ExistingAccount, msg = APIHelper.GetEnumDescription(SignUpResult.ExistingAccount)});
+                    return APIHelper.GetJsonResult(APIStatusCode.ExistingAccount);
                 }
-                _db.Users.InsertOnSubmit(new Core.Models.User()
+                _db.Users.InsertOnSubmit(new User()
                 {
                     UserName = model.UserName,
                     Address = model.Address,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
-                    PasswordHash = IdentityCore.Utils.PasswordGenerator.HashPassword(model.Password)
+                    PasswordHash = SecurityHelper.HashPassword(model.Password)
                 });
                 _db.SubmitChanges();
-                return new JsonResult(new {code = SignUpResult.Ok, msg = APIHelper.GetEnumDescription(SignUpResult.Ok), data = model});
+                return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
+                {
+                    {"data", model}
+                }, "Đăng ký");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                return new JsonResult(new {err = APIErrorCode.RequestFailed, msg = "Có lỗi xảy ra!" });
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
             }
         }
 
-        //[HttpGet]
-        //public IActionResult GetAll()
-        //{
-        //    var users = _userService.GetAll();
-        //    return Ok(users);
-        //}
+        [HttpGet]
+        [Authorize]
+        public IActionResult Get()
+        {
+            var users = from u in _db.Users select new { 
+                u.Id, 
+                u.UserName, 
+                u.PhoneNumber,
+                u.Email,
+                u.CreateDate,
+                u.LockoutEnabled,
+                u.LockoutEnd
+            };
+            return Ok(users);
+        }
 
-        //[HttpGet("{id}")]
-        //public IActionResult GetById(int id)
-        //{
-        //    var user = _userService.GetById(id);
-        //    return Ok(user);
-        //}
+        [Authorize]
+        [HttpGet("{username}")]
+        public IActionResult Get(string username)
+        {
+            var user = _db.Users.Where(u => u.UserName.Equals(username.Trim()));
+            return Ok(user);
+        }
 
-        //[HttpPut("{id}")]
-        //public IActionResult Update(int id, UpdateRequest model)
-        //{
-        //    _userService.Update(id, model);
-        //    return Ok(new { message = "User updated successfully" });
-        //}
+        [Authorize]
+        [HttpPut("{username}")]
+        public IActionResult Update(string username, [FromBody]UserDetailModel model)
+        {
+            try
+            {
+                User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
+                if (user == null || string.IsNullOrEmpty(user.UserName) == false)
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật tài khoản");
+                }
+                user.Email = model.Email;
+                user.Address = model.Address;
+                user.PhoneNumber = model.PhoneNumber;
+                user.PasswordHash = SecurityHelper.HashPassword(model.Password);
 
-        //[HttpDelete("{id}")]
-        //public IActionResult Delete(int id)
-        //{
-        //    _userService.Delete(id);
-        //    return Ok(new { message = "User deleted successfully" });
-        //}
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật tài khoản");
+            }
+            catch (Exception ex)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
+            }
+
+
+        }
+        [Authorize]
+        [HttpDelete("{username}")]
+        public IActionResult Delete(string username)
+        {
+            try
+            {
+                User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
+                if (user == null)
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "xóa tài khoản");
+                }
+                _db.Users.DeleteOnSubmit(user);
+                _db.SubmitChanges();
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa tài khoản");
+            }
+            catch (Exception ex)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
+            }
+            
+        }
 
     }
 }
