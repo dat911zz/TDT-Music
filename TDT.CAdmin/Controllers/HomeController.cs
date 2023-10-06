@@ -11,7 +11,6 @@ using TDT.IdentityCore.Utils;
 
 namespace TDT.CAdmin.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
