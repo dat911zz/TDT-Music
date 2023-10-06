@@ -1,18 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TDT.Core.DTO;
 using TDT.Core.ModelClone;
 
 namespace TDT.Core.Helper
 {
     public class DataHelper
     {
+        public static string COLOR_DEFAULT_STEP = "#000fff";
+        private int _viewColor;
         private static DataHelper _instance;
-        private DataHelper()
-        {
+        private DataHelper() {
             this._viewColor = 0;
         }
         public static DataHelper Instance
@@ -25,43 +24,8 @@ namespace TDT.Core.Helper
             }
         }
 
-        public static string COLOR_DEFAULT_STEP = "#000fff";
-        public static readonly string DOMAIN_API = "https://localhost:44300";
-        private int _viewColor;
-        public Dictionary<string, ArtistDTO> Artists = new Dictionary<string, ArtistDTO>();
-        public Dictionary<string, string> ThumbSong = new Dictionary<string, string>();
-        private Dictionary<string,SongDTO> _songs = new Dictionary<string, SongDTO>();
-
-
         public int VIEW_COLOR { get => _viewColor; set => _viewColor = value; }
-        public Dictionary<string, SongDTO> Songs { 
-            get => _songs;
-            set
-            {
-                _songs = value.OrderByDescending(x => x.Value.releaseDate).ToDictionary(x => x.Key, x => x.Value);
-            }
-        }
-        public List<List<SongDTO>> SongRelease {
-            get
-            {
-                List<List<SongDTO>> res = new List<List<SongDTO>>();
-                int take = 4;
-                for(int i = 0; i < 3; i++)
-                {
-                    res.Add(this.Songs.Values.Skip(i * take).Take(take).ToList());
-                }
-                return res;
-            }
-        }
-        public List<SongDTO> Song100Release
-        {
-            get
-            {
-                return this.Songs.Values.Take(100).ToList();
-            }
-        }
 
-        
         public async Task<List<string>> pushPlaylist(Playlist playlist)
         {
             List<string> list = new List<string>();

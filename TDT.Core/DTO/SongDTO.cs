@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace TDT.Core.DTO
 {
@@ -68,21 +67,5 @@ namespace TDT.Core.DTO
         public int listen { get => _listen; set => _listen = value; }
         public bool liked { get => _liked; set => _liked = value; }
         public int comment { get => _comment; set => _comment = value; }
-        public DateTime ReleaseDate
-        {
-            get
-            {
-                return (new DateTime(1975, 1, 1, 0, 0, 0)).AddSeconds(long.Parse(this.releaseDate));
-            }
-        }
-        public string Duration
-        {
-            get
-            {
-                TimeSpan t = TimeSpan.FromSeconds(this.duration);
-                string res = t.Minutes.ToString("00") + ":" + t.Seconds.ToString("00");
-                return t.Hours == 0 ? res : t.Hours.ToString("00") + ":" + res;
-            }
-        }
     }
 }

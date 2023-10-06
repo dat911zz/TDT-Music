@@ -18,6 +18,5 @@ namespace TDT.Core.API
         {
             DataHelper.Instance.VIEW_COLOR = value;
         }
-        
     }
 }

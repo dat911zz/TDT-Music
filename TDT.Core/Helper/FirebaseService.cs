@@ -72,22 +72,13 @@ namespace TDT.Core.Helper
         {
             return await firebase.Child(path).OnceSingleAsync<T>();
         }
-        public Dictionary<string, object> getDictionary(string path, string index = null)
+        public Dictionary<string, object> getDictionary(string path)
         {
-            var json = "";
-            if(index != null)
-            {
-                json = getValueJson(path, index).Result;
-            }
-            else json = getValueJson(path).Result;
+            var json = getValueJson(path).Result;
             return JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
         }
-        public async Task<string> getValueJson(string path, string index = null)
+        public async Task<string> getValueJson(string path)
         {
-            if (index != null)
-            {
-                return await firebase.Child(path).OrderBy(index).LimitToFirst(1000000000).OnceAsJsonAsync();
-            }
             return await firebase.Child(path).OnceAsJsonAsync();
         }
         public async void push(string nameNodeParent, object obj)

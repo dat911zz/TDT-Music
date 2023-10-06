@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using TDT.Core.DTO;
 using TDT.Core.Helper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,16 +13,6 @@ namespace TDT.API.Controllers
     public class SongController : ControllerBase
     {
         // GET: api/<SongController>
-
-        [Route("load")]
-        [HttpGet]
-        public JsonResult load()
-        {
-            var dics = FirebaseService.Instance.getDictionary("Song", "id");
-            List<SongDTO> songs = dics.Values.Select(x => ConvertService.Instance.convertToObjectFromJson<SongDTO>(x.ToString())).ToList();
-            return new JsonResult(songs);
-        }
-
         [Route("release")]
         [HttpGet]
         public JsonResult release()
