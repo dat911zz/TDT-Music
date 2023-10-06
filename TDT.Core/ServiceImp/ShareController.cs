@@ -13,9 +13,17 @@ namespace TDT.Core.ServiceImp
     {
         public JsonResult LoadSongRelease()
         {
-            HttpService httpService = new HttpService(@DataHelper.DOMAIN_API + "/api/Song/load");
+            HttpService httpService = new HttpService(DataHelper.DOMAIN_API + "/api/Song/load");
             string json = httpService.getJson();
-            List<SongDTO> songs = ConvertService.Instance.convertToObjectFromJson<List<SongDTO>>(json);
+            List<SongDTO> songs = new List<SongDTO>();
+            if(DataHelper.Instance.Songs.Count <= 0)
+            {
+                songs = ConvertService.Instance.convertToObjectFromJson<List<SongDTO>>(json);
+            }
+            else
+            {
+                songs = DataHelper.Instance.Songs.Values.ToList();
+            }
             foreach (SongDTO song in songs)
             {
                 if(!DataHelper.Instance.Songs.Keys.Contains(song.encodeId))

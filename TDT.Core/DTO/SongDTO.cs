@@ -68,21 +68,15 @@ namespace TDT.Core.DTO
         public int listen { get => _listen; set => _listen = value; }
         public bool liked { get => _liked; set => _liked = value; }
         public int comment { get => _comment; set => _comment = value; }
-        public DateTime ReleaseDate
+        public DateTime ReleaseDate()
         {
-            get
-            {
-                return (new DateTime(1975, 1, 1, 0, 0, 0)).AddSeconds(long.Parse(this.releaseDate));
-            }
+            return (new DateTime(1975, 1, 1, 0, 0, 0)).AddSeconds(long.Parse(this.releaseDate));
         }
-        public string Duration
+        public string Duration()
         {
-            get
-            {
-                TimeSpan t = TimeSpan.FromSeconds(this.duration);
-                string res = t.Minutes.ToString("00") + ":" + t.Seconds.ToString("00");
-                return t.Hours == 0 ? res : t.Hours.ToString("00") + ":" + res;
-            }
+            TimeSpan t = TimeSpan.FromSeconds(this.duration);
+            string res = t.Minutes.ToString("00") + ":" + t.Seconds.ToString("00");
+            return t.Hours == 0 ? res : t.Hours.ToString("00") + ":" + res;
         }
     }
 }

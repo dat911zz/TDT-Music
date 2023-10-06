@@ -42,8 +42,8 @@ namespace TDT.Core.ServiceImp
                     DataHelper.Instance.ThumbSong.Add(song.encodeId, img);
                 }
                 int iArt = 0;
-                string betweenDate = HelperUtility.Instance.getBetweenDate(song.ReleaseDate);
-                string duration = song.Duration;
+                string betweenDate = HelperUtility.Instance.getBetweenDate(song.ReleaseDate());
+                string duration = song.Duration();
                 str.AppendFormat(@"
                         <div class=""list-item hide-right media-item hide-right full-left"">
                             <div class=""media"">
