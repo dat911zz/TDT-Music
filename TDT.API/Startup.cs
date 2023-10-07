@@ -125,7 +125,7 @@ namespace TDT.API
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMiddleware<ErrorHandlerMiddleware>();
+            app.UseMiddleware<APIErrorHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

@@ -97,16 +97,16 @@ namespace TDT.Core.ModelClone
         //private string linkMP3;
         //public Song() { }
 
-        //public string Id { get => id; set => id = value; }
-        //public string Title { get => title; set => title = value; }
-        //public string Alias { get => alias; set => alias = value; }
-        //public string Thumbnail { get => thumbnail; set => thumbnail = value; }
-        //public string ThumbnailM { get => thumbnailM; set => thumbnailM = value; }
-        //public double Duration { get => duration; set => duration = value; }
-        //public int StreamingStatus { get => streamingStatus; set => streamingStatus = value; }
-        //public double ReleaseDate { get => releaseDate; set => releaseDate = value; }
-        //public double Like { get => like; set => like = value; }
-        //public bool IsPrivate { get => isPrivate; set => isPrivate = value; }
-        //public string LinkMP3 { get => linkMP3; set => linkMP3 = value; }
+        //public string Id { Get => id; set => id = value; }
+        //public string Title { Get => title; set => title = value; }
+        //public string Alias { Get => alias; set => alias = value; }
+        //public string Thumbnail { Get => thumbnail; set => thumbnail = value; }
+        //public string ThumbnailM { Get => thumbnailM; set => thumbnailM = value; }
+        //public double Duration { Get => duration; set => duration = value; }
+        //public int StreamingStatus { Get => streamingStatus; set => streamingStatus = value; }
+        //public double ReleaseDate { Get => releaseDate; set => releaseDate = value; }
+        //public double Like { Get => like; set => like = value; }
+        //public bool IsPrivate { Get => isPrivate; set => isPrivate = value; }
+        //public string LinkMP3 { Get => linkMP3; set => linkMP3 = value; }
     }
 }

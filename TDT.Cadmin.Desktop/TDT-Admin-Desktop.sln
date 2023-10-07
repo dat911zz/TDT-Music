@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDT.Cadmin.Desktop", "TDT.Cadmin.Desktop.csproj", "{F12979B1-246E-4D17-9D28-B740DDC14E5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TDT.QLND", "..\TDT.QLND\TDT.QLND.csproj", "{51337181-0F4D-440C-89BA-DDEB81C4F977}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F12979B1-246E-4D17-9D28-B740DDC14E5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F12979B1-246E-4D17-9D28-B740DDC14E5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F12979B1-246E-4D17-9D28-B740DDC14E5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F12979B1-246E-4D17-9D28-B740DDC14E5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51337181-0F4D-440C-89BA-DDEB81C4F977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51337181-0F4D-440C-89BA-DDEB81C4F977}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51337181-0F4D-440C-89BA-DDEB81C4F977}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51337181-0F4D-440C-89BA-DDEB81C4F977}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {206654E8-A7FD-4424-A084-C0F52E7D87DD}
+	EndGlobalSection
+EndGlobal

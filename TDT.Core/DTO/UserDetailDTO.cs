@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TDT.Core.Models;
 
-namespace TDT.Core.Models
+namespace TDT.Core.DTO
 {
-    public partial class UserDetailModel
+    public class UserDetailDTO : APIResponseModel
     {
         private string _Address;
 

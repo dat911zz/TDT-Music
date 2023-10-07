@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TDT.CAdmin.Models;
+using TDT.Core.Models;
+using TDT.Core.Ultils;
 using TDT.IdentityCore.Utils;
 
 namespace TDT.CAdmin.Controllers
@@ -20,9 +22,10 @@ namespace TDT.CAdmin.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Start session");
+            var a = await APICallHelper.get("user/get");
             return View();
         }
         public IActionResult Privacy()

@@ -17,7 +17,7 @@ using TDT.IdentityCore.Utils;
 
 namespace TDT.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class LoginController : Controller
     {
@@ -32,7 +32,7 @@ namespace TDT.API.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromBody]LoginModel login)
+        public IActionResult Login(LoginModel login)
         {
             try
             {

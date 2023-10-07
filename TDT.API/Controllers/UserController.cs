@@ -64,15 +64,7 @@ namespace TDT.API.Controllers
         [Authorize]
         public IActionResult Get()
         {
-            var users = from u in _db.Users select new { 
-                u.Id, 
-                u.UserName, 
-                u.PhoneNumber,
-                u.Email,
-                u.CreateDate,
-                u.LockoutEnabled,
-                u.LockoutEnd
-            };
+            var users = _db.Users.AsEnumerable();
             return Ok(users);
         }
 

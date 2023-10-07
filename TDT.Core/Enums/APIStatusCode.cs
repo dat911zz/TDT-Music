@@ -15,6 +15,8 @@ namespace TDT.Core.Enums
         NullRequest,
         [Description("Các tham số [{0}] đang bỏ trống")]
         NullParams,
+        [Description("Không tìm thấy api này")]
+        NotFound,
         [Description("Chuỗi xác thực không hợp lệ")]
         InvalidAuthenticationString,
         [Description("Tài khoản không hợp lệ hoặc chưa được kích hoạt")]
