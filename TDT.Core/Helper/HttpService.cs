@@ -18,8 +18,15 @@ namespace TDT.Core.Helper
         }
         public string getJson()
         {
-            var response = new HttpClient().GetAsync(url).Result;
-            return response.Content.ReadAsStringAsync().Result;
+            try
+            {
+                var response = new HttpClient().GetAsync(url).Result;
+                return response.Content.ReadAsStringAsync().Result;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
         }
     }
 }

@@ -21,17 +21,7 @@ namespace TDT.API.Controllers
         public JsonResult load()
         {
             var dics = FirebaseService.Instance.getDictionary("Song", "id");
-            List<SongDTO> songs = dics.Values.Select(x => ConvertService.Instance.convertToObjectFromJson<SongDTO>(x.ToString())).ToList();
-            return new JsonResult(songs);
-        }
-
-        [Route("release")]
-        [HttpGet]
-        public JsonResult release()
-        {
-            var list = FirebaseService.Instance.getPlaylistRelease().Result;
-            list = list.OrderByDescending(x => long.Parse(x.Object.releasedAt)).Take(10).ToList();
-            return new JsonResult(list);
+            return new JsonResult(dics.Values.Select(x => ConvertService.Instance.convertToObjectFromJson<SongDTO>(x.ToString())).ToList());
         }
 
         // GET api/<SongController>/5

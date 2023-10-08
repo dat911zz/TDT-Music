@@ -13,31 +13,58 @@ namespace TDT.Core.ServiceImp
     {
         public JsonResult LoadSongRelease()
         {
-            HttpService httpService = new HttpService(DataHelper.DOMAIN_API + "/api/Song/load");
-            string json = httpService.getJson();
             List<SongDTO> songs = new List<SongDTO>();
-            if(DataHelper.Instance.Songs.Count <= 0)
+            if (DataHelper.Instance.Songs.Count <= 0)
             {
+                HttpService httpService = new HttpService(DataHelper.DOMAIN_API + "/Song/load");
+                string json = httpService.getJson();
                 songs = ConvertService.Instance.convertToObjectFromJson<List<SongDTO>>(json);
             }
             else
             {
                 songs = DataHelper.Instance.Songs.Values.ToList();
             }
-            foreach (SongDTO song in songs)
+            if (songs != null)
             {
-                if(!DataHelper.Instance.Songs.Keys.Contains(song.encodeId))
+                foreach (SongDTO song in songs)
                 {
-                    DataHelper.Instance.Songs.Add(song.encodeId, song);
+                    if (!DataHelper.Instance.Songs.Keys.Contains(song.encodeId))
+                    {
+                        DataHelper.Instance.Songs.Add(song.encodeId, song);
+                    }
                 }
             }
             List<string> htmls = new List<string>();
             List<List<SongDTO>> songRelease = DataHelper.Instance.SongRelease;
-            foreach (List< SongDTO> listItem in songRelease)
+            foreach (List<SongDTO> listItem in songRelease)
             {
                 htmls.Add(Generator.Instance.GenerateSongRelease(listItem));
             }
             return new JsonResult(string.Concat(htmls));
+        }
+        public JsonResult LoadGenre()
+        {
+            if(DataHelper.Instance.Genres.Count <= 0)
+            {
+                HttpService httpService = new HttpService(DataHelper.DOMAIN_API + "/Genre/load");
+                string json = httpService.getJson();
+                List<Genre> genres = ConvertService.Instance.convertToObjectFromJson<List<Genre>>(json);
+                if(genres != null)
+                {
+                    foreach (Genre genre in genres)
+                    {
+                        if(!DataHelper.Instance.Genres.Keys.Contains(genre.id))
+                        {
+                            DataHelper.Instance.Genres.Add(genre.id, genre);
+                        }
+                        else
+                        {
+                            DataHelper.Instance.Genres[genre.id] = genre;
+                        }
+                    }
+                }
+            }
+            return new JsonResult("true");
         }
     }
 }

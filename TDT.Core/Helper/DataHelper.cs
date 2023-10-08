@@ -26,11 +26,13 @@ namespace TDT.Core.Helper
         }
 
         public static string COLOR_DEFAULT_STEP = "#000fff";
-        public static readonly string DOMAIN_API = "https://localhost:44300";
+        public static readonly string DOMAIN_API = "https://localhost:44300" + "/api";
         private int _viewColor;
+        public Dictionary<string, Genre> Genres = new Dictionary<string, Genre>();
         public Dictionary<string, ArtistDTO> Artists = new Dictionary<string, ArtistDTO>();
         public Dictionary<string, string> ThumbSong = new Dictionary<string, string>();
         private Dictionary<string,SongDTO> _songs = new Dictionary<string, SongDTO>();
+        private List<List<SongDTO>> _songRelease = new List<List<SongDTO>>();
 
 
         public int VIEW_COLOR { get => _viewColor; set => _viewColor = value; }
@@ -44,13 +46,35 @@ namespace TDT.Core.Helper
         public List<List<SongDTO>> SongRelease {
             get
             {
-                List<List<SongDTO>> res = new List<List<SongDTO>>();
-                int take = 4;
-                for(int i = 0; i < 3; i++)
+                if(this._songRelease.Count <= 0)
                 {
-                    res.Add(this.Songs.Values.Skip(i * take).Take(take).ToList());
+                    List<SongDTO> arrSong = this.Songs.Values.ToList();
+                    List<List<SongDTO>> res = new List<List<SongDTO>>();
+                    int take = 4;
+                    int iStartArr = 0;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        List<SongDTO> res_s = new List<SongDTO>();
+                        string releaseDate = "";
+                        int count = 0;
+                        for (int j = iStartArr; j < arrSong.Count; j++)
+                        {
+                            iStartArr++;
+                            SongDTO itemCheck = arrSong[j];
+                            if (!releaseDate.Equals(itemCheck.releaseDate) || (releaseDate.Equals(itemCheck.releaseDate) && !res_s.Select(x => x.thumbnail).Contains(itemCheck.thumbnail)))
+                            {
+                                res_s.Add(itemCheck);
+                                count++;
+                            }
+                            releaseDate = itemCheck.releaseDate;
+                            if (count >= take)
+                                break;
+                        }
+                        res.Add(res_s);
+                    }
+                    this._songRelease = res;
                 }
-                return res;
+                return this._songRelease;
             }
         }
         public List<SongDTO> Song100Release
