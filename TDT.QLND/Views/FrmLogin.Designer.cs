@@ -1,4 +1,4 @@
-﻿namespace TDT.QLND.View
+﻿namespace TDT.QLND.Views
 {
     partial class FrmLogin
     {

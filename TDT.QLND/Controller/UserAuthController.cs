@@ -1,4 +1,4 @@
-﻿using TDT.QLND.View;
+﻿using TDT.QLND.Views;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,20 +8,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TDT.QLND.Models;
+using TDT.QLND.DTO;
 using TDT.Core.Ultils;
-using TDT.Core.Models;
-using TDT.Core.DTO;
 
 namespace TDT.QLND.Controller
 {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
     public class UserAuthController
     {
         private string connStr;
         private FrmLoginBinding loginBinding;
         private FrmConfigBinding configBinding;
-        private static UserAuthController instance;
-        private FrmConfig frmConfig = null;
-        private FrmLogin frmLogin = null;
+        private static UserAuthController? instance;
+        private FrmConfig? frmConfig;
+        private FrmLogin? frmLogin;
         public Action gotoDashborad;
         public Action<string, string, string, string> saveConfig;
         public static UserAuthController Instance
@@ -35,7 +37,9 @@ namespace TDT.QLND.Controller
                 return instance;
             }
         }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private UserAuthController() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public void SetConnStr(string connStr)
         {
             this.connStr = connStr;
@@ -108,28 +112,30 @@ namespace TDT.QLND.Controller
                 loginBinding.txtPass.Focus();
                 return;
             }
-            ConnectionState rs = CheckConnectionString();
-            DialogResult dig;
-            switch (rs)
-            {
-                case ConnectionState.Valid:
-                    ProcessLogin();
-                    break;
-                case ConnectionState.NotExist:
-                    dig = MessageBox.Show("Tài khoản hoặc mật khẩu không đúng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    if (dig == DialogResult.OK)
-                    {
-                        ProcessConfig();
-                    }
-                    break;
-                case ConnectionState.Invalid:
-                    dig = MessageBox.Show("Cấu hình không hợp lệ hoặc kết nối thất bại, vui lòng kiểm tra lại kết nối!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    if (dig == DialogResult.OK)
-                    {
-                        ProcessConfig();
-                    }
-                    break;
-            }
+            ProcessLogin();
+            //--Đã chuyển sang sử dụng xác thực thông qua API
+            //ConnectionState rs = CheckConnectionString();
+            //DialogResult dig;
+            //switch (rs)
+            //{
+            //    case ConnectionState.Valid:
+            //        ProcessLogin();
+            //        break;
+            //    case ConnectionState.NotExist:
+            //        dig = MessageBox.Show("Tài khoản hoặc mật khẩu không đúng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        if (dig == DialogResult.OK)
+            //        {
+            //            ProcessConfig();
+            //        }
+            //        break;
+            //    case ConnectionState.Invalid:
+            //        dig = MessageBox.Show("Cấu hình không hợp lệ hoặc kết nối thất bại, vui lòng kiểm tra lại kết nối!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        if (dig == DialogResult.OK)
+            //        {
+            //            ProcessConfig();
+            //        }
+            //        break;
+            //}
         }
 
         public ConnectionState CheckConnectionString()
@@ -154,38 +160,25 @@ namespace TDT.QLND.Controller
         }
         public LoginResult CheckUser(string pUser, string pPass)
         {
-            AuthDTO auth = APICallHelper.Post<AuthDTO>("login", new LoginModel()
-            {
-                UserName = pUser,
-                Password = pPass
-            }.ToString()).Result;
-            if (string.IsNullOrEmpty(auth.Token))
-            {
-                return LoginResult.Invalid;
-            }
-            UserDetailDTO userDetail = APICallHelper.Get<UserDetailDTO>("user/get", token: auth.Token).Result;
             try
             {
-                SqlDataAdapter da = new SqlDataAdapter("select * from QL_NguoiDung where TenDangNhap='" + pUser + "' and MatKhau='" + pPass + "'", connStr);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                if (dt.Rows.Count == 0)
+                AuthDTO auth = APICallHelper.Post<AuthDTO>("auth/login", new LoginModel()
+                {
+                    UserName = pUser,
+                    Password = pPass
+                }.ToString()).Result;
+                if (string.IsNullOrEmpty(auth.Token))
                 {
                     return LoginResult.Invalid;
                 }
-                else
-                {
-                    if (dt.Rows[0]["HoatDong"] == null || dt.Rows[0]["HoatDong"].ToString() == "False")
-                    {
-                        return LoginResult.Disabled;
-                    }
-                    return LoginResult.Success;
-                }
+                //ResponseDataDTO<User> userDetail = APICallHelper.Get<ResponseDataDTO<User>>("user", token: auth.Token).Result;
+                //ResponseDataDTO<User> res = APICallHelper.Get<ResponseDataDTO<User>>($"user/{pUser}", token: auth.Token).Result;
+                return LoginResult.Success;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(String.Format("Lỗi: {0}", ex.Message));
-                return LoginResult.Invalid;
+                MessageBox.Show(String.Format("Lỗi: {0}", ex.Message), "Hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return LoginResult.Exception;
             }
 
         }
@@ -193,6 +186,8 @@ namespace TDT.QLND.Controller
         {
             switch (CheckUser(loginBinding.txtUsername.Text.Trim(), loginBinding.txtPass.Text.Trim()))
             {
+                case LoginResult.Exception:
+                    break;
                 case LoginResult.Invalid:
                     MessageBox.Show("Sai Tên đăng nhập hoặc Mật khẩu");
                     break;
@@ -220,6 +215,7 @@ namespace TDT.QLND.Controller
     }
     public enum LoginResult
     {
+        Exception,
         Invalid,
         Disabled,
         Success,
@@ -257,3 +253,5 @@ namespace TDT.QLND.Controller
         }
     }
 }
+#pragma warning restore CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
+#pragma warning restore CS8602 // Dereference of a possibly null reference.

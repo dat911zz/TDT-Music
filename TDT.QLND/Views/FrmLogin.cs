@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace TDT.QLND.View
+namespace TDT.QLND.Views
 {
     public partial class FrmLogin : Form
     {

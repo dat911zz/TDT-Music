@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using TDT.Core.Enums;
 using TDT.Core.Models;
 using TDT.Core.Extensions;
+using Newtonsoft.Json;
 
 namespace TDT.Core.Ultils
 {
@@ -32,6 +33,22 @@ namespace TDT.Core.Ultils
                 }
             }         
             return new JsonResult(jsonData);
+        }
+        public static string GetJsonString(Enum value, Dictionary<string, object> data = null, string formatValue = "")
+        {
+            var jsonData = new Dictionary<string, object>
+            {
+                { "code", value },
+                { "msg", value.GetDescription(formatValue) }
+            };
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    jsonData[item.Key] = item.Value;
+                }
+            }
+            return JsonConvert.SerializeObject(jsonData);
         }
     }
 }

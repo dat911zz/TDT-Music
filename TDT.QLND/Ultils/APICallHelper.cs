@@ -1,6 +1,4 @@
-﻿
-using Microsoft.AspNetCore.WebUtilities;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -10,9 +8,7 @@ using System.Net.Http.Json;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
-using TDT.Core.Enums;
-using TDT.Core.Helper;
-using TDT.Core.Models;
+using TDT.QLND.Models;
 
 namespace TDT.Core.Ultils
 {

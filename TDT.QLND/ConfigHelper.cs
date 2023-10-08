@@ -10,7 +10,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Dynamic;
-using Microsoft.Data.Sql;
+//using Microsoft.Data.Sql;
 
 namespace TDT.QLND
 {
@@ -19,7 +19,7 @@ namespace TDT.QLND
         public static DataTable GetServerName()
         {
             DataTable dt = new DataTable();
-            dt = SqlDataSourceEnumerator.Instance.GetDataSources();
+            //dt = SqlDataSourceEnumerator.Instance.GetDataSources();
             return dt;
         }
         public static DataTable GetDBName(string serverName, string userName, string pass)

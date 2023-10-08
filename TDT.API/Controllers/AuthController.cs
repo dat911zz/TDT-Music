@@ -17,14 +17,14 @@ using TDT.IdentityCore.Utils;
 
 namespace TDT.API.Controllers
 {
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
-    public class LoginController : Controller
+    public class AuthController : Controller
     {
         private IConfiguration _cfg;
         private readonly ILogger<HomeController> _logger;
         private readonly QLDVModelDataContext _db;
-        public LoginController(IConfiguration cfg, ILogger<HomeController> logger, QLDVModelDataContext db)
+        public AuthController(IConfiguration cfg, ILogger<HomeController> logger, QLDVModelDataContext db)
         {
             _cfg = cfg;
             _logger = logger;
@@ -40,12 +40,19 @@ namespace TDT.API.Controllers
                 User user = Authenticate(login);
                 if (user != null)
                 {
-                    string token = SecurityHelper.GenerateJWT(_cfg, user);
-                    response = APIHelper.GetJsonResult(APIStatusCode.AccessGranted, new Dictionary<string, object>()
+                    if (user.LockoutEnabled)
                     {
-                        {"token", token}
-                    });
-                    _logger.LogInformation("{0} connected", HttpContext.Connection.RemoteIpAddress);
+                        response = APIHelper.GetJsonResult(APIStatusCode.InvalidAccount);
+                    }
+                    else
+                    {
+                        string token = SecurityHelper.GenerateJWT(_cfg, user);
+                        response = APIHelper.GetJsonResult(APIStatusCode.AccessGranted, new Dictionary<string, object>()
+                        {
+                            {"token", token}
+                        });
+                        _logger.LogInformation("{0} connected", HttpContext.Connection.RemoteIpAddress);
+                    }                  
                 }
                 else
                 {
@@ -62,6 +69,38 @@ namespace TDT.API.Controllers
                     });
             }
             
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult Register([FromBody] UserIdentiyModel model)
+        {
+            try
+            {
+                if (_db.Users.Any(u => u.UserName.Equals(model.UserName)))
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.ExistingAccount);
+                }
+                _db.Users.InsertOnSubmit(new User()
+                {
+                    UserName = model.UserName,
+                    Address = model.Address,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                    PasswordHash = SecurityHelper.HashPassword(model.Password)
+                });
+                _db.SubmitChanges();
+                return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
+                    {
+                        {"data", model}
+                    }, "Đăng ký");
+            }
+            catch (Exception ex)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
+            }
         }
         private User Authenticate(LoginModel login)
         {

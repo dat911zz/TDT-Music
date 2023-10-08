@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using TDT.Core.Enums;
 
 namespace TDT.Core.Models
 {
     public class APIResponseModel
     {
-        public int Code { get; set; }
+        public APIStatusCode Code { get; set; }
         public string Msg { get; set; }
         public override string ToString()
         {

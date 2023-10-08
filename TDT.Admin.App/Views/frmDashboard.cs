@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TDT.QLND.View;
+using TDT.QLND.Views;
 
-namespace TDT.Cadmin.Desktop.Views
+namespace TDT.Cadmin.App.Views
 {
     public partial class frmDashboard : Form
     {
@@ -18,6 +18,13 @@ namespace TDT.Cadmin.Desktop.Views
         {
             InitializeComponent();
             this._prevFrm = _prevFrm;
+        }
+
+        private void frmDashboard_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _prevFrm.Show();
+            e.Cancel = false;
+            this.Hide();
         }
     }
 }
