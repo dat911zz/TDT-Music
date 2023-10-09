@@ -6,7 +6,7 @@ using TDT.Core.Helper;
 
 namespace TDT.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class GenreController : ControllerBase
     {

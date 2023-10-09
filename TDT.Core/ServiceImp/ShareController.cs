@@ -2,10 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using TDT.Core.DTO;
 using TDT.Core.Helper;
+using TDT.Core.ModelClone;
+using TDT.Core.Ultils;
 
 namespace TDT.Core.ServiceImp
 {
@@ -13,10 +16,10 @@ namespace TDT.Core.ServiceImp
     {
         public JsonResult LoadSongRelease()
         {
-            List<SongDTO> songs = new List<SongDTO>();
+            IList<SongDTO> songs = new List<SongDTO>();
             if (DataHelper.Instance.Songs.Count <= 0)
             {
-                HttpService httpService = new HttpService(DataHelper.DOMAIN_API + "/Song/load");
+                HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Song/load");
                 string json = httpService.getJson();
                 songs = ConvertService.Instance.convertToObjectFromJson<List<SongDTO>>(json);
             }
@@ -46,7 +49,7 @@ namespace TDT.Core.ServiceImp
         {
             if(DataHelper.Instance.Genres.Count <= 0)
             {
-                HttpService httpService = new HttpService(DataHelper.DOMAIN_API + "/Genre/load");
+                HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Genre/load");
                 string json = httpService.getJson();
                 List<Genre> genres = ConvertService.Instance.convertToObjectFromJson<List<Genre>>(json);
                 if(genres != null)
@@ -65,6 +68,31 @@ namespace TDT.Core.ServiceImp
                 }
             }
             return new JsonResult("true");
+        }
+        public JsonResult LoadPlaylist()
+        {
+            List<PlaylistDTO> playlists = new List<PlaylistDTO>();
+            if (DataHelper.Instance.Playlists.Count <= 0)
+            {
+                HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Playlist/load");
+                string json = httpService.getJson();
+                playlists = ConvertService.Instance.convertToObjectFromJson<List<PlaylistDTO>>(json);
+            }
+            if(playlists != null)
+            {
+                foreach (PlaylistDTO playlist in playlists)
+                {
+                    if (!DataHelper.Instance.Playlists.Keys.Contains(playlist.encodeId))
+                    {
+                        DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
+                    }
+                }
+            }
+            return new JsonResult("true");
+        }
+        public JsonResult GetHtmlPlaylistChill()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.Playlists.Values.Take(5).ToList()));
         }
     }
 }

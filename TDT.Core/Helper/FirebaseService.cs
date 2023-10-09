@@ -10,6 +10,9 @@ using System;
 using TDT.Core.DTO;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
+using TDT.Core.ModelClone;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TDT.Core.Helper
 {
@@ -145,6 +148,22 @@ namespace TDT.Core.Helper
                 return ex.Message;
             }
         }
+        public async Task<string> pushFile(Stream stream, string nameParent)
+        {
+            try
+            {
+                if (stream != null)
+                {
+                    var task = await storage.Child(nameParent).PutAsync(stream);
+                    return task;
+                }
+                return "Creat stream error: " + nameParent;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
 
         public async Task<IReadOnlyCollection<FirebaseObject<PlaylistDTO>>> get1()
         {
@@ -152,6 +171,31 @@ namespace TDT.Core.Helper
             //return await firebase.Child("Playlist").OrderBy("title").StartAt(str).EndAt(str + "\uf8ff").OnceAsync<PlaylistDTO>();
             return await firebase.Child("Playlist").OrderByKey().StartAt("(Single)").EndAt("(Single)" + "~").OnceAsync<PlaylistDTO>();
             //return await firebase.Child("Playlist").OrderBy("contentLastUpdate").OnceAsync<PlaylistDTO>();
+        }
+
+        public async Task<List<string>> pushSong(SongDTO song, string urlMP3)
+        {
+            List<string> list = new List<string>();
+            if (song != null)
+            {
+                string thumbnail = song.thumbnail.Split("/").Last();
+                string thumbnailM = song.thumbnailM.Split("/").Last();
+                if (String.IsNullOrEmpty(thumbnail) || String.IsNullOrEmpty(thumbnailM))
+                {
+                    return list;
+                }
+                string path_thumbnail = "Images/Song/0/" + thumbnail;
+                string path_thumbnailM = "Images/Song/1/" + thumbnailM;
+                list.Add(await FirebaseService.Instance.pushFile(song.thumbnail, path_thumbnail));
+                list.Add(await FirebaseService.Instance.pushFile(song.thumbnailM, path_thumbnailM));
+                song.thumbnail = path_thumbnail;
+                song.thumbnailM = path_thumbnailM;
+                string nameSong = "MP3/" + song.encodeId + ".mp3";
+                await FirebaseService.Instance.pushFile(urlMP3, nameSong);
+                song.streamingStatus = 1;
+                FirebaseService.Instance.push("Song/" + song.encodeId, song);
+            }
+            return list;
         }
     }
 }

@@ -23,6 +23,7 @@ namespace TDT_Music
                 {
                     webBuilder.UseStartup<Startup>();
                     new Task(() => { new ShareController().LoadGenre(); }).Start();
+                    new Task(() => { new ShareController().LoadPlaylist(); }).Start();
                 });
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TDT.Core.DTO;
 using TDT.Core.Helper;
+using TDT.Core.ModelClone;
 using TDT.Core.Ultils;
 
 namespace TDT.Core.ServiceImp
@@ -159,6 +160,75 @@ namespace TDT.Core.ServiceImp
                     </div>
                 </div>
             ");
+            return str.ToString();
+        }
+
+        public string GeneratePlaylist(List<PlaylistDTO> playlists)
+        {
+            StringBuilder str = new StringBuilder();
+            foreach (var playlist in playlists)
+            {
+                string img;
+                if (DataHelper.Instance.ThumbPlaylist.Keys.Contains(playlist.encodeId))
+                {
+                    img = DataHelper.Instance.ThumbPlaylist[playlist.encodeId];
+                }
+                else
+                {
+                    img = FirebaseService.Instance.getStorage(playlist.thumbnail);
+                    DataHelper.Instance.ThumbPlaylist.Add(playlist.encodeId, img);
+                }
+                //int iSpace = playlist.title.Length / 2;
+                //if (playlist.title[iSpace] !=  ' ')
+                //{
+                //    int iPre = iSpace - 1;
+                //    while(iPre >= 0 && playlist.title[iPre] != ' ')
+                //    {
+                //        --iPre;
+                //    }
+                //    int iNe = iSpace + 1;
+                //    while (iNe < playlist.title.Length && playlist.title[iNe] != ' ')
+                //    {
+                //        ++iNe;
+                //    }
+                //    if(iPre < 0 && iNe >= playlist.title.Length)
+                //    {
+                //        iSpace = -1;
+                //    }
+                //    else
+                //    {
+
+                //    }
+                //}
+                str.AppendFormat(@"
+                    <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
+                        <div class=""playlist-wrapper is-description"">
+                            <div class=""zm-card"">
+                                <div>
+                                    <a class="""" title=""{0}""
+                                        href=""{1}"">
+                                        <div class=""zm-card-image"">
+                                            <figure class=""image is-48x48"">
+                                                <img src=""{2}"" alt="""" />
+                                            </figure>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class=""zm-card-content"">
+                                    <h3 class=""mt-10 subtitle"">
+                                        <span>
+                                            <span>
+                                                <span>{3}</span>
+                                            </span>
+                                            <span style=""position: fixed; visibility: hidden; top: 0px; left: 0px; "">…</span>
+                                        </span>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ", playlist.title, playlist.link, img, playlist.title);
+            }
             return str.ToString();
         }
     }

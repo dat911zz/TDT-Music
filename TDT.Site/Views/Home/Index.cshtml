@@ -2,6 +2,7 @@
 @using TDT.Core.Helper;
 @{
     ViewData["Title"] = "Home Page";
+    <link rel="stylesheet" href="~/css/loading.css" />
 }
 
 <div class="container home-page-content">
@@ -167,7 +168,31 @@
             <button class="zm-btn button" tabindex="0">Quốc tế</button>
         </div>
         <div id="song_release" class="columns is-multiline">
-            
+            <div class="column mar-b-0 is-fullhd-4 is-widescreen-4 is-desktop-4 is-touch-6 is-tablet-6">
+                <div class="list">
+                    @for(int i = 0; i < 4; i++)
+                    {
+                        @await Html.PartialAsync("/views/partial/_itemsong.cshtml");
+                    }
+                </div>
+            </div>
+            <div class="column mar-b-0 is-fullhd-4 is-widescreen-4 is-desktop-4 is-touch-6 is-tablet-6">
+                <div class="list">
+                    @for(int i = 0; i < 4; i++)
+                    {
+                        @await Html.PartialAsync("/views/partial/_itemsong.cshtml");
+                    }
+                </div>
+            </div>
+            <div class="column mar-b-0 is-fullhd-4 is-widescreen-4 is-desktop-4 is-touch-6 is-tablet-6">
+                <div class="list">
+                    @for (int i = 0; i < 4; i++)
+                    {
+                        @await Html.PartialAsync("/views/partial/_itemsong.cshtml")
+                        ;
+                    }
+                </div>
+            </div>
         </div>
     </div>
     <div class="zm-section playlist-section channel-section pad-0">
@@ -180,7 +205,7 @@
             </h3>
             <div class="zm-carousel-wrapper">
                 <div class="zm-carousel">
-                    <div class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px)">
+                    <div id="playlist_chill" class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px)">
                         <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
                             <div class="playlist-wrapper is-description">
                                 <div class="zm-card">
@@ -1062,11 +1087,17 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $.ajax({
             url: "/Share/LoadSongRelease",
             success: function(data) {
                 $('#song_release').html(data);
+                $.ajax({
+                    url: "/Share/GetHtmlPlaylistChill",
+                    success: function (data) {
+                        $('#playlist_chill').html(data);
+                    }
+                });
             }
         });
         var change = true;

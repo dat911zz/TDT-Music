@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using TDT.Core.Models;
 
 namespace TDT.Core.DTO
 {
-    public class SongDTO
+    public class SongDTO : APIResponseModel
     {
         private string _encodeId;
         private string _title;
@@ -70,7 +71,7 @@ namespace TDT.Core.DTO
         public int comment { get => _comment; set => _comment = value; }
         public DateTime ReleaseDate()
         {
-            return (new DateTime(1975, 1, 1, 0, 0, 0)).AddSeconds(long.Parse(this.releaseDate));
+            return (new DateTime(1975, 1, 1, 0, 0, 0)).AddMilliseconds(long.Parse(13 - this.releaseDate.Length > 0 ? this.releaseDate.PadRight(13, '0') : this.releaseDate));
         }
         public string Duration()
         {

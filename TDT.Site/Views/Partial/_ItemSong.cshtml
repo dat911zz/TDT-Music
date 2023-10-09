@@ -1,12 +1,12 @@
 ﻿@page
-@model TDT.Core.DTO.SongDTO
+@* @model TDT.Core.DTO.SongDTO *@
 @{
 }
 <div class="list-item hide-right media-item hide-right full-left">
     <div class="media">
         <div class="media-left">
             <div class="song-thumb">
-                <figure class="image is-60x60" title="@Model.title">
+                <figure class="loading image is-60x60" title="">
                     <img src="" alt="" />
                 </figure>
                 <div class="opacity"></div>
@@ -20,29 +20,28 @@
                         <button class="zm-btn action-play button" tabindex="0">
                             <i class="icon action-play ic-play"></i>
                         </button>
-                        <button class="zm-btn zm-tooltip-btn is-hidden is-hover-circle button"
-                                tabindex="0">
+                        <button class="zm-btn zm-tooltip-btn is-hidden is-hover-circle button" tabindex="0">
                             <i class="icon ic-more"></i>
                         </button>
                     </div>
                 </div>
             </div>
             <div class="card-info">
-                <div class="title-wrapper">
+                <div class="title-wrapper loading">
                     <span class="item-title title">
                         <span>
                             <span>
-                                <span>@Model.title</span>
+                                <span></span>
                             </span>
-                            <span style="position: fixed;visibility: hidden; top: 0px; left: 0px;">…</span>
+                            <span style="position: fixed; visibility: hidden; top: 0px; left: 0px;"></span>
                         </span>
                     </span>
                 </div>
-                <h3 class="is-one-line is-truncate subtitle">
-                    <a class="is-ghost" href="/nghe-si/Dee-Tran">Dee Trần</a>
+                <h3 class="loading is-one-line is-truncate subtitle">
+                    <a class="is-ghost" href=""></a>
                 </h3>
-                <div class="time-release">
-                    <span>3 ngày trước</span>
+                <div class="time-release loading">
+                    <span></span>
                 </div>
             </div>
         </div>
@@ -50,11 +49,7 @@
             <div class="hover-items">
                 <div class="level">
                     <div class="level-item"></div>
-                    <div class="level-item">
-                        <button class="zm-btn zm-tooltip-btn is-hover-circle button" tabindex="0">
-                            <i class="icon ic-karaoke"></i>
-                        </button>
-                    </div>
+                    <div class="level-item"></div>
                     <div class="level-item">
                         <button class="zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button"
                                 tabindex="0">
@@ -72,12 +67,13 @@
             <div class="action-items">
                 <div class="level">
                     <div class="level-item">
-                        <button class="zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button" tabindex="0">
+                        <button class="zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button"
+                                tabindex="0">
                             <i class="icon ic-like"></i>
                             <i class="icon ic-like-full"></i>
                         </button>
                     </div>
-                    <div class="level-item duration">03:44</div>
+                    <div class="level-item duration"></div>
                 </div>
             </div>
         </div>

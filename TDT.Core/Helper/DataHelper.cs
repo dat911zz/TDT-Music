@@ -26,12 +26,13 @@ namespace TDT.Core.Helper
         }
 
         public static string COLOR_DEFAULT_STEP = "#000fff";
-        public static readonly string DOMAIN_API = "https://localhost:44300" + "/api";
         private int _viewColor;
         public Dictionary<string, Genre> Genres = new Dictionary<string, Genre>();
         public Dictionary<string, ArtistDTO> Artists = new Dictionary<string, ArtistDTO>();
         public Dictionary<string, string> ThumbSong = new Dictionary<string, string>();
+        public Dictionary<string, string> ThumbPlaylist = new Dictionary<string, string>();
         private Dictionary<string,SongDTO> _songs = new Dictionary<string, SongDTO>();
+        private Dictionary<string,PlaylistDTO> _playlists = new Dictionary<string, PlaylistDTO>();
         private List<List<SongDTO>> _songRelease = new List<List<SongDTO>>();
 
 
@@ -40,7 +41,7 @@ namespace TDT.Core.Helper
             get => _songs;
             set
             {
-                _songs = value.OrderByDescending(x => x.Value.releaseDate).ToDictionary(x => x.Key, x => x.Value);
+                _songs = value.OrderByDescending(x => x.Value.ReleaseDate()).ToDictionary(x => x.Key, x => x.Value);
             }
         }
         public List<List<SongDTO>> SongRelease {
@@ -85,7 +86,14 @@ namespace TDT.Core.Helper
             }
         }
 
-        
+        public Dictionary<string, PlaylistDTO> Playlists {
+            get => _playlists;
+            set
+            {
+                _playlists = value.OrderByDescending(x => x.Value.contentLastUpdate).ToDictionary(x => x.Key, x => x.Value);
+            }
+        }
+
         public async Task<List<string>> pushPlaylist(Playlist playlist)
         {
             List<string> list = new List<string>();
