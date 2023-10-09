@@ -4,16 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using TDT.Core.Enums;
 
 namespace TDT.Core.Models
 {
-    public class LoginModel
+    public class APIResponseModel
     {
-        private string _UserName;
-
-        private string _Password;
-        public string UserName { get => _UserName; set => _UserName = value; }
-        public string Password { get => _Password; set => _Password = value; }
+        public APIStatusCode Code { get; set; }
+        public string Msg { get; set; }
         public override string ToString()
         {
             return JsonSerializer.Serialize(this);

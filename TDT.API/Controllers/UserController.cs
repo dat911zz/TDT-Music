@@ -5,7 +5,9 @@ using Microsoft.OpenApi.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TDT.Core.DTO;
 using TDT.Core.Enums;
+using TDT.Core.Helper;
 using TDT.Core.ModelClone;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
@@ -15,7 +17,7 @@ using TDT.IdentityCore.Utils;
 
 namespace TDT.API.Controllers
 {
-    [Route("api/v{version:apiVersion}/[controller]/[action]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -27,53 +29,16 @@ namespace TDT.API.Controllers
             _db = db;
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        public IActionResult Register([FromBody]UserIdentiyModel model)
-        {
-            try
-            {
-                if (_db.Users.Any(u => u.UserName.Equals(model.UserName)))
-                {
-                    return APIHelper.GetJsonResult(APIStatusCode.ExistingAccount);
-                }
-                _db.Users.InsertOnSubmit(new User()
-                {
-                    UserName = model.UserName,
-                    Address = model.Address,
-                    Email = model.Email,
-                    PhoneNumber = model.PhoneNumber,
-                    PasswordHash = SecurityHelper.HashPassword(model.Password)
-                });
-                _db.SubmitChanges();
-                return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
-                {
-                    {"data", model}
-                }, "Đăng ký");
-            }
-            catch (Exception ex)
-            {
-                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
-                    {
-                        {"exception", ex.Message}
-                    });
-            }
-        }
-
         [HttpGet]
         [Authorize]
         public IActionResult Get()
         {
-            var users = from u in _db.Users select new { 
-                u.Id, 
-                u.UserName, 
-                u.PhoneNumber,
-                u.Email,
-                u.CreateDate,
-                u.LockoutEnabled,
-                u.LockoutEnd
-            };
-            return Ok(users);
+            var users = _db.Users.AsEnumerable();
+
+            return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
+                {
+                    {"data", users}
+                }, "Lấy dữ liệu");
         }
 
         [Authorize]
@@ -81,7 +46,10 @@ namespace TDT.API.Controllers
         public IActionResult Get(string username)
         {
             var user = _db.Users.Where(u => u.UserName.Equals(username.Trim()));
-            return Ok(user);
+            return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
+                {
+                    {"data", user}
+                }, "Lấy dữ liệu");
         }
 
         [Authorize]

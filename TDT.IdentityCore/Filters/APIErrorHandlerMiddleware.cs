@@ -10,11 +10,11 @@ using TDT.IdentityCore.Models;
 
 namespace TDT.IdentityCore.Filters
 {
-    public class ErrorHandlerMiddleware
+    public class APIErrorHandlerMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public ErrorHandlerMiddleware(RequestDelegate next)
+        public APIErrorHandlerMiddleware(RequestDelegate next)
         {
             _next = next;
         }

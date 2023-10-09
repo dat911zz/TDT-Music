@@ -3,10 +3,20 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace TDT.Core.Enums
+namespace TDT.QLND.Models
 {
+    public class APIResponseModel
+    {
+        public APIStatusCode Code { get; set; }
+        public string Msg { get; set; }
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this);
+        }
+    }
     public enum APIStatusCode
     {
         [Description("Có lỗi đã xảy ra")]

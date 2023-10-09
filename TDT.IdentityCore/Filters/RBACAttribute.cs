@@ -1,14 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc.Authorization;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace TDT.CAdmin.Filters
 {
-    public class RBACAttribute : AuthorizeFilter
+    public class RBACAttribute : Attribute, IAuthorizationFilter
     {
-        public override Task OnAuthorizationAsync(AuthorizationFilterContext context)
+        private readonly IEnumerable<Claim> _claims;
+        public RBACAttribute(IHttpContextAccessor httpContextAccessor)
         {
-            return base.OnAuthorizationAsync(context);
+            _claims = httpContextAccessor.HttpContext.User.Claims;
+        }
+        public void OnAuthorization(AuthorizationFilterContext context)
+        {
+            if (context != null)
+            {
+                
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using TDT.Core.DTO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
+using TDT.Core.Models;
 
 namespace TDT.Core.Helper
 {
@@ -193,7 +194,17 @@ namespace TDT.Core.Helper
             result.comment = song.comment;
             return result;
         }
-
+        public UserIdentiyModel convertToUserDetailDTO(User user)
+        {
+            return new UserIdentiyModel
+            {
+                UserName = user.UserName,
+                Address = user.Address,
+                PhoneNumber = user.PhoneNumber,
+                Email = user.Email,
+                Password = user.PasswordHash
+            };
+        }
         public T convertToObjectFromJson<T>(string json) where T : class
         {
             return JsonConvert.DeserializeObject<T>(json);

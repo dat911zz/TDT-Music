@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace TDT.Core.Models
+namespace TDT.QLND.Models
 {
     public class LoginModel
     {

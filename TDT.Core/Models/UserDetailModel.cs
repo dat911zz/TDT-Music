@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TDT.Core.Models
 {
-    public class UserDetailModel
+    public partial class UserDetailModel
     {
         private string _Address;
 
