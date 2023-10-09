@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using TDT.Core.DTO;
 using TDT.Core.Helper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,13 +13,12 @@ namespace TDT.API.Controllers
     public class PlaylistController : ControllerBase
     {
         // GET: api/<PlaylistController>
-        [Route("release")]
+        [Route("load")]
         [HttpGet]
-        public JsonResult release()
+        public JsonResult load()
         {
-            var list = FirebaseService.Instance.getPlaylistRelease().Result;
-            list = list.OrderByDescending(x => long.Parse(x.Object.releasedAt)).Take(10).ToList();
-            return new JsonResult(list);
+            var dics = FirebaseService.Instance.getDictionary("Playlist", "id");
+            return new JsonResult(dics.Values.Select(x => ConvertService.Instance.convertToObjectFromJson<PlaylistDTO>(x.ToString())).ToList());
         }
 
         // GET api/<PlaylistController>/5
