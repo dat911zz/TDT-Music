@@ -90,9 +90,46 @@ namespace TDT.Core.ServiceImp
             }
             return new JsonResult("true");
         }
+        public JsonResult LoadArtist()
+        {
+            List<ArtistDTO> artists = new List<ArtistDTO>();
+            HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Artist/load");
+            string json = httpService.getJson();
+            artists = ConvertService.Instance.convertToObjectFromJson<List<ArtistDTO>>(json);
+            if (artists != null)
+            {
+                foreach (ArtistDTO artist in artists)
+                {
+                    if (!DataHelper.Instance.Artists.Keys.Contains(artist.id))
+                    {
+                        try
+                        {
+                            DataHelper.Instance.Artists.Add(artist.id, artist);
+                        }catch { }
+                    }
+                }
+            }
+            return new JsonResult("true");
+        }
         public JsonResult GetHtmlPlaylistChill()
         {
-            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.Playlists.Values.Take(5).ToList()));
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistChills.Take(5).ToList()));
+        }
+        public JsonResult GetHtmlPlaylistYeuDoi()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistYeuDoi.Take(5).ToList()));
+        }
+        public JsonResult GetHtmlPlaylistRemixDance()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistRemixDances.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistTamTrang()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistTamTrang.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlArtistThinhHanh()
+        {
+            return new JsonResult(Generator.Instance.GenerateArtist(DataHelper.Instance.ArtistThinhHanh));
         }
     }
 }

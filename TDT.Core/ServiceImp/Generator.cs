@@ -96,8 +96,17 @@ namespace TDT.Core.ServiceImp
                         artDTO = FirebaseService.Instance.getSingleValue<ArtistDTO>($"Artist/{item.Key}").Result;
                         if (artDTO == null)
                             continue;
-                        DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
+                        try
+                        {
+                            DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
+                        }catch { }
                     }
+                    else
+                    {
+                        artDTO = DataHelper.Instance.Artists[item.Key];
+                    }
+                    if (string.IsNullOrEmpty(artDTO.name))
+                        continue;
                     if(iArt++ > 0)
                     {
                         str.Append(", ");
@@ -163,7 +172,14 @@ namespace TDT.Core.ServiceImp
             return str.ToString();
         }
 
-        public string GeneratePlaylist(List<PlaylistDTO> playlists)
+        /// <summary>
+        /// optionLast = 0 : title,
+        /// optionLast = 1 : artists
+        /// </summary>
+        /// <param name="optionLast">0: title</param>
+        /// <param name="optionLast">1: artists</param>
+        /// <returns></returns>
+        public string GeneratePlaylist(List<PlaylistDTO> playlists, int optionLast = 0)
         {
             StringBuilder str = new StringBuilder();
             foreach (var playlist in playlists)
@@ -176,30 +192,45 @@ namespace TDT.Core.ServiceImp
                 else
                 {
                     img = FirebaseService.Instance.getStorage(playlist.thumbnail);
-                    DataHelper.Instance.ThumbPlaylist.Add(playlist.encodeId, img);
+                    try
+                    {
+                        DataHelper.Instance.ThumbPlaylist.Add(playlist.encodeId, img);
+                    }
+                    catch { }
                 }
-                //int iSpace = playlist.title.Length / 2;
-                //if (playlist.title[iSpace] !=  ' ')
-                //{
-                //    int iPre = iSpace - 1;
-                //    while(iPre >= 0 && playlist.title[iPre] != ' ')
-                //    {
-                //        --iPre;
-                //    }
-                //    int iNe = iSpace + 1;
-                //    while (iNe < playlist.title.Length && playlist.title[iNe] != ' ')
-                //    {
-                //        ++iNe;
-                //    }
-                //    if(iPre < 0 && iNe >= playlist.title.Length)
-                //    {
-                //        iSpace = -1;
-                //    }
-                //    else
-                //    {
-
-                //    }
-                //}
+                string last = string.Empty;
+                if(optionLast == 0)
+                {
+                    last = playlist.title;
+                }
+                else
+                {
+                    int iArt = 0;
+                    foreach (var item in playlist.artists)
+                    {
+                        ArtistDTO artDTO = new ArtistDTO();
+                        if (!DataHelper.Instance.Artists.Keys.Contains(item.Key))
+                        {
+                            artDTO = FirebaseService.Instance.getSingleValue<ArtistDTO>($"Artist/{item.Key}").Result;
+                            if (artDTO == null)
+                                continue;
+                            DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
+                        }
+                        else
+                        {
+                            artDTO = DataHelper.Instance.Artists[item.Key];
+                        }
+                        if (string.IsNullOrEmpty(artDTO.name))
+                            continue;
+                        if (iArt++ > 0)
+                        {
+                            last += ", ";
+                        }
+                        last += string.Format(@"
+                                            <a class=""is-ghost"" href=""{1}"">{0}</a>
+                    ", artDTO.name, artDTO.link);
+                    }
+                }
                 str.AppendFormat(@"
                     <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
                         <div class=""playlist-wrapper is-description"">
@@ -227,7 +258,58 @@ namespace TDT.Core.ServiceImp
                             </div>
                         </div>
                     </div>
-                ", playlist.title, playlist.link, img, playlist.title);
+                ", playlist.title, playlist.link, img, last);
+            }
+            return str.ToString();
+        }
+
+        public string GenerateArtist(List<ArtistDTO> artists, int optionLast = 0)
+        {
+            StringBuilder str = new StringBuilder();
+            foreach (var artist in artists)
+            {
+                string img;
+                if (DataHelper.Instance.ThumbArtist.Keys.Contains(artist.id))
+                {
+                    img = DataHelper.Instance.ThumbArtist[artist.id];
+                }
+                else
+                {
+                    img = FirebaseService.Instance.getStorage(artist.thumbnail);
+                    try
+                    {
+                        DataHelper.Instance.ThumbArtist.Add(artist.id, img);
+                    }
+                    catch { }
+                }
+                str.AppendFormat(@"
+                    <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
+                        <div class=""playlist-wrapper is-description"">
+                            <div class=""zm-card"">
+                                <div>
+                                    <a class="""" title=""Những Bài Hát Hay Nhất Của {0}""
+                                       href=""{1}"">
+                                        <div class=""zm-card-image"">
+                                            <figure class=""image is-48x48"">
+                                                <img src=""{2}"" alt="""" />
+                                            </figure>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class=""zm-card-content"">
+                                    <h3 class=""mt-10 subtitle"">
+                                        <span>
+                                            <span>
+                                                <a class=""is-ghost"" href=""{3}"">{4}</a>
+                                            </span>
+                                            <span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;""></span>
+                                        </span>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ", artist.name, artist.playlistId, img, artist.link, artist.name);
             }
             return str.ToString();
         }

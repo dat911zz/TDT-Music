@@ -391,7 +391,7 @@
             <h3 class="zm-section-title title is-2">Một chút yêu đời</h3>
             <div class="zm-carousel-wrapper">
                 <div class="zm-carousel">
-                    <div class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px)">
+                    <div id="playlist_yeudoi" class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px)">
                         <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
                             <div class="playlist-wrapper is-description">
                                 <div class="zm-card">
@@ -575,7 +575,7 @@
             <h3 class="zm-section-title title is-2">Remix là Dance luôn</h3>
             <div class="zm-carousel-wrapper">
                 <div class="zm-carousel">
-                    <div class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px)">
+                    <div id="playlist_remix_dance" class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px)">
                         <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
                             <div class="playlist-wrapper is-artist">
                                 <div class="zm-card">
@@ -720,7 +720,7 @@
             <h3 class="zm-section-title title is-2">Tâm trạng tan chậm</h3>
             <div class="zm-carousel-wrapper">
                 <div class="zm-carousel">
-                    <div class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px)">
+                    <div id="playlist_tam_trang" class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px)">
                         <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
                             <div class="playlist-wrapper is-description">
                                 <div class="zm-card">
@@ -904,7 +904,7 @@
             <h3 class="zm-section-title title is-2">Nghệ sĩ thịnh hành</h3>
             <div class="zm-carousel-wrapper">
                 <div class="zm-carousel">
-                    <div class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px)">
+                    <div id="artist_thinh_hanh" class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px)">
                         <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
                             <div class="playlist-wrapper is-description">
                                 <div class="zm-card">
@@ -1096,6 +1096,30 @@
                     url: "/Share/GetHtmlPlaylistChill",
                     success: function (data) {
                         $('#playlist_chill').html(data);
+                    }
+                });
+                $.ajax({
+                    url: "/Share/GetHtmlPlaylistYeuDoi",
+                    success: function (data) {
+                        $('#playlist_yeudoi').html(data);
+                    }
+                });
+                $.ajax({
+                    url: "/Share/GetHtmlPlaylistRemixDance",
+                    success: function (data) {
+                        $('#playlist_remix_dance').html(data);
+                    }
+                });
+                $.ajax({
+                    url: "/Share/GetHtmlPlaylistTamTrang",
+                    success: function (data) {
+                        $('#playlist_tam_trang').html(data);
+                    }
+                });
+                $.ajax({
+                    url: "/Share/GetHtmlArtistThinhHanh",
+                    success: function (data) {
+                        $('#artist_thinh_hanh').html(data);
                     }
                 });
             }
