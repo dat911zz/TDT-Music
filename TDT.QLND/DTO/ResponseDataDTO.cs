@@ -9,7 +9,7 @@ namespace TDT.QLND.DTO
 {
     public class ResponseDataDTO<T> : APIResponseModel
     {
-        private IList<T> data = new List<T>();
+        private IList<T> data;
 
         public IList<T> Data { get => data; set => data = value; }
     }

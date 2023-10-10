@@ -21,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using TDT.IdentityCore.Filters;
 using TDT.Core.Extensions;
+using TDT.IdentityCore.Middlewares;
 
 namespace TDT.API
 {

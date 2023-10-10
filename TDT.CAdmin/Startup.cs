@@ -12,7 +12,7 @@ using System;
 using TDT.CAdmin.Areas.Identity.Data;
 using TDT.CAdmin.Models;
 using TDT.Core.ServiceImp;
-using TDT.IdentityCore.Filters;
+using TDT.IdentityCore.Middlewares;
 
 namespace TDT.CAdmin
 {
@@ -33,6 +33,7 @@ namespace TDT.CAdmin
             services.AddRazorPages();
             services.AddTransient<IEmailSender, MailingService>();
             services.AddSignalR();
+            services.Configure<ErrorHandlerMiddleware>(Configuration);
             //services.Configure<IdentityEmailService>(Configuration);
         }
 
@@ -55,7 +56,7 @@ namespace TDT.CAdmin
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseMiddleware<APIErrorHandlerMiddleware>();
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

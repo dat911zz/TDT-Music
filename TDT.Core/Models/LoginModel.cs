@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -12,7 +13,9 @@ namespace TDT.Core.Models
         private string _UserName;
 
         private string _Password;
+        [Required(ErrorMessage = "Vui lòng nhập tên đăng nhập!")]
         public string UserName { get => _UserName; set => _UserName = value; }
+        [Required(ErrorMessage = "Vui lòng nhập mật khẩu!")]
         public string Password { get => _Password; set => _Password = value; }
         public override string ToString()
         {
