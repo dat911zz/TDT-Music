@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using TDT.IdentityCore.Models;
 
-namespace TDT.IdentityCore.Filters
+namespace TDT.IdentityCore.Middlewares
 {
     public class APIErrorHandlerMiddleware
     {
