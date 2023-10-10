@@ -1,0 +1,192 @@
+﻿@model IEnumerable<TDT.Core.DTO.SongDTO>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.encodeId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.alias)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isOffical)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.artistsNames)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isWorldWide)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.thumbnailM)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.link)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.thumbnail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.duration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.zingChoice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isPrivate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.preRelease)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.releaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.distributor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isIndie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.streamingStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.allowAudioAds)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.hasLyric)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.userid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.album)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isRBT)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.like)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.listen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.liked)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.comment)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.encodeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.alias)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isOffical)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.artistsNames)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isWorldWide)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.thumbnailM)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.link)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.thumbnail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.duration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.zingChoice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isPrivate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.preRelease)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.releaseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.distributor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isIndie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.streamingStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.allowAudioAds)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.hasLyric)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.userid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.album)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isRBT)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.like)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.listen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.liked)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.comment)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

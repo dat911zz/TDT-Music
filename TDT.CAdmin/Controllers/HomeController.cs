@@ -9,6 +9,7 @@ using System.Net;
 using System.Threading.Tasks;
 using TDT.CAdmin.Filters;
 using TDT.CAdmin.Models;
+using TDT.Core.DTO;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
 using TDT.IdentityCore.Utils;
@@ -27,7 +28,7 @@ namespace TDT.CAdmin.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Start session");
-            //ResponseDataDTO<User> userDetail = APICallHelper.Get<ResponseDataDTO<User>>("user", token: auth.Token).Result;
+            //ResponseDataDTO<User> userDetail = APICallHelper.Get<ResponseDataDTO<User>>("user", token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJlbWFpbCI6InN0cmluZyIsImp0aSI6ImQ1ODE4ZDBmLWQzZDYtNGNjMi05NTRjLWRhZmNlMThhODY3NSIsImV4cCI6MTY5Njk2MjUwNCwiaXNzIjoiVERUIENvcnBlcmF0aW9uIiwiYXVkIjoiQVBJIFVzZXIifQ.2Jr0iB2HQ88Z6craHzKPjLO4tsJ5lVOg-_x4n5Bx4nA").Result;
             //ResponseDataDTO<User> res = APICallHelper.Get<ResponseDataDTO<User>>($"user/{pUser}", token: auth.Token).Result;
             return View();
         }
