@@ -26,6 +26,8 @@ namespace TDT.CAdmin.Controllers
         {
             _logger.LogInformation("Start session");
             var a = await APICallHelper.get("user/get");
+            //var a = await APICallHelper.Get("user/get");
+
             return View();
         }
         public IActionResult Privacy()
