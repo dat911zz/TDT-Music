@@ -98,11 +98,11 @@ namespace TDT.IdentityCore.Utils
                 );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        public static string ValidateToken(IConfiguration _cfg, string token)
+        public static bool IsValidToken(IConfiguration _cfg, string token)
         {
             if (token == null)
             {
-                return null;
+                return false;
             }
             var tokenHandler = new JwtSecurityTokenHandler();
             var secirityKey = Encoding.ASCII.GetBytes(Convert.ToString(_cfg["Jwt:Key"]));
@@ -120,14 +120,14 @@ namespace TDT.IdentityCore.Utils
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var jti = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "jti").Value;
-                var userName = jwtToken.Claims.FirstOrDefault(sub => sub.Type == "sub").Value;
-
-                return userName;
+                //var jti = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "jti").Value;
+                //var userName = jwtToken.Claims.FirstOrDefault(sub => sub.Type == "sub").Value;
+                
+                return true;
             }
             catch (Exception ex)
             {               
-                return null;
+                return false;
             }
         }
     }

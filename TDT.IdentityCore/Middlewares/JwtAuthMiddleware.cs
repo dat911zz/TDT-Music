@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TDT.IdentityCore.Utils;
 
-namespace TDT.IdentityCore.Filters
+namespace TDT.IdentityCore.Middlewares
 {
     public class JwtAuthMiddleware
     {
@@ -20,7 +20,7 @@ namespace TDT.IdentityCore.Filters
         public async Task Invoke(HttpContext context, IConfiguration cfg)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var userId = SecurityHelper.ValidateToken(cfg, token);
+            var userId = SecurityHelper.IsValidToken(cfg, token);
             if (userId != null)
             {
                 // attach user to context on successful jwt validation
