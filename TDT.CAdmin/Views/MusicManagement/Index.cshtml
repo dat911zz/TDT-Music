@@ -10,121 +10,121 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table table-hover table-white">
     <thead>
         <tr>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.encodeId)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.title)
             </th>
-            <th>
+            @*             <th scope="col">
                 @Html.DisplayNameFor(model => model.alias)
-            </th>
-            <th>
+            </th> *@
+            @*    <th scope="col" >
                 @Html.DisplayNameFor(model => model.isOffical)
-            </th>
-            <th>
+            </th> *@
+           @*  <th scope="col">
                 @Html.DisplayNameFor(model => model.username)
-            </th>
-            <th>
+            </th> *@
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.artistsNames)
             </th>
-            <th>
+            @*             <th scope="col">
                 @Html.DisplayNameFor(model => model.isWorldWide)
-            </th>
-            <th>
+            </th> *@
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.thumbnailM)
             </th>
-            <th>
+           @*  <th scope="col">
                 @Html.DisplayNameFor(model => model.link)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.thumbnail)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.duration)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.zingChoice)
-            </th>
-            <th>
+            </th> 
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.isPrivate)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.preRelease)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.releaseDate)
-            </th>
-            <th>
+            </th>*@
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.distributor)
-            </th>
-            <th>
+            </th scope="col">
+@*             <th scope="col">
                 @Html.DisplayNameFor(model => model.isIndie)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.streamingStatus)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.allowAudioAds)
-            </th>
-            <th>
+            </th> 
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.hasLyric)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.userid)
-            </th>
-            <th>
+            </th >*@
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.album)
             </th>
-            <th>
+@*             <th scope="col">
                 @Html.DisplayNameFor(model => model.isRBT)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.like)
             </th>
-            <th>
+            <th scope="col"> 
                 @Html.DisplayNameFor(model => model.listen)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.liked)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.comment)
-            </th>
-            <th></th>
+            </th> *@
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+               <td scope="row">
                 @Html.DisplayFor(modelItem => item.encodeId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.title)
             </td>
-            <td>
+@*             <td>
                 @Html.DisplayFor(modelItem => item.alias)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.isOffical)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.username)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.artistsNames)
             </td>
-            <td>
+         @*    <td>
                 @Html.DisplayFor(modelItem => item.isWorldWide)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.thumbnailM)
-            </td>
-            <td>
+            </td> 
+        @*    <td>
                 @Html.DisplayFor(modelItem => item.link)
             </td>
             <td>
@@ -134,7 +134,7 @@
                 @Html.DisplayFor(modelItem => item.duration)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.zingChoice)
+                @Html.DisplayFor(modelItem => item.zingChoice) 
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.isPrivate)
@@ -144,11 +144,11 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.releaseDate)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.distributor)
             </td>
-            <td>
+          @*   <td>
                 @Html.DisplayFor(modelItem => item.isIndie)
             </td>
             <td>
@@ -162,11 +162,11 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.userid)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.album)
             </td>
-            <td>
+@*             <td>
                 @Html.DisplayFor(modelItem => item.isRBT)
             </td>
             <td>
@@ -180,8 +180,8 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.comment)
-            </td>
-            <td>
+            </td> *@
+            <td >
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })

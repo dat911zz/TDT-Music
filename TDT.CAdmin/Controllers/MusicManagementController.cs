@@ -33,10 +33,10 @@ namespace TDT.CAdmin.Controllers
                 encodeId = "1131231223"
             }); _songs.Add(new SongDTO
             {
-                encodeId = "12123123123"
+                encodeId = "12123"
             }); _songs.Add(new SongDTO
             {
-                encodeId = "11312323312323"
+                encodeId = "113123"
             });
         }
 
@@ -44,6 +44,34 @@ namespace TDT.CAdmin.Controllers
         {
             
             return View(_songs);
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(SongDTO song)
+        {
+            return View();
+        }
+
+
+        public IActionResult Edit(string? encodeId)
+        {
+            return View();
+        }
+        public IActionResult Edit(SongDTO song)
+        {
+            return View(song);
+        }
+
+        public IActionResult Delete(string encodeId)
+        {
+            return View();
+        }
+        public IActionResult Details()
+        {
+            return View();
         }
     }
 }
