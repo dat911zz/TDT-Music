@@ -4,8 +4,11 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using TDT.CAdmin.Filters;
 using TDT.CAdmin.Models;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
@@ -25,18 +28,23 @@ namespace TDT.CAdmin.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Start session");
-            var a = await APICallHelper.get("user/get");
+            var test = Directory.GetCurrentDirectory();
+            //ResponseDataDTO<User> userDetail = APICallHelper.Get<ResponseDataDTO<User>>("user", token: auth.Token).Result;
+            //ResponseDataDTO<User> res = APICallHelper.Get<ResponseDataDTO<User>>($"user/{pUser}", token: auth.Token).Result;
             return View();
         }
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(int statusCode, string msg = "Có lỗi đã xảy ra!")
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.ErrorCode = statusCode != 0 ? statusCode : 404;
+            ViewBag.ErrorContent = msg;
+            return View();
         }
     }
 }

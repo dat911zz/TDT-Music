@@ -21,6 +21,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using TDT.IdentityCore.Filters;
 using TDT.Core.Extensions;
+using TDT.IdentityCore.Middlewares;
+using TDT.IdentityCore.Utils;
 
 namespace TDT.API
 {
@@ -113,6 +115,7 @@ namespace TDT.API
                 });
                 #endregion
             });
+            services.AddTransient<ISecurityHelper, SecurityHelper>();
             services.AddSingleton(new QLDVModelDataContext(Configuration.GetConnectionString("AdminConnection")));
         }
 

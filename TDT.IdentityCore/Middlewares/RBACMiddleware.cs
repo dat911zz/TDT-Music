@@ -5,26 +5,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TDT.Core.DTO;
+using TDT.Core.Models;
+using TDT.Core.Ultils;
 using TDT.IdentityCore.Utils;
 
-namespace TDT.IdentityCore.Filters
+namespace TDT.IdentityCore.Middlewares
 {
-    public class JwtAuthMiddleware
+    public class RBACMiddleware
     {
         private readonly RequestDelegate _next;
-        public JwtAuthMiddleware(RequestDelegate next)
+        public RBACMiddleware(RequestDelegate next)
         {
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IConfiguration cfg)
+        public async Task Invoke(HttpContext context, IConfiguration cfg, ISecurityHelper securityHelper)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var userId = SecurityHelper.ValidateToken(cfg, token);
-            if (userId != null)
+            var userName = securityHelper.ValidateToken(token);
+            if (userName != null)
             {
                 // attach user to context on successful jwt validation
-                //context.Items["User"] = userService.GetById(userId.Value);
+                context.Items["User"] = APICallHelper.Get<ResponseDataDTO<User>>($"user/{userName}", token: token).Result;
             }
 
             await _next(context);
