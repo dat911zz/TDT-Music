@@ -8,7 +8,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action=" ">Tạo Bài Hát Mới</a>
 </p>
 <table class="table table-hover table-white">
     <thead>
@@ -19,81 +19,22 @@
             <th scope="col">
                 @Html.DisplayNameFor(model => model.title)
             </th>
-            @*             <th scope="col">
-                @Html.DisplayNameFor(model => model.alias)
-            </th> *@
-            @*    <th scope="col" >
-                @Html.DisplayNameFor(model => model.isOffical)
-            </th> *@
-           @*  <th scope="col">
-                @Html.DisplayNameFor(model => model.username)
-            </th> *@
             <th scope="col">
                 @Html.DisplayNameFor(model => model.artistsNames)
             </th>
-            @*             <th scope="col">
-                @Html.DisplayNameFor(model => model.isWorldWide)
-            </th> *@
+
             <th scope="col">
                 @Html.DisplayNameFor(model => model.thumbnailM)
             </th>
-           @*  <th scope="col">
-                @Html.DisplayNameFor(model => model.link)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.thumbnail)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.duration)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.zingChoice)
-            </th> 
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.isPrivate)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.preRelease)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.releaseDate)
-            </th>*@
+
             <th scope="col">
                 @Html.DisplayNameFor(model => model.distributor)
-            </th scope="col">
-@*             <th scope="col">
-                @Html.DisplayNameFor(model => model.isIndie)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.streamingStatus)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.allowAudioAds)
-            </th> 
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.hasLyric)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.userid)
-            </th >*@
+            </th >
+
             <th scope="col">
                 @Html.DisplayNameFor(model => model.album)
             </th>
-@*             <th scope="col">
-                @Html.DisplayNameFor(model => model.isRBT)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.like)
-            </th>
-            <th scope="col"> 
-                @Html.DisplayNameFor(model => model.listen)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.liked)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.comment)
-            </th> *@
+
             <th scope="col"></th>
         </tr>
     </thead>
@@ -106,81 +47,24 @@
             <td>
                 @Html.DisplayFor(modelItem => item.title)
             </td>
-@*             <td>
-                @Html.DisplayFor(modelItem => item.alias)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isOffical)
-            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.username)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.artistsNames)
-            </td>
-         @*    <td>
-                @Html.DisplayFor(modelItem => item.isWorldWide)
-            </td>*@
+            </td>  
             <td>
                 @Html.DisplayFor(modelItem => item.thumbnailM)
             </td> 
-        @*    <td>
-                @Html.DisplayFor(modelItem => item.link)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.thumbnail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.zingChoice) 
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isPrivate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.preRelease)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.releaseDate)
-            </td>*@
+
             <td>
                 @Html.DisplayFor(modelItem => item.distributor)
             </td>
-          @*   <td>
-                @Html.DisplayFor(modelItem => item.isIndie)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.streamingStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.allowAudioAds)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.hasLyric)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.userid)
-            </td> *@
+
             <td>
                 @Html.DisplayFor(modelItem => item.album)
             </td>
-@*             <td>
-                @Html.DisplayFor(modelItem => item.isRBT)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.like)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.listen)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.liked)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.comment)
-            </td> *@
+
             <td >
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
