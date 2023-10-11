@@ -18,5 +18,11 @@ namespace TDT.Core.API
         {
             DataHelper.Instance.VIEW_COLOR = value;
         }
+        [Route("TokenFirebase")]
+        [HttpGet]
+        public JsonResult getToken()
+        {
+            return new JsonResult(FirebaseService.Instance.getToken());
+        }
     }
 }

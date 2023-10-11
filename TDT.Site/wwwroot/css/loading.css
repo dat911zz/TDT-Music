@@ -1,0 +1,33 @@
+﻿.loading {
+    position: relative;
+    min-height: 16px;
+    border-radius: 10px;
+    background-color: var(--loading-bg);
+    overflow:hidden;
+}
+
+    .loading::before {
+        content: '';
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: auto;
+        background: linear-gradient(to right, rgba(57,57,57,0.7), transparent);
+        animation: loading-wave linear 1s infinite;
+        transform: translateX(-100%);
+    }
+
+    .loading.title-wrapper {
+        max-width: 40%;
+    }
+
+    .loading.time-release {
+        max-width: 20%;
+    }
+
+@keyframes loading-wave {
+    100% {
+        transform: translateX(100%);
+    }
+}

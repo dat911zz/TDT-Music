@@ -32,7 +32,7 @@ namespace TDT.Core.DTO
         private string _description;
         private string _aliasTitle;
         private string _sectionId;
-        private int _contentLastUpdate;
+        private string _contentLastUpdate;
         private Dictionary<string, string> _songs;
         private object _bannerAdaptiveId;
         private int _like;
@@ -66,7 +66,7 @@ namespace TDT.Core.DTO
         public string description { get => _description; set => _description = value; }
         public string aliasTitle { get => _aliasTitle; set => _aliasTitle = value; }
         public string sectionId { get => _sectionId; set => _sectionId = value; }
-        public int contentLastUpdate { get => _contentLastUpdate; set => _contentLastUpdate = value; }
+        public string contentLastUpdate { get => _contentLastUpdate; set => _contentLastUpdate = value; }
         public Dictionary<string, string> songs { get => _songs; set => _songs = value; }
         public object bannerAdaptiveId { get => _bannerAdaptiveId; set => _bannerAdaptiveId = value; }
         public int like { get => _like; set => _like = value; }

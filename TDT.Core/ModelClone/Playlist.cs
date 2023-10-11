@@ -32,7 +32,7 @@ namespace TDT.Core.ModelClone
         private string _description;
         private string _aliasTitle;
         private string _sectionId;
-        private int _contentLastUpdate;
+        private string _contentLastUpdate;
         private Artist _artist;
         private List<Genre> _genres;
         private SongIntermediary _song;
@@ -68,7 +68,7 @@ namespace TDT.Core.ModelClone
         public string description { get => _description; set => _description = value; }
         public string aliasTitle { get => _aliasTitle; set => _aliasTitle = value; }
         public string sectionId { get => _sectionId; set => _sectionId = value; }
-        public int contentLastUpdate { get => _contentLastUpdate; set => _contentLastUpdate = value; }
+        public string contentLastUpdate { get => _contentLastUpdate; set => _contentLastUpdate = value; }
         public Artist artist { get => _artist; set => _artist = value; }
         public List<Genre> genres { get => _genres; set => _genres = value; }
         public SongIntermediary song { get => _song; set => _song = value; }
