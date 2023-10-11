@@ -22,13 +22,15 @@ namespace TDT.API.Controllers
     public class AuthController : Controller
     {
         private IConfiguration _cfg;
+        private ISecurityHelper _securityHelper;
         private readonly ILogger<HomeController> _logger;
         private readonly QLDVModelDataContext _db;
-        public AuthController(IConfiguration cfg, ILogger<HomeController> logger, QLDVModelDataContext db)
+        public AuthController(IConfiguration cfg, ISecurityHelper securityHelper, ILogger<HomeController> logger, QLDVModelDataContext db)
         {
             _cfg = cfg;
             _logger = logger;
             _db = db;
+            _securityHelper = securityHelper;
         }
         [AllowAnonymous]
         [HttpPost]
@@ -46,7 +48,7 @@ namespace TDT.API.Controllers
                     }
                     else
                     {
-                        string token = SecurityHelper.GenerateJWT(_cfg, user);
+                        string token = _securityHelper.GenerateJWT(user);
                         response = APIHelper.GetJsonResult(APIStatusCode.AccessGranted, new Dictionary<string, object>()
                         {
                             {"token", token}

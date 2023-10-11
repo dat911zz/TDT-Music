@@ -59,8 +59,11 @@ namespace TDT.IdentityCore.Middlewares
                         break;
                 }
 
-                _logger.LogError("An exception found!", error.StackTrace, error.Message);
-                HandlerError(context, error.Message);
+                _logger.LogError($"Exception: {error.Message}\n{error.StackTrace}");
+                HandlerError(
+                    context, 
+                    "Có lỗi đã xảy ra!"
+                    );
             }
         }
         private void HandlerError(HttpContext context, string msg)
