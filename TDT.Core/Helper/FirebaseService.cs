@@ -71,6 +71,11 @@ namespace TDT.Core.Helper
             }
         }
 
+        public string getToken()
+        {
+            return authLink.FirebaseToken;
+        }
+
         public async Task<T> getSingleValue<T>(string path)
         {
             return await firebase.Child(path).OnceSingleAsync<T>();

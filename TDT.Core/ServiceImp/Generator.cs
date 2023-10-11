@@ -88,32 +88,36 @@ namespace TDT.Core.ServiceImp
                                             </span>
                                         </div>
                                         <h3 class=""is-one-line is-truncate subtitle"">", song.title, img, song.title);
-                foreach (var item in song.artists)
+                if(song.artists != null)
                 {
-                    ArtistDTO artDTO = new ArtistDTO();
-                    if (!DataHelper.Instance.Artists.Keys.Contains(item.Key))
+                    foreach (var item in song.artists)
                     {
-                        artDTO = FirebaseService.Instance.getSingleValue<ArtistDTO>($"Artist/{item.Key}").Result;
-                        if (artDTO == null)
-                            continue;
-                        try
+                        ArtistDTO artDTO = new ArtistDTO();
+                        if (!DataHelper.Instance.Artists.Keys.Contains(item.Key))
                         {
-                            DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
-                        }catch { }
-                    }
-                    else
-                    {
-                        artDTO = DataHelper.Instance.Artists[item.Key];
-                    }
-                    if (string.IsNullOrEmpty(artDTO.name))
-                        continue;
-                    if(iArt++ > 0)
-                    {
-                        str.Append(", ");
-                    }
-                    str.AppendFormat(@"
+                            artDTO = FirebaseService.Instance.getSingleValue<ArtistDTO>($"Artist/{item.Key}").Result;
+                            if (artDTO == null)
+                                continue;
+                            try
+                            {
+                                DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
+                            }
+                            catch { }
+                        }
+                        else
+                        {
+                            artDTO = DataHelper.Instance.Artists[item.Key];
+                        }
+                        if (string.IsNullOrEmpty(artDTO.name))
+                            continue;
+                        if (iArt++ > 0)
+                        {
+                            str.Append(", ");
+                        }
+                        str.AppendFormat(@"
                                             <a class=""is-ghost"" href=""{1}"">{0}</a>
                     ", artDTO.name, artDTO.link);
+                    }
                 }
 
                 str.AppendFormat(@"
@@ -203,7 +207,7 @@ namespace TDT.Core.ServiceImp
                 {
                     last = playlist.title;
                 }
-                else
+                else if(playlist.artists != null)
                 {
                     int iArt = 0;
                     foreach (var item in playlist.artists)
