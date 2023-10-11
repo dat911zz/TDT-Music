@@ -14,11 +14,6 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="encodeId" class="control-label"></label>
-                <input asp-for="encodeId" class="form-control" />
-                <span asp-validation-for="encodeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="title" class="control-label"></label>
                 <input asp-for="title" class="form-control" />
                 <span asp-validation-for="title" class="text-danger"></span>
@@ -127,26 +122,6 @@
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="isRBT" /> @Html.DisplayNameFor(model => model.isRBT)
                 </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="like" class="control-label"></label>
-                <input asp-for="like" class="form-control" />
-                <span asp-validation-for="like" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="listen" class="control-label"></label>
-                <input asp-for="listen" class="form-control" />
-                <span asp-validation-for="listen" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="liked" /> @Html.DisplayNameFor(model => model.liked)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="comment" class="control-label"></label>
-                <input asp-for="comment" class="form-control" />
-                <span asp-validation-for="comment" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
