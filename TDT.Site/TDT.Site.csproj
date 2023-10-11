@@ -5,4 +5,8 @@
     <RootNamespace>TDT_Music</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.17" />
+  </ItemGroup>
+
 </Project>
