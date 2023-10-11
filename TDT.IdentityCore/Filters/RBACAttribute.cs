@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
@@ -16,27 +17,31 @@ namespace TDT.CAdmin.Filters
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class RBACAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
-        private readonly IEnumerable<Claim> _claims;
-        private readonly IConfiguration _cfg;
-        public RBACAttribute(IHttpContextAccessor httpContextAccessor, IConfiguration cfg)
+        public string? Claims { get; set; }
+        public RBACAttribute()
         {
             
         }
+        public RBACAttribute(string claims)
+        {
+            Claims = claims;       
+        }
         public void OnAuthorization(AuthorizationFilterContext fillterContext)
         {
+            // skip authorization if action is decorated with [AllowAnonymous] attribute
+            var allowAnonymous = fillterContext.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
+            if (allowAnonymous)
+                return;
             if (fillterContext != null)
             {
                 Microsoft.Extensions.Primitives.StringValues authTokens;
                 fillterContext.HttpContext.Request.Headers.TryGetValue("authToken", out authTokens);
 
                 var _token = authTokens.FirstOrDefault();
-                if (_token != null)
-                {
-                    if (SecurityHelper.IsValidToken(_cfg, _token))
-                    {
-
-                    }
-                }
+                // authorization
+                //var user = (User)context.HttpContext.Items["User"];
+                //if (user == null)
+                //    context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
             }
         }
     }

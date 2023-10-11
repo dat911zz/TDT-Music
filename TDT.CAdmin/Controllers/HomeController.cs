@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -27,10 +28,12 @@ namespace TDT.CAdmin.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Start session");
+            var test = Directory.GetCurrentDirectory();
             //ResponseDataDTO<User> userDetail = APICallHelper.Get<ResponseDataDTO<User>>("user", token: auth.Token).Result;
             //ResponseDataDTO<User> res = APICallHelper.Get<ResponseDataDTO<User>>($"user/{pUser}", token: auth.Token).Result;
             return View();
         }
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();

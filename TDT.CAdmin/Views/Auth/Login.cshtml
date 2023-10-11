@@ -6,7 +6,7 @@
 @{
 
     Layout = null;
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Đăng nhập";
 }
 <html>
 <head>
@@ -51,7 +51,8 @@
                             </div>
                             </div>*@
                             <div class="col-12 loginbttm" style="display:flex; justify-content:space-between;">
-                                <div asp-validation-summary="All" class="login-btm login-text text-danger"></div>
+                                @* <div asp-validation-summary="All" class="login-btm login-text text-danger"></div> *@
+                                <div class="login-btm login-text text-danger"></div>
                                 <div class="login-btm login-button">
                                     <button type="submit" class="btn btn-outline-primary">ĐĂNG NHẬP</button>
                                 </div>
@@ -60,14 +61,14 @@
 
                         <div class="form-group">
                             <p>
-                                <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                                <a id="forgot-password" asp-controller="Auth" asp-action="Login">Forgot your password?</a>
                             </p>
                             <p>
-                                <a asp-page="./Register" asp-route-returnUrl="./Register">Register as a new user</a>
+                                <a asp-controller="Auth" asp-action="Register" asp-route-returnUrl="/Auth/Login">Register as a new user</a>
                             </p>
-                            <p>
+                            @* <p>
                                 <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                            </p>
+                            </p> *@
                         </div>
 
                     </div>
