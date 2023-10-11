@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using TDT.Core.Models;
 
 namespace TDT.Core.DTO
 {
-    public class SongDTO
+    public class SongDTO : APIResponseModel
     {
         private string _encodeId;
         private string _title;
@@ -67,5 +69,15 @@ namespace TDT.Core.DTO
         public int listen { get => _listen; set => _listen = value; }
         public bool liked { get => _liked; set => _liked = value; }
         public int comment { get => _comment; set => _comment = value; }
+        public DateTime ReleaseDate()
+        {
+            return (new DateTime(1975, 1, 1, 0, 0, 0)).AddMilliseconds(long.Parse(13 - this.releaseDate.Length > 0 ? this.releaseDate.PadRight(13, '0') : this.releaseDate));
+        }
+        public string Duration()
+        {
+            TimeSpan t = TimeSpan.FromSeconds(this.duration);
+            string res = t.Minutes.ToString("00") + ":" + t.Seconds.ToString("00");
+            return t.Hours == 0 ? res : t.Hours.ToString("00") + ":" + res;
+        }
     }
 }
