@@ -1,19 +1,30 @@
-﻿const player = document.querySelector("#tdt-audio");
+﻿//const player = document.querySelector("#tdt-audio");
+//const musicName = document.querySelector(".tdt-track-name");
+//const playPauseButton = document.querySelector(".tdt-play");
+//const prevButton = document.querySelector(".tdt-previous");
+//const nextButton = document.querySelector(".tdt-next");
+//const currentTime = document.querySelector(".tdt-current-time");
+//const duration = document.querySelector(".tdt-duration");
+//const progressBar = document.querySelector(".tdt-seek-bar");
+//const progress = document.querySelector(".tdt-play-bar");
+//const sound = document.querySelector('.knob-wrapper');
+
+const player = document.querySelector(".--z--player audio");
 const musicName = document.querySelector(".tdt-track-name");
-const playPauseButton = document.querySelector(".tdt-play");
-const prevButton = document.querySelector(".tdt-previous");
-const nextButton = document.querySelector(".tdt-next");
-const currentTime = document.querySelector(".tdt-current-time");
-const duration = document.querySelector(".tdt-duration");
-const progressBar = document.querySelector(".tdt-seek-bar");
-const progress = document.querySelector(".tdt-play-bar");
+const playPauseButton = document.querySelector(".btn-play");
+const prevButton = document.querySelector(".btn-pre");
+const nextButton = document.querySelector(".btn-next");
+const currentTime = document.querySelector(".time.left");
+const duration = document.querySelector(".time.right");
+const progress = document.querySelector(".zm-slider-bar");
 const sound = document.querySelector('.knob-wrapper');
 
 //import songs from "./songs.js";
 var songs = [{
-    src: "https://mp3-s1-zmp3.zmdcdn.me/890e3488f4c81d9644d9/6841713295008143453?authen=exp=1691456833~acl=/890e3488f4c81d9644d9/*~hmac=0bf31b1c6463e9206ea18799bba8f283&fs=MTY5MTI4NDAzMzmUsIC3OHx3ZWJWNnwwfDExOC42OC4xMjIdUngMTY5",
+    src: "https://a320-zmp3.zmdcdn.me/75f292979e4c0f21ad76300554ce758f?authen=exp=1697385026~acl=/75f292979e4c0f21ad76300554ce758f/*~hmac=745322e13a21876f1e372c36bcc4c243",
     name: "Châu Thịnh làm nè he !!!"
 }];
+var index_song = 0;
 
 let index = 0;
 
@@ -24,11 +35,12 @@ playPauseButton.onclick = () => playPause();
 
 const playPause = () => {
     if (player.paused) {
+        setSong();
         player.play();
-        $('#tdt_container_1').addClass('tdt-state-playing');
+        //$('#tdt_container_1').addClass('tdt-state-playing');
     } else {
         player.pause();
-        $('#tdt_container_1').removeClass('tdt-state-playing');
+        //$('#tdt_container_1').removeClass('tdt-state-playing');
     }
 };
 
@@ -48,7 +60,7 @@ const updateTime = () => {
         ? (player.currentTime / durationFormatted) * 100
         : 0;
 
-    progress.style.width = progressWidth + "%";
+    progress.style.background = "linear-gradient( to right, var(--progressbar-active-bg) 0%, var(--progressbar-active-bg) " + progressWidth + "%, var(--progressbar-player-bg) " + progressWidth + "%, var(--progressbar-player-bg) 100% )";
 };
 
 const formatZero = (n) => (n < 10 ? "0" + n : n);
@@ -117,3 +129,7 @@ $('.knob-wrapper').mousedown(function () {
 }).mouseup(function () {
     $(window).unbind("mousemove");
 });
+
+function setSong() {
+    player.src = songs[index_song].src;
+}

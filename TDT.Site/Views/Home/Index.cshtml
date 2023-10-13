@@ -311,42 +311,66 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        $.ajax({
-            url: "/Share/LoadSongRelease",
-            success: function(data) {
-                $('#song_release').html(data);
-                $.ajax({
-                    url: "/Share/GetHtmlPlaylistChill",
-                    success: function (data) {
-                        $('#playlist_chill').html(data);
-                    }
-                });
-                $.ajax({
-                    url: "/Share/GetHtmlPlaylistYeuDoi",
-                    success: function (data) {
-                        $('#playlist_yeudoi').html(data);
-                    }
-                });
-                $.ajax({
-                    url: "/Share/GetHtmlPlaylistRemixDance",
-                    success: function (data) {
-                        $('#playlist_remix_dance').html(data);
-                    }
-                });
-                $.ajax({
-                    url: "/Share/GetHtmlPlaylistTamTrang",
-                    success: function (data) {
-                        $('#playlist_tam_trang').html(data);
-                    }
-                });
-                $.ajax({
-                    url: "/Share/GetHtmlArtistThinhHanh",
-                    success: function (data) {
-                        $('#artist_thinh_hanh').html(data);
-                    }
-                });
-            }
-        });
+        // $.ajax({
+        //     url: "/Share/LoadSongRelease",
+        //     success: function(data) {
+        //         if (data == '') {
+        //             RedirectError(500, "DB đang lỗi");
+        //             return;
+        //         }
+        //         $('#song_release').html(data);
+        //         $.ajax({
+        //             url: "/Share/GetHtmlPlaylistChill",
+        //             success: function (data) {
+        //                 if (data == '') {
+        //                     RedirectError(500, "DB đang lỗi");
+        //                     return;
+        //                 }
+        //                 $('#playlist_chill').html(data);
+        //             }
+        //         });
+        //         $.ajax({
+        //             url: "/Share/GetHtmlPlaylistYeuDoi",
+        //             success: function (data) {
+        //                 if (data == '') {
+        //                     RedirectError(500, "DB đang lỗi");
+        //                     return;
+        //                 }
+        //                 $('#playlist_yeudoi').html(data);
+        //             }
+        //         });
+        //         $.ajax({
+        //             url: "/Share/GetHtmlPlaylistRemixDance",
+        //             success: function (data) {
+        //                 if (data == '') {
+        //                     RedirectError(500, "DB đang lỗi");
+        //                     return;
+        //                 }
+        //                 $('#playlist_remix_dance').html(data);
+        //             }
+        //         });
+        //         $.ajax({
+        //             url: "/Share/GetHtmlPlaylistTamTrang",
+        //             success: function (data) {
+        //                 if (data == '') {
+        //                     RedirectError(500, "DB đang lỗi");
+        //                     return;
+        //                 }
+        //                 $('#playlist_tam_trang').html(data);
+        //             }
+        //         });
+        //         $.ajax({
+        //             url: "/Share/GetHtmlArtistThinhHanh",
+        //             success: function (data) {
+        //                 if (data == '') {
+        //                     RedirectError(500, "DB đang lỗi");
+        //                     return;
+        //                 }
+        //                 $('#artist_thinh_hanh').html(data);
+        //             }
+        //         });
+        //     }
+        // });
         var change = true;
         var gal = $('.gallery-item');
         $i = 5;

@@ -88,8 +88,8 @@ button:focus {
 	font-size: 16px;
 	line-height: 40px;
 	color: #777777;
-	background-color: #fff;
-	border-radius: 5px;
+	/*background-color: #fff;*/
+	/*border-radius: 5px;*/
 	border: 1px solid transparent;
 }
 .form-control:focus {

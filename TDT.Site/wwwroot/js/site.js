@@ -22,3 +22,7 @@ function ChangeGallery(i) {
     $(gal).eq(i).removeClass('gallery-item-add').addClass('gallery-item-last');
     return i + 1 >= $(gal).length ? 0 : i + 1;
 }
+
+function RedirectError(statuscode, msg) {
+    window.location = "/Home/Error/?statusCode=" + statuscode + "&msg=" + msg;
+}

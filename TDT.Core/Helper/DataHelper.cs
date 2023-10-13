@@ -38,10 +38,10 @@ namespace TDT.Core.Helper
         private Dictionary<string,SongDTO> _songs = new Dictionary<string, SongDTO>();
         private Dictionary<string,PlaylistDTO> _playlists = new Dictionary<string, PlaylistDTO>();
         private List<List<SongDTO>> _songRelease = new List<List<SongDTO>>();
-        List<PlaylistDTO> _playlistChills = new List<PlaylistDTO>();
-        List<PlaylistDTO> _playlistYeuDoi = new List<PlaylistDTO>();
-        List<PlaylistDTO> _playlistRemixDances = new List<PlaylistDTO>();
-        List<PlaylistDTO> _playlistTamTrang = new List<PlaylistDTO>();
+        //List<PlaylistDTO> _playlistChills = new List<PlaylistDTO>();
+        //List<PlaylistDTO> _playlistYeuDoi = new List<PlaylistDTO>();
+        //List<PlaylistDTO> _playlistRemixDances = new List<PlaylistDTO>();
+        //List<PlaylistDTO> _playlistTamTrang = new List<PlaylistDTO>();
 
 
         public int VIEW_COLOR { get => _viewColor; set => _viewColor = value; }
@@ -99,24 +99,28 @@ namespace TDT.Core.Helper
         {
             get
             {
-                if(_playlistChills.Count <= 0)
-                {
-                    string[] keys = new string[] { "chill" };
-                    this._playlistChills = GetPlaylistWithGenreKeys(keys: keys);
-                }                
-                return this._playlistChills;
+                //if(_playlistChills.Count <= 0)
+                //{
+                //    string[] keys = new string[] { "chill" };
+                //    this._playlistChills = GetPlaylistWithGenreKeys(keys: keys);
+                //}                
+                //return this._playlistChills;
+                string[] keys = new string[] { "chill" };
+                return GetPlaylistWithGenreKeys(keys: keys);
             }
         }
 
         public List<PlaylistDTO> PlaylistRemixDances { 
             get
             {
-                if(this._playlistRemixDances.Count <= 0)
-                {
-                    string[] keys = new string[] { "dance", "remix", "edm" };
-                    this._playlistRemixDances = GetPlaylistWithGenreKeys(keys: keys);
-                }
-                return _playlistRemixDances;
+                //if(this._playlistRemixDances.Count <= 0)
+                //{
+                //    string[] keys = new string[] { "dance", "remix", "edm" };
+                //    this._playlistRemixDances = GetPlaylistWithGenreKeys(keys: keys);
+                //}
+                //return _playlistRemixDances;
+                string[] keys = new string[] { "dance", "remix", "edm" };
+                return GetPlaylistWithGenreKeys(keys: keys);
             }
         }
 
@@ -124,24 +128,28 @@ namespace TDT.Core.Helper
         {
             get
             {
-                if (this._playlistYeuDoi.Count <= 0)
-                {
-                    string[] keys = new string[] { "v-pop", "rap-viet", "rap-hip-hop" };
-                    this._playlistYeuDoi = GetPlaylistWithGenreKeys(keys: keys);
-                }
-                return _playlistYeuDoi;
+                //if (this._playlistYeuDoi.Count <= 0)
+                //{
+                //    string[] keys = new string[] { "v-pop", "rap-viet", "rap-hip-hop" };
+                //    this._playlistYeuDoi = GetPlaylistWithGenreKeys(keys: keys);
+                //}
+                //return _playlistYeuDoi;
+                string[] keys = new string[] { "v-pop", "rap-viet", "rap-hip-hop" };
+                return GetPlaylistWithGenreKeys(keys: keys);
             }
         }
 
         public List<PlaylistDTO> PlaylistTamTrang {
             get
             {
-                if (this._playlistTamTrang.Count <= 0)
-                {
-                    string[] keys = new string[] { "v-pop", "buồn", "đau", "khổ" };
-                    this._playlistTamTrang = GetPlaylistWithGenreKeys(keys: keys);
-                }
-                return _playlistTamTrang;
+                //if (this._playlistTamTrang.Count <= 0)
+                //{
+                //    string[] keys = new string[] { "v-pop", "buồn", "đau", "khổ" };
+                //    this._playlistTamTrang = GetPlaylistWithGenreKeys(keys: keys);
+                //}
+                //return _playlistTamTrang;
+                string[] keys = new string[] { "v-pop", "buồn", "đau", "khổ" };
+                return GetPlaylistWithGenreKeys(keys: keys);
             }
         }
 
