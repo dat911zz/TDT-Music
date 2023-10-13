@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TDT.Core\TDT.Core.csproj" />
+    <ProjectReference Include="..\TDT.IdentityCore\TDT.IdentityCore.csproj" />
   </ItemGroup>
 
 </Project>

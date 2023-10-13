@@ -29,9 +29,11 @@ namespace TDT_Music.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(int statusCode, string msg = "Có lỗi đã xảy ra!")
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.ErrorCode = statusCode != 0 ? statusCode : 404;
+            ViewBag.ErrorContent = msg;
+            return View();
         }
     }
 }

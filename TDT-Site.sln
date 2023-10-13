@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDT.Site", "TDT.Site\TDT.Si
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDT.Core", "TDT.Core\TDT.Core.csproj", "{707850DC-10A3-43DE-9B8A-3791E147902F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDT.IdentityCore", "TDT.IdentityCore\TDT.IdentityCore.csproj", "{81FCA5BF-DF5F-4036-9996-936237CB43D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{707850DC-10A3-43DE-9B8A-3791E147902F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{707850DC-10A3-43DE-9B8A-3791E147902F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{707850DC-10A3-43DE-9B8A-3791E147902F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81FCA5BF-DF5F-4036-9996-936237CB43D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81FCA5BF-DF5F-4036-9996-936237CB43D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81FCA5BF-DF5F-4036-9996-936237CB43D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81FCA5BF-DF5F-4036-9996-936237CB43D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
