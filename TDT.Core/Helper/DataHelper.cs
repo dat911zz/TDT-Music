@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using NLog.Fluent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +12,7 @@ namespace TDT.Core.Helper
 {
     public class DataHelper
     {
+
         private static DataHelper _instance;
         private DataHelper()
         {

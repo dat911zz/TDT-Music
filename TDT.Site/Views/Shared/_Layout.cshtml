@@ -20,12 +20,17 @@
     <link rel="stylesheet" type="text/css" href="~/css/style.css">
     
     <link rel="stylesheet" href="~/css/site.css" />*@
+    <link rel="stylesheet" type="text/css" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/main.css" />
     <link rel="stylesheet" href="~/css/zgallery.css" />
     <link rel="stylesheet" href="~/css/zplayer.css" />
 </head>
 <body>
-    
+    <div class="ms_loader">
+        <div class="wrap">
+            <img src="~/image/loader.gif" />
+        </div>
+    </div>
 
     <div id="root">
         <div class="zm-section zm-layout has-player">
@@ -493,6 +498,11 @@
     <script type="text/javascript" src="~/js/plugins/scroll/jquery.mCustomScrollbar.js"></script>
     <script type="text/javascript" src="~/js/custom.js"></script>*@
 
+    <script>
+        setTimeout(function () {
+            $('.ms_loader').hide();
+        }, 2000);
+    </script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
