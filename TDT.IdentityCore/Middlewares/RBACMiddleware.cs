@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TDT.Core.DTO;
@@ -22,14 +24,15 @@ namespace TDT.IdentityCore.Middlewares
 
         public async Task Invoke(HttpContext context, IConfiguration cfg, ISecurityHelper securityHelper)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var userName = securityHelper.ValidateToken(token);
-            if (userName != null)
+            if (context.User.Claims.Count() > 0)
             {
-                // attach user to context on successful jwt validation
-                context.Items["User"] = APICallHelper.Get<ResponseDataDTO<User>>($"user/{userName}", token: token).Result;
+                var time = long.Parse(context.User.FindFirstValue("exp"));
+                if (DateTimeOffset.FromUnixTimeSeconds(time).UtcDateTime <= DateTime.UtcNow)
+                {
+                    await context.SignOutAsync();
+                }
             }
-
+          
             await _next(context);
         }
     }

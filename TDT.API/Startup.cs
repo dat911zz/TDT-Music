@@ -23,6 +23,8 @@ using TDT.IdentityCore.Filters;
 using TDT.Core.Extensions;
 using TDT.IdentityCore.Middlewares;
 using TDT.IdentityCore.Utils;
+using TDT.Core.ServiceImp;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace TDT.API
 {
@@ -105,6 +107,7 @@ namespace TDT.API
                 });
                 #endregion
             });
+            services.AddTransient<IEmailSender, MailingService>();
             services.AddTransient<ISecurityHelper, SecurityHelper>();
             services.AddSingleton(new QLDVModelDataContext(Configuration.GetConnectionString("AdminConnection")));
         }

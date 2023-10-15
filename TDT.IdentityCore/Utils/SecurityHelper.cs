@@ -16,7 +16,8 @@ namespace TDT.IdentityCore.Utils
     public interface ISecurityHelper
     {
         public string GenerateJWT(User userInfo, bool isExpr = true, double expr = 120);
-        public string? ValidateToken(string token);
+        public IEnumerable<Claim> ValidateToken(string token);
+        public string GeneratePasswordResetToken(string email);
     }
     public class SecurityHelper : ISecurityHelper
     {
@@ -104,12 +105,29 @@ namespace TDT.IdentityCore.Utils
                 _cfg["Jwt:Issuer"],
                 _cfg["Jwt:Audience"],
                 claims,
-                expires: isExpr ? DateTime.Now.AddMinutes(expr) : null,
+                expires: isExpr ? DateTime.UtcNow.AddMinutes(expr) : null,
                 signingCredentials: credentials
                 );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        public string? ValidateToken(string token)
+        public string GeneratePasswordResetToken(string email)
+        {
+            var sercurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]));
+            var credentials = new SigningCredentials(sercurityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new[] {
+                new Claim(JwtRegisteredClaimNames.Email, email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+            var token = new JwtSecurityToken(
+                _cfg["Jwt:Issuer"],
+                _cfg["Jwt:Audience"],
+                claims,
+                expires: DateTime.UtcNow.AddMinutes(120),
+                signingCredentials: credentials
+                );
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        public IEnumerable<Claim> ValidateToken(string token)
         {
             if (token == null)
             {
@@ -133,8 +151,8 @@ namespace TDT.IdentityCore.Utils
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 //var jti = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "jti").Value;
                 //var userName = jwtToken.Claims.FirstOrDefault(sub => sub.Type == "sub").Value;
-                
-                return jwtToken.Claims.FirstOrDefault(sub => sub.Type == "sub").Value;
+
+                return jwtToken.Claims;
             }
             catch (Exception ex)
             {               

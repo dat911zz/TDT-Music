@@ -14,6 +14,8 @@ using TDT.Core.Ultils;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using TDT.IdentityCore.Utils;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Text.RegularExpressions;
 
 namespace TDT.API.Controllers
 {
@@ -24,17 +26,24 @@ namespace TDT.API.Controllers
         private IConfiguration _cfg;
         private ISecurityHelper _securityHelper;
         private readonly ILogger<HomeController> _logger;
+        private readonly IEmailSender _mailSender;
         private readonly QLDVModelDataContext _db;
-        public AuthController(IConfiguration cfg, ISecurityHelper securityHelper, ILogger<HomeController> logger, QLDVModelDataContext db)
+        public AuthController(
+            IConfiguration cfg, 
+            ISecurityHelper securityHelper,
+            IEmailSender mailSender,
+            ILogger<HomeController> logger, 
+            QLDVModelDataContext db)
         {
             _cfg = cfg;
             _logger = logger;
             _db = db;
             _securityHelper = securityHelper;
+            _mailSender = mailSender;
         }
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login(LoginModel login)
+        public IActionResult Login(LoginModel login, bool isCAdmin = false)
         {
             try
             {
@@ -44,11 +53,11 @@ namespace TDT.API.Controllers
                 {
                     if (user.LockoutEnabled)
                     {
-                        response = APIHelper.GetJsonResult(APIStatusCode.InvalidAccount);
+                        response = APIHelper.GetJsonResult(APIStatusCode.AccountLockout);
                     }
                     else
                     {
-                        string token = _securityHelper.GenerateJWT(user);
+                        string token = isCAdmin ? _securityHelper.GenerateJWT(user) : _securityHelper.GenerateJWT(user, false);
                         response = APIHelper.GetJsonResult(APIStatusCode.AccessGranted, new Dictionary<string, object>()
                         {
                             {"token", token}
@@ -119,6 +128,74 @@ namespace TDT.API.Controllers
                 }
             }
             return user;
+        }
+        [HttpPost]
+        public IActionResult ForgotPassword(string username)
+        {
+            try
+            {
+                string email = "";
+                if (new Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$").IsMatch(username))
+                {
+                    email = username;
+                }
+                else
+                {
+                    User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username));
+                    if (user == null)
+                    {
+                        return APIHelper.GetJsonResult(APIStatusCode.AccountNotFound);
+                    }
+                    email = user.Email;
+                }
+                string token = _securityHelper.GeneratePasswordResetToken(username);
+                string url = Url.Action("ResetPassword", "Auth", new { token, email = email }, Request.Scheme);
+
+                if (!string.IsNullOrEmpty(email))
+                {
+                    _mailSender.SendEmailAsync(email, "Khôi phục tài khoản",
+                        "<h1>Đường link khôi phục tài khoản:</h1>" +
+                        "<a href='" + url + "'>Link</a>"
+                        );
+                }
+                return APIHelper.GetJsonResult(APIStatusCode.Succeeded, formatValue: "Đã gửi mail khôi phục");
+            }
+            catch (Exception ex)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
+            }
+            
+        }
+
+        [HttpPost]
+        public IActionResult ResetPassword(string email, string token, string newPassword)
+        {
+            try
+            {   
+                var user = _db.Users.FirstOrDefault(u => u.Email.Trim().Contains(email));
+                if (user == null)
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.InvalidEmail);
+                }
+                if (_securityHelper.ValidateToken(token).Count() == 0)
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.InvalidAuthenticationString);
+                }
+                
+                user.PasswordHash = SecurityHelper.HashPassword(newPassword);
+                _db.SubmitChanges();
+                return APIHelper.GetJsonResult(APIStatusCode.Succeeded, formatValue: "Đặt lại mật khẩu");
+            }
+            catch (Exception ex)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
+            }           
         }
     }
 }

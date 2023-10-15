@@ -1,0 +1,50 @@
+﻿.table-container {
+    max-height: 450px;
+    overflow: auto;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 15px;
+    padding-left: 15px;
+    width: 100%;
+    max-width: none;
+}
+    .table-container table {
+        position: relative;
+        border-collapse: collapse;
+    }
+    .table-container thead tr th {
+        font-weight: bold;
+        font-size: 14px;
+        background: white;
+        position: sticky;
+        top: 0; /* Don't forget this, required for the stickiness */
+        box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+    }
+    .table-container tbody tr:hover {
+        background: #449fb1;
+    }
+    .table-container tbody tr:hover td {
+        color: #ffff;
+    }
+    .table-container td.img_song{
+        height: 60px;
+    }
+
+
+    .table-container::-webkit-scrollbar {
+        border-radius: 50px;
+        background: #8233a94f;
+    }
+    .table-container::-webkit-scrollbar:horizontal {        
+        height: 8px;     
+    }
+    .table-container::-webkit-scrollbar:vertical {
+        width: 8px;
+    }
+    .table-container::-webkit-scrollbar-track {
+        /*background: #8233a9b0;*/
+    }
+    .table-container::-webkit-scrollbar-thumb {
+        border-radius: 50px;
+        background: #449fb1;
+    }

@@ -158,3 +158,10 @@ body {
 .pagedList .pagedListNav {
     margin: 10px 0;
 }
+
+.toast-success {
+    background-color: #51A351;
+}
+#toast-container > div{
+    opacity: 0.9;
+}
