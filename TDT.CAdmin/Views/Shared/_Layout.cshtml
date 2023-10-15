@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/css/base.css" />
     <link rel="stylesheet" href="~/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="~/css/style.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @Html.AddSharedCSS("css/HoldOn.css");
@@ -56,6 +57,23 @@
                         </ul>
                     </div>
                 </li>
+
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
+                        <span class="menu-icon">
+                            <i class="fa fa-music" aria-hidden="true"></i>
+                        </span>
+                        <span class="menu-title">Song</span>
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </a>
+                    <div class="collapse" id="auth">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","MusicManagement")"> List Song </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create","MusicManagement")"> Create Song </a></li>
+                        </ul>
+                    </div>
+                </li>
+
             </ul>
             <div>
                 <span class="nav-link">Background Color</span>
@@ -218,7 +236,6 @@
             </div>
         </div>
     </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/settings.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
