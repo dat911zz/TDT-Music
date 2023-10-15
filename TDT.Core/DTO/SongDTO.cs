@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using TDT.Core.Models;
 
 namespace TDT.Core.DTO
@@ -40,9 +41,12 @@ namespace TDT.Core.DTO
 
         [Display(Name = "Mã Hóa")]
         public string encodeId { get => _encodeId; set => _encodeId = value; }
+        
+        [Required(ErrorMessage = "Vui lòng nhập tiêu đề!")]
 
         [Display(Name = "Tiêu đề")]
         public string title { get => _title; set => _title = value; }
+        [Required(ErrorMessage = "Nhập bí danh!")]
 
         [Display(Name = "Bí danh")]
         public string alias { get => _alias; set => _alias = value; }
@@ -51,22 +55,28 @@ namespace TDT.Core.DTO
         public bool isOffical { get => _isOffical; set => _isOffical = value; }
 
         [Display(Name = "Tên người dùng")]
+        [Required(ErrorMessage = "Vui lòng nhập tên người dùng!")]
         public string username { get => _username; set => _username = value; }
+
+        [Required(ErrorMessage = "Vui nhập tên nghệ xĩ!")]
         [Display(Name = "Tên nghệ sĩ")]
         public string artistsNames { get => _artistsNames; set => _artistsNames = value; }
-        
+
+        [Required(ErrorMessage = "Vui lòng nhập danh sách nghệ sĩ!")]
         [Display(Name = "Danh sách nghệ sĩ")]
         public Dictionary<string, string> artists { get => _artists; set => _artists = value; }
         
         [Display(Name = "Là toàn cầu")]
         public bool isWorldWide { get => _isWorldWide; set => _isWorldWide = value; }
-        
+
+        [Required(ErrorMessage = "Vui lòng chọn file ảnh M!")]
         [Display(Name = "Ảnh thu nhỏ M")]
         public string thumbnailM { get => _thumbnailM; set => _thumbnailM = value; }
 
         [Display(Name = "Liên kết")]
         public string link { get => _link; set => _link = value; }
 
+        [Required(ErrorMessage = "Vui lòng chọn file ảnh!")]
         [Display(Name = "Ảnh thu nhỏ")]
         public string thumbnail { get => _thumbnail; set => _thumbnail = value; }
         
@@ -76,12 +86,14 @@ namespace TDT.Core.DTO
         [Display(Name = "Lựa chọn Zing")]
         public bool zingChoice { get => _zingChoice; set => _zingChoice = value; }
 
-        [Display(Name = "Là bản riêng tư")]
+        [Display(Name = "Bản riêng tư")]
         public bool isPrivate { get => _isPrivate; set => _isPrivate = value; }
         
         [Display(Name = "Trước ngày phát hành")]
         public bool preRelease { get => _preRelease; set => _preRelease = value; }
-        
+
+        [Required(ErrorMessage = "Vui lòng Nghi Ngày phát hành!")]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Ngày phát hành")]
         public string releaseDate { get => _releaseDate; set => _releaseDate = value; }
         
@@ -92,6 +104,7 @@ namespace TDT.Core.DTO
         public string distributor { get => _distributor; set => _distributor = value; }
 
         [Display(Name = "Danh sách chỉ số")]
+
         public List<object> indicators { get => _indicators; set => _indicators = value; }
         [Display(Name = "Là bản độc lập")]
         public bool isIndie { get => _isIndie; set => _isIndie = value; }

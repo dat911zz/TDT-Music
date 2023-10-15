@@ -5,14 +5,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<h1>TẠO BÀI HÁT</h1>
 
-<h4>SongDTO</h4>
+<h4>Nhập giá trị của bài hát</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="encodeId" class="control-label"></label>
+                <input asp-for="encodeId" class="form-control" />
+                <span asp-validation-for="encodeId" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="title" class="control-label"></label>
                 <input asp-for="title" class="form-control" />
@@ -25,7 +30,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isOffical" /> @Html.DisplayNameFor(model => model.isOffical)
+                    <input class="form-check-input"  style=" opacity:1;" asp-for="isOffical" /> @Html.DisplayNameFor(model => model.isOffical)
                 </label>
             </div>
             <div class="form-group">
@@ -40,7 +45,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isWorldWide" /> @Html.DisplayNameFor(model => model.isWorldWide)
+                    <input class="form-check-input"  style=" opacity:1;" asp-for="isWorldWide" /> @Html.DisplayNameFor(model => model.isWorldWide)
                 </label>
             </div>
             <div class="form-group">
@@ -65,17 +70,17 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="zingChoice" /> @Html.DisplayNameFor(model => model.zingChoice)
+                    <input class="form-check-input"  style=" opacity:1;" asp-for="zingChoice" /> @Html.DisplayNameFor(model => model.zingChoice)
                 </label>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isPrivate" /> @Html.DisplayNameFor(model => model.isPrivate)
+                    <input class="form-check-input"  style=" opacity:1;" asp-for="isPrivate" /> @Html.DisplayNameFor(model => model.isPrivate)
                 </label>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="preRelease" /> @Html.DisplayNameFor(model => model.preRelease)
+                    <input class="form-check-input"  style=" opacity:1;" asp-for="preRelease" /> @Html.DisplayNameFor(model => model.preRelease)
                 </label>
             </div>
             <div class="form-group">
@@ -90,7 +95,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isIndie" /> @Html.DisplayNameFor(model => model.isIndie)
+                    <input class="form-check-input"  style=" opacity:1;" asp-for="isIndie" /> @Html.DisplayNameFor(model => model.isIndie)
                 </label>
             </div>
             <div class="form-group">
@@ -100,12 +105,12 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="allowAudioAds" /> @Html.DisplayNameFor(model => model.allowAudioAds)
+                    <input class="form-check-input"  style=" opacity:1;" asp-for="allowAudioAds" /> @Html.DisplayNameFor(model => model.allowAudioAds)
                 </label>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="hasLyric" /> @Html.DisplayNameFor(model => model.hasLyric)
+                    <input class="form-check-input"  style=" opacity:1;" asp-for="hasLyric" /> @Html.DisplayNameFor(model => model.hasLyric)
                 </label>
             </div>
             <div class="form-group">
@@ -120,8 +125,38 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isRBT" /> @Html.DisplayNameFor(model => model.isRBT)
+                    <input class="form-check-input"  style=" opacity:1;" asp-for="isRBT" /> @Html.DisplayNameFor(model => model.isRBT)
                 </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="like" class="control-label"></label>
+                <input asp-for="like" class="form-control" />
+                <span asp-validation-for="like" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="listen" class="control-label"></label>
+                <input asp-for="listen" class="form-control" />
+                <span asp-validation-for="listen" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input"  style=" opacity:1;" asp-for="liked" /> @Html.DisplayNameFor(model => model.liked)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="comment" class="control-label"></label>
+                <input asp-for="comment" class="form-control" />
+                <span asp-validation-for="comment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Msg" class="control-label"></label>
+                <input asp-for="Msg" class="form-control" />
+                <span asp-validation-for="Msg" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -137,3 +172,4 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
