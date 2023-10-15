@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -35,8 +37,16 @@ namespace TDT.CAdmin
             services.AddRazorPages();
             services.AddTransient<IEmailSender, MailingService>();
             services.AddTransient<ISecurityHelper, SecurityHelper>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSignalR();
             services.Configure<ErrorHandlerMiddleware>(Configuration);
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+                    cfg =>
+                    {                      
+                        cfg.LoginPath = new PathString("/Auth/Login");
+                        cfg.LogoutPath = new PathString("/Auth/Logout");
+                    }
+                );
             //services.Configure<IdentityEmailService>(Configuration);
         }
 

@@ -17571,9 +17571,12 @@ div.tagsinput {
   .preview-list .preview-item .form-check {
     margin-top: 8px;
     margin-right: 1rem; }
-  .preview-list .preview-item .preview-thumbnail {
-    color: #ffffff;
-    position: relative; }
+    .preview-list .preview-item .preview-thumbnail {
+        color: #ffffff;
+        position: relative;
+        min-width: 20px;
+        text-align: center;
+    }
     .preview-list .preview-item .preview-thumbnail img,
     .preview-list .preview-item .preview-thumbnail .preview-icon {
       width: 40px;

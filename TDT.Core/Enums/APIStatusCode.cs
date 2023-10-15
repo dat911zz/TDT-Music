@@ -39,5 +39,7 @@ namespace TDT.Core.Enums
         ExistingAccount,
         [Description("{0} thành công!")]
         Succeeded,
+        [Description("Tài khoản tạm khóa")]
+        AccountLockout,
     }
 }
