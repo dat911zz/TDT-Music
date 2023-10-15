@@ -111,6 +111,10 @@ namespace TDT.Core.ServiceImp
             }
             return new JsonResult("true");
         }
+
+        // Load MusicManagementController
+
+
         public JsonResult GetHtmlPlaylistChill()
         {
             return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistChills.Take(5).ToList()));

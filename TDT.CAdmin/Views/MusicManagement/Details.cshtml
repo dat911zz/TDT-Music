@@ -1,0 +1,165 @@
+﻿@model TDT.Core.DTO.SongDTO
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Chi Tiết Bài Hát: @Html.DisplayFor(model => model.title)</h1>
+<div class="row">
+    <div class="col-sm-7">
+        <table class="table">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.encodeId)</th>
+                <td>@Html.DisplayFor(model => model.encodeId)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.title)</th>
+                <td>@Html.DisplayFor(model => model.title)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.alias)</th>
+                <td>@Html.DisplayFor(model => model.alias)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.isOffical)</th>
+                <td>@Html.DisplayFor(model => model.isOffical)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.username)</th>
+                <td>@Html.DisplayFor(model => model.username)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.artistsNames)</th>
+                <td>@Html.DisplayFor(model => model.artistsNames)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.isWorldWide)</th>
+                <td>@Html.DisplayFor(model => model.isWorldWide)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.thumbnailM)</th>
+                <td>@Html.DisplayFor(model => model.thumbnailM)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.link)</th>
+                <td>@Html.DisplayFor(model => model.link)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.thumbnail)</th>
+                <td>@Html.DisplayFor(model => model.thumbnail)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.duration)</th>
+                <td>@Html.DisplayFor(model => model.duration)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.zingChoice)</th>
+                <td>@Html.DisplayFor(model => model.zingChoice)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.isPrivate)</th>
+                <td>@Html.DisplayFor(model => model.isPrivate)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.preRelease)</th>
+                <td>@Html.DisplayFor(model => model.preRelease)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.releaseDate)</th>
+                <td>@Html.DisplayFor(model => model.releaseDate)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.distributor)</th>
+                <td>@Html.DisplayFor(model => model.distributor)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.isIndie)</th>
+                <td>@Html.DisplayFor(model => model.isIndie)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.streamingStatus)</th>
+                <td>@Html.DisplayFor(model => model.streamingStatus)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.allowAudioAds)</th>
+                <td>@Html.DisplayFor(model => model.allowAudioAds)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.hasLyric)</th>
+                <td>@Html.DisplayFor(model => model.hasLyric)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.userid)</th>
+                <td>@Html.DisplayFor(model => model.userid)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.album)</th>
+                <td>@Html.DisplayFor(model => model.album)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.isRBT)</th>
+                <td>@Html.DisplayFor(model => model.isRBT)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.like)</th>
+                <td>@Html.DisplayFor(model => model.like)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.listen)</th>
+                <td>@Html.DisplayFor(model => model.listen)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.liked)</th>
+                <td>@Html.DisplayFor(model => model.liked)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.comment)</th>
+                <td>@Html.DisplayFor(model => model.comment)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Code)</th>
+                <td>@Html.DisplayFor(model => model.Code)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Msg)</th>
+                <td>@Html.DisplayFor(model => model.Msg)</td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="col-sm-5 text-center ">
+        <p class="badge badge-primary">@Html.DisplayNameFor(model => model.thumbnailM)</p>
+        <p class="img_song img-fluid" encodeid="@Model.encodeId" thumbnail="@Model.thumbnailM">
+        </p>
+        <p class="badge badge-primary">@Html.DisplayNameFor(model => model.thumbnail)</p>
+        <p class="img_song" encodeid="@Model.encodeId" thumbnail="@Model.thumbnail"></p>
+    </div>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
+<script>
+    $(".img_song").each(function (e, val) {
+        var id = $(this).attr("encodeid");
+        var thumbnail = $(this).attr("thumbnail");
+        loadImg(this, id, thumbnail);
+        console.log(id, thumbnail);
+
+    })
+    function loadImg(that, _id, _thumbnail) {
+        $.ajax({
+            url: "/MusicManagement/LoadImg",
+            data: {
+                encodeID: _id,
+                thumbnail: _thumbnail
+            },
+            success: function (data) {
+                // $('#img_song').html(data);
+                $(that).html('<img style="width: 200px;" class="thumbnail" src="' + data + '"/>');
+            }
+        });
+    }
+
+</script>
