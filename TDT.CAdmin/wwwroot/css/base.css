@@ -1,4 +1,4 @@
-﻿:root {
+﻿/*:root {
     --height-logo: 100px;
     --bg-temp: #12151e;
     --icon-temp: #fff;
@@ -13,8 +13,24 @@
     --bg-popup: #191C24;
     --bg-hover: #0F1015;
     --border-temp: 1px px solid #2c2e33;
-}
+}*/
 
+:root {
+    --height-logo: 100px;
+    --icon-temp: #fff;
+    --bg-temp: #f5f5f5;
+    --bg-main-content: #ffff;
+    --color-temp: #6C7293;
+    --nav-link-hover: #0f1015;
+    --navbar-shadow: 4px 0 0px 2px rgba(0 0 0 / 0.03);
+    --color-separate: #eaecf0;
+    --color-icon-nav: #767676;
+    --color-change: #000;
+    --bg-popup: #f5f5f5;
+    --bg-hover: #e5e7eb;
+    --border-temp: 1px solid #efebeb;
+    --popup-shadow: 0px 0px 35px -3px #eae4e4
+}
 
 
 .dot-bg-color {
@@ -32,6 +48,25 @@
 
 h1, h2, h3, h4, h5, h6, p, span, div {
     color: var(--color-change);
+}
+#main-content {
+    margin-top: 70px;
+    padding: 30px;
+    width: 100%;
+}
+nav {
+    border-bottom: 1px solid #E3E3E3;
+}
+#sidebar > ul > li > a > span.menu-title:hover{
+    cursor: default;
+}
+.btn-control a{
+    padding: 0 5px 0 5px;
+    font-size: 24px;
+    text-decoration: none !important;
+}
+.btn-control a div{
+    /*width: 100%;*/
 }
 /*html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,

@@ -10,51 +10,49 @@
     <link rel="stylesheet" href="~/css/base.css" />
     <link rel="stylesheet" href="~/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="~/css/style.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     @Html.AddSharedCSS("css/HoldOn.css")
-
+    @Html.AddSharedCSS("css/shared.css")
 </head>
 <body>
     <div class="container-scroller">
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-                <img src="~/image/logo_TDT_Devil-transparent.png" style="height:100%; object-fit:contain;" />
-            </div>
+            <a href="/" class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+                <img src="~/image/logo_TDT_Devil_red.png" style="height:100%; object-fit:contain;" />
+            </a>
             <ul class="nav mt-4">
                 <li class="nav-item menu-items">
                     <a class="nav-link">
                         <span class="menu-icon">
                             <i class="fa fa-tachometer" aria-hidden="true"></i>
                         </span>
-                        <span class="menu-title">Dashboard</span>
+                        <span class="menu-title">Trang chủ</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
+                @* <li class="nav-item menu-items">
                     <a class="nav-link">
                         <span class="menu-icon">
                             <i class="fa fa-product-hunt" aria-hidden="true"></i>
                         </span>
                         <span class="menu-title">Products</span>
                     </a>
-                </li>
+                </li> *@
                 <li class="nav-item menu-items">
                     <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
                         <span class="menu-icon">
                             <i class="fa fa-shield" aria-hidden="true"></i>
                         </span>
-                        <span class="menu-title">User Pages</span>
+                        <span class="menu-title">Quản lý Tài khoản</span>
                         <i class="fa fa-caret-down" aria-hidden="true"></i>
                     </a>
                     <div class="collapse" id="auth">
                         <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index", "User")">Danh sách tài khoản</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index", "User")">Thêm tài khoản</a></li>
                         </ul>
                     </div>
                 </li>
@@ -64,29 +62,29 @@
                         <span class="menu-icon">
                             <i class="fa fa-music" aria-hidden="true"></i>
                         </span>
-                        <span class="menu-title">Song</span>
+                        <span class="menu-title">Quản lý Bài hát</span>
                         <i class="fa fa-caret-down" aria-hidden="true"></i>
                     </a>
                     <div class="collapse" id="auth">
                         <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","MusicManagement")"> List Song </a></li>
-                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create","MusicManagement")"> Create Song </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","MusicManagement")">Danh sách nhạc</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create","MusicManagement")">Tạo</a></li>
                         </ul>
                     </div>
                 </li>
 
             </ul>
-            <div>
+            @* <div>
                 <span class="nav-link">Background Color</span>
                 <div style="display:flex; align-items:center; justify-content: center;">
                     <span id="temp_black" class="dot-bg-color" style="background-color:var(--gray-dark);"></span>
                     <span id="temp_white" class="dot-bg-color" style="background-color:var(--white);"></span>
                 </div>
-            </div>
+            </div> *@
         </nav>
         <div class="container-fluid page-body-wrapper">
             <partial name="_NavPartial" />
-            <div id="main-content" style="margin-top:70px; padding-top: 30px; width:100%;">
+            <div id="main-content">
                 @RenderBody()
             </div>
         </div>
@@ -97,6 +95,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @Html.AddSharedScript("js/HoldOn.js")
+    @Html.AddSharedScript("js/shared.js")
     <!--Start of Tawk.to Script-->
     <script type="text/javascript">
         var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
@@ -123,13 +122,12 @@
                 "--color-icon-nav": "#767676", "--color-change": "#000", "--bg-popup": "#fff", "--bg-hover": "#e5e7eb",
                 "--border-temp": "1px solid #efebeb", "--popup-shadow": "0px 0px 35px -3px #eae4e4"
             };
-
-            $('#temp_black').on('click', function () {
-                setTempViewColor_Black();
-            });
-            $('#temp_white').on('click', function () {
-                setTempViewColor_White();
-            });
+            // $('#temp_black').on('click', function () {
+            //     setTempViewColor_Black();
+            // });
+            // $('#temp_white').on('click', function () {
+            //     setTempViewColor_White();
+            // });
             function setTempViewColor_Black() {
                 ajaxUpdateViewColor(0);
                 $(":root").css(temp_black);
@@ -171,7 +169,6 @@
             "hideMethod": "fadeOut"
         }
     </script>
-    @Html.Raw("<script>" + ViewBag.Scripts + "</script>")
     <!--End of Tawk.to Script-->
     @await RenderSectionAsync("Scripts", required: false)
 </body>

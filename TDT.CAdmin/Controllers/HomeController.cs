@@ -26,7 +26,6 @@ namespace TDT.CAdmin.Controllers
         {
             _logger = logger;
         }
-
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Start session");
