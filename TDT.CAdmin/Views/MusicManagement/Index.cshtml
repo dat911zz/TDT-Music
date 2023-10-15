@@ -4,10 +4,10 @@
 @using X.PagedList.Mvc.Core.Common;
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Danh sách bài hát";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>Danh Sách Bài Hát Hiện Tại</h1>
+<h2>Danh sách bài hát</h2>
 
 @{
     int maxLength = 20; // Đặt giá trị tối đa
@@ -16,7 +16,8 @@
 <p>
     <a asp-action="Create">Tạo Bài Hát Mới</a>
 </p>
-<table class="table table-hover table-black">
+<div class="table-container">
+<table class="table">
     <thead>
         <tr>
             <th scope="col">
@@ -42,8 +43,8 @@
             <th scope="col"></th>
         </tr>
     </thead>
-    <tbody id="img_song">
-
+    <tbody>
+     
         @foreach (var item in Model)
         {
             <tr>
@@ -74,17 +75,18 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.isPrivate)
                 </td>
-                <td>
+
+                <td class="btn-control">
                     <a href="@Url.Action("Delete", "MusicManagement", new { id = item.encodeId})">
                         <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
                     </a>
                 </td>
-                <td>
+                <td  class="btn-control">
                     <a href="@Url.Action("Details", "MusicManagement", new { id = item.encodeId})">
                         <div class="fa fa-bars" aria-hidden="true"></div>
                     </a>
                 </td>
-                <td>
+                <td  class="btn-control">
                     <a href="@Url.Action("Edit", "MusicManagement", new { id = item.encodeId})">
                         <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
                     </a>
@@ -93,7 +95,7 @@
         }
     </tbody>
 </table>
-
+</div>
 
 <!-- Hiển thị điều hướng phân trang -->
 <div class="pagedList-container">

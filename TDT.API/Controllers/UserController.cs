@@ -59,7 +59,7 @@ namespace TDT.API.Controllers
             try
             {
                 User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
-                if (user == null || string.IsNullOrEmpty(user.UserName) == false)
+                if (user == null || string.IsNullOrEmpty(user.UserName))
                 {
                     return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật tài khoản");
                 }
@@ -67,7 +67,7 @@ namespace TDT.API.Controllers
                 user.Address = model.Address;
                 user.PhoneNumber = model.PhoneNumber;
                 user.PasswordHash = SecurityHelper.HashPassword(model.Password);
-
+                _db.SubmitChanges();
                 return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật tài khoản");
             }
             catch (Exception ex)
