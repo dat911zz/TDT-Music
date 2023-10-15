@@ -1,53 +1,56 @@
-﻿@model IPagedList<TDT.Core.DTO.SongDTO>
-@using X.PagedList;
-@using X.PagedList.Mvc.Core;
+﻿@using X.PagedList.Mvc.Core;
 @using X.PagedList.Mvc.Core.Common;
+@using X.PagedList;
+@model IPagedList<TDT.Core.DTO.PlaylistDTO>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>Danh Sách Bài Hát Hiện Tại</h1>
-
 @{
-    int maxLength = 20; // Đặt giá trị tối đa
+    int maxLength = 25; // Đặt giá trị tối đa
 }
 
+<h1>Danh Sách Play List</h1>
+
 <p>
-    <a asp-action="Create">Tạo Bài Hát Mới</a>
+    <a asp-action="Create">Tạo Play List Mới</a>
 </p>
-<table class="table table-hover table-black">
+<table class="table">
     <thead>
         <tr>
-            <th scope="col">
-                @* @Html.DisplayNameFor(model => model.encodeId) *@
+            <th>
                 Mã ID
             </th>
-            <th scope="col">
-                @*  @Html.DisplayNameFor(model => model.title) *@
+            <th>
                 Tiêu Đề
-            </th>
-            <th scope="col">
-                @* @Html.DisplayNameFor(model => model.artistsNames) *@
-                Tên nghệ sĩ
             </th>
             <th>
                 Ảnh
             </th>
-            <th scope="col">
-                @*  @Html.DisplayNameFor(model => model.isPrivate) *@
-                Bản riêng tư
+            <th>
+                Ngày Phát Hành
+            </th>
+            <th>
+                PR
+            </th>
+            <th>
+                Tên Nghệ Sĩ
+            </th>
+            <th>
+                UID
             </th>
 
-            <th scope="col"></th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
-    <tbody id="img_song">
-
+    <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td scope="row">
+                <td>
                     @Html.DisplayFor(modelItem => item.encodeId)
                 </td>
                 <td>
@@ -58,34 +61,36 @@
                     }
                     @truncatedTitle
                 </td>
-
-                <td>
-                    @{
-                        string truncatedArtistsNames = item.artistsNames.Length > maxLength
-                        ? item.artistsNames.Substring(0, maxLength) + "..."
-                        : item.artistsNames;
-                    }
-                    @truncatedArtistsNames
-                   
-    
-                </td>
                 <td class="img_song" encodeid="@item.encodeId" thumbnail="@item.thumbnail">
+                <td>
+                        @Html.DisplayFor(modelItem => item.releaseDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.isPrivate)
+                        @Html.DisplayFor(modelItem => item.PR)
                 </td>
                 <td>
-                    <a href="@Url.Action("Delete", "MusicManagement", new { id = item.encodeId})">
+                        @{
+                            string truncatedArtistsNames = item.artistsNames.Length > maxLength
+                            ? item.artistsNames.Substring(0, maxLength) + "..."
+                            : item.artistsNames;
+                        }
+                        @truncatedArtistsNames
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.uid)
+                </td>
+                <td>
+                    <a href="@Url.Action("Delete", "PlaylistManagement", new { id = item.encodeId})">
                         <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
                     </a>
                 </td>
                 <td>
-                    <a href="@Url.Action("Details", "MusicManagement", new { id = item.encodeId})">
+                    <a href="@Url.Action("Details", "PlaylistManagement", new { id = item.encodeId})">
                         <div class="fa fa-bars" aria-hidden="true"></div>
                     </a>
                 </td>
                 <td>
-                    <a href="@Url.Action("Edit", "MusicManagement", new { id = item.encodeId})">
+                    <a href="@Url.Action("Edit", "PlaylistManagement", new { id = item.encodeId})">
                         <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
                     </a>
                 </td>
@@ -93,12 +98,10 @@
         }
     </tbody>
 </table>
-
-
-<!-- Hiển thị điều hướng phân trang -->
 <div class="pagedList-container">
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
 </div>
+
 <script>
     $(".img_song").each(function (e, val) {
         var id = $(this).attr("encodeid");
@@ -109,7 +112,7 @@
     })
     function loadImg(that, _id, _thumbnail) {
         $.ajax({
-            url: "/MusicManagement/LoadImg",
+            url: "/PlaylistManagement/LoadImg",
             data: {
                 encodeID: _id,
                 thumbnail: _thumbnail
