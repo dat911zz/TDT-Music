@@ -43,7 +43,13 @@ namespace TDT.Core.Helper
         List<PlaylistDTO> _playlistRemixDances = new List<PlaylistDTO>();
         List<PlaylistDTO> _playlistTamTrang = new List<PlaylistDTO>();
 
-
+        List<PlaylistDTO> _playlistNoiBat = new List<PlaylistDTO>();
+        List<PlaylistDTO> _playlistHomNayBanTheNao = new List<PlaylistDTO>();
+        List<PlaylistDTO> _playlistNganNgaCauCa = new List<PlaylistDTO>();
+        List<PlaylistDTO> _playlistAmThanhLofi = new List<PlaylistDTO>();
+        List<PlaylistDTO> _playlistMotChutKhongLoi = new List<PlaylistDTO>();
+        List<PlaylistDTO> _playlistYen = new List<PlaylistDTO>();
+        List<PlaylistDTO> _playlistChillCungDance = new List<PlaylistDTO>();
         public int VIEW_COLOR { get => _viewColor; set => _viewColor = value; }
         public Dictionary<string, SongDTO> Songs { 
             get => _songs;
@@ -144,7 +150,91 @@ namespace TDT.Core.Helper
                 return _playlistTamTrang;
             }
         }
+        public List<PlaylistDTO> PlaylistNoiBat
+        {
+            get
+            {
+                if (this._playlistNoiBat.Count <= 0)
+                {
+                    string[] keys = new string[] { "v-pop", "remix", "rap-viet" };
+                    this._playlistNoiBat = GetPlaylistWithGenreKeys(keys: keys);
+                }
+                return _playlistNoiBat;
+            }
+        }
+        public List<PlaylistDTO> PlaylistHomNayBanTheNao
+        {
+            get
+            {
+                if (this._playlistHomNayBanTheNao.Count <= 0)
+                {
+                    string[] keys = new string[] { "chill", "tinh-yeu" };
+                    this._playlistHomNayBanTheNao = GetPlaylistWithGenreKeys(keys: keys);
+                }
+                return _playlistHomNayBanTheNao;
+            }
+        }
 
+        public List<PlaylistDTO> PlaylistNganNgaCauCa
+        {
+            get
+            {
+                if (this._playlistNganNgaCauCa.Count <= 0)
+                {
+                    string[] keys = new string[] { "chill", "vui" };
+                    this._playlistNganNgaCauCa = GetPlaylistWithGenreKeys(keys: keys);
+                }
+                return _playlistNganNgaCauCa;
+            }
+        }
+        public List<PlaylistDTO> PlaylistAmThanhLofi
+        {
+            get
+            {
+                if (this._playlistAmThanhLofi.Count <= 0)
+                {
+                    string[] keys = new string[] { "lofi", "de-ngu","v-pop", "acoustic", "tinh-yeu" };
+                    this._playlistAmThanhLofi = GetPlaylistWithGenreKeys(keys: keys);
+                }
+                return _playlistAmThanhLofi;
+            }
+        }
+        public List<PlaylistDTO> PlaylistMotChutKhongLoi
+        {
+            get
+            {
+                if (this._playlistMotChutKhongLoi.Count <= 0)
+                {
+                    string[] keys = new string[] { "khong-loi", "yeu-binh", "chua-lanh" };
+                    this._playlistMotChutKhongLoi = GetPlaylistWithGenreKeys(keys: keys);
+                }
+                return _playlistMotChutKhongLoi;
+            }
+        }
+        public List<PlaylistDTO> PlaylistYen
+        {
+            get
+            {
+                if (this._playlistYen.Count <= 0)
+                {
+                    string[] keys = new string[] { "yen", "thien-nhien", "mua", "ti-tach", "lieu-lo","v-pop", "acoustic" };
+                    this._playlistYen = GetPlaylistWithGenreKeys(keys: keys);
+                }
+                return _playlistYen;
+            }
+        }
+        public List<PlaylistDTO> PlaylistChillCungDance
+        {
+            get
+            {
+                if (this._playlistChillCungDance.Count <= 0)
+                {
+                    string[] keys = new string[] { "chill", "thu-gian", "EDM", "acoustic" };
+                    this._playlistChillCungDance = GetPlaylistWithGenreKeys(keys: keys);
+                }
+                return _playlistChillCungDance;
+            }
+        }
         public List<ArtistDTO> ArtistThinhHanh
         {
             get

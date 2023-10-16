@@ -135,5 +135,33 @@ namespace TDT.Core.ServiceImp
         {
             return new JsonResult(Generator.Instance.GenerateArtist(DataHelper.Instance.ArtistThinhHanh));
         }
+        public JsonResult GetHtmlPlaylistNoiBat()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistNoiBat.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistHomNayBanTheNao()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistHomNayBanTheNao.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistNganNgaCauCa()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistNganNgaCauCa.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistAmThanhLofi()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistAmThanhLofi.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistMotChutKhongLoi()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistMotChutKhongLoi.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistYen()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistYen.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistChillCungDance()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistChillCungDance.Take(5).ToList(), 1));
+        }
     }
 }
