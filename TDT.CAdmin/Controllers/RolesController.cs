@@ -1,20 +1,46 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using TDT.Core.DTO;
+using TDT.Core.Ultils;
+using X.PagedList;
 
 namespace TDT.CAdmin.Controllers
 {
-    public class Roles_Controller : Controller
+    public class RolesController : Controller
     {
-        // GET: Roles_Controller
-        public ActionResult Index()
+        public readonly ILogger<RolesController> _logger;
+        public RolesController(ILogger<RolesController> logger)
         {
+            _logger = logger;
+
+
+        }
+        // GET: Roles_Controller
+        public ActionResult Index(int? page)
+        {
+            ResponseDataDTO<RoleDTO> roles = APICallHelper.Get<ResponseDataDTO<RoleDTO>>("Role", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+
+            if (roles.Data != null)
+            {
+                int pageNumber = (page ?? 1);
+                int pageSize = 10;
+
+                IPagedList<RoleDTO> pagedList = roles.Data.ToPagedList(pageNumber, pageSize);
+
+                return View(pagedList);
+
+            }
             return View();
         }
 
         // GET: Roles_Controller/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            ResponseDataDTO<RoleDTO> roleDetail = APICallHelper.Get<ResponseDataDTO<RoleDTO>>($"Role/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            return View(roleDetail.Data.FirstOrDefault());
         }
 
         // GET: Roles_Controller/Create
@@ -30,6 +56,11 @@ namespace TDT.CAdmin.Controllers
         {
             try
             {
+                RoleDTO role = new RoleDTO();
+                role.Name = collection["Name"].ToString();
+                role.Description = collection["Description"].ToString();
+                role.CreateDate = DateTime.Now;
+
                 return RedirectToAction(nameof(Index));
             }
             catch
