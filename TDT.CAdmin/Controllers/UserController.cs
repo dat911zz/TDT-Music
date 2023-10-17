@@ -25,13 +25,13 @@ namespace TDT.CAdmin.Controllers
         }
         public IActionResult Index(int? page)
         {
-            ResponseDataDTO<UserDTO> userDetail = APICallHelper.Get<ResponseDataDTO<UserDTO>>("user", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
-            if (userDetail.Data != null)
+            ResponseDataDTO<UserDTO> users = APICallHelper.Get<ResponseDataDTO<UserDTO>>("user", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            if (users.Data != null)
             {
                 int pageNumber = (page ?? 1);
                 int pageSize = 10;
 
-                IPagedList<UserDTO> pagedList = userDetail.Data.ToPagedList(pageNumber, pageSize);
+                IPagedList<UserDTO> pagedList = users.Data.ToPagedList(pageNumber, pageSize);
 
                 return View(pagedList);
 
@@ -45,11 +45,13 @@ namespace TDT.CAdmin.Controllers
         }
         public ActionResult Details(string id)
         {
-            return View();
+            ResponseDataDTO<User> userDetail = APICallHelper.Get<ResponseDataDTO<User>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;            
+            return View(userDetail.Data.FirstOrDefault());
         }
         public ActionResult Edit(string id)
         {
-            return View();
+            ResponseDataDTO<User> userDetail = APICallHelper.Get<ResponseDataDTO<User>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            return View(userDetail.Data.FirstOrDefault());
         }
     //    [HttpPost]
     //    public ActionResult Create(TaiKhoanV2 model, FormCollection collection)

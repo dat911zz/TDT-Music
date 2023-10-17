@@ -169,6 +169,12 @@
             "hideMethod": "fadeOut"
         }
     </script>
+    <scrtipt>
+        @* @Html.Raw(TempData["notify"])
+        function notify(type, ){
+            toastr["success"]("123", "hehe")
+        } *@
+    </scrtipt>
     <!--End of Tawk.to Script-->
     @await RenderSectionAsync("Scripts", required: false)
 </body>

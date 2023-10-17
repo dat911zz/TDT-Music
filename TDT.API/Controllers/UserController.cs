@@ -19,8 +19,10 @@ namespace TDT.API.Controllers
 {
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
+        private static readonly string CTR_NAME = "Tài khoản";
         private readonly ILogger<UserController> _logger;
         private readonly QLDVModelDataContext _db;
         public UserController(ILogger<UserController> logger, QLDVModelDataContext db)
@@ -30,7 +32,6 @@ namespace TDT.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public IActionResult Get()
         {
             var users = _db.Users.AsEnumerable();
@@ -41,7 +42,6 @@ namespace TDT.API.Controllers
                 }, "Lấy dữ liệu");
         }
 
-        [Authorize]
         [HttpGet("{username}")]
         public IActionResult Get(string username)
         {
@@ -52,7 +52,6 @@ namespace TDT.API.Controllers
                 }, "Lấy dữ liệu");
         }
 
-        [Authorize]
         [HttpPut("{username}")]
         public IActionResult Update(string username, [FromBody]UserDetailModel model)
         {
@@ -61,14 +60,14 @@ namespace TDT.API.Controllers
                 User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
                 if (user == null || string.IsNullOrEmpty(user.UserName))
                 {
-                    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật tài khoản");
+                    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật " + CTR_NAME);
                 }
                 user.Email = model.Email;
                 user.Address = model.Address;
                 user.PhoneNumber = model.PhoneNumber;
                 user.PasswordHash = SecurityHelper.HashPassword(model.Password);
                 _db.SubmitChanges();
-                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật tài khoản");
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật " + CTR_NAME);
             }
             catch (Exception ex)
             {
@@ -77,10 +76,8 @@ namespace TDT.API.Controllers
                         {"exception", ex.Message}
                     });
             }
-
-
         }
-        [Authorize]
+
         [HttpDelete("{username}")]
         public IActionResult Delete(string username)
         {
@@ -89,11 +86,11 @@ namespace TDT.API.Controllers
                 User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
                 if (user == null)
                 {
-                    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "xóa tài khoản");
+                    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "xóa " + CTR_NAME);
                 }
                 _db.Users.DeleteOnSubmit(user);
                 _db.SubmitChanges();
-                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa tài khoản");
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa " + CTR_NAME);
             }
             catch (Exception ex)
             {
@@ -101,9 +98,7 @@ namespace TDT.API.Controllers
                     {
                         {"exception", ex.Message}
                     });
-            }
-            
+            }       
         }
-
     }
 }
