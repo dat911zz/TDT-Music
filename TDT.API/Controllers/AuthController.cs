@@ -21,6 +21,7 @@ namespace TDT.API.Controllers
 {
     [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class AuthController : Controller
     {
         private IConfiguration _cfg;
@@ -28,6 +29,7 @@ namespace TDT.API.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IEmailSender _mailSender;
         private readonly QLDVModelDataContext _db;
+
         public AuthController(
             IConfiguration cfg, 
             ISecurityHelper securityHelper,
@@ -41,6 +43,7 @@ namespace TDT.API.Controllers
             _securityHelper = securityHelper;
             _mailSender = mailSender;
         }
+
         [AllowAnonymous]
         [HttpPost]
         public IActionResult Login(LoginModel login, bool isCAdmin = false)
@@ -81,6 +84,7 @@ namespace TDT.API.Controllers
             }
             
         }
+
         [AllowAnonymous]
         [HttpPost]
         public IActionResult Register([FromBody] UserIdentiyModel model)
@@ -113,6 +117,7 @@ namespace TDT.API.Controllers
                     });
             }
         }
+
         private User Authenticate(LoginModel login)
         {
             User user = null;
@@ -129,6 +134,67 @@ namespace TDT.API.Controllers
             }
             return user;
         }
+
+        [HttpPost]
+        public IActionResult LockoutAccount(string username, [FromBody]DateTime lockoutEnd)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(username))
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.NullParams);
+                }
+                if (!_db.Users.Any(u => u.UserName.Equals(username.Trim())))
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.AccountNotFound);
+                }
+                var user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
+                user.LockoutEnd = lockoutEnd;
+                user.LockoutEnabled = true;
+                _db.SubmitChanges();
+                return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
+                    {
+                        {"data", lockoutEnd}
+                    }, "Khóa tài khoản");
+            }
+            catch (Exception ex)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult UnlockAccount(string username)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(username))
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.NullParams);
+                }
+                if (!_db.Users.Any(u => u.UserName.Equals(username.Trim())))
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.AccountNotFound);
+                }
+                var user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
+                user.LockoutEnd = null;
+                user.LockoutEnabled = false;
+                _db.SubmitChanges();
+                return APIHelper.GetJsonResult(APIStatusCode.Succeeded, formatValue: "Mở khóa tài khoản");
+            }
+            catch (Exception ex)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
+            }
+        }
+
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult ForgotPassword(string username)
         {
@@ -170,6 +236,7 @@ namespace TDT.API.Controllers
             
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult ResetPassword(string email, string token, string newPassword)
         {
