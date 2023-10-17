@@ -16,7 +16,7 @@ namespace TDT.Core.DTO
         private string _Name;
 
         private string _Description;
-        private DateTime _CreateDate;
+        private DateTime? _CreateDate;
         [SwaggerSchema(ReadOnly = true)]
         [Display(Name = "ID")]
         public int Id { get => _Id; set => _Id = value; }
@@ -28,6 +28,6 @@ namespace TDT.Core.DTO
         [SwaggerSchema(ReadOnly = true)]
         [Display(Name = "Ngày Tạo Role")]
 
-        public DateTime CreateDate { get => _CreateDate; set => _CreateDate = value; }
+        public DateTime? CreateDate { get => _CreateDate; set => _CreateDate = value; }
     }
 }

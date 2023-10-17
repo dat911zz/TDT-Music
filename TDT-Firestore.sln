@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDT.Firestore", "TDT.Firestore\TDT.Firestore.csproj", "{9F5A5CAA-5B2E-4DB0-A68E-A5CB8ED13977}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDT.Core", "TDT.Core\TDT.Core.csproj", "{6DF5FCC0-313E-49BC-B78B-26B8A88F72CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F5A5CAA-5B2E-4DB0-A68E-A5CB8ED13977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F5A5CAA-5B2E-4DB0-A68E-A5CB8ED13977}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F5A5CAA-5B2E-4DB0-A68E-A5CB8ED13977}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F5A5CAA-5B2E-4DB0-A68E-A5CB8ED13977}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DF5FCC0-313E-49BC-B78B-26B8A88F72CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DF5FCC0-313E-49BC-B78B-26B8A88F72CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DF5FCC0-313E-49BC-B78B-26B8A88F72CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DF5FCC0-313E-49BC-B78B-26B8A88F72CD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8F5E763-C5A9-4890-A42B-F684ED7C61E9}
+	EndGlobalSection
+EndGlobal
