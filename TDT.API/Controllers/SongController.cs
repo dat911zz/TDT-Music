@@ -41,11 +41,11 @@ namespace TDT.API.Controllers
         [Authorize]
         public IActionResult InsertOrUpdate(string key, string urlMP3, [FromBody]SongDTO song)
         {
-            //List<string> result = FirebaseService.Instance.pushSong(song, urlMP3).Result;
-            //if(result != null && result.Count > 0)
-            //{
-            //    return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật bài hát");
-            //}
+            List<string> result = FirebaseService.Instance.pushSong(song, urlMP3).Result;
+            if (result != null && result.Count > 0)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật bài hát");
+            }
             return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật bài hát");
         }
 

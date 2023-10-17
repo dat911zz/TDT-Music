@@ -40,9 +40,6 @@
             <th>
                 UID
             </th>
-
-            <th></th>
-            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -79,17 +76,15 @@
                 <td>
                         @Html.DisplayFor(modelItem => item.uid)
                 </td>
-                <td>
+                <td class="btn-control">
                     <a href="@Url.Action("Delete", "PlaylistManagement", new { id = item.encodeId})">
                         <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
                     </a>
-                </td>
-                <td>
+         
                     <a href="@Url.Action("Details", "PlaylistManagement", new { id = item.encodeId})">
                         <div class="fa fa-bars" aria-hidden="true"></div>
                     </a>
-                </td>
-                <td>
+ 
                     <a href="@Url.Action("Edit", "PlaylistManagement", new { id = item.encodeId})">
                         <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
                     </a>

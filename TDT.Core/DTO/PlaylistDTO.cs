@@ -80,10 +80,15 @@ namespace TDT.Core.DTO
         public bool isPrivate { get => _isPrivate; set => _isPrivate = value; }
         [Display(Name = "Tên người dùng")]
         public string userName { get => _userName; set => _userName = value; }
-
+        [Display(Name = "Album")]
         public bool isAlbum { get => _isAlbum; set => _isAlbum = value; }
+        [Display(Name = "Loại văn bản")]
+
         public string textType { get => _textType; set => _textType = value; }
+        [Display(Name = "Single")]
+
         public bool isSingle { get => _isSingle; set => _isSingle = value; }
+
         public string distributor { get => _distributor; set => _distributor = value; }
         public string description { get => _description; set => _description = value; }
         public string aliasTitle { get => _aliasTitle; set => _aliasTitle = value; }

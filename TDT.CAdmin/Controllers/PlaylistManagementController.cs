@@ -43,7 +43,7 @@ namespace TDT.CAdmin.Controllers
             if (_playlists != null)
             {
                 int pageNumber = (page ?? 1);
-                int pageSize = 10; // 
+                int pageSize = 10; 
                 IPagedList<PlaylistDTO> pagedList = _playlists.ToPagedList(pageNumber, pageSize);
                 return View(pagedList);
             }
