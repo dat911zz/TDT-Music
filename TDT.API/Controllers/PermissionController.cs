@@ -33,7 +33,8 @@ namespace TDT.API.Controllers
             {
                 Id = r.Id,
                 Name = r.Name,
-                Description = r.Description
+                Description = r.Description,
+                CreateDate = r.CreateDate
             }).AsEnumerable();
 
             return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
@@ -43,13 +44,14 @@ namespace TDT.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public IActionResult Get(int id)
         {
-            var role = _db.Permissions.Where(u => u.Id.Equals(id.Trim())).Select(r => new PermissionDTO
+            var role = _db.Permissions.Where(u => u.Id == id).Select(r => new PermissionDTO
             {
                 Id = r.Id,
                 Name = r.Name,
-                Description = r.Description
+                Description = r.Description,
+                CreateDate = r.CreateDate
             });
             return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
                 {
@@ -84,11 +86,11 @@ namespace TDT.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(string id, [FromBody] RoleDTO model)
+        public IActionResult Update(int id, [FromBody] RoleDTO model)
         {
             try
             {
-                var role = _db.Roles.FirstOrDefault(u => u.Id.Equals(id.Trim()));
+                var role = _db.Roles.FirstOrDefault(u => u.Id == id);
                 if (role == null || string.IsNullOrEmpty(role.Name))
                 {
                     return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật " + CTR_NAME);
@@ -108,11 +110,11 @@ namespace TDT.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete(int id)
         {
             try
             {
-                var role = _db.Permissions.FirstOrDefault(u => u.Id.Equals(id.Trim()));
+                var role = _db.Permissions.FirstOrDefault(u => u.Id == id);
                 if (role == null)
                 {
                     return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "xóa " + CTR_NAME);
