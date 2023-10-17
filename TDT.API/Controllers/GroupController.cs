@@ -33,7 +33,8 @@ namespace TDT.API.Controllers
             {
                 Id = r.Id,
                 Name = r.Name,
-                Description = r.Description
+                Description = r.Description,
+                CreateDate = r.CreateDate
             }).AsEnumerable();
 
             return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
@@ -43,13 +44,14 @@ namespace TDT.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public IActionResult Get(int id)
         {
-            var gr = _db.Groups.Where(u => u.Id.Equals(id.Trim())).Select(r => new GroupDTO
+            var gr = _db.Groups.Where(u => u.Id == id).Select(r => new GroupDTO
             {
                 Id = r.Id,
                 Name = r.Name,
-                Description = r.Description
+                Description = r.Description,
+                CreateDate = r.CreateDate
             });
             return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
                 {
@@ -84,11 +86,11 @@ namespace TDT.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(string id, [FromBody] GroupDTO model)
+        public IActionResult Update(int id, [FromBody] GroupDTO model)
         {
             try
             {
-                var role = _db.Groups.FirstOrDefault(u => u.Id.Equals(id.Trim()));
+                var role = _db.Groups.FirstOrDefault(u => u.Id == id);
                 if (role == null || string.IsNullOrEmpty(role.Name))
                 {
                     return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật " + CTR_NAME);
@@ -108,11 +110,11 @@ namespace TDT.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete(int id)
         {
             try
             {
-                var gr = _db.Groups.FirstOrDefault(u => u.Id.Equals(id.Trim()));
+                var gr = _db.Groups.FirstOrDefault(u => u.Id == id);
                 if (gr == null)
                 {
                     return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "xóa " + CTR_NAME);

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Google.Cloud.Firestore;
+using System.Collections.Generic;
 
 namespace TDT.Core.DTO
 {
+    [FirestoreData]
     public class Genre // thể loại album // playlist // song
     {
         private string _id;
@@ -10,10 +12,15 @@ namespace TDT.Core.DTO
         private string _alias;
         private string _link;
 
+        [FirestoreProperty]
         public string id { get => _id; set => _id = value; }
+        [FirestoreProperty]
         public string name { get => _name; set => _name = value; }
+        [FirestoreProperty]
         public string title { get => _title; set => _title = value; }
+        [FirestoreProperty]
         public string alias { get => _alias; set => _alias = value; }
+        [FirestoreProperty]
         public string link { get => _link; set => _link = value; }
 
         public bool compare(Genre other)
