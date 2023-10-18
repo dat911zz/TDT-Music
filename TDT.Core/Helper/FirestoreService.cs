@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TDT.Core.DTO.Firestore;
 
 namespace TDT.Core.Helper
 {
@@ -76,7 +77,7 @@ namespace TDT.Core.Helper
             if (string.IsNullOrEmpty(id))
             {
                 var listDoc = db.Collection(path).ListDocumentsAsync();
-                await listDoc.ForEachAsync(async doc =>
+                await listDoc.ForEachAsync(doc =>
                 {
                     result.Add(doc.Id);
                 });
@@ -90,6 +91,7 @@ namespace TDT.Core.Helper
         public async Task<string> GetDocumentReferenceKey(DocumentReference docRef)
         {
             DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            //snapshot.Reference.Database.Document
             if (snapshot.Exists)
             {
                 return snapshot.Id;
@@ -102,9 +104,57 @@ namespace TDT.Core.Helper
         }
         public async Task SetAsync<T>(string path, string id, T model)
         {
-            DocumentReference docRef = db.Collection(path).Document(id);
-            await docRef.SetAsync(model, SetOptions.MergeAll);
+            try
+            {
+                DocumentReference docRef = db.Collection(path).Document(id);
+                await docRef.SetAsync(model, SetOptions.MergeAll);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }          
             //Console.WriteLine(docRef.Id);
+        }
+        public async Task<string> CTestAsync(string path)
+        {
+            var docRef = db.Document(path);
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            //snapshot.Reference.Database.Document
+            if (snapshot.Exists)
+            {
+                var tests = snapshot.ConvertTo<List<SongDTO>>();
+                var list = snapshot.ToDictionary().Select(c => new SongDTO(GetObject<SongDTO>((Dictionary<string, object>)c.Value)));
+                return snapshot.Id;
+            }
+            else
+            {
+                Console.WriteLine("-Document {0} does not exist!", snapshot.Id);
+                return null;
+            }
+        }
+        public Object GetObject(Dictionary<string, object> dict, Type type)
+        {
+            var obj = Activator.CreateInstance(type);
+
+            foreach (var kv in dict)
+            {
+                var prop = type.GetProperty(kv.Key);
+                if (prop == null) continue;
+
+                object value = kv.Value;
+                if (value is Dictionary<string, object>)
+                {
+                    value = GetObject((Dictionary<string, object>)value, prop.PropertyType); // <= This line
+                }
+
+                prop.SetValue(obj, value, null);
+            }
+            return obj;
+        }
+        public T GetObject<T>(Dictionary<string, object> dict)
+        {
+            return (T)GetObject(dict, typeof(T));
         }
         public async Task DeleteAsync(string path)
         {

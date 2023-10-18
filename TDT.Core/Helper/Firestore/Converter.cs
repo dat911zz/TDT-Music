@@ -66,10 +66,15 @@ namespace TDT.Core.Helper.Firestore
             result.sectionId = playlist.sectionId;
             result.contentLastUpdate = playlist.contentLastUpdate;
             result.songs = new List<string>();
-            foreach (Song song in playlist.song.items)
+            
+            if (playlist.song != null)
             {
-                result.songs.Add(song.alias);
-            }
+                result.songs = playlist.song.items.Select(s => s.alias).ToList();
+                //foreach (Song song in playlist.song.items)
+                //{
+                //    result.songs.Add(song.alias);
+                //}
+            }           
             result.bannerAdaptiveId = playlist.bannerAdaptiveId;
             result.like = playlist.like;
             result.listen = playlist.listen;

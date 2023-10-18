@@ -51,7 +51,7 @@ namespace TDT.Core.DTO.Firestore
         [FirestoreProperty]
         public string artistsNames { get; set; }
         [FirestoreProperty]
-        public List<Artist> artists { get; set; }
+        public List<Artist>? artists { get; set; }
         [FirestoreProperty]
         public bool isWorldWide { get; set; }
         [FirestoreProperty]
@@ -103,7 +103,7 @@ namespace TDT.Core.DTO.Firestore
         [FirestoreProperty]
         public string artistsNames { get; set; }
         [FirestoreProperty]
-        public List<Artist> artists { get; set; }
+        public List<Artist>? artists { get; set; }
         [FirestoreProperty]
         public bool isWorldWide { get; set; }
         [FirestoreProperty]
@@ -121,9 +121,9 @@ namespace TDT.Core.DTO.Firestore
         [FirestoreProperty]
         public bool preRelease { get; set; }
         [FirestoreProperty]
-        public int releaseDate { get; set; }
+        public long? releaseDate { get; set; }
         [FirestoreProperty]
-        public List<string> genreIds { get; set; }
+        public List<string>? genreIds { get; set; }
         [FirestoreProperty]
         public string distributor { get; set; }
         [FirestoreProperty]
