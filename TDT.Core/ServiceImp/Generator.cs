@@ -262,7 +262,7 @@ namespace TDT.Core.ServiceImp
                             </div>
                         </div>
                     </div>
-                ", playlist.title, playlist.link, img, last);
+                ", playlist.title, $"/Album?encodeId={playlist.encodeId}", img, last);
             }
             return str.ToString();
         }

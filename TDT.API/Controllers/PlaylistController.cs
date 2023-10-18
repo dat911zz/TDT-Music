@@ -22,10 +22,17 @@ namespace TDT.API.Controllers
         }
 
         // GET api/<PlaylistController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{encodeId}")]
+        public JsonResult Get(string encodeId)
         {
-            return "value";
+            PlaylistDTO playlist;
+            string json = FirebaseService.Instance.getValueJson($"/Playlist/{encodeId}").Result;
+            if (string.IsNullOrEmpty(json))
+            {
+                return new JsonResult(null);
+            }
+            playlist = ConvertService.Instance.convertToObjectFromJson<PlaylistDTO>(json);
+            return new JsonResult(playlist);
         }
 
         // POST api/<PlaylistController>
@@ -44,6 +51,7 @@ namespace TDT.API.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+
         }
     }
 }
