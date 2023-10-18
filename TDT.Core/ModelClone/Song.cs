@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Google.Cloud.Firestore;
+using System.Collections.Generic;
 using TDT.Core.DTO;
 
 namespace TDT.Core.ModelClone
 {
-
+    [FirestoreData]
     public class Song
     {
         private string _encodeId;
@@ -39,47 +40,47 @@ namespace TDT.Core.ModelClone
         private bool _liked;
         private int _comment;
 
-        public string encodeId { get => _encodeId; set => _encodeId = value; }
-        public string title { get => _title; set => _title = value; }
-        public string alias { get => _alias; set => _alias = value; }
-        public bool isOffical { get => _isOffical; set => _isOffical = value; }
-        public string username { get => _username; set => _username = value; }
-        public string artistsNames { get => _artistsNames; set => _artistsNames = value; }
-        public List<Artist> artists { get => _artists; set => _artists = value; }
-        public bool isWorldWide { get => _isWorldWide; set => _isWorldWide = value; }
-        public string thumbnailM { get => _thumbnailM; set => _thumbnailM = value; }
-        public string link { get => _link; set => _link = value; }
-        public string thumbnail { get => _thumbnail; set => _thumbnail = value; }
-        public int duration { get => _duration; set => _duration = value; }
-        public bool zingChoice { get => _zingChoice; set => _zingChoice = value; }
-        public bool isPrivate { get => _isPrivate; set => _isPrivate = value; }
-        public bool preRelease { get => _preRelease; set => _preRelease = value; }
-        public string releaseDate { get => _releaseDate; set => _releaseDate = value; }
-        public List<string> genreIds { get => _genreIds; set => _genreIds = value; }
-        public string distributor { get => _distributor; set => _distributor = value; }
-        public List<object> indicators { get => _indicators; set => _indicators = value; }
-        public bool isIndie { get => _isIndie; set => _isIndie = value; }
-        public int streamingStatus { get => _streamingStatus; set => _streamingStatus = value; }
-        public bool allowAudioAds { get => _allowAudioAds; set => _allowAudioAds = value; }
-        public bool hasLyric { get => _hasLyric; set => _hasLyric = value; }
-        public int userid { get => _userid; set => _userid = value; }
-        public List<Genre> genres { get => _genres; set => _genres = value; }
-        public List<Composer> composers { get => _composers; set => _composers = value; }
-        public Playlist album { get => _album; set => _album = value; }
-        public bool isRBT { get => _isRBT; set => _isRBT = value; }
-        public int like { get => _like; set => _like = value; }
-        public int listen { get => _listen; set => _listen = value; }
-        public bool liked { get => _liked; set => _liked = value; }
-        public int comment { get => _comment; set => _comment = value; }
+        [FirestoreProperty] public string encodeId { get => _encodeId; set => _encodeId = value; }
+        [FirestoreProperty] public string title { get => _title; set => _title = value; }
+        [FirestoreProperty] public string alias { get => _alias; set => _alias = value; }
+        [FirestoreProperty] public bool isOffical { get => _isOffical; set => _isOffical = value; }
+        [FirestoreProperty] public string username { get => _username; set => _username = value; }
+        [FirestoreProperty] public string artistsNames { get => _artistsNames; set => _artistsNames = value; }
+        [FirestoreProperty] public List<Artist> artists { get => _artists; set => _artists = value; }
+        [FirestoreProperty] public bool isWorldWide { get => _isWorldWide; set => _isWorldWide = value; }
+        [FirestoreProperty] public string thumbnailM { get => _thumbnailM; set => _thumbnailM = value; }
+        [FirestoreProperty] public string link { get => _link; set => _link = value; }
+        [FirestoreProperty] public string thumbnail { get => _thumbnail; set => _thumbnail = value; }
+        [FirestoreProperty] public int duration { get => _duration; set => _duration = value; }
+        [FirestoreProperty] public bool zingChoice { get => _zingChoice; set => _zingChoice = value; }
+        [FirestoreProperty] public bool isPrivate { get => _isPrivate; set => _isPrivate = value; }
+        [FirestoreProperty] public bool preRelease { get => _preRelease; set => _preRelease = value; }
+        [FirestoreProperty] public string releaseDate { get => _releaseDate; set => _releaseDate = value; }
+        [FirestoreProperty] public List<string> genreIds { get => _genreIds; set => _genreIds = value; }
+        [FirestoreProperty] public string distributor { get => _distributor; set => _distributor = value; }
+        [FirestoreProperty] public List<object> indicators { get => _indicators; set => _indicators = value; }
+        [FirestoreProperty] public bool isIndie { get => _isIndie; set => _isIndie = value; }
+        [FirestoreProperty] public int streamingStatus { get => _streamingStatus; set => _streamingStatus = value; }
+        [FirestoreProperty] public bool allowAudioAds { get => _allowAudioAds; set => _allowAudioAds = value; }
+        [FirestoreProperty] public bool hasLyric { get => _hasLyric; set => _hasLyric = value; }
+        [FirestoreProperty] public int userid { get => _userid; set => _userid = value; }
+        [FirestoreProperty] public List<Genre> genres { get => _genres; set => _genres = value; }
+        [FirestoreProperty] public List<Composer> composers { get => _composers; set => _composers = value; }
+        [FirestoreProperty] public Playlist album { get => _album; set => _album = value; }
+        [FirestoreProperty] public bool isRBT { get => _isRBT; set => _isRBT = value; }
+        [FirestoreProperty] public int like { get => _like; set => _like = value; }
+        [FirestoreProperty] public int listen { get => _listen; set => _listen = value; }
+        [FirestoreProperty] public bool liked { get => _liked; set => _liked = value; }
+        [FirestoreProperty] public int comment { get => _comment; set => _comment = value; }
     }
-
+    [FirestoreData]
     public class SongIntermediary
     {
         // convert -> clone data
 
-        public List<Song> items { get; set; }
-        public int total { get; set; }
-        public int totalDuration { get; set; }
+        [FirestoreProperty] public List<Song> items { get; set; }
+        [FirestoreProperty] public int total { get; set; }
+        [FirestoreProperty] public int totalDuration { get; set; }
 
         //-----------------------
 

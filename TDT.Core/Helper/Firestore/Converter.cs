@@ -23,7 +23,7 @@ namespace TDT.Core.Helper.Firestore
             result.playlists = new List<string>();
             foreach (Playlist playlist in typePlayList.items)
             {
-                result.playlists.Add(playlist.title);
+                result.playlists.Add(playlist.encodeId);
             }
             return result;
         }
@@ -182,6 +182,7 @@ namespace TDT.Core.Helper.Firestore
             result.comment = song.comment;
             return result;
         }
+
         public static UserIdentiyModel convertToUserDetailDTO(User user)
         {
             return new UserIdentiyModel
