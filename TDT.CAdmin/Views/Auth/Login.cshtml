@@ -14,6 +14,7 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/login.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="container">
@@ -54,7 +55,7 @@
                                 @* <div asp-validation-summary="All" class="login-btm login-text text-danger"></div> *@
                                 <div class="login-btm login-text text-danger"></div>
                                 <div class="login-btm login-button">
-                                    <button type="submit" class="btn btn-outline-primary">ĐĂNG NHẬP</button>
+                                    <button id="login_btn" type="submit" class="btn btn-outline-primary">ĐĂNG NHẬP</button>
                                 </div>
                             </div>
                         </form>
@@ -76,37 +77,21 @@
                 <div class="col-lg-3 col-md-2"></div>
             </div>
         </div>
-        @*<div class="col-md-6 col-md-offset-2">
-        <section>
-        <h4>Use another service to log in.</h4>
-        <hr />
-        @{
-        if ((Model.ExternalLogins?.Count ?? 0) == 0)
-        {
-        <div>
-        <p>
-        There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-        for details on setting up this ASP.NET application to support logging in via external services.
-        </p>
-        </div>
-        }
-        else
-        {
-        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-        <div>
-        <p>
-        @foreach (var provider in Model.ExternalLogins)
-        {
-        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-        }
-        </p>
-        </div>
-        </form>
-        }
-        }
-        </section>
-        </div>
-        *@
     </div>
 </body>
 </html>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@{
+    if (ViewBag.Error != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Đăng nhập thất bại!',
+                text: '@ViewBag.Error',
+                showConfirmButton: true,
+                timer: 2500
+            })
+        </script>
+    }
+}

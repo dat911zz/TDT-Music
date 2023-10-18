@@ -1,4 +1,4 @@
-
+﻿
 @-moz-keyframes flash {
   0% {
     opacity: 1; }
@@ -16557,7 +16557,7 @@ code {
       margin-top: 0;
       z-index: 1;
       cursor: pointer;
-      opacity: 0;
+      /*opacity: 0;*/
       filter: alpha(opacity=0); }
       .rtl .form-check .form-check-label input {
         left: auto;
@@ -17571,9 +17571,12 @@ div.tagsinput {
   .preview-list .preview-item .form-check {
     margin-top: 8px;
     margin-right: 1rem; }
-  .preview-list .preview-item .preview-thumbnail {
-    color: #ffffff;
-    position: relative; }
+    .preview-list .preview-item .preview-thumbnail {
+        color: #ffffff;
+        position: relative;
+        min-width: 20px;
+        text-align: center;
+    }
     .preview-list .preview-item .preview-thumbnail img,
     .preview-list .preview-item .preview-thumbnail .preview-icon {
       width: 40px;

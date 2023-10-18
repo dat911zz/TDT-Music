@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -30,12 +32,21 @@ namespace TDT.CAdmin
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddCors();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddTransient<IEmailSender, MailingService>();
             services.AddTransient<ISecurityHelper, SecurityHelper>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSignalR();
             services.Configure<ErrorHandlerMiddleware>(Configuration);
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+                    cfg =>
+                    {                      
+                        cfg.LoginPath = new PathString("/Auth/Login");
+                        cfg.LogoutPath = new PathString("/Auth/Logout");
+                    }
+                );
             //services.Configure<IdentityEmailService>(Configuration);
         }
 
@@ -52,9 +63,14 @@ namespace TDT.CAdmin
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseCors(policy => policy
+             .AllowAnyOrigin()
+             .AllowAnyMethod()
+             .AllowAnyHeader()
+             );
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

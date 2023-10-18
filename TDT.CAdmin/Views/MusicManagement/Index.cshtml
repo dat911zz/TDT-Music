@@ -1,0 +1,120 @@
+﻿@model IPagedList<TDT.Core.DTO.SongDTO>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Core.Common;
+
+@{
+    ViewData["Title"] = "Danh sách bài hát";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Danh sách bài hát</h2>
+
+@{
+    int maxLength = 20; // Đặt giá trị tối đa
+}
+
+<p>
+    <a asp-action="Create">Tạo Bài Hát Mới</a>
+</p>
+<div class="table-container">
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                @* @Html.DisplayNameFor(model => model.encodeId) *@
+                Mã ID
+            </th>
+            <th scope="col">
+               @*  @Html.DisplayNameFor(model => model.title) *@
+               Tiêu Đề
+            </th>
+            <th scope="col">
+                @* @Html.DisplayNameFor(model => model.artistsNames) *@
+                Tên nghệ sĩ
+            </th>
+            <th>
+                Ảnh
+            </th>
+            <th scope="col">
+               @*  @Html.DisplayNameFor(model => model.isPrivate) *@
+                Bản riêng tư
+            </th>
+
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+     
+        @foreach (var item in Model)
+        {
+            <tr >
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.encodeId)
+                </td>
+                <td>
+                    @{
+                        if (item.title.Length > maxLength)
+                             @item.title.Substring(0, maxLength)
+                        else
+                             @item.title
+                    }
+                </td>
+
+                <td>
+                 @{
+                    if (item.artistsNames.Length > maxLength)
+                      @item.artistsNames.Substring(0, maxLength)
+                    else
+                        @item.artistsNames
+                 }
+                </td>
+                <td class="img_song" encodeid="@item.encodeId" thumbnail="@item.thumbnail">
+                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.isPrivate)
+                </td>
+
+                <td class="btn-control">
+                    <a href="@Url.Action("Delete", "MusicManagement", new { id = item.encodeId})">
+                        <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
+                    </a>
+                    <a href="@Url.Action("Details", "MusicManagement", new { id = item.encodeId})">
+                        <div class="fa fa-bars" aria-hidden="true"></div>
+                    </a>
+                    <a href="@Url.Action("Edit", "MusicManagement", new { id = item.encodeId})">
+                        <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+
+<!-- Hiển thị điều hướng phân trang -->
+<div class="pagedList-container">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
+</div>
+<script>
+    $(".img_song").each(function (e, val) {
+        var id = $(this).attr("encodeid");
+        var thumbnail = $(this).attr("thumbnail");
+        loadImg(this, id, thumbnail);
+        console.log(id, thumbnail);
+        
+    })
+    function loadImg(that, _id, _thumbnail) {
+        $.ajax({
+            url: "/MusicManagement/LoadImg",
+            data: {
+                encodeID: _id,
+                thumbnail: _thumbnail
+            },
+            success: function (data) {
+                // $('#img_song').html(data);
+                $(that).html('<img src="' + data + '"/>');
+            }
+        });
+    }
+
+</script>
