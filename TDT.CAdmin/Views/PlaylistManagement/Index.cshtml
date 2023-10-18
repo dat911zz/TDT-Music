@@ -1,0 +1,122 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Core.Common;
+@using X.PagedList;
+@model IPagedList<TDT.Core.DTO.PlaylistDTO>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    int maxLength = 25; // Đặt giá trị tối đa
+}
+
+<h1>Danh Sách Play List</h1>
+
+<p>
+    <a asp-action="Create">Tạo Play List Mới</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã ID
+            </th>
+            <th>
+                Tiêu Đề
+            </th>
+            <th>
+                Ảnh
+            </th>
+            <th>
+                Ngày Phát Hành
+            </th>
+            <th>
+                PR
+            </th>
+            <th>
+                Tên Nghệ Sĩ
+            </th>
+            <th>
+                UID
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.encodeId)
+                </td>
+                <td>
+                    @{
+                        string truncatedTitle = item.title.Length > maxLength
+                        ? item.title.Substring(0, maxLength) + "..."
+                        : item.title;
+                    }
+                    @truncatedTitle
+                </td>
+                <td class="img_song" encodeid="@item.encodeId" thumbnail="@item.thumbnail">
+                <td>
+                        @Html.DisplayFor(modelItem => item.releaseDate)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.PR)
+                </td>
+                <td>
+                        @{
+                            string truncatedArtistsNames = item.artistsNames.Length > maxLength
+                            ? item.artistsNames.Substring(0, maxLength) + "..."
+                            : item.artistsNames;
+                        }
+                        @truncatedArtistsNames
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.uid)
+                </td>
+                <td class="btn-control">
+                    <a href="@Url.Action("Delete", "PlaylistManagement", new { id = item.encodeId})">
+                        <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
+                    </a>
+         
+                    <a href="@Url.Action("Details", "PlaylistManagement", new { id = item.encodeId})">
+                        <div class="fa fa-bars" aria-hidden="true"></div>
+                    </a>
+ 
+                    <a href="@Url.Action("Edit", "PlaylistManagement", new { id = item.encodeId})">
+                        <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="pagedList-container">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
+</div>
+
+<script>
+    $(".img_song").each(function (e, val) {
+        var id = $(this).attr("encodeid");
+        var thumbnail = $(this).attr("thumbnail");
+        loadImg(this, id, thumbnail);
+        console.log(id, thumbnail);
+
+    })
+    function loadImg(that, _id, _thumbnail) {
+        $.ajax({
+            url: "/PlaylistManagement/LoadImg",
+            data: {
+                encodeID: _id,
+                thumbnail: _thumbnail
+            },
+            success: function (data) {
+                // $('#img_song').html(data);
+                $(that).html('<img src="' + data + '"/>');
+            }
+        });
+    }
+
+</script>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace TDT.Core.DTO
@@ -39,29 +40,55 @@ namespace TDT.Core.DTO
         private int _listen;
         private bool _liked;
 
+        [Display(Name = "Mã Hóa")]
         public string encodeId { get => _encodeId; set => _encodeId = value; }
+        [Display(Name = "Tiêu đề")]
         public string title { get => _title; set => _title = value; }
+        [Display(Name = "Ảnh đại diện")]
         public string thumbnail { get => _thumbnail; set => _thumbnail = value; }
+        [Display(Name = "Official")]
         public bool isoffical { get => _isoffical; set => _isoffical = value; }
+        [Display(Name = "Link")]
         public string link { get => _link; set => _link = value; }
+        [Display(Name = "Indie")]
         public bool isIndie { get => _isIndie; set => _isIndie = value; }
+        [Display(Name = "Ngày phát hành")]
         public string releaseDate { get => _releaseDate; set => _releaseDate = value; }
+        [Display(Name = "Mô tả")]
         public string sortDescription { get => _sortDescription; set => _sortDescription = value; }
+        [Display(Name = "Ngày phát hành")]
         public string releasedAt { get => _releasedAt; set => _releasedAt = value; }
+        [Display(Name = "Genre IDs")]
         public List<string> genreIds { get => _genreIds; set => _genreIds = value; }
+        [Display(Name = "PR")]
         public bool PR { get => _PR; set => _PR = value; }
+        [Display(Name = "Artists")]
         public Dictionary<string, string> artists { get => _artists; set => _artists = value; }
+        [Display(Name = "Tên nghệ sĩ")]
         public string artistsNames { get => _artistsNames; set => _artistsNames = value; }
+        [Display(Name = "Chế độ phát")]
         public int playItemMode { get => _playItemMode; set => _playItemMode = value; }
+        [Display(Name = "Loại phụ")]
         public int subType { get => _subType; set => _subType = value; }
+        [Display(Name = "UID")]
         public int uid { get => _uid; set => _uid = value; }
+        [Display(Name = "Ảnh đại diện M")]
         public string thumbnailM { get => _thumbnailM; set => _thumbnailM = value; }
+        [Display(Name = "Shuffle")]
         public bool isShuffle { get => _isShuffle; set => _isShuffle = value; }
+        [Display(Name = "Riêng tư")]
         public bool isPrivate { get => _isPrivate; set => _isPrivate = value; }
+        [Display(Name = "Tên người dùng")]
         public string userName { get => _userName; set => _userName = value; }
+        [Display(Name = "Album")]
         public bool isAlbum { get => _isAlbum; set => _isAlbum = value; }
+        [Display(Name = "Loại văn bản")]
+
         public string textType { get => _textType; set => _textType = value; }
+        [Display(Name = "Single")]
+
         public bool isSingle { get => _isSingle; set => _isSingle = value; }
+
         public string distributor { get => _distributor; set => _distributor = value; }
         public string description { get => _description; set => _description = value; }
         public string aliasTitle { get => _aliasTitle; set => _aliasTitle = value; }

@@ -58,7 +58,7 @@ namespace TDT.Core.DTO
         [Required(ErrorMessage = "Vui lòng nhập tên người dùng!")]
         public string username { get => _username; set => _username = value; }
 
-        [Required(ErrorMessage = "Vui nhập tên nghệ xĩ!")]
+        [Required(ErrorMessage = "Vui lòng nhập tên nghệ sĩ!")]
         [Display(Name = "Tên nghệ sĩ")]
         public string artistsNames { get => _artistsNames; set => _artistsNames = value; }
 
@@ -100,7 +100,7 @@ namespace TDT.Core.DTO
         [Display(Name = "Danh sách mã thể loại")]
         public List<string> genreIds { get => _genreIds; set => _genreIds = value; }
         
-        [Display(Name = "Nhà phân phối")]
+        [Display(Name = "Nhà phát hành")]
         public string distributor { get => _distributor; set => _distributor = value; }
 
         [Display(Name = "Danh sách chỉ số")]
