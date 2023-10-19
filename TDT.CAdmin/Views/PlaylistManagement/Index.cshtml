@@ -67,11 +67,20 @@
                 </td>
                 <td>
                         @{
-                            string truncatedArtistsNames = item.artistsNames.Length > maxLength
+                            string truncatedArtistsNames;
+                            if (item.artistsNames.Length != null)
+                            {
+                                truncatedArtistsNames = item.artistsNames.Length > maxLength
                             ? item.artistsNames.Substring(0, maxLength) + "..."
                             : item.artistsNames;
+
+                            }else
+                            {
+                                truncatedArtistsNames = "--";
+                            }
                         }
                         @truncatedArtistsNames
+
                 </td>
                 <td>
                         @Html.DisplayFor(modelItem => item.uid)

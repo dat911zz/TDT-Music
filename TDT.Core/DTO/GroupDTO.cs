@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TDT.Core.DTO
@@ -21,5 +22,10 @@ namespace TDT.Core.DTO
         public string Description { get => _Description; set => _Description = value; }
         [SwaggerSchema(ReadOnly = true)]
         public DateTime? CreateDate { get => _CreateDate; set => _CreateDate = value; }
+
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this);
+        }
     }
 }

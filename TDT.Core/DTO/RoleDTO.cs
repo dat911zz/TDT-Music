@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TDT.Core.DTO
@@ -29,5 +30,10 @@ namespace TDT.Core.DTO
         [Display(Name = "Ngày Tạo Role")]
 
         public DateTime? CreateDate { get => _CreateDate; set => _CreateDate = value; }
+
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this);
+        }
     }
 }

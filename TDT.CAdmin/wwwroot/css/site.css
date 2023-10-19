@@ -165,3 +165,7 @@ body {
 #toast-container > div{
     opacity: 0.9;
 }
+/*Sửa màu text của Input admin thành màu đen*/
+.form-group input {
+    color: black;
+}
