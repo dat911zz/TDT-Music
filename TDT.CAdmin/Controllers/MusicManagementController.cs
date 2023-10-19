@@ -15,6 +15,7 @@ namespace TDT.CAdmin.Controllers
 
         public MusicManagementController()
         {
+            
             if (DataHelper.Instance.Songs.Count <= 0)
             {
                 HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Song/load");
@@ -50,7 +51,10 @@ namespace TDT.CAdmin.Controllers
                 return View(pagedList);
 
             }
-            return View();
+            else
+            {
+                throw new System.Exception(message:"Null Nè!");
+            }
         }
         [HttpGet]
         public string LoadImg(string encodeID, string thumbnail)
@@ -80,6 +84,8 @@ namespace TDT.CAdmin.Controllers
         [HttpPost]
         public IActionResult Create(SongDTO song, IFormFile file)
         {
+            string id;
+
             if (ModelState.IsValid)
             {
                 if (file != null && file.Length > 0 && file.ContentType == "audio/mpeg")
