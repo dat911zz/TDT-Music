@@ -14,6 +14,7 @@ using System;
 using TDT.CAdmin.Areas.Identity.Data;
 using TDT.CAdmin.Models;
 using TDT.Core.ServiceImp;
+using TDT.Core.Ultils.MVCMessage;
 using TDT.IdentityCore.Middlewares;
 using TDT.IdentityCore.Utils;
 
@@ -46,6 +47,10 @@ namespace TDT.CAdmin
                         cfg.LogoutPath = new PathString("/Auth/Logout");
                     }
                 );
+            services.AddMvc(cfg =>
+            {
+                cfg.Filters.Add<MessagesFilter>();
+            }).AddControllersAsServices();
             //services.Configure<IdentityEmailService>(Configuration);
         }
 

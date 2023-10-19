@@ -26,7 +26,7 @@ namespace TDT.Firestore
                 return _instance;
             }
         }
-        private CrawlDataV2Controller()
+        public CrawlDataV2Controller()
         {
             _service = FirestoreService.Instance;
         }

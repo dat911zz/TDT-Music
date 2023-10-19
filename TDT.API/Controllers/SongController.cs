@@ -31,18 +31,18 @@ namespace TDT.API.Controllers
             return new JsonResult(FirestoreService.Instance.Gets<SongDTO>("Song", encodeId));
         }
 
-        // POST api/<SongController>
-        [Route("InsertOrUpdate")]
-        [HttpPost]
-        [Authorize]
-        public IActionResult InsertOrUpdate(string key, string urlMP3, [FromBody]SongDTO song)
-        {
-            //List<string> result = FirebaseService.Instance.pushSong(song, urlMP3).Result;
-            //if (result != null && result.Count > 0)
-            //{
-            //    return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật bài hát");
-            //}
-            return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật bài hát");
-        }
+        //// POST api/<SongController>
+        //[Route("InsertOrUpdate")]
+        //[HttpPost]
+        //[Authorize]
+        //public IActionResult InsertOrUpdate(string key, string urlMP3, [FromBody]SongDTO song)
+        //{
+        //    List<string> result = FirebaseService.Instance.pushSong(song, urlMP3).Result;
+        //    if (result != null && result.Count > 0)
+        //    {
+        //        return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật bài hát");
+        //    }
+        //    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật bài hát");
+        //}
     }
 }

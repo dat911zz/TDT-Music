@@ -107,6 +107,7 @@ namespace TDT.Core.Helper
         public async Task<IDictionary<string, object>> GetDocumentReference(DocumentReference docRef)
         {
             DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            //snapshot.Reference.Database.Document
             if (snapshot.Exists)
             {
                 return snapshot.ToDictionary();

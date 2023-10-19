@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using TDT.Core.DTO;
+using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
-using TDT.Core.ModelClone;
 using TDT.Core.Ultils;
 using X.PagedList;
 

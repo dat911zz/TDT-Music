@@ -48,7 +48,7 @@
                             @Html.DisplayFor(modelItem => item.Description)
                         </td>
                         <td>
-                            @item.CreateDate.ToString("dd/MM/yyyy HH:mm:ss")
+                            @item.CreateDate?.ToString("dd/MM/yyyy HH:mm:ss")
                         </td>
                         <td class="btn-control">
                             <a href="@Url.Action("Delete", "Roles", new { id = item.Id})">

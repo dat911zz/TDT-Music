@@ -34,7 +34,7 @@ namespace TDT.CAdmin.Controllers
         }
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Login(string urlCallback = "")
+        public IActionResult Login()
         {
             ViewBag.Error = null;
             var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
