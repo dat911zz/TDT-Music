@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using TDT.Core.DTO;
 
-namespace TDT.Core.ModelClone
+namespace TDT.Firestore.ModelClone
 {
     public class TypePlayList
     {

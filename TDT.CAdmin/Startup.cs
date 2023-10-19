@@ -38,7 +38,6 @@ namespace TDT.CAdmin
             services.AddTransient<IEmailSender, MailingService>();
             services.AddTransient<ISecurityHelper, SecurityHelper>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSignalR();
             services.Configure<ErrorHandlerMiddleware>(Configuration);
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
                     cfg =>
@@ -79,7 +78,6 @@ namespace TDT.CAdmin
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<RealtimeHub>("/TDTRealtimeCrawlData");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

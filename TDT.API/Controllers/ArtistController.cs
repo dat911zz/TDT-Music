@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Cloud.Firestore;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
-using TDT.Core.DTO;
+using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
 
 namespace TDT.API.Controllers
@@ -12,10 +14,11 @@ namespace TDT.API.Controllers
         // GET: api/<PlaylistController>
         [Route("load")]
         [HttpGet]
-        public JsonResult load()
+        public JsonResult Load()
         {
-            var dics = FirebaseService.Instance.getDictionary("Artist", "id");
-            return new JsonResult(dics.Values.Select(x => ConvertService.Instance.convertToObjectFromJson<ArtistDTO>(x.ToString())).ToList());
+            Query query = FirestoreService.Instance.OrderByDescending("Artist", "follow");
+            List<ArtistDTO> result = FirestoreService.Instance.Gets<ArtistDTO>(query);
+            return new JsonResult(result);
         }
     }
 }
