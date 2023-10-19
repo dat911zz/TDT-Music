@@ -53,22 +53,33 @@ namespace TDT.Core.Helper
                         Type t = item.Value.GetType();
                         if (t == typeof(List<object>))
                         {
-                            someObjectType
+                            string typeItem = (someObjectType.GetProperty(item.Key)).ToString();
+                            if (typeItem.Contains("System.String"))
+                            {
+                                someObjectType
                                  .GetProperty(item.Key)
                                  .SetValue(res, ((List<object>)item.Value).Select(i => i.ToString()).ToList(), null);
+                            }
+                            else if ((someObjectType.GetProperty(item.Key)).ToString().Contains("SectionDTO"))
+                            {
+                                List<SectionDTO> sections = new List<SectionDTO>();
+                                ((List<object>)item.Value).ForEach(o => sections.Add(convertToObjectFromDictionary<SectionDTO>((IDictionary<string, object>)o)));
+                                someObjectType
+                                    .GetProperty(item.Key)
+                                    .SetValue(res, sections, null);
+                            }
+                            else
+                            {
+                                someObjectType
+                                     .GetProperty(item.Key)
+                                     .SetValue(res, item.Value, null);
+                            }
                         }
                         else if (t == typeof(Int64))
                         {
                             someObjectType
                                  .GetProperty(item.Key)
                                  .SetValue(res, int.Parse(item.Value.ToString()), null);
-                        }
-                        else if (item.Value.GetType() == typeof(Dictionary<string, object>))
-                        {
-
-                            someObjectType
-                                 .GetProperty(item.Key)
-                                 .SetValue(res, (Dictionary<string, SectionDTO>)item.Value, null);
                         }
                         else
                         {
