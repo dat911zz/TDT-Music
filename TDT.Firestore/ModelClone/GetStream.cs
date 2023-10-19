@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TDT.Core.ModelClone
+namespace TDT.Firestore.ModelClone
 {
     public class GetStream
     {

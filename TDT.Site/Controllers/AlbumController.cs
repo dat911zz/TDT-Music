@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using TDT.Core.DTO;
+using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
 using TDT.Core.Ultils;
 using TDT_Music.Services;

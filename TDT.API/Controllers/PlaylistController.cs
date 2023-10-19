@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Cloud.Firestore;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using TDT.Core.DTO;
+using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TDT.API.Controllers
 {
@@ -15,23 +14,18 @@ namespace TDT.API.Controllers
         // GET: api/<PlaylistController>
         [Route("load")]
         [HttpGet]
-        public JsonResult load()
+        public JsonResult Load()
         {
-            var dics = FirebaseService.Instance.getDictionary("Playlist", "id");
-            return new JsonResult(dics.Values.Select(x => ConvertService.Instance.convertToObjectFromJson<PlaylistDTO>(x.ToString())).ToList());
+            Query query = FirestoreService.Instance.OrderByDescending("Playlist", "releasedAt");
+            List<PlaylistDTO> result = FirestoreService.Instance.Gets<PlaylistDTO>(query);
+            return new JsonResult(result);
         }
 
         // GET api/<PlaylistController>/5
         [HttpGet("{encodeId}")]
         public JsonResult Get(string encodeId)
         {
-            PlaylistDTO playlist;
-            string json = FirebaseService.Instance.getValueJson($"/Playlist/{encodeId}").Result;
-            if (string.IsNullOrEmpty(json))
-            {
-                return new JsonResult(null);
-            }
-            playlist = ConvertService.Instance.convertToObjectFromJson<PlaylistDTO>(json);
+            PlaylistDTO playlist = FirestoreService.Instance.Gets<PlaylistDTO>("Playlist", encodeId);
             return new JsonResult(playlist);
         }
 

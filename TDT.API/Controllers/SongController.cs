@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
+﻿using Google.Cloud.Firestore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Linq;
-using TDT.Core.DTO;
+using TDT.Core.DTO.Firestore;
 using TDT.Core.Enums;
 using TDT.Core.Helper;
 using TDT.Core.Ultils;
@@ -23,21 +21,14 @@ namespace TDT.API.Controllers
         [HttpGet]
         public JsonResult load()
         {
-            var dics = FirebaseService.Instance.getDictionary("Song", "id");
-            return new JsonResult(dics.Values.Select(x => ConvertService.Instance.convertToObjectFromJson<SongDTO>(x.ToString())).ToList());
+            Query query = FirestoreService.Instance.OrderByDescending("Song", "releaseDate");
+            return new JsonResult(FirestoreService.Instance.Gets<SongDTO>(query));
         }
 
         [HttpGet("{encodeId}")]
         public JsonResult Get(string encodeId)
         {
-            SongDTO song;
-            string json = FirebaseService.Instance.getValueJson($"/Song/{encodeId}").Result;
-            if (string.IsNullOrEmpty(json))
-            {
-                return new JsonResult(null);
-            }
-            song = ConvertService.Instance.convertToObjectFromJson<SongDTO>(json);
-            return new JsonResult(song);
+            return new JsonResult(FirestoreService.Instance.Gets<SongDTO>("Song", encodeId));
         }
 
         // POST api/<SongController>
@@ -53,17 +44,5 @@ namespace TDT.API.Controllers
             //}
             return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật bài hát");
         }
-
-        //// PUT api/<SongController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/<SongController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }

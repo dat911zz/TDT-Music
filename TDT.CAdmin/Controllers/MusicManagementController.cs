@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using TDT.Core.DTO;
 using TDT.Core.Ultils;
 using Microsoft.AspNetCore.Http;
 using TDT.Core.Helper;
 using System.Linq;
 using X.PagedList;
-using TDT.Core.ModelClone;
-using System.Text;
+using TDT.Core.DTO.Firestore;
 
 namespace TDT.CAdmin.Controllers
 {

@@ -1,7 +1,7 @@
 ﻿using Google.Cloud.Firestore;
 using System.Collections.Generic;
 
-namespace TDT.Core.DTO
+namespace TDT.Core.DTO.Firestore
 {
     [FirestoreData]
     public class Genre // thể loại album // playlist // song
