@@ -7,6 +7,7 @@ using TDT.Core.DTO;
 using TDT.Core.Extensions;
 using TDT.Core.ModelClone;
 using TDT.Core.ServiceImp;
+using TDT.Core.Ultils;
 
 namespace TDT.Core.Helper
 {
@@ -186,6 +187,52 @@ namespace TDT.Core.Helper
             if (all)
                 return plGen;
             return plGen.Where(x => x.genreIds.Contains(idVietNam)).ToList();
+        }
+
+        public ArtistDTO GetArtist(string id)
+        {
+            if (Artists.Keys.Contains(id))
+            {
+                return Artists[id];
+            }
+            else
+            {
+                ArtistDTO artDTO = FirebaseService.Instance.getSingleValue<ArtistDTO>($"Artist/{id}").Result;
+                if (artDTO != null)
+                {
+
+                    try
+                    {
+                        DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
+                        return artDTO;
+                    }
+                    catch { }
+                }
+                return null;
+            }
+        }
+        public PlaylistDTO GetPlaylist(string id)
+        {
+            if (Playlists.Keys.Contains(id))
+            {
+                return Playlists[id];
+            }
+            else
+            {
+                HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Playlist/" + id);
+                string json = httpService.getJson();
+                var playlist = ConvertService.Instance.convertToObjectFromJson<PlaylistDTO>(json);
+                if (playlist != null)
+                {
+                    try
+                    {
+                        DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
+                        return playlist;
+                    }
+                    catch { }
+                }
+                return null;
+            }
         }
 
         public async Task<List<string>> pushPlaylist(Playlist playlist)

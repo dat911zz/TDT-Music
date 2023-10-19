@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 using TDT.Core.DTO;
 using TDT.Core.Enums;
 using TDT.Core.Helper;
@@ -27,13 +30,26 @@ namespace TDT.API.Controllers
             return new JsonResult(dics.Values.Select(x => ConvertService.Instance.convertToObjectFromJson<SongDTO>(x.ToString())).ToList());
         }
 
-        // GET api/<SongController>/5
-        [HttpGet("{id}")]
-        public JsonResult Get(string id)
+        [HttpGet("{encodeId}")]
+        public JsonResult Get(string encodeId)
         {
-            var song = FirebaseService.Instance.getSingleValue<SongDTO>(id);
-            return new JsonResult(song);
+           try
+            {
+                SongDTO song;
+                string json = FirebaseService.Instance.getValueJson($"/Song/{encodeId}").Result;
+                if (string.IsNullOrEmpty(json))
+                {
+                    return new JsonResult(null);
+                }
+                song = ConvertService.Instance.convertToObjectFromJson<SongDTO>(json);
+                return new JsonResult(song);
+            }
+            catch
+            {
+                return new JsonResult(null);
+            }
         }
+
 
         // POST api/<SongController>
         [Route("InsertOrUpdate")]

@@ -131,5 +131,91 @@ namespace TDT.Core.ServiceImp
         {
             return new JsonResult(Generator.Instance.GenerateArtist(DataHelper.Instance.ArtistThinhHanh));
         }
+
+        //[Route("GetHtmlArtistInfo")]
+        //[HttpGet("{id}")]
+        public JsonResult GetHtmlArtistInfo(string id)
+        {
+            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
+            return new JsonResult(artist == null ? "" : Generator.Instance.GenerateArtistInfo(artist));
+        }
+        public JsonResult GetHtmlArtsistNoiBat(string id)
+        {
+            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
+            return new JsonResult(artist == null ? "" : Generator.Instance.GenerateArtistNoiBat(artist));
+        }
+        public JsonResult GetHtmlSingleEP(string id)
+        {
+            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
+            List<PlaylistDTO> list = new List<PlaylistDTO>();
+            if (artist.sections.Keys.Contains("Single & EP"))
+            {
+                foreach(var keyPlaylist in artist.sections["Single & EP"].items.Keys) {
+                    var playlist = DataHelper.Instance.GetPlaylist(keyPlaylist);
+                    if(playlist != null)
+                    {
+                        list.Add(playlist);
+                    }
+                }
+            }
+             return new JsonResult(Generator.Instance.GeneratePlaylist(list.Take(5).ToList()));
+        }
+        public JsonResult GetHtmlAlbum(string id)
+        {
+            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
+            List<PlaylistDTO> list = new List<PlaylistDTO>();
+            if (artist.sections.Keys.Contains("Album"))
+            {
+                foreach (var keyPlaylist in artist.sections["Album"].items.Keys)
+                {
+                    var playlist = DataHelper.Instance.GetPlaylist(keyPlaylist);
+                    if (playlist != null)
+                    {
+                        list.Add(playlist);
+                    }
+                }
+            }
+            return new JsonResult(Generator.Instance.GeneratePlaylist(list.Take(5).ToList()));
+        }
+        public JsonResult GetHtmlTuyenTap(string id)
+        {
+            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
+            List<PlaylistDTO> list = new List<PlaylistDTO>();
+            if (artist.sections.Keys.Contains("Tuyển tập"))
+            {
+                foreach (var keyPlaylist in artist.sections["Tuyển tập"].items.Keys)
+                {
+                    var playlist = DataHelper.Instance.GetPlaylist(keyPlaylist);
+                    if (playlist != null)
+                    {
+                        list.Add(playlist);
+                    }
+                }
+            }
+             return new JsonResult(Generator.Instance.GeneratePlaylist(list.Take(5).ToList()));
+        }
+        public JsonResult GetHtmlCoTheThich(string id)
+        {
+            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
+            List<ArtistDTO> list = new List<ArtistDTO>();
+            if (artist.sections.Keys.Contains("Bạn Có Thể Thích"))
+            {
+                foreach (var keyArt in artist.sections["Bạn Có Thể Thích"].items.Keys)
+                {
+                    var artists = DataHelper.Instance.GetArtist(keyArt);
+                    if (artists != null)
+                    {
+                        list.Add(artists);
+                    }
+                }
+            }
+            return new JsonResult(Generator.Instance.GenerateArtist(list.Take(5).ToList()));
+        }
+
+        public JsonResult GetHtmlArtistInfoFooter(string id)
+        {
+            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
+            return new JsonResult(artist == null ? "" : Generator.Instance.GenerateArtistInfo_footer(artist));
+        }
     }
 }
