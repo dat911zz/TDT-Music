@@ -14,6 +14,7 @@ using System;
 using TDT.CAdmin.Areas.Identity.Data;
 using TDT.CAdmin.Models;
 using TDT.Core.ServiceImp;
+using TDT.Core.Ultils.MVCMessage;
 using TDT.IdentityCore.Middlewares;
 using TDT.IdentityCore.Utils;
 
@@ -38,7 +39,6 @@ namespace TDT.CAdmin
             services.AddTransient<IEmailSender, MailingService>();
             services.AddTransient<ISecurityHelper, SecurityHelper>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSignalR();
             services.Configure<ErrorHandlerMiddleware>(Configuration);
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
                     cfg =>
@@ -47,6 +47,10 @@ namespace TDT.CAdmin
                         cfg.LogoutPath = new PathString("/Auth/Logout");
                     }
                 );
+            services.AddMvc(cfg =>
+            {
+                cfg.Filters.Add<MessagesFilter>();
+            }).AddControllersAsServices();
             //services.Configure<IdentityEmailService>(Configuration);
         }
 
@@ -79,7 +83,6 @@ namespace TDT.CAdmin
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<RealtimeHub>("/TDTRealtimeCrawlData");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

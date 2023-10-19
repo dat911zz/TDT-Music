@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using TDT.Core.DTO;
+using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
-using TDT.Core.ModelClone;
 using TDT.Core.Ultils;
 
 namespace TDT.Core.ServiceImp
@@ -16,12 +17,11 @@ namespace TDT.Core.ServiceImp
     {
         public JsonResult LoadSongRelease()
         {
-            IList<SongDTO> songs = new List<SongDTO>();
+            List<SongDTO> songs = new List<SongDTO>();
             if (DataHelper.Instance.Songs.Count <= 0)
             {
-                HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Song/load");
-                string json = httpService.getJson();
-                songs = ConvertService.Instance.convertToObjectFromJson<List<SongDTO>>(json);
+                Query query = FirestoreService.Instance.OrderByDescending("Song", "releaseDate");
+                songs = FirestoreService.Instance.Gets<SongDTO>(query);
             }
             else
             {
@@ -134,6 +134,34 @@ namespace TDT.Core.ServiceImp
         public JsonResult GetHtmlArtistThinhHanh()
         {
             return new JsonResult(Generator.Instance.GenerateArtist(DataHelper.Instance.ArtistThinhHanh));
+        }
+        public JsonResult GetHtmlPlaylistNoiBat()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistNoiBat.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistHomNayBanTheNao()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistHomNayBanTheNao.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistNganNgaCauCa()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistNganNgaCauCa.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistAmThanhLofi()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistAmThanhLofi.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistMotChutKhongLoi()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistMotChutKhongLoi.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistYen()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistYen.Take(5).ToList(), 1));
+        }
+        public JsonResult GetHtmlPlaylistChillCungDance()
+        {
+            return new JsonResult(Generator.Instance.GeneratePlaylist(DataHelper.Instance.PlaylistChillCungDance.Take(5).ToList(), 1));
         }
     }
 }

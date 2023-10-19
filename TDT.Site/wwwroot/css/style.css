@@ -88,13 +88,13 @@ button:focus {
 	font-size: 16px;
 	line-height: 40px;
 	color: #777777;
-	background-color: #fff;
-	border-radius: 5px;
+	/*background-color: #fff;*/
+	/*border-radius: 5px;*/
 	border: 1px solid transparent;
 }
 .form-control:focus {
-	box-shadow: 0px 0px 10px rgba(59, 200, 231, 0.55);
-	border: 1px solid #3bc8e7;
+	/*box-shadow: 0px 0px 10px rgba(59, 200, 231, 0.55);
+	border: 1px solid #3bc8e7;*/
 }
 select.form-control:not([size]):not([multiple]) {
 	height: 40px;

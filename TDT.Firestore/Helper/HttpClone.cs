@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace TDT.Core.Helper
+namespace TDT.Firestore.Helper
 {
     public class HttpClone
     {
@@ -81,7 +81,11 @@ namespace TDT.Core.Helper
             var response = HTTP_CLIENT.GetAsync(DOMAIN + "getLyric/" + id).Result;
             return response.Content.ReadAsStringAsync().Result;
         }
-
+        public string search(string keyword)
+        {
+            var response = HTTP_CLIENT.GetAsync(DOMAIN + "search/" + keyword).Result;
+            return response.Content.ReadAsStringAsync().Result;
+        }
         public string getJsonFromUrl(string url)
         {
             var cookieContainer = new CookieContainer();

@@ -46,9 +46,9 @@
     cursor:pointer;
 }
 
-h1, h2, h3, h4, h5, h6, p, span, div {
+/*h1, h2, h3, h4, h5, h6, p, span, div {
     color: var(--color-change);
-}
+}*/
 #main-content {
     margin-top: 70px;
     padding: 30px;

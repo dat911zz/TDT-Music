@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Google.Cloud.Firestore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TDT.Core.Models;
 
 namespace TDT.Core.DTO.Firestore
 {
+    [FirestoreData]
     public class SongDTO : APIResponseModel
     {
         private string _encodeId;
@@ -25,7 +27,7 @@ namespace TDT.Core.DTO.Firestore
         private string _releaseDate;
         private List<string> _genreIds;
         private string _distributor;
-        private List<object> _indicators;
+        private List<string> _indicators;
         private bool _isIndie;
         private int _streamingStatus;
         private bool _allowAudioAds;
@@ -38,109 +40,147 @@ namespace TDT.Core.DTO.Firestore
         private int _listen;
         private bool _liked;
         private int _comment;
+        public SongDTO()
+        {
+            
+        }
+        public SongDTO(SongDTO src)
+        {
+            _encodeId = src.encodeId;
+            _title = src.title;
+            _alias = src.alias;
+            _isOffical = src.isOffical;
+            _username = src.username;
+            _artistsNames = src.artistsNames;
+            _artists = src.artists;
+            _isWorldWide = src.isWorldWide;
+            _thumbnailM = src.thumbnailM;
+            _link = src.link;
+            _thumbnail = src.thumbnail;
+            _duration = src.duration;
+            _zingChoice = src.zingChoice;
+            _isPrivate = src.isPrivate;
+            _preRelease = src.preRelease;
+            _releaseDate = src.releaseDate;
+            _genreIds = src.genreIds;
+            _distributor = src.distributor;
+            _indicators = src.indicators;
+            _isIndie = src.isIndie;
+            _streamingStatus = src.streamingStatus;
+            _allowAudioAds = src.allowAudioAds;
+            _hasLyric = src.hasLyric;
+            _userid = src.userid;
+            _composers = src.composers;
+            _album = src.album;
+            _isRBT = src.isRBT;
+            _like = src.like;
+            _listen = src.listen;
+            _liked = src.liked;
+            _comment = src.comment;
+        }
 
         [Display(Name = "Mã Hóa")]
-        public string encodeId { get => _encodeId; set => _encodeId = value; }
+        [FirestoreProperty] public string encodeId { get => _encodeId; set => _encodeId = value; }
         
         [Required(ErrorMessage = "Vui lòng nhập tiêu đề!")]
 
         [Display(Name = "Tiêu đề")]
-        public string title { get => _title; set => _title = value; }
+        [FirestoreProperty] public string title { get => _title; set => _title = value; }
         [Required(ErrorMessage = "Nhập bí danh!")]
 
         [Display(Name = "Bí danh")]
-        public string alias { get => _alias; set => _alias = value; }
+        [FirestoreProperty] public string alias { get => _alias; set => _alias = value; }
 
         [Display(Name = "Làm chính thức")]
-        public bool isOffical { get => _isOffical; set => _isOffical = value; }
+        [FirestoreProperty] public bool isOffical { get => _isOffical; set => _isOffical = value; }
 
         [Display(Name = "Tên người dùng")]
         [Required(ErrorMessage = "Vui lòng nhập tên người dùng!")]
-        public string username { get => _username; set => _username = value; }
+        [FirestoreProperty] public string username { get => _username; set => _username = value; }
 
         [Required(ErrorMessage = "Vui nhập tên nghệ xĩ!")]
         [Display(Name = "Tên nghệ sĩ")]
-        public string artistsNames { get => _artistsNames; set => _artistsNames = value; }
+        [FirestoreProperty] public string artistsNames { get => _artistsNames; set => _artistsNames = value; }
 
         [Required(ErrorMessage = "Vui lòng nhập danh sách nghệ sĩ!")]
         [Display(Name = "Danh sách nghệ sĩ")]
-        public List<string> artists { get => _artists; set => _artists = value; }
+        [FirestoreProperty] public List<string> artists { get => _artists; set => _artists = value; }
         
         [Display(Name = "Là toàn cầu")]
-        public bool isWorldWide { get => _isWorldWide; set => _isWorldWide = value; }
+        [FirestoreProperty] public bool isWorldWide { get => _isWorldWide; set => _isWorldWide = value; }
 
         [Required(ErrorMessage = "Vui lòng chọn file ảnh M!")]
         [Display(Name = "Ảnh thu nhỏ M")]
-        public string thumbnailM { get => _thumbnailM; set => _thumbnailM = value; }
+        [FirestoreProperty] public string thumbnailM { get => _thumbnailM; set => _thumbnailM = value; }
 
         [Display(Name = "Liên kết")]
-        public string link { get => _link; set => _link = value; }
+        [FirestoreProperty] public string link { get => _link; set => _link = value; }
 
         [Required(ErrorMessage = "Vui lòng chọn file ảnh!")]
         [Display(Name = "Ảnh thu nhỏ")]
-        public string thumbnail { get => _thumbnail; set => _thumbnail = value; }
+        [FirestoreProperty] public string thumbnail { get => _thumbnail; set => _thumbnail = value; }
         
         [Display(Name = "Thời lượng")]
-        public int duration { get => _duration; set => _duration = value; }
+        [FirestoreProperty] public int duration { get => _duration; set => _duration = value; }
 
         [Display(Name = "Lựa chọn Zing")]
-        public bool zingChoice { get => _zingChoice; set => _zingChoice = value; }
+        [FirestoreProperty] public bool zingChoice { get => _zingChoice; set => _zingChoice = value; }
 
         [Display(Name = "Bản riêng tư")]
-        public bool isPrivate { get => _isPrivate; set => _isPrivate = value; }
+        [FirestoreProperty] public bool isPrivate { get => _isPrivate; set => _isPrivate = value; }
         
         [Display(Name = "Trước ngày phát hành")]
-        public bool preRelease { get => _preRelease; set => _preRelease = value; }
+        [FirestoreProperty] public bool preRelease { get => _preRelease; set => _preRelease = value; }
 
         [Required(ErrorMessage = "Vui lòng Nghi Ngày phát hành!")]
         [DataType(DataType.DateTime)]
         [Display(Name = "Ngày phát hành")]
-        public string releaseDate { get => _releaseDate; set => _releaseDate = value; }
+        [FirestoreProperty] public string releaseDate { get => _releaseDate; set => _releaseDate = value; }
         
         [Display(Name = "Danh sách mã thể loại")]
-        public List<string> genreIds { get => _genreIds; set => _genreIds = value; }
+        [FirestoreProperty] public List<string> genreIds { get => _genreIds; set => _genreIds = value; }
         
         [Display(Name = "Nhà phân phối")]
-        public string distributor { get => _distributor; set => _distributor = value; }
+        [FirestoreProperty] public string distributor { get => _distributor; set => _distributor = value; }
 
         [Display(Name = "Danh sách chỉ số")]
 
-        public List<object> indicators { get => _indicators; set => _indicators = value; }
+        [FirestoreProperty] public List<string> indicators { get => _indicators; set => _indicators = value; }
         [Display(Name = "Là bản độc lập")]
-        public bool isIndie { get => _isIndie; set => _isIndie = value; }
+        [FirestoreProperty] public bool isIndie { get => _isIndie; set => _isIndie = value; }
 
         [Display(Name = "Trạng thái phát sóng")]
-        public int streamingStatus { get => _streamingStatus; set => _streamingStatus = value; }
+        [FirestoreProperty] public int streamingStatus { get => _streamingStatus; set => _streamingStatus = value; }
 
         [Display(Name = "Cho phép quảng cáo âm thanh")]
-        public bool allowAudioAds { get => _allowAudioAds; set => _allowAudioAds = value; }
+        [FirestoreProperty] public bool allowAudioAds { get => _allowAudioAds; set => _allowAudioAds = value; }
         
         [Display(Name = "Có lời bài hát")]
-        public bool hasLyric { get => _hasLyric; set => _hasLyric = value; }
+        [FirestoreProperty] public bool hasLyric { get => _hasLyric; set => _hasLyric = value; }
 
         [Display(Name = "ID người dùng")]
-        public int userid { get => _userid; set => _userid = value; }
+        [FirestoreProperty] public int userid { get => _userid; set => _userid = value; }
        
         [Display(Name = "Danh sách nhạc sĩ")]
-        public List<string> composers { get => _composers; set => _composers = value; }
+        [FirestoreProperty] public List<string> composers { get => _composers; set => _composers = value; }
 
         [Display(Name = "Album")]
-        public string album { get => _album; set => _album = value; }
+        [FirestoreProperty] public string album { get => _album; set => _album = value; }
 
         [Display(Name = "Là bản RBT")]
-        public bool isRBT { get => _isRBT; set => _isRBT = value; }
+        [FirestoreProperty] public bool isRBT { get => _isRBT; set => _isRBT = value; }
 
         [Display(Name = "Lượt thích")]
-        public int like { get => _like; set => _like = value; }
+        [FirestoreProperty] public int like { get => _like; set => _like = value; }
 
         [Display(Name = "Lượt nghe")]
-        public int listen { get => _listen; set => _listen = value; }
+        [FirestoreProperty] public int listen { get => _listen; set => _listen = value; }
 
         [Display(Name = "Đã thích")]
-        public bool liked { get => _liked; set => _liked = value; }
+        [FirestoreProperty] public bool liked { get => _liked; set => _liked = value; }
 
         [Display(Name = "Số lượt bình luận")]
-        public int comment { get => _comment; set => _comment = value; }
+        [FirestoreProperty] public int comment { get => _comment; set => _comment = value; }
         public DateTime ReleaseDate()
         {
             return (new DateTime(1975, 1, 1, 0, 0, 0)).AddMilliseconds(long.Parse(13 - this.releaseDate.Length > 0 ? this.releaseDate.PadRight(13, '0') : this.releaseDate));
