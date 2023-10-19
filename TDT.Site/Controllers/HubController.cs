@@ -21,6 +21,10 @@ namespace TDT_Music.Controllers
         {
             return View();
         }
+        public IActionResult Chill()
+        {
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(int statusCode, string msg = "Có lỗi đã xảy ra!")
         {
