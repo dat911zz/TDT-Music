@@ -11235,7 +11235,10 @@ body .react-loading-skeleton {
 .ic-copy-text:before {
     content: "\72"
 }
-
+.row {
+    background-color: black;
+    border: 1px solid #ccc;
+}
 .ic-delete:before {
     content: "\73"
 }

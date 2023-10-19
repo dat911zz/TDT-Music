@@ -1,26 +1,22 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TDT.Core.DTO;
 using TDT.Core.Enums;
-using TDT.Core.Helper;
-using TDT.Core.ModelClone;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
 using TDT.IdentityCore.Utils;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TDT.API.Controllers
 {
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
+        private static readonly string CTR_NAME = "Tài khoản";
         private readonly ILogger<UserController> _logger;
         private readonly QLDVModelDataContext _db;
         public UserController(ILogger<UserController> logger, QLDVModelDataContext db)
@@ -30,7 +26,6 @@ namespace TDT.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public IActionResult Get()
         {
             var users = _db.Users.AsEnumerable();
@@ -41,7 +36,6 @@ namespace TDT.API.Controllers
                 }, "Lấy dữ liệu");
         }
 
-        [Authorize]
         [HttpGet("{username}")]
         public IActionResult Get(string username)
         {
@@ -52,23 +46,22 @@ namespace TDT.API.Controllers
                 }, "Lấy dữ liệu");
         }
 
-        [Authorize]
         [HttpPut("{username}")]
         public IActionResult Update(string username, [FromBody]UserDetailModel model)
         {
             try
             {
                 User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
-                if (user == null || string.IsNullOrEmpty(user.UserName) == false)
+                if (user == null || string.IsNullOrEmpty(user.UserName))
                 {
-                    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật tài khoản");
+                    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật " + CTR_NAME);
                 }
                 user.Email = model.Email;
                 user.Address = model.Address;
                 user.PhoneNumber = model.PhoneNumber;
                 user.PasswordHash = SecurityHelper.HashPassword(model.Password);
-
-                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật tài khoản");
+                _db.SubmitChanges();
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật " + CTR_NAME);
             }
             catch (Exception ex)
             {
@@ -77,10 +70,8 @@ namespace TDT.API.Controllers
                         {"exception", ex.Message}
                     });
             }
-
-
         }
-        [Authorize]
+
         [HttpDelete("{username}")]
         public IActionResult Delete(string username)
         {
@@ -89,11 +80,11 @@ namespace TDT.API.Controllers
                 User user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username.Trim()));
                 if (user == null)
                 {
-                    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "xóa tài khoản");
+                    return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "xóa " + CTR_NAME);
                 }
                 _db.Users.DeleteOnSubmit(user);
                 _db.SubmitChanges();
-                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa tài khoản");
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa " + CTR_NAME);
             }
             catch (Exception ex)
             {
@@ -101,9 +92,7 @@ namespace TDT.API.Controllers
                     {
                         {"exception", ex.Message}
                     });
-            }
-            
+            }       
         }
-
     }
 }

@@ -7,12 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
-using TDT.Core.DTO;
-using System.Runtime.CompilerServices;
-using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
-using TDT.Core.ModelClone;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 
 namespace TDT.Core.Helper
 {
@@ -62,7 +57,7 @@ namespace TDT.Core.Helper
                 }
                 else
                 {
-                    if(authLink == null || authLink.IsExpired())
+                    if (authLink == null || authLink.IsExpired())
                     {
                         login().Wait();
                     }
@@ -102,10 +97,6 @@ namespace TDT.Core.Helper
             await firebase.Child(nameNode).DeleteAsync();
         }
 
-        public async Task<IReadOnlyCollection<FirebaseObject<PlaylistDTO>>> getPlaylistRelease()
-        {
-            return await firebase.Child("Playlist").OnceAsync<PlaylistDTO>();
-        }
 
         private static async Task login()
         {
@@ -135,7 +126,7 @@ namespace TDT.Core.Helper
         {
             try
             {
-                Stream stream = HttpClone.Intance.CreateFileFromUrl(url);
+                Stream stream = StorgeService.Instance.CreateFileFromUrl(url);
                 if (stream != null)
                 {
                     var task = await storage.Child(nameParent).PutAsync(stream);
@@ -163,39 +154,6 @@ namespace TDT.Core.Helper
             {
                 return ex.Message;
             }
-        }
-
-        public async Task<IReadOnlyCollection<FirebaseObject<PlaylistDTO>>> get1()
-        {
-            //string str = "Top";
-            //return await firebase.Child("Playlist").OrderBy("title").StartAt(str).EndAt(str + "\uf8ff").OnceAsync<PlaylistDTO>();
-            return await firebase.Child("Playlist").OrderByKey().StartAt("(Single)").EndAt("(Single)" + "~").OnceAsync<PlaylistDTO>();
-            //return await firebase.Child("Playlist").OrderBy("contentLastUpdate").OnceAsync<PlaylistDTO>();
-        }
-
-        public async Task<List<string>> pushSong(SongDTO song, string urlMP3)
-        {
-            List<string> list = new List<string>();
-            if (song != null)
-            {
-                string thumbnail = song.thumbnail.Split("/").Last();
-                string thumbnailM = song.thumbnailM.Split("/").Last();
-                if (String.IsNullOrEmpty(thumbnail) || String.IsNullOrEmpty(thumbnailM))
-                {
-                    return list;
-                }
-                string path_thumbnail = "Images/Song/0/" + thumbnail;
-                string path_thumbnailM = "Images/Song/1/" + thumbnailM;
-                list.Add(await FirebaseService.Instance.pushFile(song.thumbnail, path_thumbnail));
-                list.Add(await FirebaseService.Instance.pushFile(song.thumbnailM, path_thumbnailM));
-                song.thumbnail = path_thumbnail;
-                song.thumbnailM = path_thumbnailM;
-                string nameSong = "MP3/" + song.encodeId + ".mp3";
-                await FirebaseService.Instance.pushFile(urlMP3, nameSong);
-                song.streamingStatus = 1;
-                FirebaseService.Instance.push("Song/" + song.encodeId, song);
-            }
-            return list;
         }
     }
 }

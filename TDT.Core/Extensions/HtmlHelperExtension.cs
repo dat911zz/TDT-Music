@@ -17,7 +17,7 @@ namespace TDT.Core.Extensions
             {
                 return new HtmlString("");
             }
-            return new HtmlString($"<script src=\"{BASE_URL + path}\" asp-append-version=\"true\"></script>");
+            return new HtmlString($"<script src=\"{BASE_URL + path}\"></script>");
         }
         public static IHtmlContent AddSharedCSS(this IHtmlHelper html, string path)
         {

@@ -117,3 +117,51 @@ body {
     white-space: nowrap;
     line-height: 60px; /* Vertically center the text there */
 }
+
+
+
+/*Phân Trang*/
+/* Container cho điều hướng phân trang */
+.pagedList-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
+/* Điều hướng trang */
+.pagedList a,
+.pagedList span {
+    padding: 5px 10px;
+    margin: 0 5px;
+    color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+    .pagedList a:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+/* Trang hiện tại */
+.active span {
+    background-color: #007bff !important;
+    color: #fff;
+    border: 1px solid #007bff !important;
+    box-shadow: 0 0 5px #007bff !important; /* Tạo hiệu ứng nổi lên */
+    border-radius: 5px;
+}
+
+/* Nút 'Trước' và 'Tiếp theo' */
+.pagedList .pagedListNav {
+    margin: 10px 0;
+}
+
+.toast-success {
+    background-color: #51A351;
+}
+#toast-container > div{
+    opacity: 0.9;
+}

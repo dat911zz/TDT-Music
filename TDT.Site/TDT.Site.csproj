@@ -7,10 +7,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.17" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TDT.Core\TDT.Core.csproj" />
+    <ProjectReference Include="..\TDT.IdentityCore\TDT.IdentityCore.csproj" />
   </ItemGroup>
 
 </Project>

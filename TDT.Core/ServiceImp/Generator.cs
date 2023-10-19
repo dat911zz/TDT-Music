@@ -6,10 +6,8 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
-using System.Threading.Tasks;
-using TDT.Core.DTO;
+using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
-using TDT.Core.ModelClone;
 using TDT.Core.Ultils;
 
 namespace TDT.Core.ServiceImp
@@ -99,9 +97,9 @@ namespace TDT.Core.ServiceImp
                     foreach (var item in song.artists)
                     {
                         ArtistDTO artDTO = new ArtistDTO();
-                        if (!DataHelper.Instance.Artists.Keys.Contains(item.Key))
+                        if (!DataHelper.Instance.Artists.Keys.Contains(item))
                         {
-                            artDTO = FirebaseService.Instance.getSingleValue<ArtistDTO>($"Artist/{item.Key}").Result;
+                            artDTO = FirestoreService.Instance.Gets<ArtistDTO>("Artist", item);
                             if (artDTO == null)
                                 continue;
                             try
@@ -112,7 +110,7 @@ namespace TDT.Core.ServiceImp
                         }
                         else
                         {
-                            artDTO = DataHelper.Instance.Artists[item.Key];
+                            artDTO = DataHelper.Instance.Artists[item];
                         }
                         if (string.IsNullOrEmpty(artDTO.name))
                             continue;
@@ -219,16 +217,16 @@ namespace TDT.Core.ServiceImp
                     foreach (var item in playlist.artists)
                     {
                         ArtistDTO artDTO = new ArtistDTO();
-                        if (!DataHelper.Instance.Artists.Keys.Contains(item.Key))
+                        if (!DataHelper.Instance.Artists.Keys.Contains(item))
                         {
-                            artDTO = FirebaseService.Instance.getSingleValue<ArtistDTO>($"Artist/{item.Key}").Result;
+                            artDTO = FirestoreService.Instance.Gets<ArtistDTO>("Artist", item);
                             if (artDTO == null)
                                 continue;
                             DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
                         }
                         else
                         {
-                            artDTO = DataHelper.Instance.Artists[item.Key];
+                            artDTO = DataHelper.Instance.Artists[item];
                         }
                         if (string.IsNullOrEmpty(artDTO.name))
                             continue;
@@ -268,7 +266,7 @@ namespace TDT.Core.ServiceImp
                             </div>
                         </div>
                     </div>
-                ", playlist.title, playlist.link, img, last);
+                ", playlist.title, $"/Album?encodeId={playlist.encodeId}", img, last);
             }
             return str.ToString();
         }
@@ -1047,5 +1045,7 @@ namespace TDT.Core.ServiceImp
                 ",img, artist.name, artist.totalFollow);
             return str.ToString();
         }
+
+      
     }
 }

@@ -1,0 +1,73 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Core.Common;
+@using X.PagedList;
+@model IPagedList<TDT.Core.DTO.RoleDTO>
+
+@{
+    ViewData["Title"] = "Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Danh Sách Roles</h1>
+
+<p>
+    <a asp-action="Create">Tạo Mới Role</a>
+</p>
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Tên Role
+                </th>
+                <th>
+                    Miêu tả Role
+                </th>
+                <th>
+                    Ngày Tạo Role
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if(Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @item.CreateDate?.ToString("dd/MM/yyyy HH:mm:ss")
+                        </td>
+                        <td class="btn-control">
+                            <a href="@Url.Action("Delete", "Roles", new { id = item.Id})">
+                                <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
+                            </a>
+                            <a href="@Url.Action("Details", "Roles", new { id = item.Id})">
+                                <div class="fa fa-bars" aria-hidden="true"></div>
+                            </a>
+                            <a href="@Url.Action("Edit", "Roles", new { id = item.Id})">
+                                <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="pagedList-container">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
+</div>

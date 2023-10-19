@@ -1,6 +1,8 @@
 ﻿@using TDT.Core.Helper
 @using TDT.Core.Enums
-@using TDT.Core.Extensions;
+@using TDT.Core.Extensions
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Microsoft.AspNetCore.Mvc.Rendering
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,220 +12,121 @@
     <link rel="stylesheet" href="~/css/base.css" />
     <link rel="stylesheet" href="~/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="~/css/style.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    @Html.AddSharedCSS("css/HoldOn.css");
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    @Html.AddSharedCSS("css/HoldOn.css")
+    @Html.AddSharedCSS("css/shared.css")
 </head>
 <body>
     <div class="container-scroller">
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-                <img src="~/image/logo_TDT_Devil-transparent.png" style="height:100%; object-fit:contain;" />
-            </div>
+            <a href="/" class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+                <img src="~/image/logo_TDT_Devil_red.png" style="height:100%; object-fit:contain;" />
+            </a>
             <ul class="nav mt-4">
                 <li class="nav-item menu-items">
-                    <a class="nav-link">
+                    <a class="nav-link" href="@Url.Action("Index", "Home")">
                         <span class="menu-icon">
                             <i class="fa fa-tachometer" aria-hidden="true"></i>
                         </span>
-                        <span class="menu-title">Dashboard</span>
+                        <span class="menu-title">Trang chủ</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
+                @* <li class="nav-item menu-items">
                     <a class="nav-link">
                         <span class="menu-icon">
                             <i class="fa fa-product-hunt" aria-hidden="true"></i>
                         </span>
                         <span class="menu-title">Products</span>
                     </a>
+                </li> *@
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
+                        <span class="menu-icon">
+                            <i class="fa fa-shield" aria-hidden="true"></i>
+                        </span>
+                        <span class="menu-title">Quản lý Tài khoản</span>
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </a>
+                    <div class="collapse" id="auth">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index", "User")">Danh sách tài khoản</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index", "User")">Thêm tài khoản</a></li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="nav-item menu-items">
                     <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
                         <span class="menu-icon">
                             <i class="fa fa-shield" aria-hidden="true"></i>
                         </span>
-                        <span class="menu-title">User Pages</span>
+                        <span class="menu-title">Quản lý Roles</span>
                         <i class="fa fa-caret-down" aria-hidden="true"></i>
                     </a>
                     <div class="collapse" id="auth">
                         <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index", "Roles")">Danh sách Roles</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index", "Roles")">Thêm Roles</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
+                        <span class="menu-icon">
+                            <i class="fa fa-music" aria-hidden="true"></i>
+                        </span>
+                        <span class="menu-title">Quản lý Bài hát</span>
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </a>
+                    <div class="collapse" id="auth">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","MusicManagement")">Danh sách nhạc</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create","MusicManagement")">Thêm Bài Hát</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
+                        <span class="menu-icon">
+                            <i class="fa fa-th-list" aria-hidden="true"></i>
+                        </span>
+                        <span class="menu-title">Quản lý Play List <i class="fa fa-music" aria-hidden="true"></i></span>
+                        
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </a>
+                    <div class="collapse" id="auth">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","PlaylistManagement")">Danh sách Play List </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create","PlaylistManagement")"> Thêm Play List</a></li>
                         </ul>
                     </div>
                 </li>
             </ul>
-            <div>
+            @* <div>
                 <span class="nav-link">Background Color</span>
                 <div style="display:flex; align-items:center; justify-content: center;">
                     <span id="temp_black" class="dot-bg-color" style="background-color:var(--gray-dark);"></span>
                     <span id="temp_white" class="dot-bg-color" style="background-color:var(--white);"></span>
                 </div>
-            </div>
+            </div> *@
         </nav>
         <div class="container-fluid page-body-wrapper">
-            <nav class="navbar p-0 fixed-top d-flex flex-row">
-                <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-                    <img src="~/image/logo_TDT_Devil-transparent.png" style="height:100%; object-fit:contain;" />
-                </div>
-                <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
-                    <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-                        <span class="mdi mdi-menu"></span>
-                    </button>
-                    <ul class="navbar-nav w-100">
-                        <li class="nav-item w-100">
-                            <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                                <input type="text" class="form-control" placeholder="Search products">
-                            </form>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav navbar-nav-right">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-envelope" aria-hidden="true"></i>
-                                <span class="count bg-success"></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
-                                <h6 class="p-3 mb-0">Messages</h6>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item preview-item">
-                                    <div class="preview-thumbnail">
-                                        <img src="~/lib/img/Profile/user.png" alt="image" class="rounded-circle profile-pic">
-                                    </div>
-                                    <div class="preview-item-content">
-                                        <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
-                                        <p class="text-muted mb-0"> 1 Minutes ago </p>
-                                    </div>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item preview-item">
-                                    <div class="preview-thumbnail">
-                                        <img src="~/lib/img/Profile/user.png" alt="image" class="rounded-circle profile-pic">
-                                    </div>
-                                    <div class="preview-item-content">
-                                        <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>
-                                        <p class="text-muted mb-0"> 15 Minutes ago </p>
-                                    </div>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item preview-item">
-                                    <div class="preview-thumbnail">
-                                        <img src="~/lib/img/Profile/user.png" alt="image" class="rounded-circle profile-pic">
-                                    </div>
-                                    <div class="preview-item-content">
-                                        <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
-                                        <p class="text-muted mb-0"> 18 Minutes ago </p>
-                                    </div>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <p class="p-3 mb-0 text-center">4 new messages</p>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown border-left">
-                            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-                                <i class="fa fa-bell" aria-hidden="true"></i>
-                                <span class="count bg-danger"></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-                                <h6 class="p-3 mb-0">Notifications</h6>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item preview-item">
-                                    <div class="preview-thumbnail">
-                                        <div class="preview-icon bg-dark rounded-circle">
-                                            <i class="mdi mdi-calendar text-success"></i>
-                                        </div>
-                                    </div>
-                                    <div class="preview-item-content">
-                                        <p class="preview-subject mb-1">Event today</p>
-                                        <p class="text-muted ellipsis mb-0"> Just a reminder that you have an event today </p>
-                                    </div>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item preview-item">
-                                    <div class="preview-thumbnail">
-                                        <div class="preview-icon bg-dark rounded-circle">
-                                            <i class="mdi mdi-settings text-danger"></i>
-                                        </div>
-                                    </div>
-                                    <div class="preview-item-content">
-                                        <p class="preview-subject mb-1">Settings</p>
-                                        <p class="text-muted ellipsis mb-0"> Update dashboard </p>
-                                    </div>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item preview-item">
-                                    <div class="preview-thumbnail">
-                                        <div class="preview-icon bg-dark rounded-circle">
-                                            <i class="mdi mdi-link-variant text-warning"></i>
-                                        </div>
-                                    </div>
-                                    <div class="preview-item-content">
-                                        <p class="preview-subject mb-1">Launch Admin</p>
-                                        <p class="text-muted ellipsis mb-0"> New admin wow! </p>
-                                    </div>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <p class="p-3 mb-0 text-center">See all notifications</p>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
-                                <div class="navbar-profile">
-                                    <p class="mb-0 d-none d-sm-block navbar-profile-name">Hehe</p>
-                                    <i class="fa fa-caret-down d-none d-sm-block" style="font-size:10px;"></i>
-                                </div>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
-                                <a href="@Url.Action("Profile", "Admin")" class="dropdown-item preview-item user-item">
-                                    <div class="preview-thumbnail">
-                                        <i class="fa fa-user text-success"></i>
-                                    </div>
-                                    <div class="preview-item-content">
-                                        <p class="preview-subject mb-1">My account</p>
-                                    </div>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a href="@Url.Action("PasswordSwitch", "Admin")" class="dropdown-item preview-item user-item">
-                                    <div class="preview-thumbnail">
-                                        <i class="fa fa-cogs text-success"></i>
-                                    </div>
-                                    <div class="preview-item-content">
-                                        <p class="preview-subject mb-1">Password switch</p>
-                                    </div>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a href="@Url.Action("Login", "Account")" id="log-out" class="dropdown-item preview-item user-item">
-                                    <div class="preview-thumbnail">
-                                        <i class="fa fa-sign-out text-danger"></i>
-                                    </div>
-                                    <div class="preview-item-content">
-                                        <p class="preview-subject mb-1">Log out</p>
-                                    </div>
-                                </a>
-                                <p class="p-3 mb-0 text-center">Advanced settings</p>
-                            </div>
-                        </li>
-                    </ul>
-                    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-                        <span class="mdi mdi-format-line-spacing"></span>
-                    </button>
-                </div>
-            </nav>
-            <div id="main-content" style="margin-top:70px; width:100%;">
+            <partial name="_NavPartial" />
+            <div id="main-content">
                 @RenderBody()
             </div>
         </div>
     </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/settings.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @Html.AddSharedScript("js/HoldOn.js")
-    @* <script src="https://localhost:44300/js/HoldOn.js" asp-append-version="true"></script> *@
+    @Html.AddSharedScript("js/shared.js")
     <!--Start of Tawk.to Script-->
     <script type="text/javascript">
         var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
@@ -236,6 +139,8 @@
             s0.parentNode.insertBefore(s1, s0);
         })();
     </script>
+    <!--End of Tawk.to Script-->
+
     <script>
         $(document).ready(function () {
             var temp_black = {
@@ -250,13 +155,12 @@
                 "--color-icon-nav": "#767676", "--color-change": "#000", "--bg-popup": "#fff", "--bg-hover": "#e5e7eb",
                 "--border-temp": "1px solid #efebeb", "--popup-shadow": "0px 0px 35px -3px #eae4e4"
             };
-
-            $('#temp_black').on('click', function () {
-                setTempViewColor_Black();
-            });
-            $('#temp_white').on('click', function () {
-                setTempViewColor_White();
-            });
+            // $('#temp_black').on('click', function () {
+            //     setTempViewColor_Black();
+            // });
+            // $('#temp_white').on('click', function () {
+            //     setTempViewColor_White();
+            // });
             function setTempViewColor_Black() {
                 ajaxUpdateViewColor(0);
                 $(":root").css(temp_black);
@@ -280,8 +184,31 @@
                 }
             });
         });
+        //https://codeseven.github.io/toastr/demo.html
+        toastr.options = {
+            "closeButton": true,
+            "debug": true,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
     </script>
-    <!--End of Tawk.to Script-->
+    <scrtipt>
+        @* @Html.Raw(TempData["notify"])
+        function notify(type, ){
+            toastr["success"]("123", "hehe")
+        } *@
+    </scrtipt>
+    <partial name="_MessagesPartial" model="@ViewData["Messages"]" ></partial>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

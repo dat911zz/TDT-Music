@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
-using TDT.Core.DTO;
+using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
 
 namespace TDT.API.Controllers
@@ -14,10 +13,10 @@ namespace TDT.API.Controllers
 
         [Route("load")]
         [HttpGet]
-        public JsonResult load()
+        public JsonResult Load()
         {
-            var dics = FirebaseService.Instance.getDictionary("Genre");
-            return new JsonResult(dics.Values.Select(x => ConvertService.Instance.convertToObjectFromJson<Genre>(x.ToString())).ToList());
+            var res = FirestoreService.Instance.Gets<Genre>("Genre");
+            return new JsonResult(res);
         }
     }
 }

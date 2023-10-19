@@ -1,4 +1,4 @@
-
+﻿
 @-moz-keyframes flash {
   0% {
     opacity: 1; }
@@ -8728,7 +8728,7 @@ pre {
   font-weight: 400;
   line-height: 1;
   color: #495057;
-  background-color: #2A3038;
+  background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #2c2e33;
   border-radius: 2px;
@@ -8813,7 +8813,7 @@ select.form-control:focus::-ms-value, select.asColorPicker-input:focus::-ms-valu
 select.tt-query:focus::-ms-value,
 select.tt-hint:focus::-ms-value {
   color: #495057;
-  background-color: #2A3038; }
+  background-color: #fff; }
 
 .form-control-file,
 .form-control-range {
@@ -10768,7 +10768,7 @@ input[type="button"].btn-block {
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
     .custom-select:focus::-ms-value {
       color: #495057;
-      background-color: #2A3038; }
+      background-color: #fff; }
   .custom-select[multiple], .custom-select[size]:not([size="1"]) {
     height: auto;
     padding-right: 0.75rem;
@@ -16557,7 +16557,7 @@ code {
       margin-top: 0;
       z-index: 1;
       cursor: pointer;
-      opacity: 0;
+      /*opacity: 0;*/
       filter: alpha(opacity=0); }
       .rtl .form-check .form-check-label input {
         left: auto;
@@ -16797,7 +16797,7 @@ code {
   font-weight: normal;
   font-size: 0.875rem;
   padding: 0.625rem 0.6875rem;
-  background-color: #2A3038;
+  background-color: #fff;
   border-radius: 2px;
   color: #ffffff; }
   .form-control:focus, .asColorPicker-input:focus, .dataTables_wrapper select:focus, .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=text],
@@ -16805,7 +16805,7 @@ code {
   .tt-query:focus,
   .tt-hint:focus {
     border: 1px solid rgba(71, 164, 71, 0.5);
-    background-color: #2A3038; }
+    background-color: #fff; }
   .form-control.form-control-lg, .form-control-lg.asColorPicker-input, .dataTables_wrapper select.form-control-lg, .jsgrid .jsgrid-table .jsgrid-filter-row input.form-control-lg[type=text],
   .jsgrid .jsgrid-table .jsgrid-filter-row select.form-control-lg, .jsgrid .jsgrid-table .jsgrid-filter-row input.form-control-lg[type=number], .select2-container--default .form-control-lg.select2-selection--single, .select2-container--default .select2-selection--single .form-control-lg.select2-search__field, .form-control-lg.typeahead,
   .form-control-lg.tt-query,
@@ -17571,9 +17571,12 @@ div.tagsinput {
   .preview-list .preview-item .form-check {
     margin-top: 8px;
     margin-right: 1rem; }
-  .preview-list .preview-item .preview-thumbnail {
-    color: #ffffff;
-    position: relative; }
+    .preview-list .preview-item .preview-thumbnail {
+        color: #ffffff;
+        position: relative;
+        min-width: 20px;
+        text-align: center;
+    }
     .preview-list .preview-item .preview-thumbnail img,
     .preview-list .preview-item .preview-thumbnail .preview-icon {
       width: 40px;
@@ -19607,7 +19610,7 @@ div.tagsinput {
   max-width: 100%; }
 
 .typeahead {
-  background-color: #2A3038; }
+  background-color: #fff; }
   .typeahead:focus {
     border-color: #2c2e33; }
 
