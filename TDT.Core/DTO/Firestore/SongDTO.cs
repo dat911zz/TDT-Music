@@ -185,7 +185,7 @@ namespace TDT.Core.DTO.Firestore
         {
             return (new DateTime(1975, 1, 1, 0, 0, 0)).AddMilliseconds(long.Parse(13 - this.releaseDate.Length > 0 ? this.releaseDate.PadRight(13, '0') : this.releaseDate));
         }
-        string Duration()
+        public string Duration()
         {
             TimeSpan t = TimeSpan.FromSeconds(this.duration);
             string res = t.Minutes.ToString("00") + ":" + t.Seconds.ToString("00");
