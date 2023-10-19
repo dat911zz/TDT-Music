@@ -2,6 +2,7 @@
 <html lang="vi" data-theme="purple">
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="600">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] TDT-Devil</title>
     <meta name="description" content="Music">
@@ -26,6 +27,7 @@
     <link rel="stylesheet" href="~/css/main.css" />
     <link rel="stylesheet" href="~/css/zgallery.css" />
     <link rel="stylesheet" href="~/css/zplayer.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
 <body>
     <div class="ms_loader">
@@ -378,9 +380,9 @@
                                         <i class="icon ic-play-circle-outline"></i></button><button
                                         class="zm-btn zm-tooltip-btn btn-next is-hover-circle button" tabindex="0">
                                         <i class="icon ic-next"></i></button><button
-                                        class="zm-btn zm-tooltip-btn btn-repeat-one is-hover-circle is-active button"
+                                        class="zm-btn zm-tooltip-btn btn-repeat is-hover-circle button"
                                         tabindex="0">
-                                        <i class="icon ic-repeat-one"></i>
+                                        <i class="icon ic-repeat"></i>
                                     </button>
                                 </div>
                             </div>
@@ -469,12 +471,11 @@
         </div>
         <div class="--z--player" data-player="" tabindex="1" style="width: 0; height: 0">
             <audio data-html5-video="" preload="auto"
-                src="https://a320-zmp3.zmdcdn.me/3d0b25c7fdc8cbc9f302e1f241401d02?authen=exp=1693971020~acl=/3d0b25c7fdc8cbc9f302e1f241401d02/*~hmac=e7eb5799e41d3795d39c1a12f720bacf"
-                __idm_id__="139265"></audio>
+                src="Test nè hehe"></audio>
         </div>
-        <div class="--z--player" data-player="" tabindex="1" style="width: 0; height: 0">
+        @* <div class="--z--player" data-player="" tabindex="1" style="width: 0; height: 0">
             <audio data-html5-video="" preload="auto"></audio>
-        </div>
+        </div> *@
         <ul class="zm-notify-list"></ul>
         <div id="CbICJwgF" class="mar-b-30">
             <div class="wrlvks_A" id="dTP-zone-2774115840800811806" z2-zoneid="2774115840800811806" z2-width="660"
@@ -491,6 +492,7 @@
 
     @RenderBody()
 
+    <script type="text/javascript" src="~/js/plugins/player/tdt-player.js"></script>
     @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="~/js/plugins/swiper/js/swiper.min.js"></script>

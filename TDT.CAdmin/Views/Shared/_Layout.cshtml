@@ -1,6 +1,8 @@
 ﻿@using TDT.Core.Helper
 @using TDT.Core.Enums
 @using TDT.Core.Extensions
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Microsoft.AspNetCore.Mvc.Rendering
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +28,7 @@
             </a>
             <ul class="nav mt-4">
                 <li class="nav-item menu-items">
-                    <a class="nav-link">
+                    <a class="nav-link" href="@Url.Action("Index", "Home")">
                         <span class="menu-icon">
                             <i class="fa fa-tachometer" aria-hidden="true"></i>
                         </span>
@@ -56,7 +58,21 @@
                         </ul>
                     </div>
                 </li>
-
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
+                        <span class="menu-icon">
+                            <i class="fa fa-shield" aria-hidden="true"></i>
+                        </span>
+                        <span class="menu-title">Quản lý Roles</span>
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </a>
+                    <div class="collapse" id="auth">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index", "Roles")">Danh sách Roles</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index", "Roles")">Thêm Roles</a></li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="nav-item menu-items">
                     <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
                         <span class="menu-icon">
@@ -68,11 +84,26 @@
                     <div class="collapse" id="auth">
                         <ul class="nav flex-column sub-menu">
                             <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","MusicManagement")">Danh sách nhạc</a></li>
-                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create","MusicManagement")">Tạo</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create","MusicManagement")">Thêm Bài Hát</a></li>
                         </ul>
                     </div>
                 </li>
-
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
+                        <span class="menu-icon">
+                            <i class="fa fa-th-list" aria-hidden="true"></i>
+                        </span>
+                        <span class="menu-title">Quản lý Play List <i class="fa fa-music" aria-hidden="true"></i></span>
+                        
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </a>
+                    <div class="collapse" id="auth">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","PlaylistManagement")">Danh sách Play List </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create","PlaylistManagement")"> Thêm Play List</a></li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
             @* <div>
                 <span class="nav-link">Background Color</span>
@@ -108,6 +139,8 @@
             s0.parentNode.insertBefore(s1, s0);
         })();
     </script>
+    <!--End of Tawk.to Script-->
+
     <script>
         $(document).ready(function () {
             var temp_black = {
@@ -169,7 +202,13 @@
             "hideMethod": "fadeOut"
         }
     </script>
-    <!--End of Tawk.to Script-->
+    <scrtipt>
+        @* @Html.Raw(TempData["notify"])
+        function notify(type, ){
+            toastr["success"]("123", "hehe")
+        } *@
+    </scrtipt>
+    <partial name="_MessagesPartial" model="@ViewData["Messages"]" ></partial>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

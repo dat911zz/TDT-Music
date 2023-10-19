@@ -13,7 +13,7 @@
         position: absolute;
         top: 0;
         left: auto;
-        background: linear-gradient(to right, rgba(57,57,57,0.7), transparent);
+        background: linear-gradient(to right, hsla(0,0%,30%,0.2), transparent);
         animation: loading-wave linear 1s infinite;
         transform: translateX(-100%);
     }
