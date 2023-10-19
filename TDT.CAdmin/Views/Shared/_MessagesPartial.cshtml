@@ -1,0 +1,45 @@
+﻿@namespace TDT.Core.Ultils.MVCMessage
+
+<script type="text/javascript">
+	toastr.options.escapeHtml = true;
+	@{
+		var messages = Model.GetDisplayMessages();
+		var scripts = "";
+		foreach (string messageType in MessageType.GetTypes())
+		{
+			if (messages[messageType].Count > 0)
+			{
+						
+				@foreach (string message in messages[messageType])
+				{
+					var msg = "";
+					if (message.Contains('\n'))
+					{
+						msg = message.Replace("\n", "\'+'_'+\'").Replace("_", "<br/>");
+					}
+					else
+					{
+						msg = message;
+					}
+					switch (messageType.ToLower())
+					{
+						case "info":
+							scripts += "toastr.info(\'" + msg + "\', 'Thông báo');";
+							break;
+						case "success":
+							scripts += "toastr.success(\'" + msg + "\', 'Thành công');";
+							break;
+						case "warning":
+							scripts += "toastr.warning(\'" + msg + "\', 'Cảnh báo');";
+							break;
+						case "error":
+							scripts += "toastr.error(\'" + msg + "\', 'Có lỗi đã xảy ra');";
+							break;
+					}
+					
+				}
+			}
+		}
+		@Html.Raw(scripts);
+	}
+</script>

@@ -1,6 +1,8 @@
 ﻿@using TDT.Core.Helper
 @using TDT.Core.Enums
 @using TDT.Core.Extensions
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Microsoft.AspNetCore.Mvc.Rendering
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +28,7 @@
             </a>
             <ul class="nav mt-4">
                 <li class="nav-item menu-items">
-                    <a class="nav-link">
+                    <a class="nav-link" href="@Url.Action("Index", "Home")">
                         <span class="menu-icon">
                             <i class="fa fa-tachometer" aria-hidden="true"></i>
                         </span>
@@ -108,6 +110,8 @@
             s0.parentNode.insertBefore(s1, s0);
         })();
     </script>
+    <!--End of Tawk.to Script-->
+
     <script>
         $(document).ready(function () {
             var temp_black = {
@@ -175,7 +179,7 @@
             toastr["success"]("123", "hehe")
         } *@
     </scrtipt>
-    <!--End of Tawk.to Script-->
+    <partial name="_MessagesPartial" model="@ViewData["Messages"]" ></partial>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
