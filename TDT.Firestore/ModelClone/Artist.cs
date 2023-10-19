@@ -1,7 +1,7 @@
 ﻿using Google.Cloud.Firestore;
 using System.Collections.Generic;
 
-namespace TDT.Core.ModelClone
+namespace TDT.Firestore.ModelClone
 {
     [FirestoreData]
     public class Artist

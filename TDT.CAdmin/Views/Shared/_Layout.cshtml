@@ -58,7 +58,21 @@
                         </ul>
                     </div>
                 </li>
-
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
+                        <span class="menu-icon">
+                            <i class="fa fa-shield" aria-hidden="true"></i>
+                        </span>
+                        <span class="menu-title">Quản lý Roles</span>
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </a>
+                    <div class="collapse" id="auth">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index", "Roles")">Danh sách Roles</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index", "Roles")">Thêm Roles</a></li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="nav-item menu-items">
                     <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
                         <span class="menu-icon">
@@ -70,11 +84,26 @@
                     <div class="collapse" id="auth">
                         <ul class="nav flex-column sub-menu">
                             <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","MusicManagement")">Danh sách nhạc</a></li>
-                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create","MusicManagement")">Tạo</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create","MusicManagement")">Thêm Bài Hát</a></li>
                         </ul>
                     </div>
                 </li>
-
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="auth">
+                        <span class="menu-icon">
+                            <i class="fa fa-th-list" aria-hidden="true"></i>
+                        </span>
+                        <span class="menu-title">Quản lý Play List <i class="fa fa-music" aria-hidden="true"></i></span>
+                        
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </a>
+                    <div class="collapse" id="auth">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","PlaylistManagement")">Danh sách Play List </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create","PlaylistManagement")"> Thêm Play List</a></li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
             @* <div>
                 <span class="nav-link">Background Color</span>

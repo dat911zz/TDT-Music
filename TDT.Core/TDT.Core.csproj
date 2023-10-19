@@ -3,6 +3,12 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="TDT\**" />
+    <EmbeddedResource Remove="TDT\**" />
+    <None Remove="TDT\**" />
+  </ItemGroup>
 	
   <ItemGroup>
     <PackageReference Include="Firebase.Auth" Version="1.0.0" />

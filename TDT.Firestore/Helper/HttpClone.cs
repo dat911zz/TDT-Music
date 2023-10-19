@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace TDT.Core.Helper
+namespace TDT.Firestore.Helper
 {
     public class HttpClone
     {

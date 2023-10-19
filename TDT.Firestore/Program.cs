@@ -13,13 +13,12 @@ namespace TDTFirestore
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.WriteLine("Hello World!");
             Task.WaitAll(
-                //ctr.TypePlaylist(),
-                //ctr.GetExistingSearchKeysAsync()
-                //ctr.CrawlFromSearch()
-                //ctr.ClearCollection()
-                //ctr1.ClearCollection("Test"),
-                ctr1.InitTestCollection()
-                //ctr1.CrawlFromSearch()
+                //ctr.TransfersRealtimeToFireStorge_TypePlaylistAsync()
+                //ctr.TransfersRealtimeToFireStorge_PlaylistAsync()
+                //ctr.TransfersRealtimeToFireStorge_ArtistAsync()
+                //ctr.TransfersRealtimeToFireStorge_SongAsync()
+                //ctr.TransfersRealtimeToFireStorge_GenreAsync()
+                //ctr.TransfersRealtimeToFireStorge_LyricAsync()
             );
         }
     }

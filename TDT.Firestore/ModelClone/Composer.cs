@@ -1,4 +1,4 @@
-﻿namespace TDT.Core.ModelClone
+﻿namespace TDT.Firestore.ModelClone
 {
     public class Composer
     {
