@@ -16,83 +16,90 @@
 <p>
     <a asp-action="Create">Tạo Play List Mới</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Mã ID
-            </th>
-            <th>
-                Tiêu Đề
-            </th>
-            <th>
-                Ảnh
-            </th>
-            <th>
-                Ngày Phát Hành
-            </th>
-            <th>
-                PR
-            </th>
-            <th>
-                Tên Nghệ Sĩ
-            </th>
-            <th>
-                UID
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="table-container">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.encodeId)
-                </td>
-                <td>
-                    @{
-                        string truncatedTitle = item.title.Length > maxLength
-                        ? item.title.Substring(0, maxLength) + "..."
-                        : item.title;
-                    }
-                    @truncatedTitle
-                </td>
-                <td class="img_song" encodeid="@item.encodeId" thumbnail="@item.thumbnail">
-                <td>
-                        @Html.DisplayFor(modelItem => item.releaseDate)
-                </td>
-                <td>
-                        @Html.DisplayFor(modelItem => item.PR)
-                </td>
-                <td>
-                        @{
-                            string truncatedArtistsNames = item.artistsNames.Length > maxLength
-                            ? item.artistsNames.Substring(0, maxLength) + "..."
-                            : item.artistsNames;
-                        }
-                        @truncatedArtistsNames
-                </td>
-                <td>
-                        @Html.DisplayFor(modelItem => item.uid)
-                </td>
-                <td class="btn-control">
-                    <a href="@Url.Action("Delete", "PlaylistManagement", new { id = item.encodeId})">
-                        <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
-                    </a>
-         
-                    <a href="@Url.Action("Details", "PlaylistManagement", new { id = item.encodeId})">
-                        <div class="fa fa-bars" aria-hidden="true"></div>
-                    </a>
- 
-                    <a href="@Url.Action("Edit", "PlaylistManagement", new { id = item.encodeId})">
-                        <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
-                    </a>
-                </td>
+                <th>
+                    Mã ID
+                </th>
+                <th>
+                    Tiêu Đề
+                </th>
+                <th>
+                    Ảnh
+                </th>
+                <th>
+                    Ngày Phát Hành
+                </th>
+                <th>
+                    PR
+                </th>
+                <th>
+                    Tên Nghệ Sĩ
+                </th>
+                <th>
+                    UID
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.encodeId)
+                    </td>
+                    <td>
+                        @{
+                            string truncatedTitle = item.title.Length > maxLength
+                            ? item.title.Substring(0, maxLength) + "..."
+                            : item.title;
+                        }
+                        @truncatedTitle
+                    </td>
+                    <td class="img_song" encodeid="@item.encodeId" thumbnail="@item.thumbnail">
+                    <td>
+                            @Html.DisplayFor(modelItem => item.releaseDate)
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.PR)
+                    </td>
+                    <td>
+                            @{
+                                if (item.artistsNames != null)
+                                {
+                                    string truncatedArtistsNames = item.artistsNames.Length > maxLength
+                                    ? item.artistsNames.Substring(0, maxLength) + "..."
+                                    : item.artistsNames;
+
+                                    @truncatedArtistsNames
+                                }
+
+                            }
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.uid)
+                    </td>
+                    <td class="btn-control">
+                        <a href="@Url.Action("Delete", "PlaylistManagement", new { id = item.encodeId})">
+                            <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
+                        </a>
+
+                        <a href="@Url.Action("Details", "PlaylistManagement", new { id = item.encodeId})">
+                            <div class="fa fa-bars" aria-hidden="true"></div>
+                        </a>
+
+                        <a href="@Url.Action("Edit", "PlaylistManagement", new { id = item.encodeId})">
+                            <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 <div class="pagedList-container">
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
 </div>

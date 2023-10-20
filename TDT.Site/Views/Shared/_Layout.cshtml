@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="~/css/zgallery.css" />
     <link rel="stylesheet" href="~/css/zplayer.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 </head>
 <body>
     <div class="ms_loader">
@@ -493,6 +494,7 @@
     @RenderBody()
 
     <script type="text/javascript" src="~/js/plugins/player/tdt-player.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="~/js/plugins/swiper/js/swiper.min.js"></script>
@@ -503,6 +505,23 @@
     <script type="text/javascript" src="~/js/custom.js"></script>*@
 
     <script>
+        //https://codeseven.github.io/toastr/demo.html
+        toastr.options = {
+            "closeButton": true,
+            "debug": true,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
         setTimeout(function () {
             $('.ms_loader').hide();
         }, 2000);
@@ -512,6 +531,7 @@
     </script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <partial name="_MessagesPartial" model="@ViewData["Messages"]"></partial>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
