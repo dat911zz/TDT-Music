@@ -460,35 +460,8 @@ namespace TDT.Core.ServiceImp
                 }
                 catch { }
             }
-            SectionDTO secNoiBat = new SectionDTO();
-
-            if (artist.sections.Keys.Contains("Bài hát nổi bật"))
-            {
-                secNoiBat = artist.sections["Bài hát nổi bật"];
-            }
-            List<SongDTO> songs = new List<SongDTO>();
-            foreach (var item in secNoiBat.items.Keys)
-            {
-                if (DataHelper.Instance.Songs.Keys.Contains(item))
-                {
-                    songs.Add(DataHelper.Instance.Songs[item]);
-                }
-                //else
-                //{
-                //    HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Song/" + item);
-                //    string json = httpService.getJson();
-                //    var song = ConvertService.Instance.convertToObjectFromJson<SongDTO>(json);
-                //    if (song != null)
-                //    {
-                //        songs.Add(song);
-                //        try
-                //        {
-                //            DataHelper.Instance.Songs.Add(song.encodeId, song);
-                //        }
-                //        catch {}
-                //    }
-                //}
-            }
+            SectionDTO secNoiBat = artist.sections.Where(s => s.title.Equals("Bài hát nổi bật")).First();
+            List<SongDTO> songs = DataHelper.GetSongs(secNoiBat);
 
             for (int i = 0; i < 3 && i < songs.Count; i++)
             {
@@ -504,7 +477,7 @@ namespace TDT.Core.ServiceImp
                     DataHelper.Instance.ThumbSong.Add(song.encodeId, img);
                 }
                 int iArt = 0;
-                string betweenDate = HelperUtility.Instance.getBetweenDate(song.ReleaseDate());
+                string betweenDate = HelperUtility.getBetweenDate(song.ReleaseDate());
                 string duration = song.Duration();
                 StringBuilder artistname = new StringBuilder();
 
@@ -513,9 +486,9 @@ namespace TDT.Core.ServiceImp
                     foreach (var item in song.artists)
                     {
                         ArtistDTO artDTO = new ArtistDTO();
-                        if (!DataHelper.Instance.Artists.Keys.Contains(item.Key))
+                        if (!DataHelper.Instance.Artists.Keys.Contains(item))
                         {
-                            artDTO = FirebaseService.Instance.getSingleValue<ArtistDTO>($"Artist/{item.Key}").Result;
+                            artDTO = DataHelper.GetArtist(item);
                             if (artDTO == null)
                                 continue;
                             try
@@ -526,7 +499,7 @@ namespace TDT.Core.ServiceImp
                         }
                         else
                         {
-                            artDTO = DataHelper.Instance.Artists[item.Key];
+                            artDTO = DataHelper.Instance.Artists[item];
                         }
                         if (string.IsNullOrEmpty(artDTO.name))
                             continue;
@@ -556,7 +529,7 @@ namespace TDT.Core.ServiceImp
                     DataHelper.Instance.ThumbSong.Add(song.encodeId, img);
                 }
                 int iArt = 0;
-                string betweenDate = HelperUtility.Instance.getBetweenDate(song.ReleaseDate());
+                string betweenDate = HelperUtility.getBetweenDate(song.ReleaseDate());
                 string duration = song.Duration();
                 StringBuilder artistname = new StringBuilder();
 
@@ -565,9 +538,9 @@ namespace TDT.Core.ServiceImp
                     foreach (var item in song.artists)
                     {
                         ArtistDTO artDTO = new ArtistDTO();
-                        if (!DataHelper.Instance.Artists.Keys.Contains(item.Key))
+                        if (!DataHelper.Instance.Artists.Keys.Contains(item))
                         {
-                            artDTO = FirebaseService.Instance.getSingleValue<ArtistDTO>($"Artist/{item.Key}").Result;
+                            artDTO = DataHelper.GetArtist(item);
                             if (artDTO == null)
                                 continue;
                             try
@@ -578,7 +551,7 @@ namespace TDT.Core.ServiceImp
                         }
                         else
                         {
-                            artDTO = DataHelper.Instance.Artists[item.Key];
+                            artDTO = DataHelper.Instance.Artists[item];
                         }
                         if (string.IsNullOrEmpty(artDTO.name))
                             continue;
@@ -615,29 +588,9 @@ namespace TDT.Core.ServiceImp
                     }
                     catch { }
                 }
-                SectionDTO secSingleED = new SectionDTO();
-                if (artist.sections.Keys.Contains("Single & EP"))
+                SectionDTO secSingleED = artist.sections.Where(s => s.title.Equals("Single & EP")).First();
+                foreach (var item in secSingleED.items)
                 {
-                    secSingleED = artist.sections["Single & EP"];
-                }
-                List<PlaylistDTO> playlists = new List<PlaylistDTO>();
-                foreach (var item in secSingleED.items.Keys)
-                {
-                    if (DataHelper.Instance.Playlists.Keys.Contains(item))
-                    {
-                        playlists.Add(DataHelper.Instance.Playlists[item]);
-                    }
-                    else
-                    {
-                        HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Playlist/" + item);
-                        string json = httpService.getJson();
-                        var playlist = ConvertService.Instance.convertToObjectFromJson<PlaylistDTO>(json);
-                        if (playlist != null)
-                        {
-                            playlists.Add(playlist);
-                            DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
-                        }
-                    }
                     str.AppendFormat(@"
                     <div class=""zm-carousel"">
                             <div class=""zm-carousel__container"" style=""transform: translate3d(0px, 0px, 0px);"">
@@ -690,29 +643,9 @@ namespace TDT.Core.ServiceImp
                     }
                     catch { }
                 }
-                SectionDTO secAlbum = new SectionDTO();
-                if (artist.sections.Keys.Contains("Album"))
+                SectionDTO secAlbum = artist.sections.Where(s => s.title.Equals("Album")).First();
+                foreach (var item in secAlbum.items)
                 {
-                    secAlbum = artist.sections["Album"];
-                }
-                List<PlaylistDTO> playlists = new List<PlaylistDTO>();
-                foreach (var item in secAlbum.items.Keys)
-                {
-                    if (DataHelper.Instance.Playlists.Keys.Contains(item))
-                    {
-                        playlists.Add(DataHelper.Instance.Playlists[item]);
-                    }
-                    else
-                    {
-                        HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Playlist/" + item);
-                        string json = httpService.getJson();
-                        var playlist = ConvertService.Instance.convertToObjectFromJson<PlaylistDTO>(json);
-                        if (playlist != null)
-                        {
-                            playlists.Add(playlist);
-                            DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
-                        }
-                    }
                     str.AppendFormat(@"
                     <div class=""zm-carousel"">
                             <div class=""zm-carousel__container"" style=""transform: translate3d(0px, 0px, 0px);"">
@@ -765,29 +698,9 @@ namespace TDT.Core.ServiceImp
                     }
                     catch { }
                 }
-                SectionDTO secTuyenTap = new SectionDTO();
-                if (artist.sections.Keys.Contains("Tuyển tập"))
+                SectionDTO secTuyenTap = artist.sections.Where(s => s.title.Equals("Tuyển tập")).First();
+                foreach (var item in secTuyenTap.items)
                 {
-                    secTuyenTap = artist.sections["Tuyển tập"];
-                }
-                List<PlaylistDTO> playlistsTuyenTap = new List<PlaylistDTO>();
-                foreach (var item in secTuyenTap.items.Keys)
-                {
-                    if (DataHelper.Instance.Playlists.Keys.Contains(item))
-                    {
-                        playlistsTuyenTap.Add(DataHelper.Instance.Playlists[item]);
-                    }
-                    else
-                    {
-                        HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Playlist/" + item);
-                        string json = httpService.getJson();
-                        var playlist = ConvertService.Instance.convertToObjectFromJson<PlaylistDTO>(json);
-                        if (playlist != null)
-                        {
-                            playlistsTuyenTap.Add(playlist);
-                            DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
-                        }
-                    }
                     str.AppendFormat(@"
                         <div class=""zm-carousel"">
                             <div class=""zm-carousel__container"" style=""transform: translate3d(0px, 0px, 0px);"">
@@ -840,29 +753,9 @@ namespace TDT.Core.ServiceImp
                     }
                     catch { }
                 }
-                SectionDTO secXuatHien = new SectionDTO();
-                if (artist.sections.Keys.Contains("Xuất hiện trong"))
+                SectionDTO secXuatHien = artist.sections.Where(s => s.title.Equals("Xuất hiện trong")).First();
+                foreach (var item in secXuatHien.items)
                 {
-                    secXuatHien = artist.sections["Xuất hiện trong"];
-                }
-                List<PlaylistDTO> playlists = new List<PlaylistDTO>();
-                foreach (var item in secXuatHien.items.Keys)
-                {
-                    if (DataHelper.Instance.Playlists.Keys.Contains(item))
-                    {
-                        playlists.Add(DataHelper.Instance.Playlists[item]);
-                    }
-                    else
-                    {
-                        HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Playlist/" + item);
-                        string json = httpService.getJson();
-                        var playlist = ConvertService.Instance.convertToObjectFromJson<PlaylistDTO>(json);
-                        if (playlist != null)
-                        {
-                            playlists.Add(playlist);
-                            DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
-                        }
-                    }
                     str.AppendFormat(@"
                             <div class=""zm-carousel"">
                                 <div class=""zm-carousel__container"" style=""transform: translate3d(0px, 0px, 0px);"">
@@ -918,29 +811,9 @@ namespace TDT.Core.ServiceImp
                     }
                     catch { }
                 }
-                SectionDTO secCoTheThich = new SectionDTO();
-                if (artist.sections.Keys.Contains("Bạn Có Thể Thích"))
+                SectionDTO secCoTheThich = artist.sections.Where(s => s.title.Equals("Xuất hiện trong")).First();
+                foreach (var item in secCoTheThich.items)
                 {
-                    secCoTheThich = artist.sections["Bạn Có Thể Thích"];
-                }
-                List<ArtistDTO> arts = new List<ArtistDTO>();
-                foreach (var item in secCoTheThich.items.Keys)
-                {
-                    if (DataHelper.Instance.Artists.Keys.Contains(item))
-                    {
-                        arts.Add(DataHelper.Instance.Artists[item]);
-                    }
-                    else
-                    {
-                        HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Artists/" + item);
-                        string json = httpService.getJson();
-                        var artistss = ConvertService.Instance.convertToObjectFromJson<ArtistDTO>(json);
-                        if (artistss != null)
-                        {
-                            arts.Add(artistss);
-                            DataHelper.Instance.Artists.Add(artistss.id, artistss);
-                        }
-                    }
                     str.AppendFormat(@"<div class=""zm-carousel"">
                                             <div class=""zm-carousel__container"" style=""transform: translate3d(0px, 0px, 0px);"">
                                                 <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">

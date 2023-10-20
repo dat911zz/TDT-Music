@@ -145,85 +145,46 @@ namespace TDT.Core.ServiceImp
         //[HttpGet("{id}")]
         public JsonResult GetHtmlArtistInfo(string id)
         {
-            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
+            ArtistDTO artist = DataHelper.GetArtist(id);
             return new JsonResult(artist == null ? "" : Generator.Instance.GenerateArtistInfo(artist));
         }
         public JsonResult GetHtmlArtsistNoiBat(string id)
         {
-            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
+            ArtistDTO artist = DataHelper.GetArtist(id);
             return new JsonResult(artist == null ? "" : Generator.Instance.GenerateArtistNoiBat(artist));
         }
         public JsonResult GetHtmlSingleEP(string id)
         {
-            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
-            List<PlaylistDTO> list = new List<PlaylistDTO>();
-            if (artist.sections.Keys.Contains("Single & EP"))
-            {
-                foreach(var keyPlaylist in artist.sections["Single & EP"].items.Keys) {
-                    var playlist = DataHelper.Instance.GetPlaylist(keyPlaylist);
-                    if(playlist != null)
-                    {
-                        list.Add(playlist);
-                    }
-                }
-            }
-             return new JsonResult(Generator.Instance.GeneratePlaylist(list.Take(5).ToList()));
+            ArtistDTO artist = DataHelper.GetArtist(id);
+            SectionDTO section = artist.sections.Where(s => s.title.Equals("Single & EP")).First();
+            List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
+            return new JsonResult(Generator.Instance.GeneratePlaylist(list.Take(5).ToList()));
         }
         public JsonResult GetHtmlAlbum(string id)
         {
-            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
-            List<PlaylistDTO> list = new List<PlaylistDTO>();
-            if (artist.sections.Keys.Contains("Album"))
-            {
-                foreach (var keyPlaylist in artist.sections["Album"].items.Keys)
-                {
-                    var playlist = DataHelper.Instance.GetPlaylist(keyPlaylist);
-                    if (playlist != null)
-                    {
-                        list.Add(playlist);
-                    }
-                }
-            }
+            ArtistDTO artist = DataHelper.GetArtist(id);
+            SectionDTO section = artist.sections.Where(s => s.title.Equals("Album")).First();
+            List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
             return new JsonResult(Generator.Instance.GeneratePlaylist(list.Take(5).ToList()));
         }
         public JsonResult GetHtmlTuyenTap(string id)
         {
-            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
-            List<PlaylistDTO> list = new List<PlaylistDTO>();
-            if (artist.sections.Keys.Contains("Tuyển tập"))
-            {
-                foreach (var keyPlaylist in artist.sections["Tuyển tập"].items.Keys)
-                {
-                    var playlist = DataHelper.Instance.GetPlaylist(keyPlaylist);
-                    if (playlist != null)
-                    {
-                        list.Add(playlist);
-                    }
-                }
-            }
+            ArtistDTO artist = DataHelper.GetArtist(id);
+            SectionDTO section = artist.sections.Where(s => s.title.Equals("Tuyển tập")).First();
+            List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
              return new JsonResult(Generator.Instance.GeneratePlaylist(list.Take(5).ToList()));
         }
         public JsonResult GetHtmlCoTheThich(string id)
         {
-            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
-            List<ArtistDTO> list = new List<ArtistDTO>();
-            if (artist.sections.Keys.Contains("Bạn Có Thể Thích"))
-            {
-                foreach (var keyArt in artist.sections["Bạn Có Thể Thích"].items.Keys)
-                {
-                    var artists = DataHelper.Instance.GetArtist(keyArt);
-                    if (artists != null)
-                    {
-                        list.Add(artists);
-                    }
-                }
-            }
+            ArtistDTO artist = DataHelper.GetArtist(id);
+            SectionDTO section = artist.sections.Where(s => s.title.Equals("Bạn Có Thể Thích")).First();
+            List<ArtistDTO> list = DataHelper.GetArtists(section);
             return new JsonResult(Generator.Instance.GenerateArtist(list.Take(5).ToList()));
         }
 
         public JsonResult GetHtmlArtistInfoFooter(string id)
         {
-            ArtistDTO artist = DataHelper.Instance.GetArtist(id);
+            ArtistDTO artist = DataHelper.GetArtist(id);
             return new JsonResult(artist == null ? "" : Generator.Instance.GenerateArtistInfo_footer(artist));
         }
         public JsonResult GetHtmlPlaylistNoiBat()
