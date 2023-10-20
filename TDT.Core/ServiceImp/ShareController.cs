@@ -15,20 +15,11 @@ namespace TDT.Core.ServiceImp
 {
     public class ShareController : ControllerBase
     {
-        public JsonResult LoadSongRelease()
+        public string GenHtmlSongRelease(List<SongDTO> songs)
         {
-            List<SongDTO> songs = new List<SongDTO>();
-            if (DataHelper.Instance.Songs.Count <= 0)
-            {
-                Query query = FirestoreService.Instance.OrderByDescending("Song", "releaseDate");
-                songs = FirestoreService.Instance.Gets<SongDTO>(query);
-            }
-            else
-            {
-                songs = DataHelper.Instance.Songs.Values.ToList();
-            }
             if (songs != null)
             {
+                DataHelper.Instance.SetSongRelease(songs);
                 foreach (SongDTO song in songs)
                 {
                     if (!DataHelper.Instance.Songs.Keys.Contains(song.encodeId))
@@ -38,12 +29,26 @@ namespace TDT.Core.ServiceImp
                 }
             }
             List<string> htmls = new List<string>();
-            List<List<SongDTO>> songRelease = DataHelper.Instance.SongRelease;
+            List<List<SongDTO>> songRelease = DataHelper.Instance.GetSongRelease();
             foreach (List<SongDTO> listItem in songRelease)
             {
                 htmls.Add(Generator.Instance.GenerateSongRelease(listItem));
             }
-            return new JsonResult(string.Concat(htmls));
+            return string.Concat(htmls);
+        }
+        public JsonResult LoadSongRelease()
+        {
+            List<SongDTO> songs = new List<SongDTO>();
+            Query query = FirestoreService.Instance.OrderByDescending("Song", "releaseDate").Limit(100);
+            songs = FirestoreService.Instance.Gets<SongDTO>(query);
+            return new JsonResult(GenHtmlSongRelease(songs));
+        }
+        public JsonResult LoadSongReleaseVN()
+        {
+            List<SongDTO> songs = new List<SongDTO>();
+            Query query = FirestoreService.Instance.WhereArrayContains("Song", "genreIds", DataHelper.GENRE_VIETNAM).OrderByDescending("releaseDate").Limit(100);
+            songs = FirestoreService.Instance.Gets<SongDTO>(query);
+            return new JsonResult(GenHtmlSongRelease(songs));
         }
         public JsonResult LoadGenre()
         {

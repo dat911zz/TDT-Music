@@ -6,21 +6,27 @@ using System.Threading.Tasks;
 
 namespace TDT.Core.Ultils
 {
-    public class HelperUtility
+    public static class HelperUtility
     {
-        private HelperUtility() { }
-        private static HelperUtility _instance;
-        public static HelperUtility Instance
+        private static readonly string[] VietnameseSigns = new string[]
         {
-            get
-            {
-                if (_instance == null)
-                    _instance = new HelperUtility();
-                return _instance;
-            }
-        }
-
-        public string getBetweenDate(DateTime dt)
+            "aAeEoOuUiIdDyY",
+            "áàạảãâấầậẩẫăắằặẳẵ",
+            "ÁÀẠẢÃÂẤẦẬẨẪĂẮẰẶẲẴ",
+            "éèẹẻẽêếềệểễ",
+            "ÉÈẸẺẼÊẾỀỆỂỄ",
+            "óòọỏõôốồộổỗơớờợởỡ",
+            "ÓÒỌỎÕÔỐỒỘỔỖƠỚỜỢỞỠ",
+            "úùụủũưứừựửữ",
+            "ÚÙỤỦŨƯỨỪỰỬỮ",
+            "íìịỉĩ",
+            "ÍÌỊỈĨ",
+            "đ",
+            "Đ",
+            "ýỳỵỷỹ",
+            "ÝỲỴỶỸ"
+        };
+        public static string getBetweenDate(DateTime dt)
         {
             string res = "{0} {1} trước";
             DateTime now = DateTime.Now;
@@ -37,6 +43,15 @@ namespace TDT.Core.Ultils
             if (now.Second - dt.Second > 0)
                 return string.Format(res, now.Second - dt.Second, "giây");
             return "Vừa xong";
+        }
+        public static string GetAlias(string str)
+        {
+            for (int i = 1; i < VietnameseSigns.Length; i++)
+            {
+                for (int j = 0; j < VietnameseSigns[i].Length; j++)
+                    str = str.Replace(VietnameseSigns[i][j], VietnameseSigns[0][i - 1]);
+            }
+            return str.ToLower().Replace(" ", "-");
         }
     }
 }

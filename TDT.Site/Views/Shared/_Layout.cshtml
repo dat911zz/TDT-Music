@@ -228,7 +228,7 @@
                         </form>
                     </div>
                     <div class="level-right">
-                        <div class="download-desktop-app" style="color: var(--link-text-hover)">
+                        @* <div class="download-desktop-app" style="color: var(--link-text-hover)">
                             <a class="zm-btn download-btn button" tabindex="0">
                                 <i class="icon">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -248,7 +248,7 @@
                                 Zing MP3 đã có ứng dụng cho máy tính, tải ngay cho trải nghiệm
                                 tuyệt vời nhất.
                             </div>
-                        </div>
+                        </div> *@
                         <div class="setting-item">
                             <button class="zm-btn zm-tooltip-btn is-hover-circle button" tabindex="0">
                                 <i class="icon ic-settings"></i>
@@ -506,6 +506,9 @@
         setTimeout(function () {
             $('.ms_loader').hide();
         }, 2000);
+        $('.tdt-logo').click(function () {
+            window.location = "/";
+        });
     </script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>

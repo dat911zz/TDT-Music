@@ -47,7 +47,7 @@ namespace TDT.Core.ServiceImp
                     DataHelper.Instance.ThumbSong.Add(song.encodeId, img);
                 }
                 int iArt = 0;
-                string betweenDate = HelperUtility.Instance.getBetweenDate(song.ReleaseDate());
+                string betweenDate = HelperUtility.getBetweenDate(song.ReleaseDate());
                 string duration = song.Duration();
                 str.AppendFormat(@"
                         <div class=""list-item hide-right media-item hide-right full-left"">
@@ -222,7 +222,11 @@ namespace TDT.Core.ServiceImp
                             artDTO = FirestoreService.Instance.Gets<ArtistDTO>("Artist", item);
                             if (artDTO == null)
                                 continue;
-                            DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
+                            try
+                            {
+                                DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
+                            }
+                            catch { }
                         }
                         else
                         {

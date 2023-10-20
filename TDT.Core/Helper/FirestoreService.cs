@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TDT.Core.DTO.Firestore;
+using TDT.Core.Ultils;
 
 namespace TDT.Core.Helper
 {
@@ -57,8 +58,16 @@ namespace TDT.Core.Helper
         {
             return db.Collection(collectionName).Where(filter);
         }
-        
-        
+        public Query WhereEqualTo(string collectionName, string path, object value)
+        {
+            return db.Collection(collectionName).WhereEqualTo(path, value);
+        }
+        public Query WhereArrayContains(string collectionName, string path, object value)
+        {
+            return db.Collection(collectionName).WhereArrayContains(path, value);
+        }
+
+
         public List<T> Gets<T>(Query query) where T : class, new()
         {
             QuerySnapshot querySnapshot = query.GetSnapshotAsync().Result;
@@ -167,6 +176,14 @@ namespace TDT.Core.Helper
                 Console.WriteLine("-Document {0} does not exist!", snapshot.Id);
                 return null;
             }
+        }
+
+        public string GetIdGenre(string key)
+        {
+            string alias = HelperUtility.GetAlias(key);
+            Query query = WhereEqualTo("Genre", "alias", alias);
+            Genre g = Gets<Genre>(query).First();
+            return g == null ? "" : g.id;
         }
     }
 }

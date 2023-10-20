@@ -15,4 +15,8 @@
     <ProjectReference Include="..\TDT.IdentityCore\TDT.IdentityCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\image\hub\" />
+  </ItemGroup>
+
 </Project>
