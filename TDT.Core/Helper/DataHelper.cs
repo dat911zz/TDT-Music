@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Google.Cloud.Firestore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TDT.Core.DTO.Firestore;
 using TDT.Core.Extensions;
 using TDT.Core.ServiceImp;
+using TDT.Core.Ultils;
 
 namespace TDT.Core.Helper
 {
@@ -25,6 +27,7 @@ namespace TDT.Core.Helper
                 return _instance;
             }
         }
+        public static string GENRE_VIETNAM = FirestoreService.Instance.GetIdGenre("Việt Nam");
 
         public static string COLOR_DEFAULT_STEP = "#000fff";
         private int _viewColor;
@@ -35,7 +38,7 @@ namespace TDT.Core.Helper
         public Dictionary<string, string> ThumbArtist = new Dictionary<string, string>();
         private Dictionary<string,SongDTO> _songs = new Dictionary<string, SongDTO>();
         private Dictionary<string,PlaylistDTO> _playlists = new Dictionary<string, PlaylistDTO>();
-        private List<List<SongDTO>> _songRelease = new List<List<SongDTO>>();
+        private List<SongDTO> _songRelease = new List<SongDTO>();
         //List<PlaylistDTO> _playlistChills = new List<PlaylistDTO>();
         //List<PlaylistDTO> _playlistYeuDoi = new List<PlaylistDTO>();
         //List<PlaylistDTO> _playlistRemixDances = new List<PlaylistDTO>();
@@ -53,41 +56,41 @@ namespace TDT.Core.Helper
             get => _songs;
             set
             {
-                _songs = value.OrderByDescending(x => x.Value.ReleaseDate()).ToDictionary(x => x.Key, x => x.Value);
+                _songs = value;
             }
         }
-        public List<List<SongDTO>> SongRelease {
-            get
+        public List<List<SongDTO>> GetSongRelease() {
+            List<List<SongDTO>> res = new List<List<SongDTO>>();
+            List<SongDTO> arrSong = this._songRelease;
+            int take = 4;
+            int iStartArr = 0;
+            for (int i = 0; i < 3; i++)
             {
-                if(this._songRelease.Count <= 0)
+                List<SongDTO> res_s = new List<SongDTO>();
+                string releaseDate = "";
+                int count = 0;
+                for (int j = iStartArr; j < arrSong.Count; j++)
                 {
-                    List<SongDTO> arrSong = this.Songs.Values.ToList();
-                    List<List<SongDTO>> res = new List<List<SongDTO>>();
-                    int take = 4;
-                    int iStartArr = 0;
-                    for (int i = 0; i < 3; i++)
+                    iStartArr++;
+                    SongDTO itemCheck = arrSong[j];
+                    if (!releaseDate.Equals(itemCheck.releaseDate) || (releaseDate.Equals(itemCheck.releaseDate) && !res_s.Select(x => x.thumbnail).Contains(itemCheck.thumbnail)))
                     {
-                        List<SongDTO> res_s = new List<SongDTO>();
-                        string releaseDate = "";
-                        int count = 0;
-                        for (int j = iStartArr; j < arrSong.Count; j++)
-                        {
-                            iStartArr++;
-                            SongDTO itemCheck = arrSong[j];
-                            if (!releaseDate.Equals(itemCheck.releaseDate) || (releaseDate.Equals(itemCheck.releaseDate) && !res_s.Select(x => x.thumbnail).Contains(itemCheck.thumbnail)))
-                            {
-                                res_s.Add(itemCheck);
-                                count++;
-                            }
-                            releaseDate = itemCheck.releaseDate;
-                            if (count >= take)
-                                break;
-                        }
-                        res.Add(res_s);
+                        res_s.Add(itemCheck);
+                        count++;
                     }
-                    this._songRelease = res;
+                    releaseDate = itemCheck.releaseDate;
+                    if (count >= take)
+                        break;
                 }
-                return this._songRelease;
+                res.Add(res_s);
+            }
+            return res;
+        }
+        public void SetSongRelease(List<SongDTO> songs)
+        {
+            if(songs != null)
+            {
+                this._songRelease = songs;
             }
         }
 
@@ -285,6 +288,5 @@ namespace TDT.Core.Helper
             return plGen.Where(x => x.genreIds.Contains(idVietNam)).ToList();
         }
 
-        
     }
 }

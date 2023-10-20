@@ -1,0 +1,92 @@
+﻿.is-1-lines {
+    -webkit-line-clamp: 1
+}
+
+.is-1-lines, .is-2-lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    white-space: normal
+}
+
+.is-2-lines {
+    -webkit-line-clamp: 2
+}
+
+.is-3-lines {
+    -webkit-line-clamp: 3
+}
+
+.is-3-lines, .is-4-lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    white-space: normal
+}
+
+.is-4-lines {
+    -webkit-line-clamp: 4
+}
+
+.is-5-lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    white-space: normal
+}
+
+.hub-detail-page .blur {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0
+}
+
+.hub-detail-page .cover {
+    position: relative;
+    margin: 0 calc(var(--padding-section)*-1);
+    text-align: center;
+    padding-bottom: 30%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 0;
+    background-color: var(--loading-bg)
+}
+
+@media screen and (min-width: 2130px) {
+    .hub-detail-page .cover {
+        margin: 0 calc(-50vw - -1006px)
+    }
+}
+
+.hub-detail-page .cover .is-center-vertical {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 100px
+}
+
+.hub-detail-page .detail-container .banners .image {
+    line-height: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    padding-bottom: 29%;
+    height: 0
+}
+
+.pop-playlist-section {
+    margin-top: -50px
+}

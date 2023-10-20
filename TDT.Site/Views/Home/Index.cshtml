@@ -161,11 +161,11 @@
             </a>
         </h3>
         <div class="genre-select">
-            <button class="zm-btn active button" tabindex="0">
+            <button class="zm-btn active button genre_all" tabindex="0">
                 Tất cả
             </button>
-            <button class="zm-btn button" tabindex="0">Việt Nam</button>
-            <button class="zm-btn button" tabindex="0">Quốc tế</button>
+            <button class="zm-btn button genre_vn" tabindex="0">Việt Nam</button>
+            <button class="zm-btn button genre_n_vn" tabindex="0">Quốc tế</button>
         </div>
         <div id="song_release" class="columns is-multiline">
             <div class="column mar-b-0 is-fullhd-4 is-widescreen-4 is-desktop-4 is-touch-6 is-tablet-6">
@@ -198,7 +198,7 @@
         <div class="container">
             <h3 class="zm-section-title title is-2">
                 Chill
-                <a class="discovery-btn" href="/hub/Chill/IWZ9Z0CI.html">
+                <a class="discovery-btn" href="/hub/Chill">
                     Tất cả <i class="icon ic-go-right"></i>
                 </a>
             </h3>
@@ -309,65 +309,82 @@
 </div>
 
 <script>
-    $(document).ready(function () {
+    function loadSongReleaseAll() {
         $.ajax({
             url: "/Share/LoadSongRelease",
-            success: function(data) {
+            success: function (data) {
                 if (data == '') {
                     RedirectError(500, "DB đang lỗi");
                     return;
                 }
                 $('#song_release').html(data);
-                $.ajax({
-                    url: "/Share/GetHtmlPlaylistChill",
-                    success: function (data) {
-                        if (data == '') {
-                            RedirectError(500, "DB đang lỗi");
-                            return;
-                        }
-                        $('#playlist_chill').html(data);
-                    }
-                });
-                $.ajax({
-                    url: "/Share/GetHtmlPlaylistYeuDoi",
-                    success: function (data) {
-                        if (data == '') {
-                            RedirectError(500, "DB đang lỗi");
-                            return;
-                        }
-                        $('#playlist_yeudoi').html(data);
-                    }
-                });
-                $.ajax({
-                    url: "/Share/GetHtmlPlaylistRemixDance",
-                    success: function (data) {
-                        if (data == '') {
-                            RedirectError(500, "DB đang lỗi");
-                            return;
-                        }
-                        $('#playlist_remix_dance').html(data);
-                    }
-                });
-                $.ajax({
-                    url: "/Share/GetHtmlPlaylistTamTrang",
-                    success: function (data) {
-                        if (data == '') {
-                            RedirectError(500, "DB đang lỗi");
-                            return;
-                        }
-                        $('#playlist_tam_trang').html(data);
-                    }
-                });
-                $.ajax({
-                    url: "/Share/GetHtmlArtistThinhHanh",
-                    success: function (data) {
-                        if (data == '') {
-                            RedirectError(500, "DB đang lỗi");
-                            return;
-                        }
-                        $('#artist_thinh_hanh').html(data);
-                    }
-                });
+            }
+        });
+    }
+    function loadSongReleaseVN() {
+        $.ajax({
+            url: "/Share/LoadSongReleaseVN",
+            success: function (data) {
+                $('#song_release').html(data);
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('.genre_all').click(function () {
+            loadSongReleaseAll();
+        });
+        $('.genre_vn').click(function () {
+            loadSongReleaseVN();
+        });
+        loadSongReleaseAll();
+        $.ajax({
+            url: "/Share/GetHtmlPlaylistChill",
+            success: function (data) {
+                if (data == '') {
+                    RedirectError(500, "DB đang lỗi");
+                    return;
+                }
+                $('#playlist_chill').html(data);
+            }
+        });
+        $.ajax({
+            url: "/Share/GetHtmlPlaylistYeuDoi",
+            success: function (data) {
+                if (data == '') {
+                    RedirectError(500, "DB đang lỗi");
+                    return;
+                }
+                $('#playlist_yeudoi').html(data);
+            }
+        });
+        $.ajax({
+            url: "/Share/GetHtmlPlaylistRemixDance",
+            success: function (data) {
+                if (data == '') {
+                    RedirectError(500, "DB đang lỗi");
+                    return;
+                }
+                $('#playlist_remix_dance').html(data);
+            }
+        });
+        $.ajax({
+            url: "/Share/GetHtmlPlaylistTamTrang",
+            success: function (data) {
+                if (data == '') {
+                    RedirectError(500, "DB đang lỗi");
+                    return;
+                }
+                $('#playlist_tam_trang').html(data);
+            }
+        });
+        $.ajax({
+            url: "/Share/GetHtmlArtistThinhHanh",
+            success: function (data) {
+                if (data == '') {
+                    RedirectError(500, "DB đang lỗi");
+                    return;
+                }
+                $('#artist_thinh_hanh').html(data);
             }
         });
         var change = true;
