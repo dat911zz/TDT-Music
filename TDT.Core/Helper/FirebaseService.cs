@@ -87,6 +87,7 @@ namespace TDT.Core.Helper
             }
             return await firebase.Child(path).OnceAsJsonAsync();
         }
+
         public async void push(string nameNodeParent, object obj)
         {
             await firebase.Child(nameNodeParent).PutAsync(obj);
