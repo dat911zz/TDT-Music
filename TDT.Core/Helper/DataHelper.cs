@@ -287,6 +287,98 @@ namespace TDT.Core.Helper
                 return plGen;
             return plGen.Where(x => x.genreIds.Contains(idVietNam)).ToList();
         }
-
+        public static ArtistDTO GetArtist(string id)
+        {
+            if(DataHelper.Instance.Artists.Keys.Contains(id))
+                return DataHelper.Instance.Artists[id];
+            ArtistDTO artist = FirestoreService.Instance.Gets<ArtistDTO>("Artist", id);
+            if(artist != null)
+            {
+                try
+                {
+                    DataHelper.Instance.Artists.Add(id, artist);
+                }
+                catch { }
+            }
+            return artist;
+        }
+        public static PlaylistDTO GetPlaylist(string id)
+        {
+            if (DataHelper.Instance.Playlists.Keys.Contains(id))
+                return DataHelper.Instance.Playlists[id];
+            PlaylistDTO playlist = FirestoreService.Instance.Gets<PlaylistDTO>("Playlist", id);
+            if (playlist != null)
+            {
+                try
+                {
+                    DataHelper.Instance.Playlists.Add(id, playlist);
+                }
+                catch { }
+            }
+            return playlist;
+        }
+        public static SongDTO GetSong(string id)
+        {
+            if (DataHelper.Instance.Songs.Keys.Contains(id))
+                return DataHelper.Instance.Songs[id];
+            SongDTO song = FirestoreService.Instance.Gets<SongDTO>("Song", id);
+            if (song != null)
+            {
+                try
+                {
+                    DataHelper.Instance.Songs.Add(id, song);
+                }
+                catch { }
+            }
+            return song;
+        }
+        public static List<PlaylistDTO> GetPlaylists(SectionDTO section)
+        {
+            List<PlaylistDTO> list = new List<PlaylistDTO>();
+            if (section != null)
+            {
+                foreach (var keyPlaylist in section.items)
+                {
+                    var playlist = GetPlaylist(keyPlaylist);
+                    if (playlist != null)
+                    {
+                        list.Add(playlist);
+                    }
+                }
+            }
+            return list;
+        }
+        public static List<ArtistDTO> GetArtists(SectionDTO section)
+        {
+            List<ArtistDTO> list = new List<ArtistDTO>();
+            if (section != null)
+            {
+                foreach (var key in section.items)
+                {
+                    var artist = GetArtist(key);
+                    if (artist != null)
+                    {
+                        list.Add(artist);
+                    }
+                }
+            }
+            return list;
+        }
+        public static List<SongDTO> GetSongs(SectionDTO section)
+        {
+            List<SongDTO> list = new List<SongDTO>();
+            if (section != null)
+            {
+                foreach (var key in section.items)
+                {
+                    var song = GetSong(key);
+                    if (song != null)
+                    {
+                        list.Add(song);
+                    }
+                }
+            }
+            return list;
+        }
     }
 }
