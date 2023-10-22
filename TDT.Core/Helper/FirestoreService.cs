@@ -20,6 +20,7 @@ namespace TDT.Core.Helper
         public static string CL_Playlist = "Playlist";
         public static string CL_TypePlaylist = "TypePlaylist";
         public static string CL_Genre = "Genre";
+        public static string CL_Storage = "Storage";
 
 
         private static readonly string CONFIG_PATH = "/Config/cross-platform-music-firebase-adminsdk-6e112-689a7c7543.json";
@@ -191,10 +192,7 @@ namespace TDT.Core.Helper
 
         public string GetIdGenre(string key)
         {
-            string alias = HelperUtility.GetAlias(key);
-            Query query = WhereEqualTo("Genre", "alias", alias);
-            Genre g = Gets<Genre>(query).First();
-            return g == null ? "" : g.id;
+            return APIHelper.GetStringValue($"{CL_Genre}/GetId?alias={HelperUtility.GetAlias(key)}");
         }
     }
 }

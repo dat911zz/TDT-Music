@@ -311,10 +311,11 @@
 <script>
     function loadSongReleaseAll() {
         $.ajax({
-            url: "/Share/LoadSongRelease",
+            url: "/Share/LoadSongReleaseAll",
             success: function (data) {
+                data = '';
                 if (data == '') {
-                    RedirectError(500, "DB đang lỗi");
+                    @ViewData["Messages"] = "Lỗi load song release";
                     return;
                 }
                 $('#song_release').html(data);
@@ -325,6 +326,10 @@
         $.ajax({
             url: "/Share/LoadSongReleaseVN",
             success: function (data) {
+                if(data == '') {
+                    @ViewData["Messages"] = "Lỗi load song release";
+                    return;
+                }
                 $('#song_release').html(data);
             }
         });
@@ -341,7 +346,7 @@
             url: "/Share/GetHtmlPlaylistChill",
             success: function (data) {
                 if (data == '') {
-                    RedirectError(500, "DB đang lỗi");
+                    @ViewData["Messages"] = "Lỗi Playlist Chill";
                     return;
                 }
                 $('#playlist_chill').html(data);

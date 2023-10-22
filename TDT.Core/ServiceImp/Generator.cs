@@ -99,7 +99,7 @@ namespace TDT.Core.ServiceImp
                         ArtistDTO artDTO = new ArtistDTO();
                         if (!DataHelper.Instance.Artists.Keys.Contains(item))
                         {
-                            artDTO = FirestoreService.Instance.Gets<ArtistDTO>("Artist", item);
+                            artDTO = APIHelper.Get<ArtistDTO>(FirestoreService.CL_Artist, item);
                             if (artDTO == null)
                                 continue;
                             try
@@ -219,7 +219,7 @@ namespace TDT.Core.ServiceImp
                         ArtistDTO artDTO = new ArtistDTO();
                         if (!DataHelper.Instance.Artists.Keys.Contains(item))
                         {
-                            artDTO = FirestoreService.Instance.Gets<ArtistDTO>("Artist", item);
+                            artDTO = APIHelper.Get<ArtistDTO>(FirestoreService.CL_Artist, item);
                             if (artDTO == null)
                                 continue;
                             try
