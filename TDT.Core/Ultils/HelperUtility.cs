@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TDT.Core.Models;
 
 namespace TDT.Core.Ultils
 {
@@ -58,7 +61,7 @@ namespace TDT.Core.Ultils
             List<string> res = new List<string>();
             foreach (var param in nameParams)
             {
-                if(!string.IsNullOrEmpty(param))
+                if (!string.IsNullOrEmpty(param))
                 {
                     var value = typeof(T).GetProperty(param).GetValue(model, null);
                     if (string.IsNullOrEmpty(value.ToString()) || value.ToString().ToLower().Equals("string"))
@@ -66,6 +69,23 @@ namespace TDT.Core.Ultils
                 }
             }
             return res;
+        }
+        public static IEnumerable<CtrlAction> GetAllControllerAction(this Assembly asm)
+        {
+            //Assembly asm = asm.GetExecutingAssembly();
+
+            return asm.GetTypes()
+                .Where(type => typeof(Controller).IsAssignableFrom(type)) //filter controllers
+                .SelectMany(type => type.GetMethods())
+                .Where(method => method.IsPublic && !method.IsDefined(typeof(NonActionAttribute))
+                && method.DeclaringType.FullName.Contains("TDT.CAdmin.Controllers")
+                )
+                .Select(s => new CtrlAction()
+                {
+                    Name = s.Name,
+                    ActionType = s.DeclaringType.FullName
+                });
+
         }
     }
 }

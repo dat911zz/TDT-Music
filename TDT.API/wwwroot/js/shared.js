@@ -18,27 +18,36 @@ var DVNConfirm = (functionName, objectName, url, id) => {
                 data: { id: id },
                 success: function (r) {
                     if (r == 'ok') {
-                        //Swal.fire({
-                        //    icon: 'success',
-                        //    title: 'Thành Công',
-                        //    text: 'Đã ' + functionName.toLowerCase() + ' ' + objectName.toLowerCase() + ' có mã là ' + id + ' !',
-                        //    showConfirmButton: true,
-                        //    timer: 2000
-                        //}).then((result) => {
-                        //    location.reload();
-                        //});
-                        toastr.success('Đã ' + functionName.toLowerCase() + ' ' + objectName.toLowerCase() + ' có mã là ' + id + ' !', 'Thành công').then();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành Công',
+                            text: 'Đã ' + functionName.toLowerCase() + ' ' + objectName.toLowerCase() + ' có mã là ' + id + ' !',
+                            showConfirmButton: true,
+                            timer: 2000
+                        }).then((result) => {
+                            location.reload();
+                        });
                     }
                     else {
-                        //Swal.fire({
-                        //    icon: 'error',
-                        //    title: 'Thất Bại',
-                        //    html: '<span style="font-weight: bold">Có lỗi đã xảy ra, vui lòng thử lại! <br/>Chi tiết: </span><span style="color: red;">' + r + '</span>',
-                        //    showConfirmButton: true,
-                        //    timer: 3500
-                        //})
-                        toastr.error('<span style="font-weight: bold">Có lỗi đã xảy ra, vui lòng thử lại! <br/>Chi tiết: </span><span style="color: red;">' + r + '</span>', 'Thất bại');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Thất Bại',
+                            html: '<span style="font-weight: bold">Có lỗi đã xảy ra, vui lòng thử lại! <br/>Chi tiết: </span><span style="color: red;">' + r + '</span>',
+                            showConfirmButton: true,
+                            timer: 3500
+                        })
                     }
+                    //if (r == 'ok') {
+                    //    toastr.success('Đã ' + functionName.toLowerCase() + ' ' + objectName.toLowerCase() + ' có mã là ' + id + ' !', 'Thành công', {
+                    //        onHidden: function () {
+                    //            window.location.reload();
+                    //        }
+                    //    });
+                        
+                    //}
+                    //else {
+                    //    toastr.error('<span style="font-weight: bold">Có lỗi đã xảy ra, vui lòng thử lại! <br/>Chi tiết: </span><span style="color: red;">' + r + '</span>', 'Thất bại');
+                    //}
                 }
             });
         }

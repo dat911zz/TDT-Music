@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Google.Api;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -26,7 +28,7 @@ namespace TDT.CAdmin.Filters
         {
             Claims = claims;       
         }
-        public void OnAuthorization(AuthorizationFilterContext fillterContext)
+        public async void OnAuthorization(AuthorizationFilterContext fillterContext)
         {
             // skip authorization if action is decorated with [AllowAnonymous] attribute
             var allowAnonymous = fillterContext.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
@@ -34,10 +36,14 @@ namespace TDT.CAdmin.Filters
                 return;
             if (fillterContext != null)
             {
-                Microsoft.Extensions.Primitives.StringValues authTokens;
-                fillterContext.HttpContext.Request.Headers.TryGetValue("authToken", out authTokens);
-
-                var _token = authTokens.FirstOrDefault();
+                if (fillterContext.HttpContext.User.Claims.Count() > 0)
+                {
+                    var time = long.Parse(fillterContext.HttpContext.User.FindFirstValue("exp"));
+                    if (DateTimeOffset.FromUnixTimeSeconds(time).UtcDateTime <= DateTime.UtcNow)
+                    {
+                        await fillterContext.HttpContext.SignOutAsync();
+                    }
+                }
                 // authorization
                 //var user = (User)context.HttpContext.Items["User"];
                 //if (user == null)

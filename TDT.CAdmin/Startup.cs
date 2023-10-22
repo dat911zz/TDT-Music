@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
 using TDT.CAdmin.Areas.Identity.Data;
+using TDT.CAdmin.Filters;
 using TDT.CAdmin.Models;
 using TDT.Core.ServiceImp;
 using TDT.Core.Ultils.MVCMessage;
@@ -51,6 +52,7 @@ namespace TDT.CAdmin
             {
                 cfg.Filters.Add<MessagesFilter>();
             }).AddControllersAsServices();
+            services.AddSession();
             //services.Configure<IdentityEmailService>(Configuration);
         }
 
@@ -76,6 +78,7 @@ namespace TDT.CAdmin
             app.UseStaticFiles();
             
             app.UseRouting();
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseMiddleware<ErrorHandlerMiddleware>();

@@ -16,9 +16,15 @@ using TDT.Core.Ultils;
 
 namespace TDT.API.Controllers
 {
+    public class FileUploadModel<T>
+    {
+        public IFormFile FileDetails { get; set; }
+        //public FileType FileType { get; set; }
+        public T srcObj { get; set; }
+    }
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    public class ArtistController : ControllerBase
+    public class ArtistController : Controller
     {
         [HttpGet]
         public JsonResult Gets()

@@ -16,13 +16,16 @@ using System.Collections.Generic;
 using TDT.IdentityCore.Utils;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Text.RegularExpressions;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using TDT.Core.DTO.Firestore;
 
 namespace TDT.API.Controllers
 {
     [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
         private IConfiguration _cfg;
         private ISecurityHelper _securityHelper;
@@ -43,7 +46,7 @@ namespace TDT.API.Controllers
             _securityHelper = securityHelper;
             _mailSender = mailSender;
         }
-
+        
         [AllowAnonymous]
         [HttpPost]
         public IActionResult Login(LoginModel login, bool isCAdmin = false)
@@ -86,7 +89,7 @@ namespace TDT.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPut]
         public IActionResult Register([FromBody] UserIdentiyModel model)
         {
             try
@@ -104,10 +107,7 @@ namespace TDT.API.Controllers
                     PasswordHash = SecurityHelper.HashPassword(model.Password)
                 });
                 _db.SubmitChanges();
-                return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
-                    {
-                        {"data", model}
-                    }, "Đăng ký");
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "tạo tài khoản");
             }
             catch (Exception ex)
             {
