@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="~/css/zgallery.css" />
     <link rel="stylesheet" href="~/css/zplayer.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 </head>
 <body>
     <div class="ms_loader">
@@ -228,7 +229,7 @@
                         </form>
                     </div>
                     <div class="level-right">
-                        <div class="download-desktop-app" style="color: var(--link-text-hover)">
+                        @* <div class="download-desktop-app" style="color: var(--link-text-hover)">
                             <a class="zm-btn download-btn button" tabindex="0">
                                 <i class="icon">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -248,7 +249,7 @@
                                 Zing MP3 đã có ứng dụng cho máy tính, tải ngay cho trải nghiệm
                                 tuyệt vời nhất.
                             </div>
-                        </div>
+                        </div> *@
                         <div class="setting-item">
                             <button class="zm-btn zm-tooltip-btn is-hover-circle button" tabindex="0">
                                 <i class="icon ic-settings"></i>
@@ -493,6 +494,7 @@
     @RenderBody()
 
     <script type="text/javascript" src="~/js/plugins/player/tdt-player.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="~/js/plugins/swiper/js/swiper.min.js"></script>
@@ -503,12 +505,33 @@
     <script type="text/javascript" src="~/js/custom.js"></script>*@
 
     <script>
+        //https://codeseven.github.io/toastr/demo.html
+        toastr.options = {
+            "closeButton": true,
+            "debug": true,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
         setTimeout(function () {
             $('.ms_loader').hide();
         }, 2000);
+        $('.tdt-logo').click(function () {
+            window.location = "/";
+        });
     </script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <partial name="_MessagesPartial" model="@ViewData["Messages"]"></partial>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

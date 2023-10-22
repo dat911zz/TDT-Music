@@ -1,0 +1,507 @@
+﻿@using TDT.Core.DTO;
+@using TDT.Core.Helper;
+@{
+    ViewData["Title"] = "Hub";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <link rel="stylesheet" href="~/css/hub.css" />
+}
+
+<main class="zm-section"
+      id="body-scroll"
+      style="
+    position: absolute;
+    inset: 0px;
+    overflow: hidden scroll;
+    margin-right: -6px;
+    margin-bottom: 0px;
+  ">
+    <div class="container hub-detail-page">
+        <div class="cover">
+            <div class="blur"
+                 style="background: url('/image/hub/chill.jpg') center center / cover no-repeat;">
+            </div>
+            <div class="is-center-vertical"></div>
+        </div>
+        <div class="container detail-container">
+            <div class="zm-section playlist-section channel-section">
+                <div class="container">
+                    <h3 class="zm-section-title title is-2">Nổi bật</h3>
+                    <div class="zm-carousel-wrapper">
+                        <div class="zm-carousel">
+                            <div id="playlist_noibat" class="zm-carousel__container"
+                                 style="transform: translate3d(0px, 0px, 0px)">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
+                                        <div class="playlist-wrapper is-normal">
+                                            <div class="zm-card">
+                                                <div>
+                                                    <a class=""
+                                                       title="Playlist Này Chill Phết"
+                                                       href="/album/Playlist-Nay-Chill-Phet-GREY-D-Hoang-Dung-JustaTee-Phuong-Ly/ZUDW9B78.html">
+                                                        <div class="zm-card-image">
+                                                            <figure class="image is-48x48">
+                                                                <img src="https://photo-resize-zmp3.zmdcdn.me/w320_r1x1_jpeg/cover/2/8/5/a/285a656223b5a1d3af74aed547ab20d6.jpg"
+                                                                     alt="" />
+                                                            </figure>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="zm-card-content">
+                                                    <h4 class="title is-6">
+                                                        <a class=""
+                                                           title="Playlist Này Chill Phết"
+                                                           href="/album/Playlist-Nay-Chill-Phet-GREY-D-Hoang-Dung-JustaTee-Phuong-Ly/ZUDW9B78.html">
+                                                            <span>
+                                                                <span><span><span>Playlist Này…</span></span></span><span style="
+                                  position: fixed;
+                                  visibility: hidden;
+                                  top: 0px;
+                                  left: 0px;
+                                ">…</span>
+                                                            </span>
+                                                        </a>
+                                                    </h4>
+                                                    <h3 class="mt-10 subtitle">
+                                                        <a class="is-ghost" href="/GREY-D-Doan-The-Lan">GREY D</a>,
+                                                        <a class="is-ghost" href="/Nguyen-Hoang-Dung">Hoàng Dũng</a>...
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+
+                            </div>
+                        </div>
+                        <button class="zm-btn zm-carousel-control-prev zm-disabled is-hide button"
+                                tabindex="0">
+                            <i class="icon ic-go-left"></i>
+                        </button><button class="zm-btn zm-carousel-control-next is-hide button"
+                                         tabindex="0">
+                            <i class="icon ic-go-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="zm-section playlist-section channel-section">
+                <div class="container">
+                    <h3 class="zm-section-title title is-2">Hôm Nay Bạn Thế Nào?</h3>
+                    <div class="zm-carousel-wrapper">
+                        <div class="zm-carousel">
+                            <div id="playlist_hom_nay_ban_the_nao" class="zm-carousel__container"
+                                 style="transform: translate3d(0px, 0px, 0px)">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
+                                        <div class="playlist-wrapper is-normal">
+                                            <div class="zm-card">
+                                                <div>
+                                                    <a class=""
+                                                       title="chả muốn làm gì"
+                                                       href="/album/cha-muon-lam-gi-Phao-kis-Minh-Huy-Obito/SBCE6B08.html">
+                                                        <div class="zm-card-image">
+                                                            <figure class="image is-48x48">
+                                                                <img src="https://photo-resize-zmp3.zmdcdn.me/w320_r1x1_jpeg/cover/4/9/7/d/497d0d9a60d742eaa32d98ba883997f2.jpg"
+                                                                     alt="" />
+                                                            </figure>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="zm-card-content">
+                                                    <h4 class="title is-6">
+                                                        <a class=""
+                                                           title="chả muốn làm gì"
+                                                           href="/album/cha-muon-lam-gi-Phao-kis-Minh-Huy-Obito/SBCE6B08.html">
+                                                            <span>
+                                                                <span><span>chả muốn làm gì</span></span><span style="
+                                  position: fixed;
+                                  visibility: hidden;
+                                  top: 0px;
+                                  left: 0px;
+                                ">…</span>
+                                                            </span>
+                                                        </a>
+                                                    </h4>
+                                                    <h3 class="mt-10 subtitle">
+                                                        <a class="is-ghost" href="/Phao">Pháo</a>,
+                                                        <a class="is-ghost" href="/nghe-si/kis">kis</a>,
+                                                        <a class="is-ghost" href="/nghe-si/Minh-Huy-Singer">Minh Huy</a>...
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <button class="zm-btn zm-carousel-control-prev zm-disabled is-hide button"
+                                tabindex="0">
+                            <i class="icon ic-go-left"></i>
+                        </button><button class="zm-btn zm-carousel-control-next is-hide button"
+                                         tabindex="0">
+                            <i class="icon ic-go-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="zm-section playlist-section channel-section">
+                <div class="container">
+                    <h3 class="zm-section-title title is-2">Ngân Nga Câu Ca</h3>
+                    <div class="zm-carousel-wrapper">
+                        <div class="zm-carousel">
+                            <div id="playlist_ngay_nga_cau_ca" class="zm-carousel__container"
+                                 style="transform: translate3d(0px, 0px, 0px)">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
+                                        <div class="playlist-wrapper is-normal">
+                                            <div class="zm-card">
+                                                <div>
+                                                    <a class=""
+                                                       title="Đong Đưa Theo Tiếng Nhạc"
+                                                       href="/album/Dong-Dua-Theo-Tieng-Nhac-TRANG-Hoang-Dung-Uyen-Linh-Tien-Tien/SBCFF9CC.html">
+                                                        <div class="zm-card-image">
+                                                            <figure class="image is-48x48">
+                                                                <img src="" alt="" />
+                                                            </figure>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="zm-card-content">
+                                                    <h4 class="title is-6">
+                                                        <a class=""
+                                                           title="Đong Đưa Theo Tiếng Nhạc"
+                                                           href="/album/Dong-Dua-Theo-Tieng-Nhac-TRANG-Hoang-Dung-Uyen-Linh-Tien-Tien/SBCFF9CC.html">
+                                                            <span>
+                                                                <span><span><span>Đong Đưa…</span></span></span><span style="
+                                  position: fixed;
+                                  visibility: hidden;
+                                  top: 0px;
+                                  left: 0px;
+                                ">…</span>
+                                                            </span>
+                                                        </a>
+                                                    </h4>
+                                                    <h3 class="mt-10 subtitle">
+                                                        <a class="is-ghost" href="/TRANG-VN">TRANG</a>,
+                                                        <a class="is-ghost" href="/Nguyen-Hoang-Dung">Hoàng Dũng</a>...
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <button class="zm-btn zm-carousel-control-prev zm-disabled is-hide button"
+                                tabindex="0">
+                            <i class="icon ic-go-left"></i>
+                        </button><button class="zm-btn zm-carousel-control-next is-hide button"
+                                         tabindex="0">
+                            <i class="icon ic-go-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="zm-section playlist-section channel-section">
+                <div class="container">
+                    <h3 class="zm-section-title title is-2">Thanh Âm Lofi</h3>
+                    <div class="zm-carousel-wrapper">
+                        <div class="zm-carousel">
+                            <div id="playlist_am_thanh_lofi" class="zm-carousel__container"
+                                 style="transform: translate3d(0px, 0px, 0px)">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
+                                        <div class="playlist-wrapper is-normal">
+                                            <div class="zm-card">
+                                                <div>
+                                                    <a class=""
+                                                       title="Lofi Guitar"
+                                                       href="/album/Lofi-Guitar-Shierro-xander-Lenny-Loops-Blue-Wednesday/SB986CF0.html">
+                                                        <div class="zm-card-image">
+                                                            <figure class="image is-48x48">
+                                                                <img src="" alt="" />
+                                                            </figure>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="zm-card-content">
+                                                    <h4 class="title is-6">
+                                                        <a class=""
+                                                           title="Lofi Guitar"
+                                                           href="/album/Lofi-Guitar-Shierro-xander-Lenny-Loops-Blue-Wednesday/SB986CF0.html">
+                                                            <span>
+                                                                <span><span>Lofi Guitar</span></span><span style="
+                                  position: fixed;
+                                  visibility: hidden;
+                                  top: 0px;
+                                  left: 0px;
+                                ">…</span>
+                                                            </span>
+                                                        </a>
+                                                    </h4>
+                                                    <h3 class="mt-10 subtitle">
+                                                        <a class="is-ghost" href="/nghe-si/Shierro-IW79C87C">Shierro</a>,
+                                                        <a class="is-ghost" href="/nghe-si/xander-IW7ZFU7A">xander.</a>,
+                                                        <a class="is-ghost"
+                                                           href="/nghe-si/Lenny-Loops.IW7D6OFW">Lenny Loops</a>...
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <button class="zm-btn zm-carousel-control-prev zm-disabled is-hide button"
+                                tabindex="0">
+                            <i class="icon ic-go-left"></i>
+                        </button><button class="zm-btn zm-carousel-control-next is-hide button"
+                                         tabindex="0">
+                            <i class="icon ic-go-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="zm-section playlist-section channel-section">
+                <div class="container">
+                    <h3 class="zm-section-title title is-2">Một Chút Không Lời</h3>
+                    <div class="zm-carousel-wrapper">
+                        <div class="zm-carousel">
+                            <div id="playlist_mot_chut_khong_loi" class="zm-carousel__container"
+                                 style="transform: translate3d(0px, 0px, 0px)">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
+                                        <div class="playlist-wrapper is-normal">
+                                            <div class="zm-card">
+                                                <div>
+                                                    <a class=""
+                                                       title="Cinematic Chillout"
+                                                       href="/album/Cinematic-Chillout-Justin-Hurwitz-Michael-Giacchino-James-Horner-Alexandre-Desplat/6B9DO96D.html">
+                                                        <div class="zm-card-image">
+                                                            <figure class="image is-48x48">
+                                                                <img src="" alt="" />
+                                                            </figure>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="zm-card-content">
+                                                    <h4 class="title is-6">
+                                                        <a class=""
+                                                           title="Cinematic Chillout"
+                                                           href="/album/Cinematic-Chillout-Justin-Hurwitz-Michael-Giacchino-James-Horner-Alexandre-Desplat/6B9DO96D.html">
+                                                            <span>
+                                                                <span><span><span>Cinematic…</span></span></span><span style="
+                                  position: fixed;
+                                  visibility: hidden;
+                                  top: 0px;
+                                  left: 0px;
+                                ">…</span>
+                                                            </span>
+                                                        </a>
+                                                    </h4>
+                                                    <h3 class="mt-10 subtitle">
+                                                        <a class="is-ghost" href="/nghe-si/Justin-Hurwitz">Justin Hurwitz</a>...
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <button class="zm-btn zm-carousel-control-prev zm-disabled is-hide button"
+                                tabindex="0">
+                            <i class="icon ic-go-left"></i>
+                        </button><button class="zm-btn zm-carousel-control-next is-hide button"
+                                         tabindex="0">
+                            <i class="icon ic-go-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="zm-section playlist-section channel-section">
+                <div class="container">
+                    <h3 class="zm-section-title title is-2">Yên</h3>
+                    <div class="zm-carousel-wrapper">
+                        <div class="zm-carousel">
+                            <div id="playlist_yen" class="zm-carousel__container"
+                                 style="transform: translate3d(0px, 0px, 0px)">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
+                                        <div class="playlist-wrapper is-normal">
+                                            <div class="zm-card">
+                                                <div>
+                                                    <a class=""
+                                                       title="Róc Rách"
+                                                       href="/album/Roc-Rach-Liquid-Lake-Zen-Music-Garden-Derrol-Ambrook-Glacier/SB9687D0.html">
+                                                        <div class="zm-card-image">
+                                                            <figure class="image is-48x48">
+                                                                <img src="" alt="" />
+                                                            </figure>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="zm-card-content">
+                                                    <h4 class="title is-6">
+                                                        <a class=""
+                                                           title="Róc Rách"
+                                                           href="/album/Roc-Rach-Liquid-Lake-Zen-Music-Garden-Derrol-Ambrook-Glacier/SB9687D0.html">
+                                                            <span>
+                                                                <span><span>Róc Rách</span></span><span style="
+                                  position: fixed;
+                                  visibility: hidden;
+                                  top: 0px;
+                                  left: 0px;
+                                ">…</span>
+                                                            </span>
+                                                        </a>
+                                                    </h4>
+                                                    <h3 class="mt-10 subtitle">
+                                                        <a class="is-ghost"
+                                                           href="/nghe-si/Liquid-Lake-IW7A9I9O">Liquid Lake</a>,
+                                                        <a class="is-ghost"
+                                                           href="/nghe-si/Zen-Music-Garden-IW7WEW0E">Zen Music Garden</a>...
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <button class="zm-btn zm-carousel-control-prev zm-disabled is-hide button"
+                                tabindex="0">
+                            <i class="icon ic-go-left"></i>
+                        </button><button class="zm-btn zm-carousel-control-next zm-disabled is-hide button"
+                                         tabindex="0">
+                            <i class="icon ic-go-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="zm-section playlist-section channel-section">
+                <div class="container">
+                    <h3 class="zm-section-title title is-2">
+                        Chill Cùng Dance/Electronic
+                    </h3>
+                    <div class="zm-carousel-wrapper">
+                        <div class="zm-carousel">
+                            <div id="playlist_chill_and_dance" class="zm-carousel__container"
+                                 style="transform: translate3d(0px, 0px, 0px)">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
+                                        <div class="playlist-wrapper is-normal">
+                                            <div class="zm-card">
+                                                <div>
+                                                    <a class=""
+                                                       title="Deep House Thư Giãn"
+                                                       href="/album/Deep-House-Thu-Gian-Henry-Green-Jako-Diaz-Sewa-Sound-Dillistone/6BCIIFZF.html">
+                                                        <div class="zm-card-image">
+                                                            <figure class="image is-48x48">
+                                                                <img src="" alt="" />
+                                                            </figure>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="zm-card-content">
+                                                    <h4 class="title is-6">
+                                                        <a class=""
+                                                           title="Deep House Thư Giãn"
+                                                           href="/album/Deep-House-Thu-Gian-Henry-Green-Jako-Diaz-Sewa-Sound-Dillistone/6BCIIFZF.html">
+                                                            <span>
+                                                                <span><span><span>Deep House…</span></span></span><span style="
+                                  position: fixed;
+                                  visibility: hidden;
+                                  top: 0px;
+                                  left: 0px;
+                                ">…</span>
+                                                            </span>
+                                                        </a>
+                                                    </h4>
+                                                    <h3 class="mt-10 subtitle">
+                                                        <a class="is-ghost" href="/nghe-si/Henry-Green">Henry Green</a>,
+                                                        <a class="is-ghost" href="/nghe-si/Jako-Diaz">Jako Diaz</a>...
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <button class="zm-btn zm-carousel-control-prev zm-disabled is-hide button"
+                                tabindex="0">
+                            <i class="icon ic-go-left"></i>
+                        </button><button class="zm-btn zm-carousel-control-next is-hide button"
+                                         tabindex="0">
+                            <i class="icon ic-go-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Tải dữ liệu từ các URL và cập nhật phần tử HTML tương ứng.
+            $.ajax({
+                url: "/Share/GetHtmlPlaylistNoiBat",
+                success: function (data) {
+                    $('#playlist_noibat').html(data);
+                }
+            });
+
+            $.ajax({
+                url: "/Share/GetHtmlPlaylistHomNayBanTheNao",
+                success: function (data) {
+                    $('#playlist_hom_nay_ban_the_nao').html(data);
+                }
+            });
+
+            $.ajax({
+                url: "/Share/GetHtmlPlaylistNganNgaCauCa",
+                success: function (data) {
+                    $('#playlist_ngay_nga_cau_ca').html(data);
+                }
+            });
+
+            $.ajax({
+                url: "/Share/GetHtmlPlaylistAmThanhLofi",
+                success: function (data) {
+                    $('#playlist_am_thanh_lofi').html(data);
+                }
+            });
+
+            $.ajax({
+                url: "/Share/GetHtmlPlaylistMotChutKhongLoi",
+                success: function (data) {
+                    $('#playlist_mot_chut_khong_loi').html(data);
+                }
+            });
+
+            $.ajax({
+                url: "/Share/GetHtmlPlaylistYen",
+                success: function (data) {
+                    $('#playlist_yen').html(data);
+                }
+            });
+
+            $.ajax({
+                url: "/Share/GetHtmlPlaylistChillCungDance",
+                success: function (data) {
+                    $('#playlist_chill_and_dance').html(data);
+                }
+            });
+        });
+    </script>
+
+
+</main>

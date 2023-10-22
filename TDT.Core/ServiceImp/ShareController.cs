@@ -15,20 +15,11 @@ namespace TDT.Core.ServiceImp
 {
     public class ShareController : ControllerBase
     {
-        public JsonResult LoadSongRelease()
+        public string GenHtmlSongRelease(List<SongDTO> songs)
         {
-            List<SongDTO> songs = new List<SongDTO>();
-            if (DataHelper.Instance.Songs.Count <= 0)
-            {
-                Query query = FirestoreService.Instance.OrderByDescending("Song", "releaseDate");
-                songs = FirestoreService.Instance.Gets<SongDTO>(query);
-            }
-            else
-            {
-                songs = DataHelper.Instance.Songs.Values.ToList();
-            }
             if (songs != null)
             {
+                DataHelper.Instance.SetSongRelease(songs);
                 foreach (SongDTO song in songs)
                 {
                     if (!DataHelper.Instance.Songs.Keys.Contains(song.encodeId))
@@ -38,12 +29,26 @@ namespace TDT.Core.ServiceImp
                 }
             }
             List<string> htmls = new List<string>();
-            List<List<SongDTO>> songRelease = DataHelper.Instance.SongRelease;
+            List<List<SongDTO>> songRelease = DataHelper.Instance.GetSongRelease();
             foreach (List<SongDTO> listItem in songRelease)
             {
                 htmls.Add(Generator.Instance.GenerateSongRelease(listItem));
             }
-            return new JsonResult(string.Concat(htmls));
+            return string.Concat(htmls);
+        }
+        public JsonResult LoadSongRelease()
+        {
+            List<SongDTO> songs = new List<SongDTO>();
+            Query query = FirestoreService.Instance.OrderByDescending("Song", "releaseDate").Limit(100);
+            songs = FirestoreService.Instance.Gets<SongDTO>(query);
+            return new JsonResult(GenHtmlSongRelease(songs));
+        }
+        public JsonResult LoadSongReleaseVN()
+        {
+            List<SongDTO> songs = new List<SongDTO>();
+            Query query = FirestoreService.Instance.WhereArrayContains("Song", "genreIds", DataHelper.GENRE_VIETNAM).OrderByDescending("releaseDate").Limit(100);
+            songs = FirestoreService.Instance.Gets<SongDTO>(query);
+            return new JsonResult(GenHtmlSongRelease(songs));
         }
         public JsonResult LoadGenre()
         {
@@ -134,6 +139,53 @@ namespace TDT.Core.ServiceImp
         public JsonResult GetHtmlArtistThinhHanh()
         {
             return new JsonResult(Generator.Instance.GenerateArtist(DataHelper.Instance.ArtistThinhHanh));
+        }
+
+        //[Route("GetHtmlArtistInfo")]
+        //[HttpGet("{id}")]
+        public JsonResult GetHtmlArtistInfo(string id)
+        {
+            ArtistDTO artist = DataHelper.GetArtist(id);
+            return new JsonResult(artist == null ? "" : Generator.Instance.GenerateArtistInfo(artist));
+        }
+        public JsonResult GetHtmlArtsistNoiBat(string id)
+        {
+            ArtistDTO artist = DataHelper.GetArtist(id);
+            return new JsonResult(artist == null ? "" : Generator.Instance.GenerateArtistNoiBat(artist));
+        }
+        public JsonResult GetHtmlSingleEP(string id)
+        {
+            ArtistDTO artist = DataHelper.GetArtist(id);
+            SectionDTO section = artist.sections.Where(s => s.title.Equals("Single & EP")).First();
+            List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
+            return new JsonResult(Generator.Instance.GeneratePlaylist(list.Take(5).ToList()));
+        }
+        public JsonResult GetHtmlAlbum(string id)
+        {
+            ArtistDTO artist = DataHelper.GetArtist(id);
+            SectionDTO section = artist.sections.Where(s => s.title.Equals("Album")).First();
+            List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
+            return new JsonResult(Generator.Instance.GeneratePlaylist(list.Take(5).ToList()));
+        }
+        public JsonResult GetHtmlTuyenTap(string id)
+        {
+            ArtistDTO artist = DataHelper.GetArtist(id);
+            SectionDTO section = artist.sections.Where(s => s.title.Equals("Tuyển tập")).First();
+            List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
+             return new JsonResult(Generator.Instance.GeneratePlaylist(list.Take(5).ToList()));
+        }
+        public JsonResult GetHtmlCoTheThich(string id)
+        {
+            ArtistDTO artist = DataHelper.GetArtist(id);
+            SectionDTO section = artist.sections.Where(s => s.title.Equals("Bạn Có Thể Thích")).First();
+            List<ArtistDTO> list = DataHelper.GetArtists(section);
+            return new JsonResult(Generator.Instance.GenerateArtist(list.Take(5).ToList()));
+        }
+
+        public JsonResult GetHtmlArtistInfoFooter(string id)
+        {
+            ArtistDTO artist = DataHelper.GetArtist(id);
+            return new JsonResult(artist == null ? "" : Generator.Instance.GenerateArtistInfo_footer(artist));
         }
         public JsonResult GetHtmlPlaylistNoiBat()
         {

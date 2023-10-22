@@ -40,44 +40,6 @@ namespace TDT.Core.DTO.Firestore
         private int _listen;
         private bool _liked;
         private int _comment;
-        public SongDTO()
-        {
-            
-        }
-        public SongDTO(SongDTO src)
-        {
-            _encodeId = src.encodeId;
-            _title = src.title;
-            _alias = src.alias;
-            _isOffical = src.isOffical;
-            _username = src.username;
-            _artistsNames = src.artistsNames;
-            _artists = src.artists;
-            _isWorldWide = src.isWorldWide;
-            _thumbnailM = src.thumbnailM;
-            _link = src.link;
-            _thumbnail = src.thumbnail;
-            _duration = src.duration;
-            _zingChoice = src.zingChoice;
-            _isPrivate = src.isPrivate;
-            _preRelease = src.preRelease;
-            _releaseDate = src.releaseDate;
-            _genreIds = src.genreIds;
-            _distributor = src.distributor;
-            _indicators = src.indicators;
-            _isIndie = src.isIndie;
-            _streamingStatus = src.streamingStatus;
-            _allowAudioAds = src.allowAudioAds;
-            _hasLyric = src.hasLyric;
-            _userid = src.userid;
-            _composers = src.composers;
-            _album = src.album;
-            _isRBT = src.isRBT;
-            _like = src.like;
-            _listen = src.listen;
-            _liked = src.liked;
-            _comment = src.comment;
-        }
 
         [Display(Name = "Mã Hóa")]
         [FirestoreProperty] public string encodeId { get => _encodeId; set => _encodeId = value; }

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TDT.Core.Ultils.MVCMessage;
 using TDT.IdentityCore.Middlewares;
 
 namespace TDT_Music
@@ -26,6 +27,10 @@ namespace TDT_Music
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.Configure<ErrorHandlerMiddleware>(Configuration);
+            services.AddMvc(cfg =>
+            {
+                cfg.Filters.Add<MessagesFilter>();
+            }).AddControllersAsServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

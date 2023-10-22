@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TDT.Core.DTO.Firestore;
+using TDT.Core.Ultils;
 
 namespace TDT.Core.Helper
 {
@@ -58,8 +59,16 @@ namespace TDT.Core.Helper
         {
             return db.Collection(collectionName).Where(filter);
         }
-        
-        
+        public Query WhereEqualTo(string collectionName, string path, object value)
+        {
+            return db.Collection(collectionName).WhereEqualTo(path, value);
+        }
+        public Query WhereArrayContains(string collectionName, string path, object value)
+        {
+            return db.Collection(collectionName).WhereArrayContains(path, value);
+        }
+
+
         public List<T> Gets<T>(Query query) where T : class, new()
         {
             QuerySnapshot querySnapshot = query.GetSnapshotAsync().Result;
@@ -170,17 +179,12 @@ namespace TDT.Core.Helper
             }
         }
 
-        public async Task<QuerySnapshot> GetQuerySnapshot(string collection, int startFrom, int pageSize)
+        public string GetIdGenre(string key)
         {
-            // Thực hiện truy vấn và sử dụng "await" để chờ cho tác vụ hoàn thành
-            QuerySnapshot querySnapshot = await db.Collection(collection)
-                .OrderBy("fieldToOrderBy")
-                .StartAt(startFrom)
-                .Limit(pageSize)
-                .GetSnapshotAsync();
-
-            return querySnapshot;
+            string alias = HelperUtility.GetAlias(key);
+            Query query = WhereEqualTo("Genre", "alias", alias);
+            Genre g = Gets<Genre>(query).First();
+            return g == null ? "" : g.id;
         }
-
     }
 }
