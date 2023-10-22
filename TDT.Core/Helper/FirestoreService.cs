@@ -15,6 +15,14 @@ namespace TDT.Core.Helper
 {
     public class FirestoreService
     {
+        public static string CL_Artist = "Artist";
+        public static string CL_Song = "Song";
+        public static string CL_Playlist = "Playlist";
+        public static string CL_TypePlaylist = "TypePlaylist";
+        public static string CL_Genre = "Genre";
+        public static string CL_Storage = "Storage";
+
+
         private static readonly string CONFIG_PATH = "/Config/cross-platform-music-firebase-adminsdk-6e112-689a7c7543.json";
         private FirestoreDb db;
         private string PATH_CONFIG = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.Parent.FullName + "\\TDT.Core\\" + CONFIG_PATH;
@@ -124,28 +132,32 @@ namespace TDT.Core.Helper
             DocumentReference docRef = db.Collection(collectionName).Document(id);
             await docRef.SetAsync(model, SetOptions.MergeAll);
         }
-        public async Task DeleteAsync(string collectionName)
+        //public async Task DeleteAsync(string collectionName)
+        //{
+        //    var snapshot = db.Collection(collectionName).GetSnapshotAsync();
+        //    await DeleteCollection(db.Collection(collectionName), 100000);
+        //}
+        //private async Task DeleteCollection(CollectionReference collectionReference, int batchSize)
+        //{
+        //    QuerySnapshot snapshot = await collectionReference.Limit(batchSize).GetSnapshotAsync();
+        //    IReadOnlyList<DocumentSnapshot> documents = snapshot.Documents;
+        //    while (documents.Count > 0)
+        //    {
+        //        foreach (DocumentSnapshot document in documents)
+        //        {
+        //            Console.WriteLine("Deleting document {0}", document.Id);
+        //            await document.Reference.DeleteAsync();
+        //        }
+        //        snapshot = await collectionReference.Limit(batchSize).GetSnapshotAsync();
+        //        documents = snapshot.Documents;
+        //    }
+        //    Console.WriteLine("Finished deleting all documents from the collection.");
+        //}
+        public async Task DeleteAsync(string collectionName, string id)
         {
-            var snapshot = db.Collection(collectionName).GetSnapshotAsync();
-            await DeleteCollection(db.Collection(collectionName), 100000);
+            var doc = db.Collection(collectionName).Document(id);
+            await doc.DeleteAsync();
         }
-        private async Task DeleteCollection(CollectionReference collectionReference, int batchSize)
-        {
-            QuerySnapshot snapshot = await collectionReference.Limit(batchSize).GetSnapshotAsync();
-            IReadOnlyList<DocumentSnapshot> documents = snapshot.Documents;
-            while (documents.Count > 0)
-            {
-                foreach (DocumentSnapshot document in documents)
-                {
-                    Console.WriteLine("Deleting document {0}", document.Id);
-                    await document.Reference.DeleteAsync();
-                }
-                snapshot = await collectionReference.Limit(batchSize).GetSnapshotAsync();
-                documents = snapshot.Documents;
-            }
-            Console.WriteLine("Finished deleting all documents from the collection.");
-        }
-
 
         public async Task<IList<string>> GetKeys(string collectionName, string id = "")
         {
@@ -180,10 +192,7 @@ namespace TDT.Core.Helper
 
         public string GetIdGenre(string key)
         {
-            string alias = HelperUtility.GetAlias(key);
-            Query query = WhereEqualTo("Genre", "alias", alias);
-            Genre g = Gets<Genre>(query).First();
-            return g == null ? "" : g.id;
+            return APIHelper.GetStringValue($"{CL_Genre}/GetId?alias={HelperUtility.GetAlias(key)}");
         }
     }
 }

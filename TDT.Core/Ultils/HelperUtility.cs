@@ -53,5 +53,19 @@ namespace TDT.Core.Ultils
             }
             return str.ToLower().Replace(" ", "-");
         }
+        public static List<string> GetParamsIllegal<T>(List<string> nameParams, T model) where T : class, new()
+        {
+            List<string> res = new List<string>();
+            foreach (var param in nameParams)
+            {
+                if(!string.IsNullOrEmpty(param))
+                {
+                    var value = typeof(T).GetProperty(param).GetValue(model, null);
+                    if (string.IsNullOrEmpty(value.ToString()) || value.ToString().ToLower().Equals("string"))
+                        res.Add(param);
+                }
+            }
+            return res;
+        }
     }
 }
