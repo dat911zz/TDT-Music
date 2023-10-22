@@ -6,56 +6,33 @@ using TDT.Core.Helper;
 using System.Linq;
 using X.PagedList;
 using TDT.Core.DTO.Firestore;
+using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1;
+using System.Threading.Tasks;
 
 namespace TDT.CAdmin.Controllers
 {
     public class MusicManagementController : Controller
     {
-        List<SongDTO> _songs = new List<SongDTO>();
+        long? lengthSong = null;
+        int pageSize = 10;
 
         public MusicManagementController()
         {
-            
-            if (DataHelper.Instance.Songs.Count <= 0)
+            if(lengthSong == null)
             {
-                HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Song/load");
-                string json = httpService.getJson();
-                _songs = ConvertService.Instance.convertToObjectFromJson<List<SongDTO>>(json);
-            }
-            else
-            {
-                _songs = DataHelper.Instance.Songs.Values.ToList();
-            }
-            if (_songs != null)
-            {
-                foreach (SongDTO song in _songs)
-                {
-                    if (!DataHelper.Instance.Songs.Keys.Contains(song.encodeId))
-                    {
-                        DataHelper.Instance.Songs.Add(song.encodeId, song);
-                    }
-                }
+                lengthSong = FirestoreService.Instance.GetCollectionReference("Song").Count().GetSnapshotAsync().Result.Count;
             }
         }
 
         public IActionResult Index(int? page)
         {
-            if (_songs != null)
-            {
-                int pageNumber = (page ?? 1);
-                int pageSize = 10; // 
-
-                List<SongDTO> lsong = _songs.ToList();
-                IPagedList<SongDTO> pagedList = lsong.ToPagedList(pageNumber, pageSize);
-
-                return View(pagedList);
-
-            }
-            else
-            {
-                throw new System.Exception(message:"Null Nè!");
-            }
+            int pageNumber = (page ?? 1);
+            Query query = FirestoreService.Instance.GetCollectionReference("Song").OrderByDescending("releaseDate").Limit(pageSize * pageNumber).LimitToLast(pageSize);
+            List<SongDTO> songs = FirestoreService.Instance.Gets<SongDTO>(query);
+            return View(songs); 
         }
+
         [HttpGet]
         public string LoadImg(string encodeID, string thumbnail)
         {
@@ -108,39 +85,39 @@ namespace TDT.CAdmin.Controllers
             return View();
         }
 
-        public IActionResult Delete(string id)
-        {
-            SongDTO song = new SongDTO();
-            if (id != null)
-            {
-                song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
-                return View(song);
+        //public IActionResult Delete(string id)
+        //{
+        //    SongDTO song = new SongDTO();
+        //    if (id != null)
+        //    {
+        //        song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
+        //        return View(song);
 
-            }
-            return View();
-        }
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteS(string id)
-        {
-            SongDTO song = new SongDTO();
-            if (id != null)
-            {
-                song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
-                return View(song);
+        //    }
+        //    return View();
+        //}
+        //[HttpPost, ActionName("Delete")]
+        //public IActionResult DeleteS(string id)
+        //{
+        //    SongDTO song = new SongDTO();
+        //    if (id != null)
+        //    {
+        //        song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
+        //        return View(song);
 
-            }
-            return View();
-        }
-        public IActionResult Details(string id)
-        {
-            SongDTO song = new SongDTO();
-            if(id != null)
-            {
-                song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
-                return View(song);
+        //    }
+        //    return View();
+        //}
+        //public IActionResult Details(string id)
+        //{
+        //    SongDTO song = new SongDTO();
+        //    if(id != null)
+        //    {
+        //        song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
+        //        return View(song);
 
-            }
-            return View();
-        }
+        //    }
+        //    return View();
+        //}
     }
 }

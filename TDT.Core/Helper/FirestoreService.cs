@@ -1,4 +1,5 @@
 ﻿using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -168,5 +169,18 @@ namespace TDT.Core.Helper
                 return null;
             }
         }
+
+        public async Task<QuerySnapshot> GetQuerySnapshot(string collection, int startFrom, int pageSize)
+        {
+            // Thực hiện truy vấn và sử dụng "await" để chờ cho tác vụ hoàn thành
+            QuerySnapshot querySnapshot = await db.Collection(collection)
+                .OrderBy("fieldToOrderBy")
+                .StartAt(startFrom)
+                .Limit(pageSize)
+                .GetSnapshotAsync();
+
+            return querySnapshot;
+        }
+
     }
 }

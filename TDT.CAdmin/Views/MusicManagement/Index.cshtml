@@ -1,7 +1,4 @@
-﻿@model IPagedList<TDT.Core.DTO.Firestore.SongDTO>
-@using X.PagedList;
-@using X.PagedList.Mvc.Core;
-@using X.PagedList.Mvc.Core.Common;
+﻿@model List<TDT.Core.DTO.Firestore.SongDTO>
 
 @{
     ViewData["Title"] = "Danh sách bài hát";
@@ -33,8 +30,8 @@
 
             @foreach (var item in Model)
             {
-                
-           
+
+
                 <tr>
                     <td scope="row">
                         @Html.DisplayFor(modelItem => item.encodeId)
@@ -65,12 +62,12 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.distributor)
-                     </td>
+                    </td>
 
                     <td class="btn-control">
                         <a href="@Url.Action("Delete", "MusicManagement", new { id = item.encodeId})">
                             <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
-                        </a>       
+                        </a>
                         <a href="@Url.Action("Details", "MusicManagement", new { id = item.encodeId})">
                             <div class="fa fa-bars" aria-hidden="true"></div>
                         </a>
@@ -85,9 +82,9 @@
 </div>
 
 <!-- Hiển thị điều hướng phân trang -->
-<div class="pagedList-container">
+@* <div class="pagedList-container">
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
-</div>
+</div> *@
 <script>
     $(".img_song").each(function (e, val) {
         var id = $(this).attr("encodeid");
