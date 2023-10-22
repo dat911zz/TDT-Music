@@ -21,7 +21,7 @@ namespace TDT.CAdmin.Controllers
         {
             if(lengthSong == null)
             {
-                lengthSong = FirestoreService.Instance.GetCollectionReference("Song").Count().GetSnapshotAsync().Result.Count;
+                _songs = APIHelper.Gets<SongDTO>($"{FirestoreService.CL_Song}");
             }
         }
 
@@ -36,10 +36,6 @@ namespace TDT.CAdmin.Controllers
         [HttpGet]
         public string LoadImg(string encodeID, string thumbnail)
         {
-            //string img;
-            //img = FirebaseService.Instance.getStorage(thumbnail);
-
-
             string img;
             if (DataHelper.Instance.ThumbSong.Keys.Contains(encodeID))
             {

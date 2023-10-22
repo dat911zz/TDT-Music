@@ -36,27 +36,21 @@ namespace TDT.Core.ServiceImp
             }
             return string.Concat(htmls);
         }
-        public JsonResult LoadSongRelease()
+        public JsonResult LoadSongReleaseAll()
         {
-            List<SongDTO> songs = new List<SongDTO>();
-            Query query = FirestoreService.Instance.OrderByDescending("Song", "releaseDate").Limit(100);
-            songs = FirestoreService.Instance.Gets<SongDTO>(query);
+            List<SongDTO> songs = APIHelper.Gets<SongDTO>($"{FirestoreService.CL_Song}/LoadSongReleaseAll");
             return new JsonResult(GenHtmlSongRelease(songs));
         }
         public JsonResult LoadSongReleaseVN()
         {
-            List<SongDTO> songs = new List<SongDTO>();
-            Query query = FirestoreService.Instance.WhereArrayContains("Song", "genreIds", DataHelper.GENRE_VIETNAM).OrderByDescending("releaseDate").Limit(100);
-            songs = FirestoreService.Instance.Gets<SongDTO>(query);
+            List<SongDTO> songs = APIHelper.Gets<SongDTO>($"{FirestoreService.CL_Song}/LoadSongReleaseVN");
             return new JsonResult(GenHtmlSongRelease(songs));
         }
         public JsonResult LoadGenre()
         {
             if(DataHelper.Instance.Genres.Count <= 0)
             {
-                HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Genre/load");
-                string json = httpService.getJson();
-                List<Genre> genres = ConvertService.Instance.convertToObjectFromJson<List<Genre>>(json);
+                List<Genre> genres = APIHelper.Gets<Genre>($"{FirestoreService.CL_Genre}");
                 if(genres != null)
                 {
                     foreach (Genre genre in genres)
@@ -79,9 +73,7 @@ namespace TDT.Core.ServiceImp
             List<PlaylistDTO> playlists = new List<PlaylistDTO>();
             if (DataHelper.Instance.Playlists.Count <= 0)
             {
-                HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Playlist/load");
-                string json = httpService.getJson();
-                playlists = ConvertService.Instance.convertToObjectFromJson<List<PlaylistDTO>>(json);
+                playlists = APIHelper.Gets<PlaylistDTO>($"{FirestoreService.CL_Playlist}/load");
             }
             if(playlists != null)
             {
@@ -97,10 +89,7 @@ namespace TDT.Core.ServiceImp
         }
         public JsonResult LoadArtist()
         {
-            List<ArtistDTO> artists = new List<ArtistDTO>();
-            HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Artist/load");
-            string json = httpService.getJson();
-            artists = ConvertService.Instance.convertToObjectFromJson<List<ArtistDTO>>(json);
+            List<ArtistDTO> artists = APIHelper.Gets<ArtistDTO>($"{FirestoreService.CL_Artist}/Load");
             if (artists != null)
             {
                 foreach (ArtistDTO artist in artists)

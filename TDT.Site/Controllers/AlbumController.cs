@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
 using TDT.Core.Ultils;
-using TDT_Music.Services;
 
 namespace TDT_Music.Controllers
 {
@@ -18,7 +17,7 @@ namespace TDT_Music.Controllers
                 throw new Exception("Đường dẫn không hợp lệ !!!");
             }
             if(!DataHelper.Instance.Playlists.Keys.Contains(encodeId)) {
-                playlist = DBService.Instance.getFirebase<PlaylistDTO>($"Playlist/{encodeId}");
+                playlist = DataHelper.GetPlaylist(encodeId);
                 if(playlist == null)
                 {
                     throw new Exception("Playlist không tồn tại");
