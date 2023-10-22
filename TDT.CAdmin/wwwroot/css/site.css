@@ -169,3 +169,11 @@ body {
 .form-group input {
     color: black;
 }
+
+
+/*H1 admin title*/
+.title-admin {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+}

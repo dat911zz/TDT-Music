@@ -16,6 +16,7 @@ namespace TDT.CAdmin.Controllers
     {
         long? lengthSong = null;
         int pageSize = 10;
+        private readonly List<SongDTO> _songs;
 
         public MusicManagementController()
         {
