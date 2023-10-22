@@ -23,17 +23,11 @@ namespace TDT.CAdmin.Controllers
         {
             ResponseDataDTO<RoleDTO> roles = APICallHelper.Get<ResponseDataDTO<RoleDTO>>("Role", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
 
-            if (roles.Data != null)
-            {
-                int pageNumber = (page ?? 1);
-                int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            int pageSize = 10;
 
-                IPagedList<RoleDTO> pagedList = roles.Data.ToPagedList(pageNumber, pageSize);
-
-                return View(pagedList);
-
-            }
-            return View();
+            IPagedList<RoleDTO> pagedList = roles.Data.ToPagedList(pageNumber, pageSize);
+            return View(pagedList);
         }
 
         // GET: Roles_Controller/Details/5

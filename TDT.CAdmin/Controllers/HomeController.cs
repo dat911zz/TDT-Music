@@ -18,6 +18,8 @@ using TDT.Core.Ultils.MVCMessage;
 using TDT.IdentityCore.Utils;
 using System.Diagnostics.Eventing.Reader;
 using Microsoft.AspNetCore.Http;
+using System.Reflection;
+using static TDT.Core.Ultils.HelperUtility;
 
 namespace TDT.CAdmin.Controllers
 {
@@ -44,8 +46,8 @@ namespace TDT.CAdmin.Controllers
                 );
                 HttpContext.Session.SetString("NotifyUpdate", "1");
             }
-			
 
+            var allActions = Assembly.GetExecutingAssembly().GetAllControllerAction();
             //this.MessageContainer().AddException(new Exception("HEHE?"));
             //this.MessageContainer().AddErrorFlashMessage("Có lỗi xảy ra, vui lòng thực hiện lại!");
             //this.MessageContainer().AddMessage("OK nè!", ToastMessageType.Success);

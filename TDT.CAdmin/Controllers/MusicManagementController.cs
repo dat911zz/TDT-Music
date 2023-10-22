@@ -18,9 +18,7 @@ namespace TDT.CAdmin.Controllers
             
             if (DataHelper.Instance.Songs.Count <= 0)
             {
-                HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Song/load");
-                string json = httpService.getJson();
-                _songs = ConvertService.Instance.convertToObjectFromJson<List<SongDTO>>(json);
+                _songs = APIHelper.Gets<SongDTO>($"{FirestoreService.CL_Song}");
             }
             else
             {
@@ -59,10 +57,6 @@ namespace TDT.CAdmin.Controllers
         [HttpGet]
         public string LoadImg(string encodeID, string thumbnail)
         {
-            //string img;
-            //img = FirebaseService.Instance.getStorage(thumbnail);
-
-
             string img;
             if (DataHelper.Instance.ThumbSong.Keys.Contains(encodeID))
             {

@@ -3,83 +3,111 @@
 @{
     ViewData["Title"] = "Details";
 }
-
+<style>
+    .confirm {
+        color: limegreen;
+    }
+    .unconfirm{
+        color: red;
+    }
+</style>
 <h1>Details</h1>
 
 <div>
     <h4>User</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
+        <dt class = "col-sm-3">
+            Mã tài khoản
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-9">
             @Html.DisplayFor(model => model.Id)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserName)
+        <dt class = "col-sm-3">
+            Tên tài khoản
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-9">
             @Html.DisplayFor(model => model.UserName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
+        <dt class = "col-sm-3">
+            Địa chỉ
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-9">
             @Html.DisplayFor(model => model.Address)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-3">
             @Html.DisplayNameFor(model => model.Email)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-9">
             @Html.DisplayFor(model => model.Email)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EmailConfirmed)
+        <dt class = "col-sm-3">
+            Xác nhận email?
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EmailConfirmed)
+        <dd class = "col-sm-9">
+            @if (Model.EmailConfirmed)
+            {
+                <span class="confirm">Đã xác nhận</span>
+            }
+            else
+            {
+                <span class="unconfirm">Chưa xác nhận</span>
+            }
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PasswordHash)
+        <dt class = "col-sm-3">
+            Mật khẩu
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PasswordHash)
+        <dd class = "col-sm-9">
+            ********
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
+        <dt class = "col-sm-3">
+            Số điện thoại
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-9">
             @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
+        <dt class = "col-sm-3">
+           Xác nhận số điện thoại?
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumberConfirmed)
+        <dd class = "col-sm-9">
+            @if (Model.PhoneNumberConfirmed)
+            {
+                <span class="confirm">Đã xác nhận</span>
+            }
+            else
+            {
+                <span class="unconfirm">Chưa xác nhận</span>
+            }
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LockoutEnd)
+        <dt class = "col-sm-3">
+            Thời hạn tạm khóa
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-9">
             @Html.DisplayFor(model => model.LockoutEnd)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LockoutEnabled)
+        <dt class = "col-sm-3">
+            Tài khoản đang tạm khóa?
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LockoutEnabled)
+        <dd class = "col-sm-9">
+            @if (Model.LockoutEnabled)
+            {
+                <span class="confirm">Đang tạm khóa</span>
+            }
+            else
+            {
+                <span class="unconfirm">Không</span>
+            }
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AccessFailedCount)
+        <dt class = "col-sm-3">
+            Số lần truy cập thất bại
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-9">
             @Html.DisplayFor(model => model.AccessFailedCount)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreateDate)
+        <dt class = "col-sm-3">
+            Ngày tạo lập
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-9">
             @Html.DisplayFor(model => model.CreateDate)
         </dd>
     </dl>

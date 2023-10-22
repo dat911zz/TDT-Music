@@ -107,10 +107,7 @@ namespace TDT.API.Controllers
                     PasswordHash = SecurityHelper.HashPassword(model.Password)
                 });
                 _db.SubmitChanges();
-                return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
-                    {
-                        {"data", model}
-                    }, "Đăng ký");
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "tạo tài khoản");
             }
             catch (Exception ex)
             {
