@@ -313,9 +313,7 @@
         $.ajax({
             url: "/Share/LoadSongReleaseAll",
             success: function (data) {
-                data = '';
                 if (data == '') {
-                    @ViewData["Messages"] = "Lỗi load song release";
                     return;
                 }
                 $('#song_release').html(data);
@@ -327,7 +325,6 @@
             url: "/Share/LoadSongReleaseVN",
             success: function (data) {
                 if(data == '') {
-                    @ViewData["Messages"] = "Lỗi load song release";
                     return;
                 }
                 $('#song_release').html(data);
@@ -346,7 +343,6 @@
             url: "/Share/GetHtmlPlaylistChill",
             success: function (data) {
                 if (data == '') {
-                    @ViewData["Messages"] = "Lỗi Playlist Chill";
                     return;
                 }
                 $('#playlist_chill').html(data);
@@ -356,7 +352,6 @@
             url: "/Share/GetHtmlPlaylistYeuDoi",
             success: function (data) {
                 if (data == '') {
-                    RedirectError(500, "DB đang lỗi");
                     return;
                 }
                 $('#playlist_yeudoi').html(data);
@@ -366,7 +361,6 @@
             url: "/Share/GetHtmlPlaylistRemixDance",
             success: function (data) {
                 if (data == '') {
-                    RedirectError(500, "DB đang lỗi");
                     return;
                 }
                 $('#playlist_remix_dance').html(data);
@@ -376,7 +370,6 @@
             url: "/Share/GetHtmlPlaylistTamTrang",
             success: function (data) {
                 if (data == '') {
-                    RedirectError(500, "DB đang lỗi");
                     return;
                 }
                 $('#playlist_tam_trang').html(data);
@@ -386,7 +379,6 @@
             url: "/Share/GetHtmlArtistThinhHanh",
             success: function (data) {
                 if (data == '') {
-                    RedirectError(500, "DB đang lỗi");
                     return;
                 }
                 $('#artist_thinh_hanh').html(data);
