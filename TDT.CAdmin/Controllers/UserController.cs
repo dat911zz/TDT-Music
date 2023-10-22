@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.Linq;
 using TDT.Core.DTO;
+using TDT.Core.Extensions;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
+using TDT.Core.Ultils.MVCMessage;
 using X.PagedList;
 
 namespace TDT.CAdmin.Controllers
@@ -33,9 +36,37 @@ namespace TDT.CAdmin.Controllers
             }
             return View();
         }
+        [HttpGet]
         public ActionResult Create()
         {
             
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Create(UserIdentiyModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                ResponseDataDTO<UserIdentiyModel> response = APICallHelper.Put<ResponseDataDTO<UserIdentiyModel>>(
+                    "Auth/Register",
+                    JsonConvert.SerializeObject(user),
+                    token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+
+                if (response.Code == Core.Enums.APIStatusCode.Succeeded)
+                {
+                    //FlashMessage để truyền message từ đây sang action hoặc controller khác
+                    this.MessageContainer().AddFlashMessage("Tạo tài khoản thành công!", ToastMessageType.Success);
+                }
+                else
+                {
+                    //Truyền message trong nội bộ hàm
+                    this.MessageContainer().AddMessage(response.Msg, ToastMessageType.Error);
+                    return View();
+                }
+
+                return RedirectToAction("Index");
+            }
+            this.MessageContainer().AddMessage("Vui lòng điền đẩy đủ thông tin!", ToastMessageType.Warning);
             return View();
         }
         public ActionResult Details(string id)

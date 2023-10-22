@@ -8,7 +8,6 @@ namespace TDT.Core.Models
 {
     public class UserIdentiyModel : UserDetailModel
     {
-        private string _UserName;
-        public string UserName { get => _UserName; set => _UserName = value; }
+        public string UserName { get; set; }
     }
 }

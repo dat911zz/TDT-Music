@@ -51,6 +51,7 @@ namespace TDT.CAdmin
             {
                 cfg.Filters.Add<MessagesFilter>();
             }).AddControllersAsServices();
+            services.AddSession();
             //services.Configure<IdentityEmailService>(Configuration);
         }
 
@@ -76,6 +77,7 @@ namespace TDT.CAdmin
             app.UseStaticFiles();
             
             app.UseRouting();
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseMiddleware<ErrorHandlerMiddleware>();
