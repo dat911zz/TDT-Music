@@ -7932,7 +7932,7 @@ body .react-loading-skeleton {
     }
 
     .icon.ic-gif-playing-white {
-        background-image: url(https://zmp3-static.zmdcdn.me/skins/zmp3-v6.1/images/icons/icon-playing.gif)
+        background-image: url("/image/icons/icon-playing.gif")
     }
 
     .icon.ic-gif-playing-auto {

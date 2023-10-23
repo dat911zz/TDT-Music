@@ -12,21 +12,9 @@ using TDT.Core.Ultils;
 
 namespace TDT.Core.ServiceImp
 {
-    public class Generator
+    public static class Generator
     {
-        private Generator() { }
-        private static Generator _instance;
-        public static Generator Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = new Generator();
-                return _instance;
-            }
-        }
-
-        public string GenerateSongRelease(List<SongDTO> songs)
+        public static string GenerateSongRelease(List<SongDTO> songs)
         {
             StringBuilder str = new StringBuilder();
             str.Append(@"
@@ -187,7 +175,7 @@ namespace TDT.Core.ServiceImp
         /// <param name="optionLast">0: title</param>
         /// <param name="optionLast">1: artists</param>
         /// <returns></returns>
-        public string GeneratePlaylist(List<PlaylistDTO> playlists, int optionLast = 0)
+        public static string GeneratePlaylist(List<PlaylistDTO> playlists, int optionLast = 0)
         {
             StringBuilder str = new StringBuilder();
             foreach (var playlist in playlists)
@@ -275,74 +263,12 @@ namespace TDT.Core.ServiceImp
             return str.ToString();
         }
 
-        public string GenerateArtist(List<ArtistDTO> artists, int optionLast = 0)
-        {
-            StringBuilder str = new StringBuilder();
-            foreach (var artist in artists)
-            {
-                string img;
-                if (DataHelper.Instance.ThumbArtist.Keys.Contains(artist.id))
-                {
-                    img = DataHelper.Instance.ThumbArtist[artist.id];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(artist.thumbnail);
-                    try
-                    {
-                        DataHelper.Instance.ThumbArtist.Add(artist.id, img);
-                    }
-                    catch { }
-                }
-                str.AppendFormat(@"
-                    <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
-                        <div class=""playlist-wrapper is-description"">
-                            <div class=""zm-card"">
-                                <div>
-                                    <a class="""" title=""Những Bài Hát Hay Nhất Của {0}""
-                                       href=""{1}"">
-                                        <div class=""zm-card-image"">
-                                            <figure class=""image is-48x48"">
-                                                <img src=""{2}"" alt="""" />
-                                            </figure>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class=""zm-card-content"">
-                                    <h3 class=""mt-10 subtitle"">
-                                        <span>
-                                            <span>
-                                                <a class=""is-ghost"" href=""{3}"">{4}</a>
-                                            </span>
-                                            <span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;""></span>
-                                        </span>
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ", artist.name, artist.playlistId, img, artist.link, artist.name);
-            }
-            return str.ToString();
-        }
+        
 
-        public string GenerateArtistInfo(ArtistDTO artist)
+        public static string GenerateArtistInfo(ArtistDTO artist)
         {
             StringBuilder str = new StringBuilder();
-            string img;
-            if (DataHelper.Instance.ThumbArtist.Keys.Contains(artist.id))
-            {
-                img = DataHelper.Instance.ThumbArtist[artist.id];
-            }
-            else
-            {
-                img = FirebaseService.Instance.getStorage(artist.thumbnail);
-                try
-                {
-                    DataHelper.Instance.ThumbArtist.Add(artist.id, img);
-                }
-                catch { }
-            }
+            string img = DataHelper.GetThumbnailArtist(artist.id, artist.thumbnail);
             str.AppendFormat(@"
                     <div class=""blur-container"" style=""left: -118px; right: -118px;"">
                         <div class=""blur""
@@ -362,7 +288,7 @@ namespace TDT.Core.ServiceImp
                                     <button class=""zm-btn play-btn pause is-outlined active is-medium button"" tabindex=""0""><i
                                             class=""icon ic-play""></i></button>
                                 </div>
-                                <div class=""bottom""><span class=""follow"">{3}</span><span><button
+                                <div class=""bottom""><span class=""follow"">{3} người quan tâm</span><span><button
                                             class=""zm-btn is-outlined is-medium follow-btn is-upper button"" tabindex=""0""><i
                                                 class=""icon ic-addfriend""></i><span>Quan tâm</span></button></span></div>
                             </div>
@@ -383,10 +309,10 @@ namespace TDT.Core.ServiceImp
                                         </svg></i></button></div>
                         </div>
                     </div>
-                ", img, img, artist.name, artist.totalFollow);
+                ", img, img, artist.name, string.Format("{0:0,0.#}", artist.totalFollow));
             return str.ToString();
         }
-        public string GenerateArtistNoiBat(ArtistDTO artist, int optionList = 0)
+        public static string GenerateArtistNoiBat(ArtistDTO artist, int optionList = 0)
         {
             StringBuilder res = new StringBuilder();
             StringBuilder col_left = new StringBuilder();
@@ -446,88 +372,23 @@ namespace TDT.Core.ServiceImp
                     </div>
                 </div>
             ";
-            string img;
-            if (DataHelper.Instance.ThumbArtist.Keys.Contains(artist.id))
-            {
-                img = DataHelper.Instance.ThumbArtist[artist.id];
-            }
-            else
-            {
-                img = FirebaseService.Instance.getStorage(artist.thumbnail);
-                try
-                {
-                    DataHelper.Instance.ThumbArtist.Add(artist.id, img);
-                }
-                catch { }
-            }
+            string img = DataHelper.GetThumbnailArtist(artist.id, artist.thumbnail);
             SectionDTO secNoiBat = artist.sections.Where(s => s.title.Equals("Bài hát nổi bật")).First();
             List<SongDTO> songs = DataHelper.GetSongs(secNoiBat);
 
             for (int i = 0; i < 3 && i < songs.Count; i++)
             {
                 SongDTO song = songs[i];
-                string imgSong;
-                if (DataHelper.Instance.ThumbSong.Keys.Contains(song.encodeId))
-                {
-                    img = DataHelper.Instance.ThumbSong[song.encodeId];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(song.thumbnail);
-                    DataHelper.Instance.ThumbSong.Add(song.encodeId, img);
-                }
-                int iArt = 0;
+                string imgSong = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail);
                 string betweenDate = HelperUtility.getBetweenDate(song.ReleaseDate());
                 string duration = song.Duration();
-                StringBuilder artistname = new StringBuilder();
-
-                if (song.artists != null)
-                {
-                    foreach (var item in song.artists)
-                    {
-                        ArtistDTO artDTO = new ArtistDTO();
-                        if (!DataHelper.Instance.Artists.Keys.Contains(item))
-                        {
-                            artDTO = DataHelper.GetArtist(item);
-                            if (artDTO == null)
-                                continue;
-                            try
-                            {
-                                DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
-                            }
-                            catch { }
-                        }
-                        else
-                        {
-                            artDTO = DataHelper.Instance.Artists[item];
-                        }
-                        if (string.IsNullOrEmpty(artDTO.name))
-                            continue;
-                        if (iArt++ > 0)
-                        {
-                            artistname.Append(", ");
-                        }
-                        artistname.AppendFormat(@"
-                                  <a class=""is-ghost"" href=""{1}"">{0}</a>
-                            ", artDTO.name, artDTO.link);
-                    }
-                }
-                col_left.AppendFormat(col, song.title, img, song.title, artistname.ToString(), duration);
+                col_left.AppendFormat(col, song.title, imgSong, song.title, GenerateArtistLink(song.artists), duration);
             }
             res.AppendFormat(main, col_left.ToString());
             for (int i = 3; i < 6 && i < songs.Count; i++)
             {
                 SongDTO song = songs[i];
-                string imgSong;
-                if (DataHelper.Instance.ThumbSong.Keys.Contains(song.encodeId))
-                {
-                    img = DataHelper.Instance.ThumbSong[song.encodeId];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(song.thumbnail);
-                    DataHelper.Instance.ThumbSong.Add(song.encodeId, img);
-                }
+                string imgSong = DataHelper.GetThumbnailSong(song.encodeId, img);
                 int iArt = 0;
                 string betweenDate = HelperUtility.getBetweenDate(song.ReleaseDate());
                 string duration = song.Duration();
@@ -564,12 +425,12 @@ namespace TDT.Core.ServiceImp
                             ", artDTO.name, artDTO.link);
                     }
                 }
-                col_right.AppendFormat(col, song.title, img, song.title, artistname.ToString(), duration);
+                col_right.AppendFormat(col, song.title, imgSong, song.title, artistname.ToString(), duration);
             }
             res.AppendFormat(main, col_right.ToString());
             return res.ToString();
         }
-        public string GenerateSingleED(List<ArtistDTO> artists, int optionList = 0)
+        public static string GenerateSingleED(List<ArtistDTO> artists, int optionList = 0)
         {
             StringBuilder str = new StringBuilder();
             foreach (var artist in artists)
@@ -624,7 +485,7 @@ namespace TDT.Core.ServiceImp
             return str.ToString();
         }
 
-        public string GenerateAlbum(List<ArtistDTO> artists, int optionList = 0)
+        public static string GenerateAlbum(List<ArtistDTO> artists, int optionList = 0)
         {
             StringBuilder str = new StringBuilder();
             foreach (var artist in artists)
@@ -679,7 +540,7 @@ namespace TDT.Core.ServiceImp
             return str.ToString();
         }
 
-        public string GenerateTuyentap(List<ArtistDTO> artists, int optionList = 0)
+        public static string GenerateTuyentap(List<ArtistDTO> artists, int optionList = 0)
         {
             StringBuilder str = new StringBuilder();
             foreach (var artist in artists)
@@ -734,7 +595,7 @@ namespace TDT.Core.ServiceImp
             }
             return str.ToString();
         }
-        public string GenerateXuatHien(List<ArtistDTO> artists, int optionList = 0)
+        public static string GenerateXuatHien(List<ArtistDTO> artists, int optionList = 0)
         {
             StringBuilder str = new StringBuilder();
             foreach (var artist in artists)
@@ -792,7 +653,7 @@ namespace TDT.Core.ServiceImp
             return str.ToString();
         }
 
-        public string GenerateCoTheThich(List<ArtistDTO> artists, int optionList = 0)
+        public static string GenerateCoTheThich(List<ArtistDTO> artists, int optionList = 0)
         {
             StringBuilder str = new StringBuilder();
             foreach (var artist in artists) 
@@ -852,7 +713,7 @@ namespace TDT.Core.ServiceImp
             }
             return str.ToString();
         }
-        public string GenerateArtistInfo_footer(ArtistDTO artist)
+        public static string GenerateArtistInfo_footer(ArtistDTO artist)
         {
             StringBuilder str = new StringBuilder();
             string img;
@@ -923,6 +784,260 @@ namespace TDT.Core.ServiceImp
             return str.ToString();
         }
 
-      
+        #region Song
+
+        #endregion
+
+        #region Playlist
+        public static string GenerateAlbumSpecial(PlaylistDTO playlist)
+        {
+            string img = DataHelper.GetThumbnailPlaylist(playlist);
+            string format = @"
+                <a class="""" title=""{0}""
+                    href=""/Album?encodeId{1}"">
+                    <div class=""playlist-wrapper is-normal allow-click"">
+                        <div class=""zm-card"">
+                            <div class=""zm-card-image"">
+                                <figure class=""image is-48x48"">
+                                    <img src=""{2}""
+                                             alt="">
+                                </figure>
+                            </div>
+                            <div class=""zm-card-content"">
+                                <span>Single</span>
+                                <h3 class=""title"">
+                                    <span>
+                                        <span>
+                                            {0}
+                                        </span>
+                                        <span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span>
+                                    </span>
+                                </h3><span class=""artist-name"">
+                                    <h3 class=""is-one-line is-truncate subtitle"">
+                                        {4}
+                                    </h3>
+                                </span><span>{5}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <div class=""media-blur"">
+                    <div class=""cover-bg""
+                        style=""background-image: url({2});"">
+                    </div>
+                    <div class=""gradient-layer""></div>
+                    <div class=""blur-layer""></div>
+                </div>
+            ";
+            return string.Format(format, playlist.title, playlist.encodeId, img, GenerateArtistLink(playlist.artists), playlist.ContentLastUpdate());
+        }
+        public static string GeneratePlaylistElement(PlaylistDTO playlist)
+        {
+            string img = DataHelper.GetThumbnailPlaylist(playlist);
+            string format = @"
+                <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
+                    <div class=""playlist-wrapper is-normal"">
+                        <div class=""zm-card"">
+                            <div><a class="""" title=""{0}""
+                                    href=""/Album?encodeId={1}"">
+                                    <div class=""zm-card-image"">
+                                        <figure class=""image is-48x48""><img
+                                                src=""{2}""
+                                                alt=""""></figure>
+                                    </div>
+                                </a></div>
+                            <div class=""zm-card-content"">
+                                <h4 class=""title is-6""><a class="""" title=""{1}""
+                                        href=""/Album?encodeId={1}""><span><span><span>{0}</span></span><span
+                                                style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span></span></a>
+                                </h4>
+                                <h3 class=""mt-10 subtitle"">{3}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ";
+            return string.Format(format, playlist.title, playlist.encodeId, img, GenerateArtistLink(playlist.artists));
+        }
+        public static string GeneratePlaylistsElement(List<PlaylistDTO> playlists)
+        {
+            string res = "";
+            if(playlists != null && playlists.Count > 0)
+            {
+                foreach (var item in playlists)
+                {
+                    res += GeneratePlaylistElement(item);
+                }
+            }
+            return res;
+        }
+        public static string GeneratePlaylistsElement(List<string> playlists)
+        {
+            string res = "";
+            if (playlists != null && playlists.Count > 0)
+            {
+                foreach (var item in playlists)
+                {
+                    PlaylistDTO playlist = DataHelper.GetPlaylist(item);
+                    if(playlist != null)
+                    {
+                        res += GeneratePlaylistElement(playlist);
+                    }
+                }
+            }
+            return res;
+        }
+        #endregion
+
+        #region Artist
+        public static string GenerateArtistItemLink(ArtistDTO artist)
+        {
+            if(artist != null)
+            {
+                return $"<a class=\"is-ghost\" href=\"/Artist/Index?id={artist.id}\">{artist.name}</a>";
+            }
+            return string.Empty;
+        }
+        public static string GenerateArtistLink(List<ArtistDTO> artists)
+        {
+            string res = "";
+            if (artists != null && artists.Count > 0)
+            {
+                for (int i = 0; i < artists.Count; i++)
+                {
+                    ArtistDTO artist = artists[i];
+                    if (artist != null)
+                    {
+                        if (i > 0)
+                        {
+                            res += ", ";
+                        }
+                        res += GenerateArtistItemLink(artist);
+                    }
+                }
+            }
+            return res;
+        }
+        public static string GenerateArtistLink(List<string> artists)
+        {
+            string res = "";
+            if (artists != null && artists.Count > 0)
+            {
+                for (int i = 0; i < artists.Count; i++)
+                {
+                    ArtistDTO artist = DataHelper.GetArtist(artists[i]);
+                    if (artist != null)
+                    {
+                        if (i > 0)
+                        {
+                            res += ", ";
+                        }
+                        res += GenerateArtistItemLink(artist);
+                    }
+                }
+            }
+            return res;
+        }
+        public static string GenerateArtistElement(ArtistDTO artist)
+        {
+            string img = DataHelper.GetThumbnailArtist(artist.id, artist.thumbnail);
+            string format = @"
+                <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
+                    <div class=""zm-card zm-card--artist"">
+                        <div class=""image-wrapper"">
+                            <div class=""zm-card-image is-rounded""><a class="""" title=""{0}"" href=""/Artist/Index?id={1}"">
+                                    <figure class=""image is-48x48""><img
+                                            src=""{2}""
+                                            alt=""""></figure>
+                                    <div class=""opacity ""></div>
+                                    <div class=""zm-actions-container"">
+                                        <div class=""zm-box zm-actions artist-actions""><span class=""is-hidden""><button
+                                                    class=""zm-btn zm-tooltip-btn is-hidden is-hover-circle button"" tabindex=""0""><i
+                                                        class=""icon ic-like""></i></button></span><button
+                                                class=""zm-btn action-play  button"" tabindex=""0""><i
+                                                    class=""icon action-play ic-24-Shuffle""></i></button><button
+                                                class=""zm-btn zm-tooltip-btn is-hidden is-hover-circle button"" tabindex=""0""><i
+                                                    class=""icon ic-more""></i></button></div>
+                                    </div>
+                                </a></div>
+                        </div>
+                        <div class=""zm-card-content"">
+                            <div class=""title"">{3}</div>
+                            <div class=""subtitle""><span class=""followers"">{4} quan tâm</span></div>
+                        </div>
+                        <div class=""zm-card-footer""><span><button class=""zm-btn is-outlined mar-t-15 mar-b-20 is-small is-upper button""
+                                    tabindex=""0""><i class=""icon ic-addfriend""></i><span>Quan tâm</span></button></span></div>
+                    </div>
+                </div>
+            ";
+            return string.Format(format, artist.name, artist.id, img, GenerateArtistItemLink(artist), HelperUtility.GetCompactNum(artist.totalFollow));
+        }
+        public static string GenerateArtistsElement(List<ArtistDTO> artists)
+        {
+            if(artists != null && artists.Count > 0)
+            {
+                string res = "";
+                foreach (ArtistDTO artist in artists)
+                {
+                    res += GenerateArtistElement(artist);
+                }
+                return res;
+            }
+            return string.Empty;
+        }
+        public static string GenerateArtistsElement(List<string> artists)
+        {
+            string res = "";
+            if (artists != null && artists.Count > 0)
+            {
+                foreach (string item in artists)
+                {
+                    ArtistDTO artist = DataHelper.GetArtist(item);
+                    if(artist != null)
+                    {
+                        res += GenerateArtistElement(artist);
+                    }
+                }
+            }
+            return res;
+        }
+        public static string GenerateArtist(List<ArtistDTO> artists, int optionLast = 0)
+        {
+            StringBuilder str = new StringBuilder();
+            foreach (var artist in artists)
+            {
+                string img = DataHelper.GetThumbnailArtist(artist.id, artist.thumbnail);
+                str.AppendFormat(@"
+                    <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
+                        <div class=""playlist-wrapper is-description"">
+                            <div class=""zm-card"">
+                                <div>
+                                    <a class="""" title=""Những Bài Hát Hay Nhất Của {0}""
+                                       href=""/Artist/Index?id={1}"">
+                                        <div class=""zm-card-image"">
+                                            <figure class=""image is-48x48"">
+                                                <img src=""{2}"" alt="""" />
+                                            </figure>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class=""zm-card-content"">
+                                    <h3 class=""mt-10 subtitle"">
+                                        <span>
+                                            <span>
+                                                <a class=""is-ghost"" href=""/Artist/Index?id={3}"">{0}</a>
+                                            </span>
+                                            <span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;""></span>
+                                        </span>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ", artist.name, artist.id, img, artist.id);
+            }
+            return str.ToString();
+        }
+        #endregion
     }
 }

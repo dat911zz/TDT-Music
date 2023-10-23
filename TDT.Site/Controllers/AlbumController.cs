@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using TDT.Core.DTO.Firestore;
+using TDT.Core.Extensions;
 using TDT.Core.Helper;
 using TDT.Core.Ultils;
 
@@ -14,20 +16,40 @@ namespace TDT_Music.Controllers
             PlaylistDTO playlist;
             if (string.IsNullOrEmpty(encodeId))
             {
-                throw new Exception("Đường dẫn không hợp lệ !!!");
+                this.MessageContainer().AddFlashMessage("Đường dẫn không hợp lệ !!!", TDT.Core.Ultils.MVCMessage.ToastMessageType.Error);
+                return Redirect("/");
             }
-            if(!DataHelper.Instance.Playlists.Keys.Contains(encodeId)) {
-                playlist = DataHelper.GetPlaylist(encodeId);
-                if(playlist == null)
+            playlist = DataHelper.GetPlaylist(encodeId);
+            if (playlist == null)
+            {
+                this.MessageContainer().AddFlashMessage("Playlist không tồn tại", TDT.Core.Ultils.MVCMessage.ToastMessageType.Error);
+                return Redirect("/");
+            }
+            List<SongDTO> songs = new List<SongDTO>();
+            foreach (var item in playlist.songs)
+            {
+                if(DataHelper.Instance.Songs.Keys.Contains(item))
                 {
-                    throw new Exception("Playlist không tồn tại");
+                    songs.Add(DataHelper.Instance.Songs[item]);
+                }
+                else
+                {
+                    var song = DataHelper.GetSong(item);
+                    if(song == null)
+                    {
+                        continue;
+                    }
+                    songs.Add(song);
                 }
             }
-            else
-            {
-                playlist = DataHelper.Instance.Playlists[encodeId];
-            }
-            return View();
+            ViewData["songs"] = songs;
+            ViewData["thumbnail"] = DataHelper.GetThumbnailPlaylist(playlist);
+            return View(playlist);
+        }
+
+        public string LoadImg(string encodeId, string thumbpath)
+        {
+            return DataHelper.GetThumbnailSong(encodeId, thumbpath);
         }
     }
 }

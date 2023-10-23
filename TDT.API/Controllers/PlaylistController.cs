@@ -40,6 +40,14 @@ namespace TDT.API.Controllers
             return new JsonResult(FirestoreService.Instance.Gets<PlaylistDTO>(FirestoreService.CL_Playlist, encodeId));
         }
 
+        [Route("GetArrayContains")]
+        [HttpPost]
+        public JsonResult GetArrayContains(string path, List<string> values)
+        {
+            Query query = FirestoreService.Instance.WhereIn(FirestoreService.CL_Playlist, path, values);
+            return new JsonResult(FirestoreService.Instance.Gets<PlaylistDTO>(query));
+        }
+
         [Route("InsertOrUpdate")]
         [HttpPost]
         [Authorize]

@@ -51,7 +51,7 @@ namespace TDT.API.Controllers
         [HttpGet("{encodeId}")]
         public JsonResult Get(string encodeId)
         {
-            return new JsonResult(FirestoreService.Instance.Gets<ArtistDTO>(FirestoreService.CL_Artist, encodeId));
+            return new JsonResult(FirestoreService.Instance.Gets<SongDTO>(FirestoreService.CL_Song, encodeId));
         }
 
         [Route("InsertOrUpdate")]

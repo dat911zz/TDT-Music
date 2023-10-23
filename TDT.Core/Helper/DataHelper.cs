@@ -1,6 +1,7 @@
 ﻿using Google.Cloud.Firestore;
 using System;
 using System.Collections.Generic;
+using System.Data.Linq.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using TDT.Core.DTO.Firestore;
@@ -36,7 +37,9 @@ namespace TDT.Core.Helper
         public Dictionary<string, string> ThumbPlaylist = new Dictionary<string, string>();
         public Dictionary<string, string> ThumbArtist = new Dictionary<string, string>();
         private Dictionary<string,SongDTO> _songs = new Dictionary<string, SongDTO>();
+        private Dictionary<string,SongDTO> _songsNull = new Dictionary<string, SongDTO>();
         private Dictionary<string,PlaylistDTO> _playlists = new Dictionary<string, PlaylistDTO>();
+        private Dictionary<string,PlaylistDTO> _playlistsNull = new Dictionary<string, PlaylistDTO>();
         private List<SongDTO> _songRelease = new List<SongDTO>();
 
         
@@ -187,7 +190,10 @@ namespace TDT.Core.Helper
             }
         }
 
-        public List<Genre> GetGenre(params string[] contains)
+        public Dictionary<string, SongDTO> SongsNull { get => _songsNull; set => _songsNull = value; }
+        public Dictionary<string, PlaylistDTO> PlaylistsNull { get => _playlistsNull; set => _playlistsNull = value; }
+
+        public List<Genre> GetGenreWithKey(params string[] contains)
         {
             var _contains = contains.Select(x => x.ToLower()).ToList();
             List<Genre> res = new List<Genre>();
@@ -205,12 +211,12 @@ namespace TDT.Core.Helper
             return res;
         }
 
-        private List<PlaylistDTO> GetPlaylistWithGenreKeys(bool all = false, params string[] keys)
+        public List<PlaylistDTO> GetPlaylistWithGenreKeys(bool all = false, params string[] keys)
         {
             if(this.Genres.Count > 0)
             {
-                List<string> genresIds = GetGenre(keys).Select(x => x.id).ToList();
-                string idVietNam = GetGenre("việt nam").Select(x => x.id).First();
+                List<string> genresIds = GetGenreWithKey(keys).Select(x => x.id).ToList();
+                string idVietNam = GetGenreWithKey("việt nam").Select(x => x.id).First();
                 List<PlaylistDTO> plGen = this._playlists.Values.Where(x => x.genreIds.Where(g => genresIds.Contains(g)).Count() > 0).ToList();
                 List<string> ids = plGen.Select(x => x.encodeId).ToList();
                 List<PlaylistDTO> pl = this._playlists.Values.Where(x => keys.Where(k => x.title.ToLower().Contains(k)).Count() > 0 && !ids.Contains(x.encodeId)).ToList();
@@ -221,6 +227,48 @@ namespace TDT.Core.Helper
                 return plGen.Where(x => x.genreIds.Contains(idVietNam)).ToList();
             }
             return new List<PlaylistDTO>();
+        }
+
+        public static List<Genre> GetGenres(List<string> ids)
+        {
+            List<Genre> genres = new List<Genre>();
+            if(ids != null)
+            {
+                foreach(string id in ids)
+                {
+                    Genre genre = GetGenre(id);
+                    if(genre != null)
+                        genres.Add(genre);
+                }
+            }
+            return genres;
+        }
+
+        public static List<PlaylistDTO> GetPlaylistSuggest(PlaylistDTO playlist)
+        {
+            if(playlist != null && playlist.genreIds != null)
+            {
+                List<Genre> genres = GetGenres(playlist.genreIds);
+                if (genres != null && genres.Count > 0)
+                    return DataHelper.Instance.GetPlaylistWithGenreKeys(keys: genres.Select(g => g.alias).ToArray());
+            }
+            return null;
+        }
+
+        public static Genre GetGenre(string id)
+        {
+            if (DataHelper.Instance.Genres.Keys.Contains(id))
+                return DataHelper.Instance.Genres[id];
+            Genre genre = APIHelper.Get<Genre>(FirestoreService.CL_Genre, id);
+            if (genre != null)
+            {
+                try
+                {
+                    DataHelper.Instance.Genres.Add(id, genre);
+                }
+                catch { }
+            }
+            return genre;
         }
         public static ArtistDTO GetArtist(string id)
         {
@@ -241,6 +289,8 @@ namespace TDT.Core.Helper
         {
             if (DataHelper.Instance.Playlists.Keys.Contains(id))
                 return DataHelper.Instance.Playlists[id];
+            if (DataHelper.Instance.PlaylistsNull.Keys.Contains(id))
+                return null;
             PlaylistDTO playlist = APIHelper.Get<PlaylistDTO>(FirestoreService.CL_Playlist, id);
             if (playlist != null)
             {
@@ -250,18 +300,36 @@ namespace TDT.Core.Helper
                 }
                 catch { }
             }
+            else
+            {
+                try
+                {
+                    DataHelper.Instance.PlaylistsNull.Add(id, playlist);
+                }
+                catch { }
+            }
             return playlist;
         }
         public static SongDTO GetSong(string id)
         {
             if (DataHelper.Instance.Songs.Keys.Contains(id))
                 return DataHelper.Instance.Songs[id];
+            if (DataHelper.Instance.SongsNull.Keys.Contains(id))
+                return null;
             SongDTO song = APIHelper.Get<SongDTO>(FirestoreService.CL_Song, id);
             if (song != null)
             {
                 try
                 {
                     DataHelper.Instance.Songs.Add(id, song);
+                }
+                catch { }
+            }
+            else
+            {
+                try
+                {
+                    DataHelper.Instance.SongsNull.Add(id, song);
                 }
                 catch { }
             }
@@ -314,6 +382,30 @@ namespace TDT.Core.Helper
                 }
             }
             return list;
+        }
+        public static string GetThumbnailPlaylist(PlaylistDTO playlist)
+        {
+            if (DataHelper.Instance.ThumbPlaylist.Keys.Contains(playlist.encodeId))
+                return DataHelper.Instance.ThumbPlaylist[playlist.encodeId];
+            string url = FirebaseService.Instance.getStorage(playlist.thumbnailM);
+            DataHelper.Instance.ThumbPlaylist.Add(playlist.encodeId, url);
+            return url;
+        }
+        public static string GetThumbnailSong(string encodeId, string thumbnailPath)
+        {
+            if (DataHelper.Instance.ThumbSong.Keys.Contains(encodeId))
+                return DataHelper.Instance.ThumbSong[encodeId];
+            string url = FirebaseService.Instance.getStorage(thumbnailPath);
+            DataHelper.Instance.ThumbSong.Add(encodeId, url);
+            return url;
+        }
+        public static string GetThumbnailArtist(string id, string thumbnailPath)
+        {
+            if (DataHelper.Instance.ThumbArtist.Keys.Contains(id))
+                return DataHelper.Instance.ThumbArtist[id];
+            string url = FirebaseService.Instance.getStorage(thumbnailPath);
+            DataHelper.Instance.ThumbArtist.Add(id, url);
+            return url;
         }
     }
 }

@@ -44,6 +44,28 @@ namespace TDT.Core.Ultils
                 return string.Format(res, now.Second - dt.Second, "giây");
             return "Vừa xong";
         }
+        public static string GetCompactNum(long num)
+        {
+            if(num < 0) return string.Empty;
+            if (num / 1000000.0 >= 1)
+                return Math.Round(new decimal(num / 1000000.0),1) + "M";
+            if(num / 1000.0 >= 1)
+                return Math.Round(new decimal(num / 1000.0), 1) + "K";
+            return num.ToString();
+        }
+        public static string GetTime(long num)
+        {
+            if (num < 0) return string.Empty;
+            try
+            {
+                TimeSpan time = TimeSpan.FromSeconds(num);
+                return $"{time.Hours} giờ {time.Minutes} phút";
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
         public static string GetAlias(string str)
         {
             for (int i = 1; i < VietnameseSigns.Length; i++)
