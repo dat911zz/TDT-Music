@@ -1,10 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using TDT.Core.DTO;
+using TDT.Core.Extensions;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
+using TDT.Core.Ultils.MVCMessage;
 using X.PagedList;
 
 namespace TDT.CAdmin.Controllers
@@ -19,23 +24,28 @@ namespace TDT.CAdmin.Controllers
 
         }
         // GET: PermissionController
-        public ActionResult Index(int? page )
+        public ActionResult Index(string? searchTerm, int? page)
         {
-            ResponseDataDTO<PermissionDTO> roles = APICallHelper.Get<ResponseDataDTO<PermissionDTO>>("Permission", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            ResponseDataDTO<PermissionDTO> permission = APICallHelper.Get<ResponseDataDTO<PermissionDTO>>("Permission", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            ViewBag.SearchTerm = "";
+            int pageNumber = (page ?? 1);
+            int pageSize = 10;
 
-            if (roles.Data != null)
+            // Lọc vai trò dựa trên từ khóa tìm kiếm
+            if (!string.IsNullOrEmpty(searchTerm))
             {
-                int pageNumber = (page ?? 1);
-                int pageSize = 10;
-
-                IPagedList<PermissionDTO> pagedList = roles.Data.ToPagedList(pageNumber, pageSize);
-
-                return View(pagedList);
-
+                if (permission.Data != null)
+                {
+                    permission.Data = permission.Data.Where(r => r.Name.ToLower().Contains(searchTerm.ToLower())).ToList();
+                    ViewBag.SearchTerm = searchTerm;
+                }
+                else return View();
             }
-            return View();
-        }
 
+            IPagedList<PermissionDTO> pagedList = permission.Data == null ? new List<PermissionDTO>().ToPagedList() : permission.Data.OrderByDescending(o => o.CreateDate).ToPagedList(pageNumber, pageSize);
+
+            return View(pagedList);
+        }
         // GET: PermissionController/Details/5
         public ActionResult Details(int id)
         {
@@ -52,21 +62,39 @@ namespace TDT.CAdmin.Controllers
         // POST: PermissionController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(PermissionDTO permission)
         {
             try
             {
-                PermissionDTO permission = new PermissionDTO();
-                permission.Name = collection["Name"].ToString();
-                permission.Description = collection["Description"].ToString();
+                if (ModelState.IsValid)
+                {
+                    if (permission.Name == "" || permission.Description == "")
+                    {
+                        this.MessageContainer().AddMessage("Vui lòng điền đẩy đủ thông tin!", ToastMessageType.Warning);
+                        return View();
+                    }
+                    ResponseDataDTO<PermissionDTO> roleDetail = APICallHelper.Post<ResponseDataDTO<PermissionDTO>>(
+                       $"Permission",
+                       token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+                       requestBody: JsonConvert.SerializeObject(permission)
+                       ).Result;
+                    if (roleDetail.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+                    {
+                        //FlashMessage để truyền message từ đây sang action hoặc controller khác
+                        this.MessageContainer().AddFlashMessage("Tạo quyền thành công!", ToastMessageType.Success);
+                    }
+                    else
+                    {
+                        //Truyền message trong nội bộ hàm
+                        this.MessageContainer().AddMessage(roleDetail.Msg, ToastMessageType.Error);
+                        return View();
+                    }
 
-                ResponseDataDTO<PermissionDTO> roleDetail = APICallHelper.Post<ResponseDataDTO<PermissionDTO>>(
-                    $"Permission",
-                    token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
-                    requestBody: permission.ToString()
-                    ).Result;
+                    return RedirectToAction(nameof(Index));
+                }
+                return View();
 
-                return RedirectToAction(nameof(Index));
+
             }
             catch
             {
@@ -85,38 +113,50 @@ namespace TDT.CAdmin.Controllers
 
         // POST: PermissionController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(PermissionDTO permission)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    ResponseDataDTO<PermissionDTO> res = APICallHelper.Put<ResponseDataDTO<PermissionDTO>>(
+                        $"Permission/{permission.Id}",
+                        token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+                        requestBody: JsonConvert.SerializeObject(permission)
+                        ).Result;
+                    if (res.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+                    {
+                        //FlashMessage để truyền message từ đây sang action hoặc controller khác
+                        this.MessageContainer().AddFlashMessage("Sửa quyền thành công!", ToastMessageType.Success);
+                    }
+                    else
+                    {
+                        this.MessageContainer().AddMessage(res.Msg, ToastMessageType.Error);
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                return View();
             }
             catch
             {
                 return View();
             }
-        }
-
-        // GET: PermissionController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
         }
 
         // POST: PermissionController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
-            try
+            ResponseDataDTO<PermissionDTO> roleDetail = APICallHelper.Delete<ResponseDataDTO<PermissionDTO>>($"Permission/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            if (roleDetail.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
-                return RedirectToAction(nameof(Index));
+                this.MessageContainer().AddFlashMessage("Xóa quyền thành công!", ToastMessageType.Success);
             }
-            catch
+            else
             {
-                return View();
+                this.MessageContainer().AddFlashMessage(roleDetail.Msg, ToastMessageType.Error);
             }
+            return new JsonResult("ok");
         }
     }
 }

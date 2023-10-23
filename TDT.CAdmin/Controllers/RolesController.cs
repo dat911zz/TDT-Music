@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,17 +62,12 @@ namespace TDT.CAdmin.Controllers
         // POST: Roles_Controller/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(RoleDTO role)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-
-                    RoleDTO role = new RoleDTO();
-                    role.Name = collection["Name"].ToString();
-                    role.Description = collection["Description"].ToString();
-
                     if (role.Name == "" || role.Description == "")
                     {
                         this.MessageContainer().AddMessage("Vui lòng điền đẩy đủ thông tin!", ToastMessageType.Warning);
@@ -80,7 +76,7 @@ namespace TDT.CAdmin.Controllers
                     ResponseDataDTO<RoleDTO> roleDetail = APICallHelper.Post<ResponseDataDTO<RoleDTO>>(
                        $"Role",
                        token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
-                       requestBody: role.ToString()
+                       requestBody:JsonConvert.SerializeObject(role)
                        ).Result;
                     if (roleDetail.Code == Core.Enums.APIStatusCode.ActionSucceeded)
                     {
@@ -116,27 +112,16 @@ namespace TDT.CAdmin.Controllers
         // POST: Roles_Controller/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, RoleDTO role)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    RoleDTO role = new RoleDTO();
-
-                    role.Id = Convert.ToInt32(collection["Id"].ToString());
-                    role.Name = collection["Name"].ToString();
-                    role.Description = collection["Description"].ToString();
-                    string createDateStr = collection["CreateDate"];
-                    DateTime createDate;
-                    if (DateTime.TryParse(createDateStr, out createDate))
-                    {
-                        role.CreateDate = createDate;
-                    }
                     ResponseDataDTO<RoleDTO> roleDetail = APICallHelper.Put<ResponseDataDTO<RoleDTO>>(
                         $"Role/{id}",
                         token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
-                        requestBody: role.ToString()
+                        requestBody: JsonConvert.SerializeObject(role)
                         ).Result;
                     if (roleDetail.Code == Core.Enums.APIStatusCode.ActionSucceeded)
                     {

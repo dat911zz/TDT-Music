@@ -86,11 +86,11 @@ namespace TDT.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] RoleDTO model)
+        public IActionResult Update(int id,[FromBody] PermissionDTO model)
         {
             try
             {
-                var role = _db.Roles.FirstOrDefault(u => u.Id == id);
+                var role = _db.Permissions.FirstOrDefault(u => u.Id == id);
                 if (role == null || string.IsNullOrEmpty(role.Name))
                 {
                     return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật " + CTR_NAME);
