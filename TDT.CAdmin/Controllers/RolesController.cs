@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TDT.Core.DTO;
@@ -27,7 +28,8 @@ namespace TDT.CAdmin.Controllers
             int pageNumber = (page ?? 1);
             int pageSize = 10;
 
-            IPagedList<RoleDTO> pagedList = roles.Data.ToPagedList(pageNumber, pageSize);
+            IPagedList<RoleDTO> pagedList = roles.Data == null ? new List<RoleDTO>().ToPagedList() : roles.Data.OrderByDescending(o => o.CreateDate).ToPagedList(pageNumber, pageSize);
+
             return View(pagedList);
         }
 
