@@ -21,13 +21,16 @@ namespace TDT.Core.DTO
         [SwaggerSchema(ReadOnly = true)]
         [Display(Name = "ID")]
         public int Id { get => _Id; set => _Id = value; }
-        [Display(Name = "Tên Role")]
+        [Display(Name = "Tên Vai Trò")]
+        [Required(ErrorMessage = "Vui lòng nhập tên vai trò!")]
+
         public string Name { get => _Name; set => _Name = value; }
-        [Display(Name = "Miêu Tả Role")]
+        [Display(Name = "Miêu tả vai trò")]
+        [Required(ErrorMessage = "Vui lòng nhập giới thiệu vai trò!")]
 
         public string Description { get => _Description; set => _Description = value; }
         [SwaggerSchema(ReadOnly = true)]
-        [Display(Name = "Ngày Tạo Role")]
+        [Display(Name = "Ngày Tạo vai trò")]
 
         public DateTime? CreateDate { get => _CreateDate; set => _CreateDate = value; }
 

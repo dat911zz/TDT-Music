@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using TDT.Core.DTO;
+using TDT.Core.Models;
 using TDT.Core.Ultils;
 using X.PagedList;
 
@@ -38,7 +39,8 @@ namespace TDT.CAdmin.Controllers
         // GET: PermissionController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            ResponseDataDTO<PermissionDTO> preDetail = APICallHelper.Get<ResponseDataDTO<PermissionDTO>>($"Permission/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            return View(preDetail.Data.FirstOrDefault());
         }
 
         // GET: PermissionController/Create
@@ -54,6 +56,16 @@ namespace TDT.CAdmin.Controllers
         {
             try
             {
+                PermissionDTO permission = new PermissionDTO();
+                permission.Name = collection["Name"].ToString();
+                permission.Description = collection["Description"].ToString();
+
+                ResponseDataDTO<PermissionDTO> roleDetail = APICallHelper.Post<ResponseDataDTO<PermissionDTO>>(
+                    $"Permission",
+                    token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+                    requestBody: permission.ToString()
+                    ).Result;
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -65,7 +77,10 @@ namespace TDT.CAdmin.Controllers
         // GET: PermissionController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            ResponseDataDTO<PermissionDTO> preDetail = APICallHelper.Get<ResponseDataDTO<PermissionDTO>>($"Permission/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+
+            return View(preDetail.Data.FirstOrDefault());
+
         }
 
         // POST: PermissionController/Edit/5

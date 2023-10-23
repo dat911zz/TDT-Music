@@ -48,10 +48,16 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.CreateDate)
                     </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <td class="btn-control">
+                        <a href="@Url.Action("Delete", "Permission", new { id = item.Id})">
+                            <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
+                        </a>
+                        <a href="@Url.Action("Details", "Permission", new { id = item.Id})">
+                            <div class="fa fa-bars" aria-hidden="true"></div>
+                        </a>
+                        <a href="@Url.Action("Edit", "Permission", new { id = item.Id})">
+                            <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
+                        </a>
                     </td>
                 </tr>
             }

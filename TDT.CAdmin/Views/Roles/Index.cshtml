@@ -6,13 +6,30 @@
 @{
     ViewData["Title"] = "Roles";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    
 }
 
-<h1 class="title-admin">Danh Sách Roles</h1>
+<h1 class="title-admin">Danh Sách Vai Trò</h1>
 
-<p>
-    <a asp-action="Create">Tạo Mới Role</a>
-</p>
+<div class="row"> 
+      <div class="col-3">
+        <a type="button" class="btn btn-outline-dark" asp-action="Create">Tạo Mới Role</a>
+      </div>
+      <div class="col-6"></div>
+    <div class="col-3 input-group mb-3 ">
+        <input type="text" class="form-control border" placeholder="Nhập vào vai trò cần tìm"
+               aria-label="Nhập vào vai trò cần tìm" aria-describedby="button-search"
+               id="searchTerm" value="@ViewBag.SearchTerm">
+        <div class="input-group-append">
+            <button class="btn btn-outline-dark" type="button" id="button-search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+        </div>
+    </div>
+
+</div>
+
+
 <div class="table-container">
     <table class="table">
         <thead>
@@ -51,7 +68,7 @@
                             @item.CreateDate
                         </td>
                         <td class="btn-control">
-                            <a href="@Url.Action("Delete", "Roles", new { id = item.Id})">
+                            <a onclick="DVNConfirm('Xóa', 'Vai Trò' , '/Roles/Delete' , '@item.Id')">
                                 <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
                             </a>
                             <a href="@Url.Action("Details", "Roles", new { id = item.Id})">
@@ -71,3 +88,20 @@
 <div class="pagedList-container">
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
 </div>
+<script>
+    $(document).ready(function () {
+
+        $('#button-search').click(function () {
+            var searchTerm = $('#searchTerm').val();
+            window.location.href = '@Url.Action("Index", new { page = 1 })' + '&searchTerm=' + searchTerm;
+        });
+        $('#searchTerm').keypress(function (e) {
+            var key = e.which;
+            if (key == 13) {
+                var searchTerm = $('#searchTerm').val();
+                window.location.href = '@Url.Action("Index", new { page = 1 })' + '&searchTerm=' + searchTerm;
+            }
+        });
+
+    });
+</script>
