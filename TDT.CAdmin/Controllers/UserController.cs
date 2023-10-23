@@ -27,10 +27,6 @@ namespace TDT.CAdmin.Controllers
             ResponseDataDTO<UserDTO> users = APICallHelper.Get<ResponseDataDTO<UserDTO>>("user", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             int pageNumber = (page ?? 1);
             int pageSize = 10;
-            if (users.Data == null)
-            {
-                return View();
-            }
             IPagedList<UserDTO> pagedList = users.Data == null ? new List<UserDTO>().ToPagedList() : users.Data.OrderByDescending(o => o.CreateDate).ToPagedList(pageNumber, pageSize);
             return View(pagedList);
         }
@@ -45,7 +41,7 @@ namespace TDT.CAdmin.Controllers
         {
             if (ModelState.IsValid)
             {
-                ResponseDataDTO<UserIdentiyModel> response = APICallHelper.Put<ResponseDataDTO<UserIdentiyModel>>(
+                ResponseDataDTO<UserIdentiyModel> response = APICallHelper.Post<ResponseDataDTO<UserIdentiyModel>>(
                     "Auth/Register",
                     JsonConvert.SerializeObject(user),
                     token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
@@ -75,89 +71,46 @@ namespace TDT.CAdmin.Controllers
         [HttpGet]
         public ActionResult Edit(string id)
         {
-            ResponseDataDTO<User> userDetail = APICallHelper.Get<ResponseDataDTO<User>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            ResponseDataDTO<User> userDetail = APICallHelper.Put<ResponseDataDTO<User>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+
             return View(userDetail.Data.FirstOrDefault());
         }
         [HttpPost]
         public ActionResult Edit(User model)
         {
-
+            ResponseDataDTO<User> res = APICallHelper.Post<ResponseDataDTO<User>>($"user/{model.UserName.Trim()}",
+                JsonConvert.SerializeObject(model),
+                token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value)
+                .Result;
+            if (res.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+            {
+                //FlashMessage để truyền message từ đây sang action hoặc controller khác
+                this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Success);
+            }
+            else
+            {
+                //Truyền message trong nội bộ hàm
+                this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Error);
+            }
             return View(model);
         }
         [HttpPost]
         public ActionResult Delete(string id)
         {
-            ResponseDataDTO<User> userDetail = APICallHelper.Delete<ResponseDataDTO<User>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
-            if (userDetail.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+            ResponseDataDTO<User> res = APICallHelper.Delete<ResponseDataDTO<User>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            if (res.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
                 //FlashMessage để truyền message từ đây sang action hoặc controller khác
-                this.MessageContainer().AddFlashMessage("Xóa tài khoản thành công!", ToastMessageType.Success);
+                this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Success);
             }
             else
             {
                 //Truyền message trong nội bộ hàm
-                this.MessageContainer().AddFlashMessage(userDetail.Msg, ToastMessageType.Error);
+                this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Error);
             }
             return new JsonResult("ok");
         }
-        //    [HttpPost]
-        //    public ActionResult Create(TaiKhoanV2 model, FormCollection collection)
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            try
-        //            {
-        //                if (_services.Db.TAIKHOANs.Any(x => x.TENDN.Equals(model.TenDN)))
-        //                {
-        //                    ModelState.AddModelError("", "Tên đăng nhập đã trùng!");
-        //                }
-        //                else
-        //                {
-        //                    if (!model.TenDN.Equals("sa"))
-        //                    {
-        //                        //_services.Db.TAIKHOANs.InsertOnSubmit(model);
-        //                        //_services.Db.SubmitChanges();
-        //                        string address = "";
-        //                        address += collection["address"].ToString() + " ,";
-        //                        address += collection["ward"].ToString() + " ,";
-        //                        address += collection["district"].ToString() + " ,";
-        //                        address += collection["province"].ToString() + ".";
-
-        //                        var result = _services.DbContext.Exceute(string.Format("exec TaoTaiKhoanNhanVien N'{0}', '{1}', '{2}', N'{3}', '{4}', '{5}', '{6}', N'{7}'",
-        //                                collection["hoten"].ToString(),
-        //                                collection["ns"].ToString(),
-        //                                collection["sdt"].ToString(),
-        //                                address,
-        //                                collection["email"].ToString(),
-        //                                model.TenDN,
-        //                                model.MatKhau,
-        //                                model.ChucVu
-        //                            ));
-        //                        if (result == 0)
-        //                        {
-        //                            throw new Exception("Thao tác thất bại!");
-        //                        }
-        //                        return RedirectToAction("Index");
-        //                    }
-        //                    else
-        //                    {
-        //                        ModelState.AddModelError("TenDN", "Tên đăng nhập không hợp lệ!");
-        //                    }
-        //                }
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                ModelState.AddModelError("", ex.Message);
-        //            }
-        //        }
-        //        return View();
-        //    }
-        //    public ActionResult Details(int id)
-        //    {
-        //        IEnumerable<TaiKhoanV2> users = _services.DbContext.QueryTable<TaiKhoanV2>("TaiKhoan");
-        //        ViewBag.NVList = _services.DbContext.QueryTable<NhanVien>("NhanVien");
-        //        return View(users.SingleOrDefault(x => x.MaTaiKhoan == id));
-        //    }
+        
         //    public ActionResult Edit(int id)
         //    {
         //        List<string> cvList = new List<string>() { "Nhân Viên", "Quản trị viên" };
