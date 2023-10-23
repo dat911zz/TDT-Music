@@ -89,7 +89,7 @@ namespace TDT.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPut]
+        [HttpPost]
         public IActionResult Register([FromBody] UserIdentiyModel model)
         {
             try

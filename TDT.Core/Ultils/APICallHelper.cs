@@ -55,18 +55,11 @@ namespace TDT.Core.Ultils
             {
                 HTTP_CLIENT.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
             }
-            if (!string.IsNullOrEmpty(requestBody) || method.Method.ToLower().Equals("delete"))
+            if (!string.IsNullOrEmpty(requestBody))
             {
-                if (!string.IsNullOrEmpty(requestBody))
-                {
-                    request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-                }
-                response = HTTP_CLIENT.Send(request);
+                request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
             }
-            else
-            {
-                response = HTTP_CLIENT.GetAsync(requestUri).Result;
-            }
+            response = await HTTP_CLIENT.SendAsync(request);
 
             switch (response.StatusCode)
             {
