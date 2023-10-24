@@ -7,9 +7,22 @@
 }
 
 <h2 class="title-admin">Danh sách tài khoản</h2>
-<p>
-    <a asp-action="Create">Thêm tài khoản mới</a>
-</p>
+<div class="row">
+    <div class="col-3">
+        <a type="button" class="btn btn-outline-dark" asp-action="Create">Thêm tài khoản mới</a>
+    </div>
+    <div class="col-6"></div>
+    <div class="col-3 input-group mb-3 ">
+        <input type="text" class="form-control border" placeholder="Nhập vào tài khoản cần tìm"
+               aria-label="Nhập vào tài khoản cần tìm" aria-describedby="button-search"
+               id="searchTerm" value="@ViewBag.SearchTerm">
+        <div class="input-group-append">
+            <button class="btn btn-outline-dark" type="button" id="button-search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>
 <div class="table-container">
     <table class="table">
         <thead>
@@ -82,5 +95,5 @@
 </div>
 <!-- Hiển thị điều hướng phân trang -->
 <div class="pagedList-container">
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @ViewBag.SearchTerm }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
 </div>

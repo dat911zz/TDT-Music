@@ -9,6 +9,7 @@ using TDT.Core.DTO.Firestore;
 using Google.Cloud.Firestore;
 using Google.Cloud.Firestore.V1;
 using System.Threading.Tasks;
+using TDT.Core.DTO;
 
 namespace TDT.CAdmin.Controllers
 {
@@ -40,18 +41,25 @@ namespace TDT.CAdmin.Controllers
             
         }
 
-        public IActionResult Index(int? page)
+        public IActionResult Index(string searchTerm, int? page)
         {
+            ViewBag.SearchTerm = "";
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            List<SongDTO> lsong = _songs;
+
             if (DataHelper.Instance.Songs.Count > 0)
             {
-                int pageSize = 10;
-                int pageNumber = (page ?? 1);
-                List<SongDTO> lsong = _songs;
-                IPagedList<SongDTO> pagedList = lsong.ToPagedList(pageNumber, pageSize);
-                return View(pagedList);
-
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    lsong = _songs.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).ToList();
+                    ViewBag.SearchTerm = searchTerm;
+                    //pageSize = lsong.Count;
+                    ViewBag.SoBH = lsong.Count;
+                }
             }
-            return View();
+            IPagedList<SongDTO> pagedList = lsong == null ? new List<SongDTO>().ToPagedList() : lsong.OrderByDescending(o => o.releaseDate).ToPagedList(pageNumber, pageSize);
+            return View(pagedList);
         }
 
         [HttpGet]

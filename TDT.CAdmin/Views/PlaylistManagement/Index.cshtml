@@ -11,7 +11,7 @@
     int maxLength = 25; // Đặt giá trị tối đa
 }
 
-<h1 class="title-admin">Danh Sách Play List</h1>
+<h2 class="title-admin">Danh Sách Play List</h2>
 
 <p>
     <a asp-action="Create">Tạo Play List Mới</a>
@@ -103,8 +103,9 @@
     </tbody>
 </table>
 <div class="pagedList-container">
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @ViewBag.SearchTerm }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
 </div>
+
 
 <script>
     $(".img_song").each(function (e, val) {

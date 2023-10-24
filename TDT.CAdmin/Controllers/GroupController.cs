@@ -22,7 +22,7 @@ namespace TDT.CAdmin.Controllers
 
         }
         // GET: Groups_Controller
-        public ActionResult Index(string? searchTerm, int? page)
+        public ActionResult Index(string searchTerm, int? page)
         {
             ResponseDataDTO<GroupDTO> Groups = APICallHelper.Get<ResponseDataDTO<GroupDTO>>("Group", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             ViewBag.SearchTerm = "";
@@ -36,6 +36,7 @@ namespace TDT.CAdmin.Controllers
                 {
                     Groups.Data = Groups.Data.Where(r => r.Name.ToLower().Contains(searchTerm.ToLower())).ToList();
                     ViewBag.SearchTerm = searchTerm;
+                   
                 }
                 else return View();
             }

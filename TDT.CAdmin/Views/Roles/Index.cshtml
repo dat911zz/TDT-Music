@@ -9,7 +9,7 @@
     
 }
 
-<h1 class="title-admin">Danh Sách Vai Trò</h1>
+<h2 class="title-admin">Danh Sách Vai Trò</h2>
 
 <div class="row"> 
       <div class="col-3">
@@ -85,8 +85,9 @@
 </div>
 
 <div class="pagedList-container">
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @ViewBag.SearchTerm }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
 </div>
+
 <script>
     $(document).ready(function () {
 
