@@ -14,24 +14,44 @@ namespace TDT.CAdmin.Controllers
 {
     public class MusicManagementController : Controller
     {
-        long? lengthSong = null;
-        int pageSize = 10;
         private readonly List<SongDTO> _songs;
 
         public MusicManagementController()
         {
-            if(lengthSong == null)
+            if (DataHelper.Instance.Songs.Count <= 0)
             {
                 _songs = APIHelper.Gets<SongDTO>($"{FirestoreService.CL_Song}");
+                 if (_songs != null)
+                {
+                    foreach (SongDTO song in _songs)
+                    {
+                        if (!DataHelper.Instance.Songs.Keys.Contains(song.encodeId))
+                        {
+                            DataHelper.Instance.Songs.Add(song.encodeId, song);
+                        }
+                    }
+                }
             }
+            else
+            {
+                _songs = DataHelper.Instance.Songs.Values.ToList();
+            }
+            
+            
         }
 
         public IActionResult Index(int? page)
         {
-            int pageNumber = (page ?? 1);
-            Query query = FirestoreService.Instance.GetCollectionReference("Song").OrderByDescending("releaseDate").Limit(pageSize * pageNumber).LimitToLast(pageSize);
-            List<SongDTO> songs = FirestoreService.Instance.Gets<SongDTO>(query);
-            return View(songs); 
+            if (DataHelper.Instance.Songs.Count > 0)
+            {
+                int pageSize = 10;
+                int pageNumber = (page ?? 1);
+                List<SongDTO> lsong = _songs;
+                IPagedList<SongDTO> pagedList = lsong.ToPagedList(pageNumber, pageSize);
+                return View(pagedList);
+
+            }
+            return View();
         }
 
         [HttpGet]

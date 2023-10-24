@@ -1,4 +1,7 @@
-﻿@model List<TDT.Core.DTO.Firestore.SongDTO>
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Core.Common;
+@using X.PagedList;
+@model IPagedList<TDT.Core.DTO.Firestore.SongDTO>
 
 @{
     ViewData["Title"] = "Danh sách bài hát";
@@ -82,9 +85,9 @@
 </div>
 
 <!-- Hiển thị điều hướng phân trang -->
-@* <div class="pagedList-container">
+<div class="pagedList-container">
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
-</div> *@
+</div> 
 <script>
     $(".img_song").each(function (e, val) {
         var id = $(this).attr("encodeid");
