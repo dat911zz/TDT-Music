@@ -61,7 +61,7 @@ namespace TDT.API.Controllers
                 FirebaseService.Instance.pushFile(image, "Images/Playlist/1/" + thumbnail).Wait();
                 playlist.thumbnail = "Images/Playlist/0/" + thumbnail;
                 playlist.thumbnailM = "Images/Playlist/1/" + thumbnail;
-                FirestoreService.Instance.SetAsync(FirestoreService.CL_Artist, playlist.encodeId, playlist).Wait();
+                FirestoreService.Instance.SetAsync(FirestoreService.CL_Playlist, playlist.encodeId, playlist).Wait();
                 return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, new Dictionary<string, object>()
                     {
                         {"data", playlist}

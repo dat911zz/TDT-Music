@@ -11,14 +11,14 @@
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
                 <div class="col-sm-6">
-                   @*  <div class="form-group">
-                        <label asp-for="encodeId" class="control-label"></label>
-                        <input asp-for="encodeId" class="form-control" />
-                        <span asp-validation-for="encodeId" class="text-danger"></span>
+                    @*  <div class="form-group">
+                    <label asp-for="encodeId" class="control-label"></label>
+                    <input asp-for="encodeId" class="form-control" />
+                    <span asp-validation-for="encodeId" class="text-danger"></span>
                     </div> *@
                     <div class="form-group">
                         <label asp-for="title" class="control-label"></label>
@@ -30,11 +30,7 @@
                         <input asp-for="alias" class="form-control" />
                         <span asp-validation-for="alias" class="text-danger"></span>
                     </div>
-                    <div class="form-group form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" style=" opacity:1;" asp-for="isOffical" /> @Html.DisplayNameFor(model => model.isOffical)
-                        </label>
-                    </div>
+
                     <div class="form-group">
                         <label asp-for="username" class="control-label"></label>
                         <input asp-for="username" class="form-control" />
@@ -45,16 +41,12 @@
                         <input asp-for="artistsNames" class="form-control" />
                         <span asp-validation-for="artistsNames" class="text-danger"></span>
                     </div>
-                    <div class="form-group form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" style=" opacity:1;" asp-for="isWorldWide" /> @Html.DisplayNameFor(model => model.isWorldWide)
-                        </label>
-                    </div>
-                    <div class="form-group">
+
+                  <div class="form-group">
                         <label asp-for="thumbnailM" class="control-label"></label>
-                        <input asp-for="thumbnailM" class="form-control" />
+                        <input asp-for="thumbnailM" readonly class="form-control" />
                         <span asp-validation-for="thumbnailM" class="text-danger"></span>
-                    </div>
+                    </div> 
                     <div class="form-group">
                         <label asp-for="link" class="control-label"></label>
                         <input asp-for="link" class="form-control" />
@@ -62,16 +54,21 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="thumbnail" class="control-label"></label>
-                        <input asp-for="thumbnail" class="form-control" />
+                        <input asp-for="thumbnail"  class="form-control" />
                         <span asp-validation-for="thumbnail" class="text-danger"></span>
-                    </div>
+                    </div> 
                     <div class="form-group">
                         <label asp-for="duration" class="control-label"></label>
                         <input asp-for="duration" class="form-control" />
                         <span asp-validation-for="duration" class="text-danger"></span>
                     </div>
-                   <div class="row">
-                       <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" style=" opacity:1;" asp-for="isOffical" /> @Html.DisplayNameFor(model => model.isOffical)
+                                </label>
+                            </div>
                             <div class="form-group form-check">
                                 <label class="form-check-label">
                                     <input class="form-check-input" style=" opacity:1;" asp-for="zingChoice" /> @Html.DisplayNameFor(model => model.zingChoice)
@@ -87,8 +84,8 @@
                                     <input class="form-check-input" style=" opacity:1;" asp-for="preRelease" /> @Html.DisplayNameFor(model => model.preRelease)
                                 </label>
                             </div>
-                       </div>
-                       <div class="col-sm-6">
+                        </div>
+                        <div class="col-sm-6">
                             <div class="form-group form-check">
                                 <label class="form-check-label">
                                     <input class="form-check-input" style=" opacity:1;" asp-for="isRBT" /> @Html.DisplayNameFor(model => model.isRBT)
@@ -99,14 +96,24 @@
                                     <input class="form-check-input" style=" opacity:1;" asp-for="isIndie" /> @Html.DisplayNameFor(model => model.isIndie)
                                 </label>
                             </div>
-                       </div>
-                   </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" style=" opacity:1;" asp-for="liked" /> @Html.DisplayNameFor(model => model.liked)
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" style=" opacity:1;" asp-for="isWorldWide" /> @Html.DisplayNameFor(model => model.isWorldWide)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-sm-6">
-                    
+
                     <div class="form-group">
                         <label asp-for="releaseDate" class="control-label"></label>
-                        <input asp-for="releaseDate" class="form-control" />
+                        <input asp-for="releaseDate" class="form-control" min="1800-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
                         <span asp-validation-for="releaseDate" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -114,13 +121,13 @@
                         <input asp-for="distributor" class="form-control" />
                         <span asp-validation-for="distributor" class="text-danger"></span>
                     </div>
-            
+
                     <div class="form-group">
                         <label asp-for="streamingStatus" class="control-label"></label>
                         <input asp-for="streamingStatus" class="form-control" />
                         <span asp-validation-for="streamingStatus" class="text-danger"></span>
                     </div>
-                 
+
                     <div class="form-group">
                         <label asp-for="userid" class="control-label"></label>
                         <input asp-for="userid" class="form-control" />
@@ -131,43 +138,39 @@
                         <input asp-for="album" class="form-control" />
                         <span asp-validation-for="album" class="text-danger"></span>
                     </div>
-        
-   @*                  <div class="form-group">
-                        <label asp-for="like" class="control-label"></label>
-                        <input asp-for="like" class="form-control" />
-                        <span asp-validation-for="like" class="text-danger"></span>
+                                        
+                    <div class="form-group">
+                    <label asp-for="like" class="control-label"></label>
+                    <input asp-for="like" class="form-control" />
+                    <span asp-validation-for="like" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="listen" class="control-label"></label>
-                        <input asp-for="listen" class="form-control" />
-                        <span asp-validation-for="listen" class="text-danger"></span>
+                    <label asp-for="listen" class="control-label"></label>
+                    <input asp-for="listen" class="form-control" />
+                    <span asp-validation-for="listen" class="text-danger"></span>
                     </div>
-                    <div class="form-group form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" style=" opacity:1;" asp-for="liked" /> @Html.DisplayNameFor(model => model.liked)
-                        </label>
+
+                    <div class="form-group">
+                    <label asp-for="comment" class="control-label"></label>
+                    <input asp-for="comment" class="form-control" />
+                    <span asp-validation-for="comment" class="text-danger"></span>
+                    </div>
+@*                      <div class="form-group">
+                    <label asp-for="Code" class="control-label"></label>
+                    <input asp-for="Code" class="form-control" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="comment" class="control-label"></label>
-                        <input asp-for="comment" class="form-control" />
-                        <span asp-validation-for="comment" class="text-danger"></span>
-                    </div> *@
-@*                     <div class="form-group">
-                        <label asp-for="Code" class="control-label"></label>
-                        <input asp-for="Code" class="form-control" />
-                        <span asp-validation-for="Code" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Msg" class="control-label"></label>
-                        <input asp-for="Msg" class="form-control" />
-                        <span asp-validation-for="Msg" class="text-danger"></span>
+                    <label asp-for="Msg" class="control-label"></label>
+                    <input asp-for="Msg" class="form-control" />
+                    <span asp-validation-for="Msg" class="text-danger"></span>
                     </div> *@
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-primary" />
                     </div>
                 </div>
             </div>
-           
+
         </form>
     </div>
 </div>
@@ -177,6 +180,8 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

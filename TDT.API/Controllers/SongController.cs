@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TDT.Core.DTO;
 using TDT.Core.DTO.Firestore;
 using TDT.Core.Enums;
 using TDT.Core.Helper;
@@ -75,7 +74,7 @@ namespace TDT.API.Controllers
                 FirebaseService.Instance.pushFile(image, "Images/Song/1/" + thumbnail).Wait();
                 song.thumbnail = "Images/Song/0/" + thumbnail;
                 song.thumbnailM = "Images/Song/1/" + thumbnail;
-                FirestoreService.Instance.SetAsync(FirestoreService.CL_Artist, song.encodeId, song).Wait();
+                FirestoreService.Instance.SetAsync(FirestoreService.CL_Song_Test, song.encodeId, song).Wait();      // Sửa Song Test
                 return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, new Dictionary<string, object>()
                     {
                         {"data", song}
