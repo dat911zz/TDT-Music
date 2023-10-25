@@ -105,7 +105,7 @@ namespace TDT.IdentityCore.Utils
                 _cfg["Jwt:Issuer"],
                 _cfg["Jwt:Audience"],
                 claims,
-                expires: isExpr ? DateTime.UtcNow.AddMinutes(expr) : null,
+                expires: isExpr ? DateTime.UtcNow.AddMinutes(expr) : DateTime.UtcNow.AddYears(10),
                 signingCredentials: credentials
                 );
             return new JwtSecurityTokenHandler().WriteToken(token);

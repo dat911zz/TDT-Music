@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using TDT.Core.DTO;
+using TDT.Core.Enums;
 using TDT.Core.Extensions;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
@@ -26,7 +27,7 @@ namespace TDT.CAdmin.Controllers
         {
             ResponseDataDTO<UserDTO> users = APICallHelper.Get<ResponseDataDTO<UserDTO>>("user", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             int pageNumber = (page ?? 1);
-            int pageSize = 10;
+            int pageSize = 7;
             IPagedList<UserDTO> pagedList = users.Data == null ? new List<UserDTO>().ToPagedList() : users.Data.OrderByDescending(o => o.CreateDate).ToPagedList(pageNumber, pageSize);
             return View(pagedList);
         }
@@ -46,7 +47,7 @@ namespace TDT.CAdmin.Controllers
                     JsonConvert.SerializeObject(user),
                     token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
 
-                if (response.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+                if (response.Code == APIStatusCode.ActionSucceeded)
                 {
                     //FlashMessage để truyền message từ đây sang action hoặc controller khác
                     this.MessageContainer().AddFlashMessage("Tạo tài khoản thành công!", ToastMessageType.Success);
