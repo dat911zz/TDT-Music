@@ -169,19 +169,19 @@ namespace TDT.Core.ServiceImp
 
         public JsonResult GetHtmlPlaylistChill()
         {
-            return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistChills.Take(5).ToList()));
+            return new JsonResult(Generator.GeneratePlaylistsElement(DataHelper.Instance.PlaylistChills.Take(5).ToList()));
         }
         public JsonResult GetHtmlPlaylistYeuDoi()
         {
-            return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistYeuDoi.Take(5).ToList()));
+            return new JsonResult(Generator.GeneratePlaylistsElement(DataHelper.Instance.PlaylistYeuDoi.Take(5).ToList()));
         }
         public JsonResult GetHtmlPlaylistRemixDance()
         {
-            return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistRemixDances.Take(5).ToList(), 1));
+            return new JsonResult(Generator.GeneratePlaylistsElement(DataHelper.Instance.PlaylistRemixDances.Take(5).ToList()));
         }
         public JsonResult GetHtmlPlaylistTamTrang()
         {
-            return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistTamTrang.Take(5).ToList(), 1));
+            return new JsonResult(Generator.GeneratePlaylistsElement(DataHelper.Instance.PlaylistTamTrang.Take(5).ToList()));
         }
         public JsonResult GetHtmlArtistThinhHanh()
         {
@@ -190,31 +190,31 @@ namespace TDT.Core.ServiceImp
         
         public JsonResult GetHtmlPlaylistNoiBat()
         {
-            return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistNoiBat.Take(5).ToList(), 1));
+            return new JsonResult(Generator.GeneratePlaylistsElement(DataHelper.Instance.PlaylistNoiBat.Take(5).ToList()));
         }
         public JsonResult GetHtmlPlaylistHomNayBanTheNao()
         {
-            return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistHomNayBanTheNao.Take(5).ToList(), 1));
+            return new JsonResult(Generator.GeneratePlaylistsElement(DataHelper.Instance.PlaylistHomNayBanTheNao.Take(5).ToList()));
         }
         public JsonResult GetHtmlPlaylistNganNgaCauCa()
         {
-            return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistNganNgaCauCa.Take(5).ToList(), 1));
+            return new JsonResult(Generator.GeneratePlaylistsElement(DataHelper.Instance.PlaylistNganNgaCauCa.Take(5).ToList()));
         }
         public JsonResult GetHtmlPlaylistAmThanhLofi()
         {
-            return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistAmThanhLofi.Take(5).ToList(), 1));
+            return new JsonResult(Generator.GeneratePlaylistsElement(DataHelper.Instance.PlaylistAmThanhLofi.Take(5).ToList()));
         }
         public JsonResult GetHtmlPlaylistMotChutKhongLoi()
         {
-            return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistMotChutKhongLoi.Take(5).ToList(), 1));
+            return new JsonResult(Generator.GeneratePlaylistsElement(DataHelper.Instance.PlaylistMotChutKhongLoi.Take(5).ToList()));
         }
         public JsonResult GetHtmlPlaylistYen()
         {
-            return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistYen.Take(5).ToList(), 1));
+            return new JsonResult(Generator.GeneratePlaylistsElement(DataHelper.Instance.PlaylistYen.Take(5).ToList()));
         }
         public JsonResult GetHtmlPlaylistChillCungDance()
         {
-            return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistChillCungDance.Take(5).ToList(), 1));
+            return new JsonResult(Generator.GeneratePlaylistsElement(DataHelper.Instance.PlaylistChillCungDance.Take(5).ToList()));
         }
         public string LoadImg(string encodeId, string thumbpath)
         {

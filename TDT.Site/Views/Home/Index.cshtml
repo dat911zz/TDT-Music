@@ -2,7 +2,6 @@
 @using TDT.Core.Helper;
 @{
     ViewData["Title"] = "Home Page";
-    <link rel="stylesheet" href="~/css/loading.css" />
 }
 
 <div class="container home-page-content">
@@ -335,6 +334,8 @@
         });
     }
     $(document).ready(function () {
+        $('.home').addClass('is-active');
+
         $('.genre_all').click(function () {
             loadSongReleaseAll();
         });

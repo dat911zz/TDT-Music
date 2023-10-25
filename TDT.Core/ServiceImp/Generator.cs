@@ -302,30 +302,26 @@ namespace TDT.Core.ServiceImp
             return res;
         }
 
-        /// <summary>
-        /// optionLast = 0 : title,
-        /// optionLast = 1 : artists
-        /// </summary>
-        /// <param name="optionLast">0: title</param>
-        /// <param name="optionLast">1: artists</param>
-        /// <returns></returns>
-        public static string GeneratePlaylist(List<PlaylistDTO> playlists, int optionLast = 0)
+        public static string GeneratePlaylists(List<PlaylistDTO> playlists, bool classColumn = false)
         {
             StringBuilder str = new StringBuilder();
             foreach (var playlist in playlists)
             {
-                string img = DataHelper.GetThumbnailPlaylist(playlist);
-                string last = string.Empty;
-                if (optionLast == 0)
-                {
-                    last = playlist.title;
-                }
-                else if (playlist.artists != null)
-                {
-                    last = GenerateArtistLink(playlist.artists);
-                }
-                str.AppendFormat(@"
-                    <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
+                str.Append(GeneratePlaylist(playlist, classColumn));
+            }
+            return str.ToString();
+        }
+        public static string GeneratePlaylist(PlaylistDTO playlist, bool classColumn = false)
+        {
+            StringBuilder str = new StringBuilder();
+            string img = DataHelper.GetThumbnailPlaylist(playlist);
+            string column = string.Empty;
+            if(classColumn)
+            {
+                column = " column mar-b-30 ";
+            }
+            str.AppendFormat(@"
+                    <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3 {4}"">
                         <div class=""playlist-wrapper is-description"">
                             <div class=""zm-card"">
                                 <div>
@@ -339,6 +335,7 @@ namespace TDT.Core.ServiceImp
                                     </a>
                                 </div>
                                 <div class=""zm-card-content"">
+                                    <h4 class=""title is-6""><a class="""" title=""xin đừng lặng im"" href=""{1}""><span><span><span>{0}</span></span><span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span></span></a></h4>
                                     <h3 class=""mt-10 subtitle"">
                                         <span>
                                             <span>
@@ -351,9 +348,8 @@ namespace TDT.Core.ServiceImp
                             </div>
                         </div>
                     </div>
-                ", playlist.title, $"/Album?encodeId={playlist.encodeId}", img, last);
-            }
-            return str.ToString();
+                ", playlist.title, $"/Album?encodeId={playlist.encodeId}", img, GenerateArtistLink(playlist.artists), column);
+            return str.ToString(); 
         }
 
         
@@ -529,11 +525,16 @@ namespace TDT.Core.ServiceImp
             ";
             return string.Format(format, playlist.title, playlist.encodeId, img, GenerateArtistLink(playlist.artists), playlist.ContentLastUpdate());
         }
-        public static string GeneratePlaylistElement(PlaylistDTO playlist)
+        public static string GeneratePlaylistElement(PlaylistDTO playlist, bool classColumn = false)
         {
             string img = DataHelper.GetThumbnailPlaylist(playlist);
+            string column = string.Empty;
+            if (classColumn)
+            {
+                column = " column mar-b-30 ";
+            }
             string format = @"
-                <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
+                <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3 {4} "">
                     <div class=""playlist-wrapper is-normal"">
                         <div class=""zm-card"">
                             <div><a class="""" title=""{0}""
@@ -555,21 +556,21 @@ namespace TDT.Core.ServiceImp
                     </div>
                 </div>
             ";
-            return string.Format(format, playlist.title, playlist.encodeId, img, GenerateArtistLink(playlist.artists));
+            return string.Format(format, playlist.title, playlist.encodeId, img, GenerateArtistLink(playlist.artists), column);
         }
-        public static string GeneratePlaylistsElement(List<PlaylistDTO> playlists)
+        public static string GeneratePlaylistsElement(List<PlaylistDTO> playlists, bool classColumn = false)
         {
             string res = "";
             if(playlists != null && playlists.Count > 0)
             {
                 foreach (var item in playlists)
                 {
-                    res += GeneratePlaylistElement(item);
+                    res += GeneratePlaylistElement(item, classColumn);
                 }
             }
             return res;
         }
-        public static string GeneratePlaylistsElement(List<string> playlists)
+        public static string GeneratePlaylistsElement(List<string> playlists, bool classColumn = false)
         {
             string res = "";
             if (playlists != null && playlists.Count > 0)
@@ -579,7 +580,7 @@ namespace TDT.Core.ServiceImp
                     PlaylistDTO playlist = DataHelper.GetPlaylist(item);
                     if(playlist != null)
                     {
-                        res += GeneratePlaylistElement(playlist);
+                        res += GeneratePlaylistElement(playlist, classColumn);
                     }
                 }
             }

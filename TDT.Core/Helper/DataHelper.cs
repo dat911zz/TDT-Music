@@ -31,6 +31,7 @@ namespace TDT.Core.Helper
 
         public static string COLOR_DEFAULT_STEP = "#000fff";
         private int _viewColor;
+        public List<TypePlaylistDTO> Top100 = new List<TypePlaylistDTO>();
         public Dictionary<string, Genre> Genres = new Dictionary<string, Genre>();
         public Dictionary<string, ArtistDTO> Artists = new Dictionary<string, ArtistDTO>();
         public Dictionary<string, string> ThumbSong = new Dictionary<string, string>();

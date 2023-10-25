@@ -1,7 +1,6 @@
 ﻿@using TDT.Core.DTO.Firestore
 @{
     ViewData["Title"] = "Home Page";
-    <link rel="stylesheet" href="~/css/loading.css" />
     List<SongDTO> songs = ViewData["songs"] as List<SongDTO>;
     string imgPlaylist = ViewData["thumbnail"].ToString();
     string contentLastUpdate = Model.ContentLastUpdate().ToShortDateString();

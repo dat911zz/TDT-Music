@@ -2320,7 +2320,10 @@ h1.title, h3.title {
         }
 
     .playlist-wrapper .zm-card-content .subtitle {
-        font-size: 14px
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
 .playlist-wrapper.is-subtitle .title, .playlist-wrapper.is-subtitle .title a {

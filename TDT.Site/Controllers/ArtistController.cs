@@ -45,7 +45,7 @@ namespace TDT_Music.Controllers
                             List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
                             if(list != null && list.Count > 0)
                             {
-                                ViewData[section.title] = Generator.GeneratePlaylist(list.Take(5).ToList());
+                                ViewData[section.title] = Generator.GeneratePlaylistsElement(list.Take(5).ToList());
                             }
                         }
                     }
@@ -65,13 +65,13 @@ namespace TDT_Music.Controllers
         {
             SectionDTO section = artist.sections.Where(s => s.title.Equals("Single & EP")).First();
             List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
-            return Generator.GeneratePlaylist(list.Take(5).ToList());
+            return Generator.GeneratePlaylistsElement(list.Take(5).ToList());
         }
         public string GetHtmlAlbum(ArtistDTO artist)
         {
             SectionDTO section = artist.sections.Where(s => s.title.Equals("Album")).First();
             List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
-            return Generator.GeneratePlaylist(list.Take(5).ToList());
+            return Generator.GeneratePlaylistsElement(list.Take(5).ToList());
         }
     }
 }
