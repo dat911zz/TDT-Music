@@ -1,21 +1,41 @@
-﻿@model IPagedList<TDT.Core.DTO.Firestore.SongDTO>
-@using X.PagedList;
-@using X.PagedList.Mvc.Core;
+﻿@using X.PagedList.Mvc.Core;
 @using X.PagedList.Mvc.Core.Common;
+@using X.PagedList;
+@model IPagedList<TDT.Core.DTO.Firestore.SongDTO>
 
 @{
     ViewData["Title"] = "Danh sách bài hát";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>Danh sách bài hát</h2>
+<h2 class="title-admin">Danh sách bài hát</h2>
 
 @{
     int maxLength = 20; // Đặt giá trị tối đa
 }
+<div class="row">
+    <div class="col-3">
+        <a type="button" class="btn btn-outline-dark" asp-action="Create">Tạo Bài Hát Mới</a>
+    </div>
+    <div class="col-6">
+        @{
+            if (ViewBag.SearchTerm != "")
+            {
+                <p>Số bài hát tìm được: @ViewBag.SoBH</p>
+            }
+        }
+    </div>
+    <div class="col-3 input-group mb-3 ">
+        <input type="text" class="form-control border" placeholder="Nhập vào vai trò cần tìm"
+               aria-label="Nhập vào vai trò cần tìm" aria-describedby="button-search"
+               id="searchTerm" value="@ViewBag.SearchTerm">
+        <div class="input-group-append">
+            <button class="btn btn-outline-dark" type="button" id="button-search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create">Tạo Bài Hát Mới</a>
-</p>
 <div class="table-container">
     <table class="table">
         <thead>
@@ -33,8 +53,8 @@
 
             @foreach (var item in Model)
             {
-                
-           
+
+
                 <tr>
                     <td scope="row">
                         @Html.DisplayFor(modelItem => item.encodeId)
@@ -65,12 +85,12 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.distributor)
-                     </td>
+                    </td>
 
                     <td class="btn-control">
                         <a href="@Url.Action("Delete", "MusicManagement", new { id = item.encodeId})">
                             <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
-                        </a>       
+                        </a>
                         <a href="@Url.Action("Details", "MusicManagement", new { id = item.encodeId})">
                             <div class="fa fa-bars" aria-hidden="true"></div>
                         </a>
@@ -86,8 +106,9 @@
 
 <!-- Hiển thị điều hướng phân trang -->
 <div class="pagedList-container">
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @ViewBag.SearchTerm }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
 </div>
+
 <script>
     $(".img_song").each(function (e, val) {
         var id = $(this).attr("encodeid");
@@ -109,5 +130,23 @@
             }
         });
     }
+    $(document).ready(function () {
+        $('#button-search').click(function () {
+            var searchTerm = $('#searchTerm').val();
+            window.location.href = '@Url.Action("Index", new { page = 1})' + '&searchTerm=' + searchTerm;
+        });
+        $('#searchTerm').keypress(function (e) {
+            var key = e.which;
+            if (key == 13) {
+                var searchTerm = $('#searchTerm').val();
+                window.location.href = '@Url.Action("Index", new { page =  1})' + '&searchTerm=' + searchTerm;
+            }
+        });
+        // $('.pagedList').click(function () {
+        //     var searchTerm = $('#searchTerm').val();
+        //     window.location.href = '@Url.Action("Index", new { page = Model.PageNumber})' + '&searchTerm=' + searchTerm;
+        // });
+    });
+
 
 </script>

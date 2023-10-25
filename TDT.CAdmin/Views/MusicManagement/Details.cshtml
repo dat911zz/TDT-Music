@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Chi Tiết Bài Hát: @Html.DisplayFor(model => model.title)</h1>
+<h1 class="title-admin">Chi Tiết Bài Hát: @Html.DisplayFor(model => model.title)</h1>
 <div class="row">
     <div class="col-sm-7">
         <table class="table">
@@ -138,7 +138,7 @@
 </div>
 <div>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Trở về trang trước</a>
 </div>
 <script>
     $(".img_song").each(function (e, val) {
