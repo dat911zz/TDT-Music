@@ -8,6 +8,7 @@ using TDT.Core.Extensions;
 using TDT.Core.Helper;
 using TDT.Core.ServiceImp;
 using TDT.Core.Ultils;
+using static System.Collections.Specialized.BitVector32;
 
 namespace TDT_Music.Controllers
 {
@@ -21,57 +22,49 @@ namespace TDT_Music.Controllers
                 this.MessageContainer().AddFlashMessage("Artist không tồn tại", TDT.Core.Ultils.MVCMessage.ToastMessageType.Error);
                 return Redirect("/");
             }
-            artist.sections = artist.sections.OrderByDescending(s => s.sectionType).ToList();
-            if(artist.sections != null && artist.sections.Count > 0)
-            {
-                foreach (var section in artist.sections)
-                {
-                    if (section != null)
-                    {
-                        if(section.sectionType == "song")
-                        {
-                            ViewData[section.title] = Generator.GenerateArtistNoiBat(artist);
-                        }
-                        else if(section.sectionType == "artist")
-                        {
-                            List<ArtistDTO> list = DataHelper.GetArtists(section);
-                            if(list != null && list.Count > 0)
-                            {
-                                ViewData[section.title] = Generator.GenerateArtistsElement(list.Take(5).ToList());
-                            }
-                        }
-                        else if(section.sectionType == "playlist")
-                        {
-                            List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
-                            if(list != null && list.Count > 0)
-                            {
-                                ViewData[section.title] = Generator.GeneratePlaylistsElement(list.Take(5).ToList());
-                            }
-                        }
-                    }
-                }
-            }
-
             PlaylistDTO playlist = APIHelper.Get<PlaylistDTO>(FirestoreService.CL_Playlist, artist.playlistId);
             ViewData["ArtistInfo"] = Generator.GenerateArtistInfo(artist);
             if(playlist != null)
             {
                 ViewData["PlaylistRelease"] = Generator.GenerateAlbumSpecial(playlist);
             }
+            string json = JsonConvert.SerializeObject(artist.sections.Where(s => s.items != null && s.items.Count > 0).ToList());
+            ViewData["ArraySection"] = json;
             return View(artist);
         }
 
-        public string GetHtmlSingleEP(ArtistDTO artist)
+        public string GetHtmlSection(string artistId, string titleSection)
         {
-            SectionDTO section = artist.sections.Where(s => s.title.Equals("Single & EP")).First();
-            List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
-            return Generator.GeneratePlaylistsElement(list.Take(5).ToList());
-        }
-        public string GetHtmlAlbum(ArtistDTO artist)
-        {
-            SectionDTO section = artist.sections.Where(s => s.title.Equals("Album")).First();
-            List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
-            return Generator.GeneratePlaylistsElement(list.Take(5).ToList());
+            ArtistDTO artist = DataHelper.GetArtist(artistId);
+            if (artist == null || artist.sections == null || artist.sections.Count <= 0)
+                return string.Empty;
+            SectionDTO section = artist.sections.Where(s => s.title.Equals(titleSection)).FirstOrDefault();
+            if (section != null)
+            {
+                string res = "";
+                if (section.sectionType == "song")
+                {
+                    res = Generator.GenerateArtistNoiBat(artist);
+                }
+                else if (section.sectionType == "artist")
+                {
+                    List<ArtistDTO> list = DataHelper.GetArtists(section);
+                    if (list != null && list.Count > 0)
+                    {
+                        res = Generator.GenerateArtistsElement(list.Take(5).ToList());
+                    }
+                }
+                else if (section.sectionType == "playlist")
+                {
+                    List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
+                    if (list != null && list.Count > 0)
+                    {
+                        res = Generator.GeneratePlaylistsElement(list.Take(5).ToList());
+                    }
+                }
+                return res;
+            }
+            return string.Empty;
         }
     }
 }

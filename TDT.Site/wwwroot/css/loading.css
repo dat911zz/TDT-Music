@@ -26,6 +26,10 @@
         max-width: 20%;
     }
 
+    /*.loading.subtitle {
+        max-width: 75% !important;
+    }*/
+
 @keyframes loading-wave {
     100% {
         transform: translateX(100%);
