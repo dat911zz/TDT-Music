@@ -1,21 +1,19 @@
 ﻿@using X.PagedList.Mvc.Core;
 @using X.PagedList.Mvc.Core.Common;
 @using X.PagedList;
-@model IPagedList<TDT.Core.DTO.RoleDTO>
+@model IPagedList<TDT.Core.DTO.PermissionDTO>
 
 @{
-    ViewData["Title"] = "Roles";
+    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
 }
 
-<h2 class="title-admin">Danh Sách Vai Trò</h2>
-
-<div class="row"> 
-      <div class="col-3">
+<h2 class="title-admin" >Quản Lý Permission</h2>
+<div class="row">
+    <div class="col-3">
         <a type="button" class="btn btn-outline-dark" asp-action="Create">Tạo Mới Role</a>
-      </div>
-      <div class="col-6"></div>
+    </div>
+    <div class="col-6"></div>
     <div class="col-3 input-group mb-3 ">
         <input type="text" class="form-control border" placeholder="Nhập vào vai trò cần tìm"
                aria-label="Nhập vào vai trò cần tìm" aria-describedby="button-search"
@@ -23,12 +21,13 @@
         <div class="input-group-append">
             <button class="btn btn-outline-dark" type="button" id="button-search">
                 <i class="fa fa-search" aria-hidden="true"></i>
-                </button>
+            </button>
         </div>
     </div>
 </div>
-
-
+<p>
+    <a asp-action="Create">Tạo Mới Permission</a>
+</p>
 <div class="table-container">
     <table class="table">
         <thead>
@@ -37,53 +36,50 @@
                     Id
                 </th>
                 <th>
-                    Tên Role
+                    Tên Permission
                 </th>
                 <th>
-                    Miêu tả Role
+                    Miêu tả Permission
                 </th>
                 <th>
-                    Ngày Tạo Role
+                    Ngày Tạo Permission
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @if(Model != null)
+            @foreach (var item in Model)
             {
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td>
-                            @item.CreateDate
-                        </td>
-                        <td class="btn-control">
-                            <a onclick="DVNConfirm('Xóa', 'Vai Trò' , '/Roles/Delete' , '@item.Id')">
-                                <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
-                            </a>
-                            <a href="@Url.Action("Details", "Roles", new { id = item.Id})">
-                                <div class="fa fa-bars" aria-hidden="true"></div>
-                            </a>
-                            <a href="@Url.Action("Edit", "Roles", new { id = item.Id})">
-                                <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
-                            </a>
-                        </td>
-                    </tr>
-                }
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateDate)
+                    </td>
+                    <td class="btn-control">
+                        <a onclick="DVNConfirm('Xóa', 'Quyền' , '/Permission/Delete' , '@item.Id')">
+                            <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
+                        </a>
+                        <a href="@Url.Action("Details", "Permission", new { id = item.Id})">
+                            <div class="fa fa-bars" aria-hidden="true"></div>
+                        </a>
+                        <a href="@Url.Action("Edit", "Permission", new { id = item.Id})">
+                            <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
+                        </a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
-</div>
 
+</div>
 <div class="pagedList-container">
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @ViewBag.SearchTerm }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
 </div>
