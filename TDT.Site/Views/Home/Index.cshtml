@@ -155,7 +155,7 @@
     <div class="zm-section zm-new-release-section channel-section pad-0">
         <h3 class="zm-section-title title is-2">
             Mới phát hành
-            <a class="discovery-btn" href="/Hub/new_release?option=0">
+            <a id="all_release" class="discovery-btn" href="/Hub/new_release?option=0">
                 Tất cả <i class="icon ic-go-right"></i>
             </a>
         </h3>
@@ -194,7 +194,7 @@
         <div class="container">
             <h3 class="zm-section-title title is-2">
                 Chill
-                <a class="discovery-btn" href="/hub/Chill">
+                <a class="discovery-btn" href="/Hub/Chill">
                     Tất cả <i class="icon ic-go-right"></i>
                 </a>
             </h3>
@@ -314,7 +314,7 @@
                 }
                 $('.genre_vn').removeClass('active');
                 $('.genre_all').addClass('active');
-                $('.discovery-btn').attr("href", "/Hub/new_release?option=0");
+                $('#all_release').attr("href", "/Hub/new_release?option=0");
                 $('#song_release').html(data);
             }
         });
@@ -328,7 +328,7 @@
                 }
                 $('.genre_all').removeClass('active');
                 $('.genre_vn').addClass('active');
-                $('.discovery-btn').attr("href", "/Hub/new_release?option=1");
+                $('#all_release').attr("href", "/Hub/new_release?option=1");
                 $('#song_release').html(data);
             }
         });

@@ -479,7 +479,93 @@ namespace TDT.Core.ServiceImp
         }
         
         #region Song
-
+        public static string GenerateSongElement(SongDTO song)
+        {
+            string img = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail);
+            string format = @"
+                <div class=""select-item"">
+                    <div class=""checkbox-wrapper"">
+                        <label class=""checkbox""><input type=""checkbox"" /></label>
+                    </div>
+                    <div class=""list-item bor-b-1 media-item hide-right"">
+                        <div class=""media"">
+                            <div class=""media-left"">
+                                <div class=""song-prefix mar-r-10""><i class=""icon ic-song""></i></div>
+                                <div class=""song-thumb"">
+                                    <figure class=""image is-40x40"" title=""{0}"">
+                                        <img src=""{1}"" alt="""" />
+                                    </figure>
+                                    <div class=""opacity""></div>
+                                    <div class=""zm-actions-container"">
+                                        <div class=""zm-box zm-actions"">
+                                            <button class=""zm-btn zm-tooltip-btn animation-like is-hidden active is-hover-circle button""
+                                                tabindex=""0"">
+                                                <i class=""icon ic-like""></i><i class=""icon ic-like-full""></i></button><button
+                                                class=""zm-btn action-play button"" tabindex=""0"">
+                                                <i class=""icon action-play ic-play""></i></button><button
+                                                class=""zm-btn zm-tooltip-btn is-hidden is-hover-circle button"" tabindex=""0"">
+                                                <i class=""icon ic-more""></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=""card-info"">
+                                    <div class=""title-wrapper"">
+                                        <span class=""item-title title""><span><span><span>{0}</span></span><span style=""
+                                    position: fixed;
+                                    visibility: hidden;
+                                    top: 0px;
+                                    left: 0px;
+                                  "">…</span></span></span>
+                                    </div>
+                                    <h3 class=""is-one-line is-truncate subtitle"">
+                                        {2}
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class=""media-content"">
+                                <div class=""album-info"">{3}</div>
+                            </div>
+                            <div class=""media-right"">
+                                <div class=""hover-items"">
+                                    <div class=""level"">
+                                        <div class=""level-item""></div>
+                                        <div class=""level-item"">
+                                            <button class=""zm-btn zm-tooltip-btn is-hover-circle button"" tabindex=""0"">
+                                                <i class=""icon ic-karaoke""></i>
+                                            </button>
+                                        </div>
+                                        <div class=""level-item"">
+                                            <button class=""zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button""
+                                                tabindex=""0"">
+                                                <i class=""icon ic-like""></i><i class=""icon ic-like-full""></i>
+                                            </button>
+                                        </div>
+                                        <div class=""level-item"">
+                                            <button class=""zm-btn zm-tooltip-btn is-hover-circle button"" tabindex=""0"">
+                                                <i class=""icon ic-more""></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=""action-items"">
+                                    <div class=""level"">
+                                        <div class=""level-item"">
+                                            <button class=""zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button""
+                                                tabindex=""0"">
+                                                <i class=""icon ic-like""></i><i class=""icon ic-like-full""></i>
+                                            </button>
+                                        </div>
+                                        <div class=""level-item duration"">{4}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ";
+            return string.Format(format, song.title, img, song.GetHtmlArtist(), song.GetHtmlAlbum(), song.Duration());
+        }
         #endregion
 
         #region Playlist

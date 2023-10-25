@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TDT.Core.DTO.Firestore;
 using TDT.Core.Extensions;
 using TDT.Core.Helper;
+using TDT.Core.ServiceImp;
 using TDT.Core.Ultils;
 
 namespace TDT_Music.Controllers
@@ -25,26 +27,31 @@ namespace TDT_Music.Controllers
                 this.MessageContainer().AddFlashMessage("Playlist không tồn tại", TDT.Core.Ultils.MVCMessage.ToastMessageType.Error);
                 return Redirect("/");
             }
-            List<SongDTO> songs = new List<SongDTO>();
-            foreach (var item in playlist.songs)
-            {
-                if(DataHelper.Instance.Songs.Keys.Contains(item))
-                {
-                    songs.Add(DataHelper.Instance.Songs[item]);
-                }
-                else
-                {
-                    var song = DataHelper.GetSong(item);
-                    if(song == null)
-                    {
-                        continue;
-                    }
-                    songs.Add(song);
-                }
-            }
-            ViewData["songs"] = songs;
             ViewData["thumbnail"] = DataHelper.GetThumbnailPlaylist(playlist);
             return View(playlist);
+        }
+
+        public string GetHtmlSong(string page, string json)
+        {
+            int p;
+            if(!int.TryParse(page, out p))
+            {
+                return string.Empty;
+            }
+            List<string> list = JsonConvert.DeserializeObject<List<string>>(json).Skip((int)((p - 1) * 5)).Take(5).ToList();
+            if(list != null && list.Count > 0)
+            {
+                string res = "";
+                foreach (var item in list)
+                {
+                    var song = DataHelper.GetSong(item);
+                    if (song == null)
+                        continue;
+                    res += Generator.GenerateSongElement(song);
+                }
+                return res;
+            }
+            return string.Empty;
         }
     }
 }

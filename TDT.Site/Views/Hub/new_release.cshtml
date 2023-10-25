@@ -182,23 +182,6 @@
     </div>
 </main>
 
-@* @for(int i = 0; i < 6; i++)
-{
-    Html.Raw(
-        "<script>"
-        +    "$.ajax({"
-        +        "url: \"/Share/LoadPageSongReleaseAll?page="+ i +"\","
-        +        "success: function (data) {"
-        +            "if (data == '') {"
-        +                "return;"
-        +            "}"
-        +            "$(\"#page_song_release\").append(data);"
-        +        "}"
-        +    "});"
-        +"</script>"
-    );
-} *@
-
 <script>
     function loadSongReleaseAll() {
         var clearFirst = false;
