@@ -21,6 +21,11 @@ namespace TDT_Music.Controllers
         {
             return View();
         }
+        public IActionResult new_release(string option)
+        {
+            ViewData["option"] = option;
+            return View();
+        }
         public IActionResult Chill()
         {
             return View();

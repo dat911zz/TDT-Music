@@ -40,14 +40,19 @@ namespace TDT.Core.Helper
         private Dictionary<string,SongDTO> _songsNull = new Dictionary<string, SongDTO>();
         private Dictionary<string,PlaylistDTO> _playlists = new Dictionary<string, PlaylistDTO>();
         private Dictionary<string,PlaylistDTO> _playlistsNull = new Dictionary<string, PlaylistDTO>();
-        private List<SongDTO> _songRelease = new List<SongDTO>();
+        private List<SongDTO> _songReleaseAll = new List<SongDTO>();
+        private List<SongDTO> _songReleaseVN = new List<SongDTO>();
 
-        
+
         public int VIEW_COLOR { get => _viewColor; set => _viewColor = value; }
         public Dictionary<string, SongDTO> Songs { get => _songs; set => _songs = value; }
-        public List<List<SongDTO>> GetSongRelease() {
+        public List<SongDTO> GetSongReleaseAllOne()
+        {
+            return this._songReleaseAll;
+        }
+        public List<List<SongDTO>> GetSongAllRelease() {
             List<List<SongDTO>> res = new List<List<SongDTO>>();
-            List<SongDTO> arrSong = this._songRelease;
+            List<SongDTO> arrSong = this._songReleaseAll;
             int take = 4;
             int iStartArr = 0;
             for (int i = 0; i < 3; i++)
@@ -72,11 +77,50 @@ namespace TDT.Core.Helper
             }
             return res;
         }
-        public void SetSongRelease(List<SongDTO> songs)
+        public void SetSongReleaseAll(List<SongDTO> songs)
         {
-            if(songs != null)
+            if (songs != null)
             {
-                this._songRelease = songs;
+                this._songReleaseAll = songs;
+            }
+        }
+        public List<SongDTO> GetSongReleaseVNOne()
+        {
+            return this._songReleaseVN;
+        }
+        public List<List<SongDTO>> GetSongVNRelease()
+        {
+            List<List<SongDTO>> res = new List<List<SongDTO>>();
+            List<SongDTO> arrSong = this._songReleaseVN;
+            int take = 4;
+            int iStartArr = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                List<SongDTO> res_s = new List<SongDTO>();
+                string releaseDate = "";
+                int count = 0;
+                for (int j = iStartArr; j < arrSong.Count; j++)
+                {
+                    iStartArr++;
+                    SongDTO itemCheck = arrSong[j];
+                    if (!releaseDate.Equals(itemCheck.releaseDate) || (releaseDate.Equals(itemCheck.releaseDate) && !res_s.Select(x => x.thumbnail).Contains(itemCheck.thumbnail)))
+                    {
+                        res_s.Add(itemCheck);
+                        count++;
+                    }
+                    releaseDate = itemCheck.releaseDate;
+                    if (count >= take)
+                        break;
+                }
+                res.Add(res_s);
+            }
+            return res;
+        }
+        public void SetSongReleaseVN(List<SongDTO> songs)
+        {
+            if (songs != null)
+            {
+                this._songReleaseVN = songs;
             }
         }
 
@@ -193,6 +237,23 @@ namespace TDT.Core.Helper
         public Dictionary<string, SongDTO> SongsNull { get => _songsNull; set => _songsNull = value; }
         public Dictionary<string, PlaylistDTO> PlaylistsNull { get => _playlistsNull; set => _playlistsNull = value; }
 
+        public void InsertToSongs(List<SongDTO> songs)
+        {
+            if (songs != null)
+            {
+                foreach (var item in songs)
+                {
+                    if (!this.Songs.Keys.Contains(item.encodeId))
+                    {
+                        try
+                        {
+                            this.Songs.Add(item.encodeId, item);
+                        }
+                        catch { }
+                    }
+                }
+            }
+        }
         public List<Genre> GetGenreWithKey(params string[] contains)
         {
             var _contains = contains.Select(x => x.ToLower()).ToList();
@@ -388,7 +449,11 @@ namespace TDT.Core.Helper
             if (DataHelper.Instance.ThumbPlaylist.Keys.Contains(playlist.encodeId))
                 return DataHelper.Instance.ThumbPlaylist[playlist.encodeId];
             string url = FirebaseService.Instance.getStorage(playlist.thumbnailM);
-            DataHelper.Instance.ThumbPlaylist.Add(playlist.encodeId, url);
+            try
+            {
+                DataHelper.Instance.ThumbPlaylist.Add(playlist.encodeId, url);
+            }
+            catch { }
             return url;
         }
         public static string GetThumbnailSong(string encodeId, string thumbnailPath)
@@ -396,7 +461,11 @@ namespace TDT.Core.Helper
             if (DataHelper.Instance.ThumbSong.Keys.Contains(encodeId))
                 return DataHelper.Instance.ThumbSong[encodeId];
             string url = FirebaseService.Instance.getStorage(thumbnailPath);
-            DataHelper.Instance.ThumbSong.Add(encodeId, url);
+            try
+            {
+                DataHelper.Instance.ThumbSong.Add(encodeId, url);
+            }
+            catch { }
             return url;
         }
         public static string GetThumbnailArtist(string id, string thumbnailPath)
@@ -404,7 +473,11 @@ namespace TDT.Core.Helper
             if (DataHelper.Instance.ThumbArtist.Keys.Contains(id))
                 return DataHelper.Instance.ThumbArtist[id];
             string url = FirebaseService.Instance.getStorage(thumbnailPath);
-            DataHelper.Instance.ThumbArtist.Add(id, url);
+            try
+            {
+                DataHelper.Instance.ThumbArtist.Add(id, url);
+            }
+            catch { }
             return url;
         }
     }

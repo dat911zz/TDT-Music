@@ -46,10 +46,5 @@ namespace TDT_Music.Controllers
             ViewData["thumbnail"] = DataHelper.GetThumbnailPlaylist(playlist);
             return View(playlist);
         }
-
-        public string LoadImg(string encodeId, string thumbpath)
-        {
-            return DataHelper.GetThumbnailSong(encodeId, thumbpath);
-        }
     }
 }

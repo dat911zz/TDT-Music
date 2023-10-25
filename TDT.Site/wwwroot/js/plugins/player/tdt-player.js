@@ -118,19 +118,19 @@ const info_nameArtist = document.querySelector(".player-controls__container .med
 var songs = [
     {
         imgSong: "https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_jpeg/cover/8/6/7/d/867dea78919c4ad9e000d1385c9042ab.jpg",
-        src: "https://a320-zmp3.zmdcdn.me/75f292979e4c0f21ad76300554ce758f?authen=exp=1697385026~acl=/75f292979e4c0f21ad76300554ce758f/*~hmac=745322e13a21876f1e372c36bcc4c243",
+        src: "",
         nameSong: "Quả Phụ Tướng",
         nameArtist: `<a class="is-ghost" href="/nghe-si/Dunghoangpham">Dunghoangpham</a>`
     },
     {
         imgSong: "https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_jpeg/cover/b/f/0/1/bf0182328238f2a252496a63e51f1f74.jpg",
-        src: "https://a320-zmp3.zmdcdn.me/49e28a31e7fee3089127f25498cad799?authen=exp=1697428532~acl=/49e28a31e7fee3089127f25498cad799/*~hmac=4b5832177189fc2af1f5eb7b1d8e8c16",
+        src: "",
         nameSong: "Cắt Đôi Nỗi Sầu",
         nameArtist: `<a class="is-ghost" href="/Tang-Duy-Tan">Tăng Duy Tân</a>, <a class="is-ghost" href="/nghe-si/Drum7">Drum7</a>`
     },
     {
         imgSong: "https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_jpeg/cover/6/d/9/6/6d961b2a82f151a0f9af7de928e8f809.jpg",
-        src: "https://a320-zmp3.zmdcdn.me/eff67a9cd162f5ef8789d7b36c350185?authen=exp=1697428650~acl=/eff67a9cd162f5ef8789d7b36c350185/*~hmac=71908200854e3de0c6472098662c110a",
+        src: "",
         nameSong: "À Lôi",
         nameArtist: `<a class="is-ghost" href="/nghe-si/Double2T">Double2T</a>, <a class="is-ghost" href="/Masew">Masew</a>`
     }

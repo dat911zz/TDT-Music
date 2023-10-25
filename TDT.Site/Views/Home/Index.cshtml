@@ -156,16 +156,13 @@
     <div class="zm-section zm-new-release-section channel-section pad-0">
         <h3 class="zm-section-title title is-2">
             Mới phát hành
-            <a class="discovery-btn" href="/new-release/song?filter=all">
+            <a class="discovery-btn" href="/Hub/new_release?option=0">
                 Tất cả <i class="icon ic-go-right"></i>
             </a>
         </h3>
         <div class="genre-select">
-            <button class="zm-btn active button genre_all" tabindex="0">
-                Tất cả
-            </button>
+            <button class="zm-btn active button genre_all" tabindex="0">Tất cả</button>
             <button class="zm-btn button genre_vn" tabindex="0">Việt Nam</button>
-            <button class="zm-btn button genre_n_vn" tabindex="0">Quốc tế</button>
         </div>
         <div id="song_release" class="columns is-multiline">
             <div class="column mar-b-0 is-fullhd-4 is-widescreen-4 is-desktop-4 is-touch-6 is-tablet-6">
@@ -311,22 +308,28 @@
 <script>
     function loadSongReleaseAll() {
         $.ajax({
-            url: "/Share/LoadSongReleaseAll",
+            url: "/Share/GetHtmlSongReleaseAll",
             success: function (data) {
                 if (data == '') {
                     return;
                 }
+                $('.genre_vn').removeClass('active');
+                $('.genre_all').addClass('active');
+                $('.discovery-btn').attr("href", "/Hub/new_release?option=0");
                 $('#song_release').html(data);
             }
         });
     }
     function loadSongReleaseVN() {
         $.ajax({
-            url: "/Share/LoadSongReleaseVN",
+            url: "/Share/GetHtmlSongReleaseVN",
             success: function (data) {
                 if(data == '') {
                     return;
                 }
+                $('.genre_all').removeClass('active');
+                $('.genre_vn').addClass('active');
+                $('.discovery-btn').attr("href", "/Hub/new_release?option=1");
                 $('#song_release').html(data);
             }
         });

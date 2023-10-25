@@ -232,7 +232,7 @@
         var encodeId = $(item).attr("data-id");
         console.log(thumbnail, encodeId)
         $.ajax({
-            url: `/Album/LoadImg?encodeId=${encodeId}&thumbpath=${thumbnail}`,
+            url: `/Share/LoadImg?encodeId=${encodeId}&thumbpath=${thumbnail}`,
             success: function(data) {
                 $(item).attr("src", data);
             }

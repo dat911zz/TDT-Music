@@ -128,7 +128,7 @@ namespace TDT.Core.DTO.Firestore
         public string GetHtmlPlaylistSuggest()
         {
             List<PlaylistDTO> playlists = DataHelper.GetPlaylistSuggest(this);
-            return Generator.GeneratePlaylistsElement(playlists);
+            return Generator.GeneratePlaylistsElement(playlists.Take(5).ToList());
         }
     }
 }

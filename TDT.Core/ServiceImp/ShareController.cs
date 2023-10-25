@@ -16,36 +16,74 @@ namespace TDT.Core.ServiceImp
 {
     public class ShareController : ControllerBase
     {
-        public string GenHtmlSongRelease(List<SongDTO> songs)
+        public void LoadSongReleaseAll()
         {
-            if (songs != null)
-            {
-                DataHelper.Instance.SetSongRelease(songs);
-                foreach (SongDTO song in songs)
-                {
-                    if (!DataHelper.Instance.Songs.Keys.Contains(song.encodeId))
-                    {
-                        DataHelper.Instance.Songs.Add(song.encodeId, song);
-                    }
-                }
-            }
+            List<SongDTO> songs = APIHelper.Gets<SongDTO>($"{FirestoreService.CL_Song}/LoadSongReleaseAll");
+            DataHelper.Instance.InsertToSongs(songs);
+            DataHelper.Instance.SetSongReleaseAll(songs);
+        }
+        public void LoadSongReleaseVN()
+        {
+            List<SongDTO> songs = APIHelper.Gets<SongDTO>($"{FirestoreService.CL_Song}/LoadSongReleaseVN");
+            DataHelper.Instance.InsertToSongs(songs);
+            DataHelper.Instance.SetSongReleaseVN(songs);
+        }
+        public string GenHtmlSongRelease(List<List<SongDTO>> songRelease)
+        {
             List<string> htmls = new List<string>();
-            List<List<SongDTO>> songRelease = DataHelper.Instance.GetSongRelease();
             foreach (List<SongDTO> listItem in songRelease)
             {
                 htmls.Add(Generator.GenerateSongRelease(listItem));
             }
             return string.Concat(htmls);
         }
-        public JsonResult LoadSongReleaseAll()
+        public JsonResult GetHtmlSongReleaseAll()
         {
-            List<SongDTO> songs = APIHelper.Gets<SongDTO>($"{FirestoreService.CL_Song}/LoadSongReleaseAll");
-            return new JsonResult(GenHtmlSongRelease(songs));
+            List<List<SongDTO>> songRelease;
+            if (DataHelper.Instance.GetSongReleaseAllOne().Count > 0)
+            {
+                songRelease = DataHelper.Instance.GetSongAllRelease();
+            }
+            else
+            {
+                LoadSongReleaseAll();
+                songRelease = DataHelper.Instance.GetSongAllRelease();
+            }
+            return new JsonResult(GenHtmlSongRelease(songRelease));
         }
-        public JsonResult LoadSongReleaseVN()
+        public JsonResult GetHtmlSongReleaseVN()
         {
-            List<SongDTO> songs = APIHelper.Gets<SongDTO>($"{FirestoreService.CL_Song}/LoadSongReleaseVN");
-            return new JsonResult(GenHtmlSongRelease(songs));
+            List<List<SongDTO>> songRelease;
+            if (DataHelper.Instance.GetSongReleaseVNOne().Count > 0)
+            {
+                songRelease = DataHelper.Instance.GetSongVNRelease();
+            }
+            else
+            {
+                LoadSongReleaseVN();
+                songRelease = DataHelper.Instance.GetSongVNRelease();
+            }
+            return new JsonResult(GenHtmlSongRelease(songRelease));
+        }
+        public JsonResult LoadPageSongReleaseAll(int? page)
+        {
+            page = page ?? 1;
+            if(DataHelper.Instance.GetSongReleaseAllOne().Count <= 0)
+            {
+                LoadSongReleaseAll();
+            }
+            List<SongDTO> songs = DataHelper.Instance.GetSongReleaseAllOne().Skip((int)((page - 1) * 5)).Take(5).ToList();
+            return new JsonResult(Generator.GeneratePageSong(songs));
+        }
+        public JsonResult LoadPageSongReleaseVN(int? page)
+        {
+            page = page ?? 1;
+            if (DataHelper.Instance.GetSongReleaseVNOne().Count <= 0)
+            {
+                LoadSongReleaseVN();
+            }
+            List<SongDTO> songs = DataHelper.Instance.GetSongReleaseVNOne().Skip((int)((page - 1) * 5)).Take(5).ToList();
+            return new JsonResult(Generator.GeneratePageSong(songs));
         }
         public JsonResult LoadSongs()
         {
@@ -150,26 +188,6 @@ namespace TDT.Core.ServiceImp
             return new JsonResult(Generator.GenerateArtist(DataHelper.Instance.ArtistThinhHanh));
         }
         
-        public JsonResult GetHtmlTuyenTap(string id)
-        {
-            ArtistDTO artist = DataHelper.GetArtist(id);
-            SectionDTO section = artist.sections.Where(s => s.title.Equals("Tuyển tập")).First();
-            List<PlaylistDTO> list = DataHelper.GetPlaylists(section);
-             return new JsonResult(Generator.GeneratePlaylist(list.Take(5).ToList()));
-        }
-        public JsonResult GetHtmlCoTheThich(string id)
-        {
-            ArtistDTO artist = DataHelper.GetArtist(id);
-            SectionDTO section = artist.sections.Where(s => s.title.Equals("Bạn Có Thể Thích")).First();
-            List<ArtistDTO> list = DataHelper.GetArtists(section);
-            return new JsonResult(Generator.GenerateArtist(list.Take(5).ToList()));
-        }
-
-        public JsonResult GetHtmlArtistInfoFooter(string id)
-        {
-            ArtistDTO artist = DataHelper.GetArtist(id);
-            return new JsonResult(artist == null ? "" : Generator.GenerateArtistInfo_footer(artist));
-        }
         public JsonResult GetHtmlPlaylistNoiBat()
         {
             return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistNoiBat.Take(5).ToList(), 1));
@@ -197,6 +215,10 @@ namespace TDT.Core.ServiceImp
         public JsonResult GetHtmlPlaylistChillCungDance()
         {
             return new JsonResult(Generator.GeneratePlaylist(DataHelper.Instance.PlaylistChillCungDance.Take(5).ToList(), 1));
+        }
+        public string LoadImg(string encodeId, string thumbpath)
+        {
+            return DataHelper.GetThumbnailSong(encodeId, thumbpath);
         }
     }
 }
