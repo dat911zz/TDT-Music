@@ -99,10 +99,99 @@
                             </div>
                         </div>
                         <div id="songs">
+                            @for(int i = 0; i < 5; i++)
+                            {
+                                <div class="select-item">
+                                    <div class="checkbox-wrapper"><label class="checkbox"><input type="checkbox"></label></div>
+                                    <div class="list-item bor-b-1 media-item hide-right">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <div class="song-prefix mar-r-10"><i class="icon ic-song"></i></div>
+                                                <div class="song-thumb">
+                                                    <figure class="image loading is-40x40" title="">
+                                                        <img src="">
+                                                    </figure>
+                                                    <div class="opacity "></div>
+                                                    <div class="zm-actions-container">
+                                                        <div class="zm-box zm-actions">
+                                                            <button class="zm-btn zm-tooltip-btn animation-like is-hidden active is-hover-circle button"
+                                                                    tabindex="0">
+                                                                <i class="icon ic-like"></i><i class="icon ic-like-full"></i>
+                                                            </button><button class="zm-btn action-play  button"
+                                                                             tabindex="0">
+                                                                <i class="icon action-play ic-play"></i>
+                                                            </button><button class="zm-btn zm-tooltip-btn is-hidden is-hover-circle button" tabindex="0">
+                                                                <i class="icon ic-more"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-info">
+                                                    <div class="title-wrapper">
+                                                        <span class="item-title title loading">
+                                                            <span>
+                                                                <span>
+                                                                    <span>
+                                                                    </span>
+                                                                </span><span style="position: fixed; visibility: hidden; top: 0px; left: 0px;">…</span>
+                                                            </span>
+                                                        </span>
+                                                    </div>
+                                                    <h3 class="is-one-line is-truncate subtitle loading">
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="media-content">
+                                                <div class="album-info loading">
+                                                    <span>
+                                                        <span><span></span></span><span style="position: fixed; visibility: hidden; top: 0px; left: 0px;">…</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="media-right">
+                                                <div class="hover-items">
+                                                    <div class="level">
+                                                        <div class="level-item"></div>
+                                                        <div class="level-item">
+                                                            <button class="zm-btn zm-tooltip-btn is-hover-circle button"
+                                                                    tabindex="0">
+                                                                <i class="icon ic-karaoke"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="level-item">
+                                                            <button class="zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button"
+                                                                    tabindex="0">
+                                                                <i class="icon ic-like"></i><i class="icon ic-like-full"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="level-item">
+                                                            <button class="zm-btn zm-tooltip-btn is-hover-circle button"
+                                                                    tabindex="0">
+                                                                <i class="icon ic-more"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="action-items">
+                                                    <div class="level">
+                                                        <div class="level-item">
+                                                            <button class="zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button"
+                                                                    tabindex="0">
+                                                                <i class="icon ic-like"></i><i class="icon ic-like-full"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="level-item duration loading"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div class="bottom-info">
-                        @* <p class="playlist-songs-info"><span>@songs.Count bài hát</span>•<span>@Model.SumDuration()</span></p> *@
+                        <p class="playlist-songs-info"><span><span id="quantity-song">0</span> bài hát</span>•<span id="sum-duration-song">0 giờ 0 phút</span></p>
                     </div>
                 </div>
             </div>
@@ -161,17 +250,28 @@
 
 <script>
     $(document).ready(function () {
+        var checkFirst = false;
         var json = `@Html.Raw(JsonConvert.SerializeObject(Model.songs))`;
         var arrSongId = JSON.parse(json);
         var max = Math.ceil(arrSongId.length / 5);
+        var q = $('#quantity-song');
+        var d = $('#sum-duration-song');
         for(var i = 1; i <= max; i++) {
             $.ajax({
                 url: "/Album/GetHtmlSong?page=" + i + "&json=" + json,
                 success: function(data) {
-                    $('#songs').append(data);
+                    var dt = JSON.parse(data);
+                    if (checkFirst) {
+                        $('#songs').append(dt.html);
+                    }
+                    else {
+                        $('#songs').html(dt.html);
+                        checkFirst = true;
+                    }
+                    $(q).html(dt.quantity);
+                    $(d).html(dt.durationHtml);
                 }
             });
         }
-        console.log()
     });
 </script>

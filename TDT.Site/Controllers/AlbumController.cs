@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Newtonsoft.Json;
 using TDT.Core.DTO.Firestore;
 using TDT.Core.Extensions;
@@ -13,6 +14,8 @@ namespace TDT_Music.Controllers
 {
     public class AlbumController : Controller
     {
+        static int q = 0;
+        static long d = 0;
         public IActionResult Index(string encodeId)
         {
             PlaylistDTO playlist;
@@ -28,15 +31,18 @@ namespace TDT_Music.Controllers
                 return Redirect("/");
             }
             ViewData["thumbnail"] = DataHelper.GetThumbnailPlaylist(playlist);
+            q = 0;
+            d = 0;
             return View(playlist);
         }
 
         public string GetHtmlSong(string page, string json)
         {
             int p;
-            if(!int.TryParse(page, out p))
+            var o = JsonConvert.SerializeObject(new { html = "", quantity = 0, duration = 0, durationHtml = "" });
+            if (!int.TryParse(page, out p))
             {
-                return string.Empty;
+                return o;
             }
             List<string> list = JsonConvert.DeserializeObject<List<string>>(json).Skip((int)((p - 1) * 5)).Take(5).ToList();
             if(list != null && list.Count > 0)
@@ -47,11 +53,13 @@ namespace TDT_Music.Controllers
                     var song = DataHelper.GetSong(item);
                     if (song == null)
                         continue;
+                    AlbumController.d += song.duration;
+                    AlbumController.q += 1;
                     res += Generator.GenerateSongElement(song);
                 }
-                return res;
+                return JsonConvert.SerializeObject(new { html = res, quantity = AlbumController.q, duration = AlbumController.d, durationHtml = HelperUtility.GetTime(AlbumController.d)});
             }
-            return string.Empty;
+            return o;
         }
     }
 }
