@@ -129,9 +129,11 @@ namespace TDT.CAdmin.Controllers
                 do
                 {
                     id = HelperUtility.GenerateRandomString(8);
+                 
                 } while (IsIdInUse(id));
+                songdto.encodeId = id;
                 Stream image = uploadFile.OpenReadStream();
-                string thumbnail = id + "_" + DateTime.Now.ToShortDateString().Replace("/", "_") + "." + uploadFile.FileName.Split('.').Last();
+                string thumbnail = id + "_" + DateTime.Now.ToString("yyyyMMddHHmmssfff").Replace("/", "_") + "." + uploadFile.FileName.Split('.').Last();
                 string url = FirebaseService.Instance.pushFile(image, "Images/Song/0/" + thumbnail).Result;
                 DataHelper.Instance.ThumbSong.Add(id, url);
                 FirebaseService.Instance.pushFile(image, "Images/Song/1/" + thumbnail).Wait();
@@ -143,11 +145,7 @@ namespace TDT.CAdmin.Controllers
                    token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
                    requestBody: JsonConvert.SerializeObject(songdto)
                ).Result;
-                //SongDTO Songfile = APICallHelper.Post<SongDTO>(
-                // $"Song/InsertOrUpdate",
-                // token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
-                // requestBody: JsonConvert.SerializeObject(fileData)
-                // ).Result;
+
                 if (Songfile.Code == Core.Enums.APIStatusCode.ActionSucceeded)
                 {
                     //FlashMessage để truyền message từ đây sang action hoặc controller khác
