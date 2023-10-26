@@ -59,7 +59,7 @@ namespace TDT.API.Controllers
             }
             try
             {
-                FirestoreService.Instance.SetAsync(FirestoreService.CL_Genre, genre.id, genre).Wait();
+                FirestoreService.Instance.SetAsync(FirestoreService.CL_Genre_test, genre.id, genre).Wait();
                 return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, new Dictionary<string, object>()
                     {
                         {"data", genre}

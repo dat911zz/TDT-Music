@@ -1,0 +1,111 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Core.Common;
+@using X.PagedList;
+@model IPagedList<TDT.Core.DTO.Firestore.Genre>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="title-admin">Danh Sách Chủ Đề</h2>
+
+<div class="row">
+    <div class="col-3">
+        <a type="button" class="btn btn-outline-dark" asp-action="Create">Tạo Mới Chủ Đề</a>
+    </div>
+    <div class="col-6"></div>
+    <div class="col-3 input-group mb-3">
+        <input type="text" class="form-control border" placeholder="Nhập vào chủ đề cần tìm" aria-label="Nhập vào chủ đề cần tìm" aria-describedby="button-search" id="searchTerm" value="@ViewBag.SearchTerm">
+        <div class="input-group-append">
+            <button class="btn btn-outline-dark" type="button" id="button-search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Bí Danh
+                </th>
+                <th>
+                    Tên Chủ Đề
+                </th>
+                <th>
+                    Tiêu Đề
+                </th>
+                <th>
+                    Link
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.alias)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.link)
+                        </td>
+
+                        <td class="btn-control">
+                            <a onclick="DVNConfirm('Xóa', 'Chủ Đề' , '/Genre/Delete' , '@item.id')">
+                                <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
+                            </a>
+                            <a href="@Url.Action("Details", "Genre", new { id = item.id })">
+                                <div class="fa fa-bars" aria-hidden="true"></div>
+                            </a>
+                            <a href="@Url.Action("Edit", "Genre", new { id = item.id })">
+                                <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Hiển thị điều hướng phân trang -->
+<div class="pagedList-container">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @ViewBag.SearchTerm }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Hàm để thực hiện tìm kiếm
+        function performSearch() {
+            var searchTerm = $('#searchTerm').val();
+            window.location.href = '@Url.Action("Index", new { page = 1 })' + '&searchTerm=' + searchTerm;
+        }
+
+        $('#button-search').click(performSearch);
+
+        $('#searchTerm').keypress(function (e) {
+            var key = e.which;
+            if (key === 13) {
+                performSearch();
+            }
+        });
+    });
+</script>

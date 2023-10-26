@@ -1,0 +1,47 @@
+﻿@model TDT.Core.DTO.Firestore.Genre
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="title-admin">Chi Tiết Bài Hát: @Html.DisplayFor(model => model.title)</h1>
+<div class="row">
+    <div class="col-sm-7">
+        <table class="table">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.id)</th>
+                <td>@Html.DisplayFor(model => model.id)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.title)</th>
+                <td>@Html.DisplayFor(model => model.title)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.alias)</th>
+                <td>@Html.DisplayFor(model => model.alias)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.name)</th>
+                <td>@Html.DisplayFor(model => model.name)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.link)</th>
+                <td>@Html.DisplayFor(model => model.link)</td>
+            </tr>
+           
+        </table>
+
+    </div>
+    <div class="col-sm-5 text-center ">
+        <p class="badge badge-primary">@Html.DisplayNameFor(model => model.alias)</p>
+        <p class="img_song img-fluid" encodeid="@Model.id" thumbnail="@Model.alias">
+        </p>
+        <p class="badge badge-primary">@Html.DisplayNameFor(model => model.alias)</p>
+        <p class="img_song" encodeid="@Model.id" thumbnail="@Model.alias"></p>
+    </div>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Trở về trang trước</a>
+</div>
