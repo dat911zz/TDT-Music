@@ -19,8 +19,6 @@ namespace TDT.Core.Helper
         private static string AuthMail = "thinh.chauvan2405@gmail.com";
         private static string AuthPassword = "admin@admin$123";
 
-        private static string folderNameImage = "images";
-
         private static string SECRET = "tBlpQ6nNoUv45MjsMVX4rxiZop9TMbZPRlayAnSc";
         private static string PATH_DB = @"https://cross-platform-music-default-rtdb.firebaseio.com/";
         private static string CONFIG_PATH = @".\Config\cross-platform-music-firebase-adminsdk-6e112-234ac26bb6.json";
@@ -39,7 +37,10 @@ namespace TDT.Core.Helper
                     AuthTokenAsyncFactory = () => Task.FromResult(authLink.FirebaseToken)
                 });
             authProvider = new FirebaseAuthProvider(new FirebaseConfig(API_KEY));
-            login().Wait();
+            while(authLink == null)
+            {
+                login().Wait();
+            }
             storage = new FirebaseStorage(BUCKET,
                          new FirebaseStorageOptions
                          {

@@ -1,0 +1,61 @@
+﻿.is-1-lines {
+    -webkit-line-clamp: 1
+}
+
+.is-1-lines, .is-2-lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    white-space: normal
+}
+
+.is-2-lines {
+    -webkit-line-clamp: 2
+}
+
+.is-3-lines {
+    -webkit-line-clamp: 3
+}
+
+.is-3-lines, .is-4-lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    white-space: normal
+}
+
+.is-4-lines {
+    -webkit-line-clamp: 4
+}
+
+.is-5-lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    white-space: normal
+}
+
+.banner-top100 {
+    background: transparent;
+    margin: -70px calc(var(--padding-section)*-1) 0;
+    text-align: center;
+    height: 280px;
+    position: relative
+}
+
+    .banner-top100 svg {
+        position: relative;
+        margin-top: 90px
+    }
+
+.section-spacing {
+    margin-bottom: 18px
+}
+
+    .section-spacing.is-slider {
+        margin-bottom: 48px
+    }

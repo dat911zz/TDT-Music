@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TDT.Core.Helper;
 using TDT.Core.Models;
+using TDT.Core.ServiceImp;
 
 namespace TDT.Core.DTO.Firestore
 {
@@ -41,7 +43,7 @@ namespace TDT.Core.DTO.Firestore
         private bool _liked;
         private int _comment;
 
-        [Display(Name = "Mã Hóa")]
+        [Display(Name = "Mã ID")]
         [FirestoreProperty] public string encodeId { get => _encodeId; set => _encodeId = value; }
         
         [Required(ErrorMessage = "Vui lòng nhập tiêu đề!")]
@@ -152,6 +154,30 @@ namespace TDT.Core.DTO.Firestore
             TimeSpan t = TimeSpan.FromSeconds(this.duration);
             string res = t.Minutes.ToString("00") + ":" + t.Seconds.ToString("00");
             return t.Hours == 0 ? res : t.Hours.ToString("00") + ":" + res;
+        }
+        public string GetHtmlArtist()
+        {
+            return Generator.GenerateArtistLink(this.artists);
+        }
+        public string GetHtmlAlbum()
+        {
+            string res = @"
+                <a href=""/Album/?encodeId={1}"">
+                    <span>
+                        <span>{0}</span>
+                    </span>
+                    <span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span>
+                </a>
+            ";
+            if (!string.IsNullOrEmpty(this.album))
+            {
+                PlaylistDTO album = DataHelper.GetPlaylist(this.album);
+                if(album != null)
+                {
+                    return string.Format(res, album.title, album.encodeId);
+                }
+            }
+            return string.Format(res, "", "");
         }
     }
 }

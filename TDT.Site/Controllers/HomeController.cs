@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using TDT_Music.Models;
+using TDT.Core.Extensions;
+using TDT.Core.Ultils.MVCMessage;
+using TDT.Site.Models;
 
-namespace TDT_Music.Controllers
+namespace TDT.Site.Controllers
 {
     public class HomeController : Controller
     {
@@ -20,6 +22,12 @@ namespace TDT_Music.Controllers
 
         public IActionResult Index()
         {
+            //this.MessageContainer().AddMessage(
+            //    "Tính năng thông báo đã được cập nhật! " +
+            //    "Có thể sử dụng được tại các controller. " +
+            //    "Chi tiết vui lòng liên hệ Vũ Đạt để được biết thêm.",
+            //    ToastMessageType.Info
+            //    );
             return View();
         }
 

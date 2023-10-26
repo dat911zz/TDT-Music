@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using TDT.Site.Services
+<!DOCTYPE html>
 <html lang="vi" data-theme="purple">
 <head>
     <meta charset="utf-8" />
@@ -23,11 +24,13 @@
         <link rel="stylesheet" href="~/css/site.css" />*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+    <link rel="stylesheet" href="~/css/loading.css" />
     <link rel="stylesheet" type="text/css" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/main.css" />
     <link rel="stylesheet" href="~/css/zgallery.css" />
     <link rel="stylesheet" href="~/css/zplayer.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 </head>
 <body>
     <div class="ms_loader">
@@ -37,7 +40,7 @@
     </div>
 
     <div id="root">
-        <div class="zm-section zm-layout has-player">
+        <div class="zm-section zm-layout">
             <aside class="zm-sidebar">
                 <div class="zm-sidebar-wrapper">
                     <nav class="zm-navbar">
@@ -51,8 +54,8 @@
                     </nav>
                     <nav class="zm-navbar zm-navbar-main">
                         <ul class="zm-navbar-menu">
-                            <li class="zm-navbar-item is-active">
-                                <a title="Khám Phá">
+                            <li class="zm-navbar-item home">
+                                <a title="Khám Phá" href="/">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
                                             d="M3.25 12C3.25 7.16751 7.16751 3.25 12 3.25C16.8325 3.25 20.75 7.16751 20.75 12C20.75 16.8325 16.8325 20.75 12 20.75C7.16751 20.75 3.25 16.8325 3.25 12ZM12 1.75C6.33908 1.75 1.75 6.33908 1.75 12C1.75 17.6609 6.33908 22.25 12 22.25C17.6609 22.25 22.25 17.6609 22.25 12C22.25 6.33908 17.6609 1.75 12 1.75ZM9.25 12C9.25 10.4812 10.4812 9.25 12 9.25C13.5188 9.25 14.75 10.4812 14.75 12C14.75 13.5188 13.5188 14.75 12 14.75C10.4812 14.75 9.25 13.5188 9.25 12ZM12 7.75C9.65279 7.75 7.75 9.65279 7.75 12C7.75 14.3472 9.65279 16.25 12 16.25C14.3472 16.25 16.25 14.3472 16.25 12C16.25 9.65279 14.3472 7.75 12 7.75Z"
@@ -61,7 +64,7 @@
                                     <span>Khám Phá</span>
                                 </a>
                             </li>
-                            <li class="zm-navbar-item">
+                            <li class="zm-navbar-item disabled zingchart">
                                 <a title="#zingchart">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -74,7 +77,7 @@
                                     </button>
                                 </a>
                             </li>
-                            <li class="zm-navbar-item">
+                            <li class="zm-navbar-item disabled radio">
                                 <a title="Radio">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -91,7 +94,7 @@
                                     </button>
                                 </a>
                             </li>
-                            <li class="zm-navbar-item sidebar-lib">
+                            <li class="zm-navbar-item sidebar-lib library">
                                 <a title="Thư Viện">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -122,7 +125,7 @@
                 ">
                             <nav class="zm-navbar zm-navbar-main">
                                 <ul class="zm-navbar-menu">
-                                    <li class="zm-navbar-item">
+                                    <li class="zm-navbar-item disabled music-charts">
                                         <a title="BXH Nhạc Mới">
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -135,7 +138,7 @@
                                             </button>
                                         </a>
                                     </li>
-                                    <li class="zm-navbar-item">
+                                    <li class="zm-navbar-item disabled genre">
                                         <a title="Chủ Đề &amp; Thể Loại">
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                                 <rect x="3" y="3" width="7.57895" height="7.57895" rx="1.89474"
@@ -153,8 +156,8 @@
                                             <span>Chủ Đề &amp; Thể Loại</span>
                                         </a>
                                     </li>
-                                    <li class="zm-navbar-item">
-                                        <a title="Top 100">
+                                    <li class="zm-navbar-item top100">
+                                        <a title="Top 100" href="/Hub/Top100">
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                                     d="M12 17L7.01888 19.6187C6.65207 19.8116 6.22335 19.5001 6.29341 19.0916L7.24472 13.5451L3.21491 9.61699C2.91815 9.32773 3.08191 8.82374 3.49202 8.76415L9.06107 7.95491L11.5516 2.90849C11.735 2.53687 12.265 2.53687 12.4484 2.90849L14.9389 7.95491L20.508 8.76415C20.9181 8.82374 21.0818 9.32773 20.7851 9.61699L16.7553 13.5451L17.7066 19.0916C17.7766 19.5001 17.3479 19.8116 16.9811 19.6187L12 17Z"
@@ -311,12 +314,12 @@
             <header class="zm-header">
                 <div class="level">
                     <div class="level-left">
-                        <button class="zm-btn disabled button" tabindex="0">
+                        @* <button class="zm-btn disabled button" tabindex="0">
                             <i class="icon ic-back"></i>
                         </button>
                         <button class="zm-btn disabled button" tabindex="0">
                             <i class="icon ic-forward"></i>
-                        </button>
+                        </button> *@
                         <form class="search">
                             <div class="search__container">
                                 <button class="zm-btn button" tabindex="0">
@@ -330,27 +333,6 @@
                         </form>
                     </div>
                     <div class="level-right">
-                        @* <div class="download-desktop-app" style="color: var(--link-text-hover)">
-                            <a class="zm-btn download-btn button" tabindex="0">
-                                <i class="icon">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <path
-                                            d="M17.4966 13.4203V13.6633C17.4966 14.5857 16.7489 15.3333 15.8266 15.3333H4.16658C3.24427 15.3333 2.49658 14.5857 2.49658 13.6633V5.00334C2.49658 4.08103 3.24427 3.33334 4.16658 3.33334H9.99658"
-                                            stroke="currentColor" stroke-linecap="round"></path>
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M14.4979 11.6247C14.4103 11.7021 14.2955 11.7493 14.1696 11.75C14.1687 11.75 14.1678 11.75 14.1668 11.75C14.1659 11.75 14.165 11.75 14.1641 11.75C14.0382 11.7493 13.9233 11.7021 13.8358 11.6247L10.5043 8.70963C10.2964 8.52779 10.2754 8.21191 10.4572 8.00409C10.6391 7.79627 10.9549 7.77521 11.1628 7.95705L13.6668 10.1481V3.33334C13.6668 3.0572 13.8907 2.83334 14.1668 2.83334C14.443 2.83334 14.6668 3.0572 14.6668 3.33334V10.1481L17.1709 7.95705C17.3787 7.77521 17.6946 7.79627 17.8765 8.00409C18.0583 8.21191 18.0372 8.52779 17.8294 8.70963L14.4979 11.6247Z"
-                                            fill="currentColor"></path>
-                                        <path d="M6 16.8333H14" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round"></path>
-                                    </svg>
-                                </i>
-                                <span>Tải bản Windows</span>
-                            </a>
-                            <div class="tooltip-download-btn">
-                                Zing MP3 đã có ứng dụng cho máy tính, tải ngay cho trải nghiệm
-                                tuyệt vời nhất.
-                            </div>
-                        </div> *@
                         <div class="setting-item">
                             <button class="zm-btn zm-tooltip-btn is-hover-circle button" tabindex="0">
                                 <i class="icon ic-settings"></i>
@@ -363,8 +345,9 @@
                                         <img src="https://zjs.zmdcdn.me/zmp3-desktop/releases/v1.9.76/static/media/user-default.3ff115bb.png"
                                             alt="" />
                                     </figure>
-                                </button>
+                                </button>                               
                             </div>
+                            @{await Html.RenderPartialAsync("_UserProfile");}                            
                         </div>
                     </div>
                 </div>
@@ -429,8 +412,7 @@
                                             <div class="thumbnail-wrapper">
                                                 <div class="thumbnail">
                                                     <figure class="image is-50x50">
-                                                        <img src="https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_webp/covers/9/2/92f893d85857a5afda233c0f81e1f6ed_1364048891.jpg"
-                                                            alt="" />
+                                                        <img src="" alt="" />
                                                     </figure>
                                                 </div>
                                             </div>
@@ -439,16 +421,16 @@
                                     <div class="media-content">
                                         <div class="is-mark level-left">
                                             <div class="song-info-wrapper">
-                                                <span class="song-title-item"><a class=""
-                                                        href="/bai-hat/Dong-Mau-Lac-Hong-Dan-Truong/ZWZ9790W.html">
+                                                <span class="song-title-item">
+                                                    <a class="" href="">
                                                         <div class="title-wrapper">
-                                                            <span class="item-title title">Dòng Máu Lạc Hồng</span>
+                                                            <span class="item-title title"></span>
                                                         </div>
                                                     </a></span>
                                             </div>
                                         </div>
                                         <h3 class="is-one-line is-truncate subtitle">
-                                            <a class="is-ghost" href="/Dan-Truong">Đan Trường</a>
+                                            <a class="is-ghost" href=""></a>
                                         </h3>
                                     </div>
                                     <div class="media-right">
@@ -489,19 +471,19 @@
                                 </div>
                             </div>
                             <div class="level-item mar-b-5">
-                                <span class="time left">01:35</span>
+                                <span class="time left">00:00</span>
                                 <div class="zm-duration-bar" style="display: flex; justify-content: center">
                                     <div class="zm-slider-bar" style="
-                        border-radius: 4px;
-                        background: linear-gradient(
-                          to right,
-                          var(--progressbar-active-bg) 0%,
-                          var(--progressbar-active-bg) 24.15697604080652%,
-                          var(--progressbar-player-bg) 24.15697604080652%,
-                          var(--progressbar-player-bg) 100%
-                        );
-                        align-self: center;
-                      ">
+                                        border-radius: 4px;
+                                        background: linear-gradient(
+                                          to right,
+                                          var(--progressbar-active-bg) 0%,
+                                          var(--progressbar-active-bg) 0%,
+                                          var(--progressbar-player-bg) 0%,
+                                          var(--progressbar-player-bg) 100%
+                                        );
+                                        align-self: center;
+                                      ">
                                         <div tabindex="0" aria-valuemax="392.829375" aria-valuemin="0"
                                             aria-valuenow="94.895698" draggable="false" role="slider"
                                             class="zm-slider-handle" style="
@@ -511,7 +493,7 @@
                         "></div>
                                     </div>
                                 </div>
-                                <span class="time right">06:33</span>
+                                <span class="time right">00:00</span>
                             </div>
                         </div>
                         <div class="player-controls-right level-right">
@@ -595,6 +577,7 @@
     @RenderBody()
 
     <script type="text/javascript" src="~/js/plugins/player/tdt-player.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="~/js/plugins/swiper/js/swiper.min.js"></script>
@@ -605,11 +588,36 @@
     <script type="text/javascript" src="~/js/custom.js"></script>*@
 
     <script>
+        //https://codeseven.github.io/toastr/demo.html
+        toastr.options = {
+            "closeButton": true,
+            "debug": true,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
         setTimeout(function () {
             $('.ms_loader').hide();
-        }, 2000);
+        }, 1000);
         $('.tdt-logo').click(function () {
             window.location = "/";
+        });
+        $(".menu-settings").hide();
+        $('.zm-avatar-frame').click(function (){
+            if ($(".menu-settings").is(":visible")) {
+                $(".menu-settings").hide();
+            }else{
+                $(".menu-settings").show();
+            }
         });
     </script>
     <script>
@@ -621,6 +629,28 @@
         }
     </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <partial name="_MessagesPartial" model="@ViewData["Messages"]"></partial>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        function checkShowPlayer() {
+            var layout = $('#root .zm-layout:first');
+            var cover = $('.now-playing-bar');
+            $.ajax({
+                url: "/Player/CheckShowPlayer",
+                success: function(data) {
+                    console.log(typeof(data));
+                    if(data) {
+                        layout.addClass("has-player");
+                        cover.show();
+                    }
+                    else {
+                        cover.hide();
+                    }
+                }
+            });
+        }
+        checkShowPlayer();
+    </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 using System;
 
-namespace TDT_Music.Models
+namespace TDT.Site.Models
 {
     public class ErrorViewModel
     {

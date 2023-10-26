@@ -56,14 +56,10 @@ namespace TDT.Core.Ultils
                 HTTP_CLIENT.DefaultRequestHeaders.Add("Authorization", string.Format("Bearer {0}", token));
             }
             if (!string.IsNullOrEmpty(requestBody))
-            {                
-                request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-                response = HTTP_CLIENT.Send(request);
-            }
-            else
             {
-                response = HTTP_CLIENT.GetAsync(requestUri).Result;
+                request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
             }
+            response = await HTTP_CLIENT.SendAsync(request);
 
             switch (response.StatusCode)
             {
