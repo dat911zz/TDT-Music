@@ -2,51 +2,63 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using TDT.Core.DTO;
 using TDT.Core.DTO.Firestore;
+using TDT.Core.Extensions;
 using TDT.Core.Helper;
 using TDT.Core.Ultils;
+using TDT.Core.Ultils.MVCMessage;
 using X.PagedList;
 
 namespace TDT.CAdmin.Controllers
 {
     public class PlaylistManagementController : Controller
     {
-        List<PlaylistDTO> _playlists = new List<PlaylistDTO>();
-
+        private List<PlaylistDTO> _playlists;
         public PlaylistManagementController()
+        {
+            GetDataPlayList();
+        }
+        public void GetDataPlayList()
         {
             if (DataHelper.Instance.Playlists.Count <= 0)
             {
-                HttpService httpService = new HttpService(APICallHelper.DOMAIN + "Playlist/load");
-                string json = httpService.getJson();
-                _playlists = ConvertService.Instance.convertToObjectFromJson<List<PlaylistDTO>>(json);
+                _playlists = APIHelper.Gets<PlaylistDTO>($"{FirestoreService.CL_Playlist}"+ "/Gets");
+
+                if (_playlists != null)
+                {
+                    foreach (PlaylistDTO playlist in _playlists)
+                    {
+                        if (!DataHelper.Instance.Playlists.Keys.Contains(playlist.encodeId))
+                        {
+                            DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
+                        }
+                    }
+                }
             }
             else
             {
                 _playlists = DataHelper.Instance.Playlists.Values.ToList();
             }
-            if (_playlists != null)
+        }
+        public IActionResult Index(string searchTerm, int? page)
+        {
+            ViewBag.SearchTerm = "";
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            List<PlaylistDTO> lsong = _playlists;
+
+            if (DataHelper.Instance.Playlists.Count > 0)
             {
-                foreach (PlaylistDTO playlist in _playlists)
+                if (!string.IsNullOrEmpty(searchTerm))
                 {
-                    if (!DataHelper.Instance.Playlists.Keys.Contains(playlist.encodeId))
-                    {
-                        DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
-                    }
+                    lsong = _playlists.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).ToList();
+                    ViewBag.SearchTerm = searchTerm;
+                    ViewBag.SoBH = lsong.Count;
                 }
             }
-        }
-
-        public IActionResult Index(int? page)
-        {
-            if (_playlists != null)
-            {
-                int pageNumber = (page ?? 1);
-                int pageSize = 10; 
-                IPagedList<PlaylistDTO> pagedList = _playlists.ToPagedList(pageNumber, pageSize);
-                return View(pagedList);
-            }
-            return View();
+            IPagedList<PlaylistDTO> pagedList = lsong == null ? new List<PlaylistDTO>().ToPagedList() : lsong.OrderByDescending(o => o.releaseDate).ToPagedList(pageNumber, pageSize);
+            return View(pagedList);
         }
         [HttpGet]
         public string LoadImg(string encodeID, string thumbnail)
@@ -100,29 +112,19 @@ namespace TDT.CAdmin.Controllers
         {
             return View();
         }
-
+        [HttpPost]
         public IActionResult Delete(string id)
         {
-            PlaylistDTO playlist = new PlaylistDTO();
-            if (id != null)
+            ResponseDataDTO<PlaylistDTO> playlistDTO = APICallHelper.Delete<ResponseDataDTO<PlaylistDTO>>($"Playlist/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            if (playlistDTO.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
-                playlist = _playlists.FirstOrDefault(s => s.encodeId.Equals(id));
-                return View(playlist);
-
+                this.MessageContainer().AddFlashMessage("Xóa play list thành công!", ToastMessageType.Success);
             }
-            return View();
-        }
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteS(string id)
-        {
-            PlaylistDTO playlist = new PlaylistDTO();
-            if (id != null)
+            else
             {
-                playlist = _playlists.FirstOrDefault(s => s.encodeId.Equals(id));
-                return View(playlist);
-
+                this.MessageContainer().AddFlashMessage(playlistDTO.Msg, ToastMessageType.Error);
             }
-            return View();
+            return new JsonResult("ok");
         }
         public IActionResult Details(string id)
         {
