@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,9 +13,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
 using TDT.CAdmin.Areas.Identity.Data;
+using TDT.CAdmin.Filters;
 using TDT.CAdmin.Models;
 using TDT.Core.ServiceImp;
 using TDT.Core.Ultils.MVCMessage;
+using TDT.IdentityCore.AuthHandler;
 using TDT.IdentityCore.Middlewares;
 using TDT.IdentityCore.Utils;
 
@@ -47,10 +50,13 @@ namespace TDT.CAdmin
                         cfg.LogoutPath = new PathString("/Auth/Logout");
                     }
                 );
+            services.AddScoped<IAuthorizationHandler, PoliciesAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
             services.AddMvc(cfg =>
             {
                 cfg.Filters.Add<MessagesFilter>();
             }).AddControllersAsServices();
+            services.AddSession();
             //services.Configure<IdentityEmailService>(Configuration);
         }
 
@@ -76,7 +82,10 @@ namespace TDT.CAdmin
             app.UseStaticFiles();
             
             app.UseRouting();
+            app.UseSession();
+            //Who are you?
             app.UseAuthentication();
+            //Where you allowed?
             app.UseAuthorization();
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseMiddleware<RBACMiddleware>();

@@ -16,13 +16,15 @@ using System.Collections.Generic;
 using TDT.IdentityCore.Utils;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Text.RegularExpressions;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using TDT.Core.DTO.Firestore;
 
 namespace TDT.API.Controllers
 {
     [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
-    [Authorize]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
         private IConfiguration _cfg;
         private ISecurityHelper _securityHelper;
@@ -43,7 +45,7 @@ namespace TDT.API.Controllers
             _securityHelper = securityHelper;
             _mailSender = mailSender;
         }
-
+        
         [AllowAnonymous]
         [HttpPost]
         public IActionResult Login(LoginModel login, bool isCAdmin = false)
@@ -91,7 +93,7 @@ namespace TDT.API.Controllers
         {
             try
             {
-                if (_db.Users.Any(u => u.UserName.Equals(model.UserName)))
+                if (_db.Users.Any(u => u.UserName.Equals(model.UserName) || u.Email.Equals(model.Email)))
                 {
                     return APIHelper.GetJsonResult(APIStatusCode.ExistingAccount);
                 }
@@ -104,10 +106,7 @@ namespace TDT.API.Controllers
                     PasswordHash = SecurityHelper.HashPassword(model.Password)
                 });
                 _db.SubmitChanges();
-                return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
-                    {
-                        {"data", model}
-                    }, "Đăng ký");
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "tạo tài khoản");
             }
             catch (Exception ex)
             {
@@ -123,7 +122,7 @@ namespace TDT.API.Controllers
             User user = null;
             //Find user
             user = _db.Users.FirstOrDefault(u =>
-            u.UserName.Equals(login.UserName)
+            u.UserName.Equals(login.UserName) || u.Email.Equals(login.UserName)
             );
             if (user != null)
             {
@@ -136,6 +135,7 @@ namespace TDT.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult LockoutAccount(string username, [FromBody]DateTime lockoutEnd)
         {
             try
@@ -167,6 +167,7 @@ namespace TDT.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult UnlockAccount(string username)
         {
             try

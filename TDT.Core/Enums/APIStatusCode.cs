@@ -35,11 +35,13 @@ namespace TDT.Core.Enums
         InvalidEmail,
         [Description("Mật khẩu không đúng định dạng")]
         InvalidPassword,
-        [Description("Tên đăng nhập đã tồn tại")]
+        [Description("Tên đăng nhập hoặc mail đã tồn tại")]
         ExistingAccount,
         [Description("{0} thành công!")]
         Succeeded,
         [Description("Tài khoản tạm khóa")]
         AccountLockout,
+        [Description("Dữ liệu đã tồn tại")]
+        Exist,
     }
 }

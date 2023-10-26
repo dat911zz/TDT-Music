@@ -43,7 +43,7 @@ namespace TDT.Core.DTO.Firestore
         private bool _liked;
         private int _comment;
 
-        [Display(Name = "Mã Hóa")]
+        [Display(Name = "Mã ID")]
         [FirestoreProperty] public string encodeId { get => _encodeId; set => _encodeId = value; }
         
         [Required(ErrorMessage = "Vui lòng nhập tiêu đề!")]

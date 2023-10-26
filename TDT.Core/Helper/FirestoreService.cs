@@ -1,4 +1,5 @@
 ﻿using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace TDT.Core.Helper
         public static string CL_TypePlaylist = "TypePlaylist";
         public static string CL_Genre = "Genre";
         public static string CL_Storage = "Storage";
-
+        public static string CL_Song_Test = "SongTest";
 
         private static readonly string CONFIG_PATH = "/Config/cross-platform-music-firebase-adminsdk-6e112-689a7c7543.json";
         private FirestoreDb db;
