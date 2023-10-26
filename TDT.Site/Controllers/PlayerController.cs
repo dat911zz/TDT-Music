@@ -28,6 +28,11 @@ namespace TDT.Site.Controllers
         {
             return PlayerService.CurIndex;
         }
+        [HttpPost]
+        public void SetCurIndex([FromForm] int index)
+        {
+            PlayerService.CurIndex = index;
+        }
 
         public bool GetIsShuffle()
         {
@@ -56,6 +61,16 @@ namespace TDT.Site.Controllers
         public void SetIsRepeatOne([FromForm] bool value)
         {
             PlayerService.IsRepeatOne = value;
+        }
+
+        public string GetCurUrl()
+        {
+            return PlayerService.CurUrl;
+        }
+        [HttpPost]
+        public void SetCurUrl([FromForm] string url)
+        {
+            PlayerService.CurUrl = url;
         }
     }
 }

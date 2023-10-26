@@ -105,17 +105,18 @@ const info_nameArtist = document.querySelector(".player-controls__container .med
 
 //import songs from "./songs.js";
 var songs = [];
-let index = getCurIndex();
+let index = 0;
+getCurIndex();
 var isInit = false;
-var isShuffle = getIsShuffle();
+var isShuffle = false;
+getIsShuffle()
 var isRepeat = false;
+getIsRepeat();
 var isRepeatOne = false;
+getIsRepeatOne();
 
 var mouse_down = false;
 var down_newTime = 0;
-
-setIconShuffle(isShuffle);
-changeMusic("init");
 
 prevButton.onclick = () => changeMusic("prev");
 nextButton.onclick = () => changeMusic();
@@ -133,22 +134,22 @@ shuffleButton.onclick = function() {
 
 function setIconShuffle(check) {
     if (check) {
-        this.classList.add('is-active');
+        shuffleButton.classList.add('is-active');
     }
     else {
-        this.classList.remove('is-active');
+        shuffleButton.classList.remove('is-active');
     }
 }
 
 repeateButton.onclick = function () {
-    if (!this.classList.contains('is-active')) {
+    if (!isRepeat && !isRepeatOne) {
         this.classList.add('is-active');
         isRepeat = true;
         isRepeatOne = false;
         this.innerHTML = icon_repeat;
     }
     else {
-        if (this.querySelector('i').classList.contains('ic-repeat')) {
+        if (isRepeat) {
             isRepeat = false;
             isRepeatOne = true;
             this.innerHTML = icon_repeatone;
@@ -160,7 +161,22 @@ repeateButton.onclick = function () {
             this.innerHTML = icon_repeat;
         }
     }
+    setIsRepeat(isRepeat);
+    setIsRepeatOne(isRepeatOne);
 };
+
+function setIconRepeate() {
+    if (isRepeat || isRepeatOne) {
+        repeateButton.classList.add('is-active');
+        if (isRepeatOne) {
+            repeateButton.innerHTML = icon_repeatone;
+        }
+    }
+}
+
+function start() {
+    changeMusic("init");
+}
 
 playPauseButton.onclick = () => playPause();
 
@@ -322,9 +338,12 @@ const changeMusic = (type = "next") => {
                 index -= 1;
             }
         }
-        
+        setCurIndex(index);
     }
     playPauseButton.innerHTML = icon_await;
+    if (index == undefined) {
+        index = 0;
+    }
     if (index < songs.length) {
         player.src = songs[index].Src;
         info_imgsong.src = songs[index].Thumbnail;
@@ -372,13 +391,19 @@ function checkShowPlayer(type = "init") {
         }
     });
 }
+$(document).ready(function () {
+    start();
+    $('.player-controls__container').click(function () {
+        redirectPlaylist(); 
+    });
+});
 
 function changeIconActionPlay() {
     var icon = $('.header-thumbnail i.action-play')
     if (player.paused) {
         icon.addClass('ic-svg-play-circle');
         icon.removeClass('ic-gif-playing-white');
-        Inif (!setFirst) {
+        if (!setFirst) {
             $('button.btn-play-all').html(`<i class="icon ic-play"></i><span>Phát tất cả</span>`);
         }
         else {
@@ -411,6 +436,7 @@ $('button.btn-play-all').click(function () {
             }
         });
         setFirst = true;
+        setCurPlaylist();
     }
     else {
         $(playPauseButton).trigger('click');
@@ -431,7 +457,16 @@ function getCurIndex() {
     $.ajax({
         url: "/Player/GetCurIndex",
         success: function (data) {
-            return data;
+            index = data;
+        }
+    });
+}
+function setCurIndex(index) {
+    $.ajax({
+        type: "POST",
+        url: "/Player/SetCurIndex",
+        data: {
+            index: index
         }
     });
 }
@@ -440,7 +475,8 @@ function getIsShuffle() {
     $.ajax({
         url: "/Player/GetIsShuffle",
         success: function (data) {
-            return data;
+            isShuffle = data;
+            setIconShuffle(isShuffle);
         }
     });
 }
@@ -450,6 +486,62 @@ function setIsShuffle(value) {
         url: "/Player/SetIsShuffle",
         data: {
             value: value
+        }
+    });
+}
+
+function getIsRepeat() {
+    $.ajax({
+        url: "/Player/GetIsRepeat",
+        success: function (data) {
+            isRepeat = data;
+            setIconRepeate();
+        }
+    });
+}
+function setIsRepeat(value) {
+    $.ajax({
+        type: "POST",
+        url: "/Player/SetIsRepeat",
+        data: {
+            value: value
+        }
+    });
+}
+
+function getIsRepeatOne() {
+    $.ajax({
+        url: "/Player/GetIsRepeatOne",
+        success: function (data) {
+            isRepeatOne = data;
+            setIconRepeate();
+        }
+    });
+}
+function setIsRepeatOne(value) {
+    $.ajax({
+        type: "POST",
+        url: "/Player/SetIsRepeatOne",
+        data: {
+            value: value
+        }
+    });
+}
+
+function redirectPlaylist() {
+    $.ajax({
+        url: "/Player/GetCurUrl",
+        success: function (data) {
+            window.location = data;
+        }
+    });
+}
+function setCurPlaylist() {
+    $.ajax({
+        type: "POST",
+        url: "/Player/SetCurUrl",
+        data: {
+            url: window.location.href
         }
     });
 }
