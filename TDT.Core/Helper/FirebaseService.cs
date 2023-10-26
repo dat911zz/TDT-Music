@@ -37,7 +37,10 @@ namespace TDT.Core.Helper
                     AuthTokenAsyncFactory = () => Task.FromResult(authLink.FirebaseToken)
                 });
             authProvider = new FirebaseAuthProvider(new FirebaseConfig(API_KEY));
-            login().Wait();
+            while(authLink == null)
+            {
+                login().Wait();
+            }
             storage = new FirebaseStorage(BUCKET,
                          new FirebaseStorageOptions
                          {

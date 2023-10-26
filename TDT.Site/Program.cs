@@ -7,7 +7,7 @@ using NLog;
 using NLog.Web;
 using Microsoft.Extensions.Logging;
 
-namespace TDT_Music
+namespace TDT.Site
 {
     public class Program
     {
@@ -37,6 +37,7 @@ namespace TDT_Music
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    new Task(() => { new ShareController().LoadSongs(); }).Start();
                     new Task(() => { new ShareController().LoadGenre(); }).Start();
                     new Task(() => { new ShareController().LoadPlaylist(); }).Start();
                     new Task(() => { new ShareController().LoadArtist(); }).Start();

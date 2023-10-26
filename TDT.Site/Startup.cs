@@ -16,7 +16,7 @@ using TDT.Core.Ultils.MVCMessage;
 using TDT.IdentityCore.Middlewares;
 using TDT.IdentityCore.Utils;
 
-namespace TDT_Music
+namespace TDT.Site
 {
     public class Startup
     {

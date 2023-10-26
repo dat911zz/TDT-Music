@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "TDT_Music": {
+    "TDT.Site": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

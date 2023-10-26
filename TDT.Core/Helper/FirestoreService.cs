@@ -75,6 +75,10 @@ namespace TDT.Core.Helper
         {
             return db.Collection(collectionName).WhereArrayContains(path, value);
         }
+        public Query WhereIn(string collectionName, string path, List<string> value)
+        {
+            return db.Collection(collectionName).WhereIn(path, value);
+        }
 
 
         public List<T> Gets<T>(Query query) where T : class, new()
