@@ -9,13 +9,14 @@
 
 <h4>PlaylistDTO</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-8">
             <div class="form-group">
                 <label asp-for="encodeId" class="control-label"></label>
-                <input asp-for="encodeId" class="form-control" />
+                <input asp-for="encodeId" class="form-control" readonly />
                 <span asp-validation-for="encodeId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -23,11 +24,7 @@
                 <input asp-for="title" class="form-control" />
                 <span asp-validation-for="title" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="thumbnail" class="control-label"></label>
-                <input asp-for="thumbnail" class="form-control" />
-                <span asp-validation-for="thumbnail" class="text-danger"></span>
-            </div>
+          
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="isoffical" /> @Html.DisplayNameFor(model => model.isoffical)
@@ -83,11 +80,7 @@
                 <input asp-for="uid" class="form-control" />
                 <span asp-validation-for="uid" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="thumbnailM" class="control-label"></label>
-                <input asp-for="thumbnailM" class="form-control" />
-                <span asp-validation-for="thumbnailM" class="text-danger"></span>
-            </div>
+           
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="isShuffle" /> @Html.DisplayNameFor(model => model.isShuffle)
@@ -145,12 +138,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="like" class="control-label"></label>
-                <input asp-for="like" class="form-control" />
+                <input asp-for="like" class="form-control" readonly />
                 <span asp-validation-for="like" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="listen" class="control-label"></label>
-                <input asp-for="listen" class="form-control" />
+                <input asp-for="listen" class="form-control" readonly />
                 <span asp-validation-for="listen" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -158,12 +151,28 @@
                     <input class="form-check-input" asp-for="liked" /> @Html.DisplayNameFor(model => model.liked)
                 </label>
             </div>
+        </div>
+        <div class="col-md-4">
+@*             <p class="badge badge-primary">@Html.DisplayNameFor(model => model.thumbnailM)</p>
+            <p class="img_song img-fluid" encodeid="@Model.encodeId" thumbnail="@Model.thumbnailM">
+            </p> *@
+            <p class="badge badge-primary">@Html.DisplayNameFor(model => model.thumbnail)</p>
+            <p class="img_song" encodeid="@Model.encodeId" thumbnail="@Model.thumbnail"></p>
+
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label  class="control-label">Chọn ảnh mới</label>
+                <input asp-for="thumbnail" class="form-control" name="uploadFile" type="file" />
+                <span asp-validation-for="thumbnail" class="text-danger"></span>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+   
+
+
 
 <div>
     <a asp-action="Index">Back to List</a>
@@ -172,3 +181,26 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    $(".img_song").each(function (e, val) {
+        var id = $(this).attr("encodeid");
+        var thumbnail = $(this).attr("thumbnail");
+        loadImg(this, id, thumbnail);
+        console.log(id, thumbnail);
+
+    })
+    function loadImg(that, _id, _thumbnail) {
+        $.ajax({
+            url: "/PlaylistManagement/LoadImg",
+            data: {
+                encodeID: _id,
+                thumbnail: _thumbnail
+            },
+            success: function (data) {
+                // $('#img_song').html(data);
+                $(that).html('<img style="width: 200px;" class="thumbnail" src="' + data + '"/>');
+            }
+        });
+    }
+
+</script>
