@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Linq.Mapping;
+using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Reflection.Metadata.Ecma335;
@@ -9,24 +10,13 @@ using System.Text;
 using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
 using TDT.Core.Ultils;
+using static Google.Cloud.Firestore.V1.StructuredAggregationQuery.Types.Aggregation.Types;
 
 namespace TDT.Core.ServiceImp
 {
-    public class Generator
+    public static class Generator
     {
-        private Generator() { }
-        private static Generator _instance;
-        public static Generator Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = new Generator();
-                return _instance;
-            }
-        }
-
-        public string GenerateSongRelease(List<SongDTO> songs)
+        public static string GenerateSongRelease(List<SongDTO> songs)
         {
             StringBuilder str = new StringBuilder();
             str.Append(@"
@@ -36,19 +26,46 @@ namespace TDT.Core.ServiceImp
             foreach (SongDTO song in songs)
             {
 
-                string img;
-                if (DataHelper.Instance.ThumbSong.Keys.Contains(song.encodeId))
-                {
-                    img = DataHelper.Instance.ThumbSong[song.encodeId];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(song.thumbnail);
-                    DataHelper.Instance.ThumbSong.Add(song.encodeId, img);
-                }
-                int iArt = 0;
+                string img = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail);
                 string betweenDate = HelperUtility.getBetweenDate(song.ReleaseDate());
                 string duration = song.Duration();
+                string premium = string.Empty;
+                if(song.streamingStatus == -1)
+                {
+                    premium = @"<i class=""icon"">
+                                    <svg width=""56"" height=""14"" viewBox=""0 0 56 14"" fill=""none"">
+                                        <rect width=""56"" height=""14"" rx=""4"" fill=""#E5AC1A""></rect>
+                                        <g clip-path=""url(#clip0_3541_3928)"">
+                                            <path
+                                                d=""M9.89231 4.22549C9.54389 4.07843 9.12579 4 8.64796 4H6.3086C6.219 4 6.14932 4.02941 6.08959 4.08824C6.02986 4.14706 6 4.21569 6 4.30392V9.68627C6 9.77451 6.02986 9.85294 6.08959 9.90196C6.14932 9.96078 6.219 9.9902 6.3086 9.9902H7.43348C7.52308 9.9902 7.60271 9.96078 7.65249 9.91177C7.72217 9.85294 7.75204 9.77451 7.75204 9.68627V7.97059H8.64796C9.12579 7.97059 9.53394 7.90196 9.89231 7.76471C10.2507 7.62745 10.5394 7.40196 10.7385 7.11765C10.9475 6.82353 11.0471 6.45098 11.0471 6.0098C11.0471 5.56863 10.9475 5.18627 10.7385 4.88235C10.5394 4.58824 10.2507 4.36275 9.89231 4.21569V4.22549ZM9.29502 6C9.29502 6.21569 9.23529 6.37255 9.11584 6.48039C8.99638 6.58824 8.82715 6.63725 8.6181 6.63725H7.74208V5.35294H8.6181C8.86697 5.35294 9.04615 5.41176 9.1457 5.52941C9.2552 5.65686 9.30498 5.80392 9.30498 6H9.29502Z""
+                                                fill=""#FEFFFF""></path>
+                                            <path
+                                                d=""M16.5818 7.63725C16.8606 7.4902 17.0995 7.29412 17.2787 7.03922C17.4877 6.7549 17.5873 6.40196 17.5873 5.9902C17.5873 5.36275 17.3583 4.86275 16.9203 4.51961C16.4922 4.17647 15.895 4 15.1583 4H12.8787C12.7891 4 12.7194 4.02941 12.6597 4.08824C12.5999 4.14706 12.5701 4.21569 12.5701 4.30392V9.68627C12.5701 9.77451 12.5999 9.85294 12.6597 9.90196C12.7194 9.96078 12.7891 9.9902 12.8787 9.9902H13.9538C14.0434 9.9902 14.123 9.96078 14.1728 9.90196C14.2325 9.84314 14.2624 9.77451 14.2624 9.68627V7.94118H14.9592L15.885 9.70588C15.9149 9.7549 15.9547 9.81373 16.0144 9.88235C16.0841 9.95098 16.1836 9.9902 16.323 9.9902H17.428C17.5076 9.9902 17.5674 9.96078 17.6271 9.91177C17.6868 9.85294 17.7167 9.78431 17.7167 9.71569C17.7167 9.67647 17.7067 9.62745 17.6769 9.57843L16.5719 7.62745L16.5818 7.63725ZM15.8352 5.97059C15.8352 6.16667 15.7755 6.31373 15.666 6.42157C15.5565 6.52941 15.3873 6.58824 15.1483 6.58824H14.2823V5.35294H15.1483C15.3873 5.35294 15.5664 5.41176 15.666 5.51961C15.7755 5.63725 15.8352 5.78431 15.8352 5.97059Z""
+                                                fill=""#FEFFFF""></path>
+                                            <path
+                                                d=""M23.5801 8.60784H20.9421V7.64706H23.3312C23.4208 7.64706 23.5005 7.61765 23.5602 7.55882C23.6199 7.5 23.6398 7.42157 23.6398 7.34314V6.61765C23.6398 6.52941 23.61 6.46078 23.5602 6.40196C23.5005 6.33333 23.4208 6.30392 23.3312 6.30392H20.9421V5.38235H23.5104C23.6 5.38235 23.6697 5.35294 23.7294 5.29412C23.7892 5.23529 23.819 5.16667 23.819 5.07843V4.30392C23.819 4.21569 23.7892 4.14706 23.7294 4.08824C23.6697 4.02941 23.6 4 23.5104 4H19.6082C19.5186 4 19.4489 4.02941 19.3892 4.08824C19.3294 4.14706 19.2996 4.21569 19.2996 4.30392V9.68627C19.2996 9.77451 19.3294 9.85294 19.3892 9.90196C19.4489 9.96078 19.5186 9.9902 19.6082 9.9902H23.5801C23.6697 9.9902 23.7394 9.96078 23.7991 9.90196C23.8588 9.84314 23.8887 9.77451 23.8887 9.68627V8.91177C23.8887 8.82353 23.8588 8.7549 23.7991 8.69608C23.7394 8.63725 23.6697 8.60784 23.5801 8.60784Z""
+                                                fill=""#FEFFFF""></path>
+                                            <path
+                                                d=""M31.2054 4H30.3095C30.19 4 30.0904 4.03922 30.0208 4.10784C29.9809 4.15686 29.9411 4.19608 29.9212 4.23529L28.5375 6.69608L27.1638 4.2451C27.1638 4.2451 27.104 4.15686 27.0542 4.10784C26.9945 4.03922 26.895 4 26.7755 4H25.8696C25.79 4 25.7203 4.02941 25.6506 4.08824C25.5909 4.14706 25.561 4.21569 25.561 4.30392V9.68627C25.561 9.77451 25.5909 9.85294 25.6506 9.91177C25.7104 9.97059 25.79 9.9902 25.8696 9.9902H26.8751C26.9647 9.9902 27.0443 9.96078 27.0941 9.90196C27.1538 9.84314 27.1837 9.77451 27.1837 9.68627V6.97059L27.9402 8.36274C27.9701 8.42157 28.0199 8.48039 28.0696 8.51961C28.1294 8.57843 28.219 8.59804 28.3185 8.59804H28.7565C28.8561 8.59804 28.9457 8.56863 29.0054 8.51961C29.0651 8.47059 29.1049 8.41176 29.1248 8.36274L29.8814 6.97059V9.68627C29.8814 9.77451 29.9113 9.85294 29.971 9.91177C30.0307 9.97059 30.1104 9.9902 30.1999 9.9902H31.1954C31.285 9.9902 31.3647 9.96078 31.4144 9.91177C31.4841 9.85294 31.514 9.77451 31.514 9.68627V4.30392C31.514 4.21569 31.4841 4.13725 31.4144 4.08824C31.3547 4.02941 31.285 4 31.1954 4H31.2054Z""
+                                                fill=""#FEFFFF""></path>
+                                            <path
+                                                d=""M34.8488 4H33.7239C33.6343 4 33.5546 4.02941 33.5049 4.08824C33.4451 4.14706 33.4153 4.21569 33.4153 4.30392V9.68627C33.4153 9.77451 33.4451 9.85294 33.5049 9.90196C33.5646 9.96078 33.6343 9.9902 33.7239 9.9902H34.8488C34.9384 9.9902 35.018 9.96078 35.0678 9.90196C35.1275 9.84314 35.1574 9.77451 35.1574 9.68627V4.30392C35.1574 4.21569 35.1275 4.14706 35.0678 4.08824C35.008 4.02941 34.9384 4 34.8488 4Z""
+                                                fill=""#FEFFFF""></path>
+                                            <path
+                                                d=""M41.8969 4H40.8118C40.7322 4 40.6625 4.02941 40.5928 4.08824C40.5331 4.14706 40.5032 4.21569 40.5032 4.30392V7.62745C40.5032 7.95098 40.4236 8.19608 40.2643 8.36274C40.105 8.51961 39.896 8.59804 39.6073 8.59804C39.3186 8.59804 39.0896 8.51961 38.9403 8.36274C38.781 8.20588 38.7114 7.95098 38.7114 7.62745V4.30392C38.7114 4.21569 38.6815 4.14706 38.6218 4.08824C38.562 4.02941 38.4923 4 38.4028 4H37.3276C37.238 4 37.1584 4.02941 37.1086 4.08824C37.0489 4.14706 37.019 4.21569 37.019 4.30392V7.63725C37.019 8.16667 37.1285 8.61765 37.3376 8.97059C37.5566 9.31373 37.8652 9.57843 38.2534 9.7549C38.6417 9.92157 39.0996 10 39.6172 10C40.1349 10 40.5928 9.92157 40.981 9.7549C41.3693 9.58824 41.6779 9.32353 41.8969 8.97059C42.1159 8.61765 42.2154 8.16667 42.2154 7.63725V4.30392C42.2154 4.21569 42.1856 4.13725 42.1159 4.08824C42.0561 4.02941 41.9865 4 41.9068 4H41.8969Z""
+                                                fill=""#FEFFFF""></path>
+                                            <path
+                                                d=""M49.9005 4.08824C49.8407 4.02941 49.771 4 49.6815 4H48.7855C48.6561 4 48.5665 4.03922 48.5068 4.10784C48.457 4.15686 48.4272 4.19608 48.4072 4.23529L47.0235 6.69608L45.6398 4.2451C45.6398 4.2451 45.5801 4.15686 45.5303 4.10784C45.4706 4.03922 45.371 4 45.2516 4H44.3457C44.2661 4 44.1864 4.02941 44.1267 4.08824C44.067 4.14706 44.0371 4.21569 44.0371 4.30392V9.68627C44.0371 9.77451 44.067 9.85294 44.1267 9.91177C44.1864 9.97059 44.2661 9.9902 44.3457 9.9902H45.3511C45.4407 9.9902 45.5204 9.96078 45.5701 9.90196C45.6299 9.84314 45.6597 9.77451 45.6597 9.68627V6.97059L46.4163 8.36274C46.4462 8.42157 46.4959 8.48039 46.5457 8.51961C46.6054 8.57843 46.695 8.59804 46.7946 8.59804H47.2326C47.3321 8.59804 47.4217 8.56863 47.4815 8.51961C47.5412 8.47059 47.581 8.41176 47.6009 8.36274L48.3575 6.97059V9.68627C48.3575 9.77451 48.3873 9.85294 48.4471 9.91177C48.5068 9.97059 48.5864 9.9902 48.676 9.9902H49.6715C49.7611 9.9902 49.8407 9.96078 49.8905 9.91177C49.9602 9.85294 49.99 9.77451 49.99 9.68627V4.30392C49.99 4.21569 49.9602 4.13725 49.8905 4.08824H49.9005Z""
+                                                fill=""#FEFFFF""></path>
+                                        </g>
+                                        <defs>
+                                            <clipPath id=""clip0_3541_3928"">
+                                                <rect width=""44"" height=""6"" fill=""white"" transform=""translate(6 4)""></rect>
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                </i>";
+                }
                 str.AppendFormat(@"
                         <div class=""list-item hide-right media-item hide-right full-left"">
                             <div class=""media"">
@@ -80,7 +97,7 @@ namespace TDT.Core.ServiceImp
                                             <span class=""item-title title"">
                                                 <span>
                                                     <span>
-                                                        <span>{2}</span>
+                                                        <span>{0}</span>
                                                     </span>
                                                     <span style=""
                                                           position: fixed;
@@ -90,38 +107,12 @@ namespace TDT.Core.ServiceImp
                                                         "">…</span>
                                                 </span>
                                             </span>
+                                            {2}
                                         </div>
-                                        <h3 class=""is-one-line is-truncate subtitle"">", song.title, img, song.title);
+                                        <h3 class=""is-one-line is-truncate subtitle"">", song.title, img, premium);
                 if (song.artists != null)
                 {
-                    foreach (var item in song.artists)
-                    {
-                        ArtistDTO artDTO = new ArtistDTO();
-                        if (!DataHelper.Instance.Artists.Keys.Contains(item))
-                        {
-                            artDTO = APIHelper.Get<ArtistDTO>(FirestoreService.CL_Artist, item);
-                            if (artDTO == null)
-                                continue;
-                            try
-                            {
-                                DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
-                            }
-                            catch { }
-                        }
-                        else
-                        {
-                            artDTO = DataHelper.Instance.Artists[item];
-                        }
-                        if (string.IsNullOrEmpty(artDTO.name))
-                            continue;
-                        if (iArt++ > 0)
-                        {
-                            str.Append(", ");
-                        }
-                        str.AppendFormat(@"
-                                            <a class=""is-ghost"" href=""{1}"">{0}</a>
-                    ", artDTO.name, artDTO.link);
-                    }
+                    str.Append(GenerateArtistLink(song.artists));
                 }
 
                 str.AppendFormat(@"
@@ -180,71 +171,157 @@ namespace TDT.Core.ServiceImp
             return str.ToString();
         }
 
-        /// <summary>
-        /// optionLast = 0 : title,
-        /// optionLast = 1 : artists
-        /// </summary>
-        /// <param name="optionLast">0: title</param>
-        /// <param name="optionLast">1: artists</param>
-        /// <returns></returns>
-        public string GeneratePlaylist(List<PlaylistDTO> playlists, int optionLast = 0)
+        public static string GeneratePageSong(List<SongDTO> songs)
+        {
+            string res = string.Empty;
+            foreach (var song in songs)
+            {
+                string premium = string.Empty;
+                if(song.streamingStatus == -1)
+                {
+                    premium = @"
+                        <i class=""icon"">
+                                <svg width=""56"" height=""14"" viewBox=""0 0 56 14"" fill=""none"">
+                                    <rect width=""56"" height=""14"" rx=""4"" fill=""#E5AC1A""></rect>
+                                    <g clip-path=""url(#clip0_3541_3928)"">
+                                        <path
+                                            d=""M9.89231 4.22549C9.54389 4.07843 9.12579 4 8.64796 4H6.3086C6.219 4 6.14932 4.02941 6.08959 4.08824C6.02986 4.14706 6 4.21569 6 4.30392V9.68627C6 9.77451 6.02986 9.85294 6.08959 9.90196C6.14932 9.96078 6.219 9.9902 6.3086 9.9902H7.43348C7.52308 9.9902 7.60271 9.96078 7.65249 9.91177C7.72217 9.85294 7.75204 9.77451 7.75204 9.68627V7.97059H8.64796C9.12579 7.97059 9.53394 7.90196 9.89231 7.76471C10.2507 7.62745 10.5394 7.40196 10.7385 7.11765C10.9475 6.82353 11.0471 6.45098 11.0471 6.0098C11.0471 5.56863 10.9475 5.18627 10.7385 4.88235C10.5394 4.58824 10.2507 4.36275 9.89231 4.21569V4.22549ZM9.29502 6C9.29502 6.21569 9.23529 6.37255 9.11584 6.48039C8.99638 6.58824 8.82715 6.63725 8.6181 6.63725H7.74208V5.35294H8.6181C8.86697 5.35294 9.04615 5.41176 9.1457 5.52941C9.2552 5.65686 9.30498 5.80392 9.30498 6H9.29502Z""
+                                            fill=""#FEFFFF""></path>
+                                        <path
+                                            d=""M16.5818 7.63725C16.8606 7.4902 17.0995 7.29412 17.2787 7.03922C17.4877 6.7549 17.5873 6.40196 17.5873 5.9902C17.5873 5.36275 17.3583 4.86275 16.9203 4.51961C16.4922 4.17647 15.895 4 15.1583 4H12.8787C12.7891 4 12.7194 4.02941 12.6597 4.08824C12.5999 4.14706 12.5701 4.21569 12.5701 4.30392V9.68627C12.5701 9.77451 12.5999 9.85294 12.6597 9.90196C12.7194 9.96078 12.7891 9.9902 12.8787 9.9902H13.9538C14.0434 9.9902 14.123 9.96078 14.1728 9.90196C14.2325 9.84314 14.2624 9.77451 14.2624 9.68627V7.94118H14.9592L15.885 9.70588C15.9149 9.7549 15.9547 9.81373 16.0144 9.88235C16.0841 9.95098 16.1836 9.9902 16.323 9.9902H17.428C17.5076 9.9902 17.5674 9.96078 17.6271 9.91177C17.6868 9.85294 17.7167 9.78431 17.7167 9.71569C17.7167 9.67647 17.7067 9.62745 17.6769 9.57843L16.5719 7.62745L16.5818 7.63725ZM15.8352 5.97059C15.8352 6.16667 15.7755 6.31373 15.666 6.42157C15.5565 6.52941 15.3873 6.58824 15.1483 6.58824H14.2823V5.35294H15.1483C15.3873 5.35294 15.5664 5.41176 15.666 5.51961C15.7755 5.63725 15.8352 5.78431 15.8352 5.97059Z""
+                                            fill=""#FEFFFF""></path>
+                                        <path
+                                            d=""M23.5801 8.60784H20.9421V7.64706H23.3312C23.4208 7.64706 23.5005 7.61765 23.5602 7.55882C23.6199 7.5 23.6398 7.42157 23.6398 7.34314V6.61765C23.6398 6.52941 23.61 6.46078 23.5602 6.40196C23.5005 6.33333 23.4208 6.30392 23.3312 6.30392H20.9421V5.38235H23.5104C23.6 5.38235 23.6697 5.35294 23.7294 5.29412C23.7892 5.23529 23.819 5.16667 23.819 5.07843V4.30392C23.819 4.21569 23.7892 4.14706 23.7294 4.08824C23.6697 4.02941 23.6 4 23.5104 4H19.6082C19.5186 4 19.4489 4.02941 19.3892 4.08824C19.3294 4.14706 19.2996 4.21569 19.2996 4.30392V9.68627C19.2996 9.77451 19.3294 9.85294 19.3892 9.90196C19.4489 9.96078 19.5186 9.9902 19.6082 9.9902H23.5801C23.6697 9.9902 23.7394 9.96078 23.7991 9.90196C23.8588 9.84314 23.8887 9.77451 23.8887 9.68627V8.91177C23.8887 8.82353 23.8588 8.7549 23.7991 8.69608C23.7394 8.63725 23.6697 8.60784 23.5801 8.60784Z""
+                                            fill=""#FEFFFF""></path>
+                                        <path
+                                            d=""M31.2054 4H30.3095C30.19 4 30.0904 4.03922 30.0208 4.10784C29.9809 4.15686 29.9411 4.19608 29.9212 4.23529L28.5375 6.69608L27.1638 4.2451C27.1638 4.2451 27.104 4.15686 27.0542 4.10784C26.9945 4.03922 26.895 4 26.7755 4H25.8696C25.79 4 25.7203 4.02941 25.6506 4.08824C25.5909 4.14706 25.561 4.21569 25.561 4.30392V9.68627C25.561 9.77451 25.5909 9.85294 25.6506 9.91177C25.7104 9.97059 25.79 9.9902 25.8696 9.9902H26.8751C26.9647 9.9902 27.0443 9.96078 27.0941 9.90196C27.1538 9.84314 27.1837 9.77451 27.1837 9.68627V6.97059L27.9402 8.36274C27.9701 8.42157 28.0199 8.48039 28.0696 8.51961C28.1294 8.57843 28.219 8.59804 28.3185 8.59804H28.7565C28.8561 8.59804 28.9457 8.56863 29.0054 8.51961C29.0651 8.47059 29.1049 8.41176 29.1248 8.36274L29.8814 6.97059V9.68627C29.8814 9.77451 29.9113 9.85294 29.971 9.91177C30.0307 9.97059 30.1104 9.9902 30.1999 9.9902H31.1954C31.285 9.9902 31.3647 9.96078 31.4144 9.91177C31.4841 9.85294 31.514 9.77451 31.514 9.68627V4.30392C31.514 4.21569 31.4841 4.13725 31.4144 4.08824C31.3547 4.02941 31.285 4 31.1954 4H31.2054Z""
+                                            fill=""#FEFFFF""></path>
+                                        <path
+                                            d=""M34.8488 4H33.7239C33.6343 4 33.5546 4.02941 33.5049 4.08824C33.4451 4.14706 33.4153 4.21569 33.4153 4.30392V9.68627C33.4153 9.77451 33.4451 9.85294 33.5049 9.90196C33.5646 9.96078 33.6343 9.9902 33.7239 9.9902H34.8488C34.9384 9.9902 35.018 9.96078 35.0678 9.90196C35.1275 9.84314 35.1574 9.77451 35.1574 9.68627V4.30392C35.1574 4.21569 35.1275 4.14706 35.0678 4.08824C35.008 4.02941 34.9384 4 34.8488 4Z""
+                                            fill=""#FEFFFF""></path>
+                                        <path
+                                            d=""M41.8969 4H40.8118C40.7322 4 40.6625 4.02941 40.5928 4.08824C40.5331 4.14706 40.5032 4.21569 40.5032 4.30392V7.62745C40.5032 7.95098 40.4236 8.19608 40.2643 8.36274C40.105 8.51961 39.896 8.59804 39.6073 8.59804C39.3186 8.59804 39.0896 8.51961 38.9403 8.36274C38.781 8.20588 38.7114 7.95098 38.7114 7.62745V4.30392C38.7114 4.21569 38.6815 4.14706 38.6218 4.08824C38.562 4.02941 38.4923 4 38.4028 4H37.3276C37.238 4 37.1584 4.02941 37.1086 4.08824C37.0489 4.14706 37.019 4.21569 37.019 4.30392V7.63725C37.019 8.16667 37.1285 8.61765 37.3376 8.97059C37.5566 9.31373 37.8652 9.57843 38.2534 9.7549C38.6417 9.92157 39.0996 10 39.6172 10C40.1349 10 40.5928 9.92157 40.981 9.7549C41.3693 9.58824 41.6779 9.32353 41.8969 8.97059C42.1159 8.61765 42.2154 8.16667 42.2154 7.63725V4.30392C42.2154 4.21569 42.1856 4.13725 42.1159 4.08824C42.0561 4.02941 41.9865 4 41.9068 4H41.8969Z""
+                                            fill=""#FEFFFF""></path>
+                                        <path
+                                            d=""M49.9005 4.08824C49.8407 4.02941 49.771 4 49.6815 4H48.7855C48.6561 4 48.5665 4.03922 48.5068 4.10784C48.457 4.15686 48.4272 4.19608 48.4072 4.23529L47.0235 6.69608L45.6398 4.2451C45.6398 4.2451 45.5801 4.15686 45.5303 4.10784C45.4706 4.03922 45.371 4 45.2516 4H44.3457C44.2661 4 44.1864 4.02941 44.1267 4.08824C44.067 4.14706 44.0371 4.21569 44.0371 4.30392V9.68627C44.0371 9.77451 44.067 9.85294 44.1267 9.91177C44.1864 9.97059 44.2661 9.9902 44.3457 9.9902H45.3511C45.4407 9.9902 45.5204 9.96078 45.5701 9.90196C45.6299 9.84314 45.6597 9.77451 45.6597 9.68627V6.97059L46.4163 8.36274C46.4462 8.42157 46.4959 8.48039 46.5457 8.51961C46.6054 8.57843 46.695 8.59804 46.7946 8.59804H47.2326C47.3321 8.59804 47.4217 8.56863 47.4815 8.51961C47.5412 8.47059 47.581 8.41176 47.6009 8.36274L48.3575 6.97059V9.68627C48.3575 9.77451 48.3873 9.85294 48.4471 9.91177C48.5068 9.97059 48.5864 9.9902 48.676 9.9902H49.6715C49.7611 9.9902 49.8407 9.96078 49.8905 9.91177C49.9602 9.85294 49.99 9.77451 49.99 9.68627V4.30392C49.99 4.21569 49.9602 4.13725 49.8905 4.08824H49.9005Z""
+                                            fill=""#FEFFFF""></path>
+                                    </g>
+                                    <defs>
+                                        <clipPath id=""clip0_3541_3928"">
+                                            <rect width=""44"" height=""6"" fill=""white"" transform=""translate(6 4)""></rect>
+                                        </clipPath>
+                                    </defs>
+                                </svg>
+                            </i>
+                    ";
+                }
+                string img = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail);
+                res += string.Format(@"
+                        <div class=""select-item"">
+                            <div class=""checkbox-wrapper""><label class=""checkbox""><input type=""checkbox""></label></div>
+                            <div class=""list-item bor-b-1 media-item hide-right is-vip"">
+                                <div class=""media"">
+                                    <div class=""media-left"">
+                                        <div class=""song-prefix mar-r-15""><i class=""icon ic-song""></i></div>
+                                        <div class=""song-thumb"">
+                                            <figure class=""image is-40x40"" title=""{2}"">
+                                                <img src=""{0}"" alt="""">
+                                            </figure>
+                                            <div class=""opacity ""></div>
+                                            <div class=""zm-actions-container"">
+                                                <div class=""zm-box zm-actions"">
+                                                    <button class=""zm-btn zm-tooltip-btn animation-like is-hidden active is-hover-circle button""
+                                                        tabindex=""0"">
+                                                        <i class=""icon ic-like""></i><i class=""icon ic-like-full""></i>
+                                                    </button><button class=""zm-btn action-play  button"" tabindex=""0"">
+                                                        <i class=""icon action-play ic-play""></i>
+                                                    </button><button class=""zm-btn zm-tooltip-btn is-hidden is-hover-circle button""
+                                                        tabindex=""0"">
+                                                        <i class=""icon ic-more""></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class=""card-info"">
+                                            <div class=""title-wrapper"">
+                                                <span class=""item-title has-icon title"">
+                                                    <span>
+                                                        <span><span>{2}</span></span><span
+                                                            style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span>
+                                                    </span>
+                                                    {1}
+                                                </span>
+                                            </div>
+                                            <h3 class=""is-one-line is-truncate subtitle"">
+                                                {3}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class=""media-content"">
+                                        <div>{4}</div>
+                                    </div>
+                                    <div class=""media-right"">
+                                        <div class=""hover-items"">
+                                            <div class=""level"">
+                                                <div class=""level-item""></div>
+                                                <div class=""level-item"">
+                                                    <button class=""zm-btn zm-tooltip-btn is-hover-circle button"" tabindex=""0"">
+                                                        <i class=""icon ic-karaoke""></i>
+                                                    </button>
+                                                </div>
+                                                <div class=""level-item"">
+                                                    <button class=""zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button""
+                                                        tabindex=""0"">
+                                                        <i class=""icon ic-like""></i><i class=""icon ic-like-full""></i>
+                                                    </button>
+                                                </div>
+                                                <div class=""level-item"">
+                                                    <button class=""zm-btn zm-tooltip-btn is-hover-circle button"" tabindex=""0"">
+                                                        <i class=""icon ic-more""></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class=""action-items"">
+                                            <div class=""level"">
+                                                <div class=""level-item"">
+                                                    <button class=""zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button""
+                                                        tabindex=""0"">
+                                                        <i class=""icon ic-like""></i><i class=""icon ic-like-full""></i>
+                                                    </button>
+                                                </div>
+                                                <div class=""level-item duration"">{5}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                ", img, premium, song.title, song.GetHtmlArtist(), HelperUtility.getBetweenDate(song.ReleaseDate()), song.Duration());
+            }
+            return res;
+        }
+
+        public static string GeneratePlaylists(List<PlaylistDTO> playlists, bool classColumn = false)
         {
             StringBuilder str = new StringBuilder();
             foreach (var playlist in playlists)
             {
-                string img;
-                if (DataHelper.Instance.ThumbPlaylist.Keys.Contains(playlist.encodeId))
-                {
-                    img = DataHelper.Instance.ThumbPlaylist[playlist.encodeId];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(playlist.thumbnail);
-                    try
-                    {
-                        DataHelper.Instance.ThumbPlaylist.Add(playlist.encodeId, img);
-                    }
-                    catch { }
-                }
-                string last = string.Empty;
-                if (optionLast == 0)
-                {
-                    last = playlist.title;
-                }
-                else if (playlist.artists != null)
-                {
-                    int iArt = 0;
-                    foreach (var item in playlist.artists)
-                    {
-                        ArtistDTO artDTO = new ArtistDTO();
-                        if (!DataHelper.Instance.Artists.Keys.Contains(item))
-                        {
-                            artDTO = APIHelper.Get<ArtistDTO>(FirestoreService.CL_Artist, item);
-                            if (artDTO == null)
-                                continue;
-                            try
-                            {
-                                DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
-                            }
-                            catch { }
-                        }
-                        else
-                        {
-                            artDTO = DataHelper.Instance.Artists[item];
-                        }
-                        if (string.IsNullOrEmpty(artDTO.name))
-                            continue;
-                        if (iArt++ > 0)
-                        {
-                            last += ", ";
-                        }
-                        last += string.Format(@"
-                                            <a class=""is-ghost"" href=""{1}"">{0}</a>
-                    ", artDTO.name, artDTO.link);
-                    }
-                }
-                str.AppendFormat(@"
-                    <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
+                str.Append(GeneratePlaylist(playlist, classColumn));
+            }
+            return str.ToString();
+        }
+        public static string GeneratePlaylist(PlaylistDTO playlist, bool classColumn = false)
+        {
+            StringBuilder str = new StringBuilder();
+            string img = DataHelper.GetThumbnailPlaylist(playlist);
+            string column = string.Empty;
+            if(classColumn)
+            {
+                column = " column mar-b-30 ";
+            }
+            str.AppendFormat(@"
+                    <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3 {4}"">
                         <div class=""playlist-wrapper is-description"">
                             <div class=""zm-card"">
                                 <div>
@@ -258,6 +335,7 @@ namespace TDT.Core.ServiceImp
                                     </a>
                                 </div>
                                 <div class=""zm-card-content"">
+                                    <h4 class=""title is-6""><a class="""" title=""xin đừng lặng im"" href=""{1}""><span><span><span>{0}</span></span><span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span></span></a></h4>
                                     <h3 class=""mt-10 subtitle"">
                                         <span>
                                             <span>
@@ -270,79 +348,16 @@ namespace TDT.Core.ServiceImp
                             </div>
                         </div>
                     </div>
-                ", playlist.title, $"/Album?encodeId={playlist.encodeId}", img, last);
-            }
-            return str.ToString();
+                ", playlist.title, $"/Album?encodeId={playlist.encodeId}", img, GenerateArtistLink(playlist.artists), column);
+            return str.ToString(); 
         }
 
-        public string GenerateArtist(List<ArtistDTO> artists, int optionLast = 0)
-        {
-            StringBuilder str = new StringBuilder();
-            foreach (var artist in artists)
-            {
-                string img;
-                if (DataHelper.Instance.ThumbArtist.Keys.Contains(artist.id))
-                {
-                    img = DataHelper.Instance.ThumbArtist[artist.id];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(artist.thumbnail);
-                    try
-                    {
-                        DataHelper.Instance.ThumbArtist.Add(artist.id, img);
-                    }
-                    catch { }
-                }
-                str.AppendFormat(@"
-                    <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
-                        <div class=""playlist-wrapper is-description"">
-                            <div class=""zm-card"">
-                                <div>
-                                    <a class="""" title=""Những Bài Hát Hay Nhất Của {0}""
-                                       href=""{1}"">
-                                        <div class=""zm-card-image"">
-                                            <figure class=""image is-48x48"">
-                                                <img src=""{2}"" alt="""" />
-                                            </figure>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class=""zm-card-content"">
-                                    <h3 class=""mt-10 subtitle"">
-                                        <span>
-                                            <span>
-                                                <a class=""is-ghost"" href=""{3}"">{4}</a>
-                                            </span>
-                                            <span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;""></span>
-                                        </span>
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ", artist.name, artist.playlistId, img, artist.link, artist.name);
-            }
-            return str.ToString();
-        }
+        
 
-        public string GenerateArtistInfo(ArtistDTO artist)
+        public static string GenerateArtistInfo(ArtistDTO artist)
         {
             StringBuilder str = new StringBuilder();
-            string img;
-            if (DataHelper.Instance.ThumbArtist.Keys.Contains(artist.id))
-            {
-                img = DataHelper.Instance.ThumbArtist[artist.id];
-            }
-            else
-            {
-                img = FirebaseService.Instance.getStorage(artist.thumbnail);
-                try
-                {
-                    DataHelper.Instance.ThumbArtist.Add(artist.id, img);
-                }
-                catch { }
-            }
+            string img = DataHelper.GetThumbnailArtist(artist.id, artist.thumbnail);
             str.AppendFormat(@"
                     <div class=""blur-container"" style=""left: -118px; right: -118px;"">
                         <div class=""blur""
@@ -362,31 +377,16 @@ namespace TDT.Core.ServiceImp
                                     <button class=""zm-btn play-btn pause is-outlined active is-medium button"" tabindex=""0""><i
                                             class=""icon ic-play""></i></button>
                                 </div>
-                                <div class=""bottom""><span class=""follow"">{3}</span><span><button
+                                <div class=""bottom""><span class=""follow"">{3} người quan tâm</span><span><button
                                             class=""zm-btn is-outlined is-medium follow-btn is-upper button"" tabindex=""0""><i
                                                 class=""icon ic-addfriend""></i><span>Quan tâm</span></button></span></div>
                             </div>
                         </div>
-                        <div class=""awards color-white mar-l-36""><i class=""icon zing-choice-award""><svg width=""100%"" height=""100%""
-                                    viewBox=""0 0 56 40"">
-                                    <path fill=""currentColor""
-                                        d=""M21.343 33.177c.678 0 1.253.152 1.725.454.472.303.813.72 1.023 1.253l-1.186.484c-.29-.661-.82-.992-1.586-.992-.339 0-.652.087-.938.26-.287.174-.513.418-.678.732-.166.315-.248.678-.248 1.09 0 .412.082.775.248 1.09.165.314.391.559.678.732.286.174.599.26.938.26.387 0 .72-.086.999-.26.278-.173.494-.426.647-.757l1.175.509c-.242.525-.602.94-1.078 1.247-.476.307-1.049.46-1.719.46-.613 0-1.162-.141-1.646-.424-.485-.282-.862-.672-1.132-1.168-.27-.496-.406-1.06-.406-1.689 0-.63.135-1.192.406-1.689.27-.496.647-.886 1.132-1.168.484-.283 1.033-.424 1.646-.424zm13.874 0c.613 0 1.166.146 1.659.436.492.29.875.686 1.15 1.186.274.5.411 1.054.411 1.66 0 .612-.137 1.17-.411 1.67-.275.5-.656.894-1.144 1.18-.489.287-1.043.43-1.665.43-.621 0-1.178-.143-1.67-.43-.493-.286-.876-.68-1.15-1.18-.275-.5-.412-1.058-.412-1.67 0-.614.137-1.171.411-1.672.275-.5.658-.893 1.15-1.18.493-.287 1.05-.43 1.671-.43zm10.303 0c.678 0 1.253.152 1.725.454.472.303.813.72 1.023 1.253l-1.187.484c-.29-.661-.819-.992-1.586-.992-.339 0-.651.087-.938.26-.286.174-.512.418-.678.732-.165.315-.248.678-.248 1.09 0 .412.083.775.248 1.09.166.314.392.559.678.732.287.174.6.26.938.26.388 0 .72-.086 1-.26.278-.173.494-.426.647-.757l1.174.509c-.242.525-.601.94-1.077 1.247-.476.307-1.05.46-1.72.46-.613 0-1.162-.141-1.646-.424-.484-.282-.861-.672-1.132-1.168-.27-.496-.405-1.06-.405-1.689 0-.63.135-1.192.405-1.689.27-.496.648-.886 1.132-1.168.484-.283 1.033-.424 1.647-.424zm6.658 0c.622 0 1.158.135 1.61.406.452.27.797.643 1.035 1.12.239.476.358 1.017.358 1.622 0 .161-.009.299-.025.412h-4.77c.057.589.267 1.043.63 1.361.363.32.787.479 1.271.479.396 0 .735-.091 1.017-.273.283-.181.509-.421.678-.72l1.077.52c-.282.509-.657.909-1.125 1.2-.469.29-1.03.435-1.683.435-.597 0-1.136-.141-1.616-.424-.48-.282-.856-.672-1.126-1.168-.27-.496-.406-1.055-.406-1.677 0-.589.131-1.136.394-1.64.262-.505.627-.906 1.095-1.205.468-.298.997-.448 1.586-.448zm-25.617-2.3v2.373l-.073.968h.073c.178-.306.442-.557.793-.75.351-.194.736-.29 1.156-.29.75 0 1.324.223 1.72.671.395.448.592 1.047.592 1.798v3.898h-1.295v-3.729c0-.476-.127-.835-.381-1.077-.255-.242-.58-.363-.975-.363-.298 0-.57.087-.817.26-.246.174-.44.406-.581.696-.141.29-.212.597-.212.92v3.293h-1.307v-8.668h1.307zm14.48 2.494v6.174h-1.308v-6.174h1.307zM21.491 0l5.573 14.824h15.471l-5.16 4.052h-10.31L22.891 8.805l-3.874 10.071H8.27l8.155 7.153-2.948 9.854-5.207 3.654 4.073-15.08L0 14.824h16.426L21.492 0zm13.725 34.376c-.347 0-.668.085-.962.254-.295.17-.531.412-.709.726-.177.315-.266.682-.266 1.102 0 .42.089.787.266 1.102.178.315.414.557.709.726.294.17.615.254.962.254s.666-.084.956-.254c.291-.17.525-.411.703-.726.177-.315.266-.682.266-1.102 0-.42-.089-.787-.266-1.102-.178-.314-.412-.557-.703-.726-.29-.17-.609-.254-.956-.254zm16.973-.085c-.436 0-.805.133-1.107.4-.303.266-.511.621-.624 1.065h3.426c-.016-.226-.089-.452-.218-.678-.129-.226-.317-.414-.563-.563-.246-.15-.55-.224-.914-.224zm-11.803-3.583c.242 0 .45.084.623.254.174.17.26.375.26.617s-.086.45-.26.624c-.174.173-.381.26-.623.26-.243 0-.45-.087-.624-.26-.173-.174-.26-.382-.26-.624s.087-.448.26-.617c.174-.17.381-.254.624-.254zm1.634-9.295c.662 0 1.271.117 1.828.35.557.235 1.029.562 1.416.981l-.92.92c-.589-.661-1.364-.992-2.324-.992-.565 0-1.094.135-1.586.405s-.884.656-1.174 1.156c-.29.5-.436 1.07-.436 1.707 0 .646.147 1.217.442 1.713.294.497.686.88 1.174 1.15.488.271 1.019.406 1.592.406.912 0 1.655-.286 2.228-.86.185-.177.34-.403.466-.677.125-.275.212-.577.26-.908h-2.978v-1.175h4.213c.048.275.072.509.072.703 0 .548-.086 1.07-.26 1.567-.173.497-.442.935-.805 1.314-.387.42-.851.74-1.392.962-.54.222-1.146.333-1.816.333-.823 0-1.582-.198-2.276-.593-.694-.395-1.245-.938-1.653-1.628-.407-.69-.611-1.46-.611-2.307s.204-1.616.611-2.306c.408-.69.959-1.233 1.653-1.628.694-.396 1.453-.593 2.276-.593zm-17.76.193v1.356l-4.504 6.053h4.552v1.26h-6.126v-1.356l4.54-6.054h-4.346v-1.259h5.884zm2.93 0v8.669h-1.332v-8.669h1.332zm3.523 0l3.922 6.368h.073l-.073-1.67v-4.698h1.32v8.669h-1.38l-4.117-6.695h-.072l.072 1.67v5.025h-1.32v-8.669h1.575z"">
-                                    </path>
-                                </svg></i>
-                            <div class=""zma-wrapper""><button class=""zm-btn zm-tooltip-btn is-hover-circle button"" tabindex=""0""><i
-                                        class=""icon""><svg width=""100%"" height=""100%"" viewBox=""0 0 38 40"">
-                                            <g fill=""none"" fill-rule=""evenodd"">
-                                                <path fill=""currentColor""
-                                                    d=""M37.838 0v40H0V0h37.838zM6.645 30.47L5 33.778l3.307-.008-1.662-3.298zm11.905 0l-2.307 1.66 2.315 1.647-.008-3.306zm-2.317 0l-.32.001.01 3.306h.32l-.01-3.306zm-6.344 0h-.26l.942 3.307h.297l.913-2.98.91 2.98h.296l.941-3.306h-.26l-.834 2.97-.909-2.97h-.292l-.904 2.97-.84-2.97zm12.254 0h-1.27v3.307h.244v-1.355h1.017l.773 1.355h.28l-.8-1.388c.207-.057.373-.17.506-.345.133-.175.203-.374.203-.596 0-.269-.092-.496-.281-.69-.189-.193-.41-.287-.672-.287zm4.349 0h-1.32v3.307h1.32c.477 0 .873-.16 1.184-.477.316-.32.472-.713.472-1.176 0-.463-.156-.855-.472-1.172-.311-.32-.707-.481-1.184-.481zm4.457 0c-.29 0-.528.078-.724.239-.19.155-.286.361-.286.623 0 .16.053.293.11.389.057.092.205.192.295.247.043.028.114.06.205.096l.21.078.238.074c.295.091.514.183.652.279.138.096.21.229.21.408 0 .38-.3.64-.838.64-.534 0-.881-.247-1-.645l-.22.124c.153.462.605.755 1.22.755.328 0 .595-.077.795-.238.2-.16.3-.375.3-.641 0-.261-.1-.458-.343-.6-.119-.073-.229-.128-.333-.17-.1-.04-.243-.091-.429-.15-.29-.092-.495-.18-.624-.266-.128-.087-.19-.216-.19-.39 0-.361.295-.618.752-.618.414 0 .7.183.857.554l.215-.114c-.172-.399-.553-.673-1.072-.673zm-4.457.237c.406 0 .742.137 1.003.41.261.27.392.606.392 1.007 0 .402-.13.737-.392 1.011-.26.27-.597.406-1.003.406h-1.054v-2.834zm-4.349 0c.198 0 .364.07.502.217s.207.321.207.524c0 .204-.07.378-.207.525-.138.142-.304.212-.502.212h-1.026v-1.478zm3.029-7.511h-1.323v6.283h1.323v-6.283zm-18.87 0H5v6.283h1.266v-4.066l1.807 2.908h.147l1.807-2.917v4.075h1.256v-6.283H9.981l-1.835 2.97-1.844-2.97zm22.939 0c-.888 0-1.623.302-2.206.906-.584.595-.871 1.346-.871 2.235 0 .89.287 1.631.87 2.235.584.605 1.32.907 2.207.907 1.082 0 2.037-.553 2.544-1.424l-1.006-.596c-.279.527-.862.854-1.538.854-.575 0-1.04-.18-1.395-.552-.347-.37-.524-.846-.524-1.424 0-.587.177-1.062.524-1.433.355-.37.82-.552 1.395-.552.676 0 1.242.32 1.538.863l1.006-.595c-.507-.872-1.47-1.424-2.544-1.424zm-9.078 0c-.551 0-1.032.164-1.426.492-.394.319-.587.759-.587 1.303 0 .552.202.966.578 1.243.385.267.718.396 1.269.56.499.139.84.268 1.033.389.192.112.289.276.289.492 0 .371-.307.638-.98.638-.701 0-1.173-.31-1.41-.923l-1.032.596c.341.923 1.19 1.493 2.406 1.493.657 0 1.19-.164 1.602-.492.411-.328.621-.768.621-1.33 0-.345-.096-.647-.227-.854-.114-.207-.394-.423-.578-.535-.087-.06-.219-.12-.385-.181-.166-.07-.298-.121-.394-.147l-.42-.138c-.455-.138-.761-.268-.927-.38-.158-.12-.237-.276-.237-.466 0-.354.306-.604.805-.604.534 0 .928.259 1.173.777l1.015-.579c-.42-.854-1.199-1.354-2.188-1.354zm-6.372 0h-1.185v4.144c0 .651.216 1.17.649 1.558.432.387.986.58 1.661.58.684 0 1.238-.193 1.67-.58.433-.388.65-.907.65-1.558v-4.144H16.04v4.047c0 .643-.355 1.048-1.125 1.048s-1.125-.405-1.125-1.048v-4.047zM11.614 6.33H5.218v2.095h3.973L5 19.908v1.965h6.614v-2.096H7.336L11.614 8.1V6.33zm3.307 0h-2.315v15.542h2.315V6.33zm2.863 0h-2.202v15.542h2.274V12.53l3.505 9.343h2.157V6.33h-2.274v9.364l-3.46-9.364zM28.314 6c-1.01 0-1.877.314-2.603.943-.8.716-1.2 1.673-1.2 2.872v8.243c0 1.199.4 2.149 1.2 2.85.726.644 1.594.965 2.602.965 1.008 0 1.876-.321 2.602-.965.8-.701 1.201-1.651 1.201-2.85v-4.91h-4.07v1.972h1.802v2.938c0 .512-.145.903-.434 1.173-.289.27-.656.406-1.1.406-.446 0-.801-.132-1.068-.395-.312-.277-.467-.672-.467-1.184V9.815c0-.512.155-.906.467-1.184.267-.263.622-.395 1.067-.395.445 0 .812.135 1.101.406.29.27.434.661.434 1.173v.789h2.268v-.79c0-1.198-.4-2.155-1.2-2.871C30.188 6.314 29.32 6 28.312 6z"">
-                                                </path>
-                                            </g>
-                                        </svg></i></button></div>
-                        </div>
                     </div>
-                ", img, img, artist.name, artist.totalFollow);
+                ", img, img, artist.name, string.Format("{0:0,0.#}", artist.totalFollow));
             return str.ToString();
         }
-        public string GenerateArtistNoiBat(ArtistDTO artist, int optionList = 0)
+        public static string GenerateArtistNoiBat(ArtistDTO artist, int optionList = 0)
         {
             StringBuilder res = new StringBuilder();
             StringBuilder col_left = new StringBuilder();
@@ -446,88 +446,23 @@ namespace TDT.Core.ServiceImp
                     </div>
                 </div>
             ";
-            string img;
-            if (DataHelper.Instance.ThumbArtist.Keys.Contains(artist.id))
-            {
-                img = DataHelper.Instance.ThumbArtist[artist.id];
-            }
-            else
-            {
-                img = FirebaseService.Instance.getStorage(artist.thumbnail);
-                try
-                {
-                    DataHelper.Instance.ThumbArtist.Add(artist.id, img);
-                }
-                catch { }
-            }
+            string img = DataHelper.GetThumbnailArtist(artist.id, artist.thumbnail);
             SectionDTO secNoiBat = artist.sections.Where(s => s.title.Equals("Bài hát nổi bật")).First();
             List<SongDTO> songs = DataHelper.GetSongs(secNoiBat);
 
             for (int i = 0; i < 3 && i < songs.Count; i++)
             {
                 SongDTO song = songs[i];
-                string imgSong;
-                if (DataHelper.Instance.ThumbSong.Keys.Contains(song.encodeId))
-                {
-                    img = DataHelper.Instance.ThumbSong[song.encodeId];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(song.thumbnail);
-                    DataHelper.Instance.ThumbSong.Add(song.encodeId, img);
-                }
-                int iArt = 0;
+                string imgSong = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail);
                 string betweenDate = HelperUtility.getBetweenDate(song.ReleaseDate());
                 string duration = song.Duration();
-                StringBuilder artistname = new StringBuilder();
-
-                if (song.artists != null)
-                {
-                    foreach (var item in song.artists)
-                    {
-                        ArtistDTO artDTO = new ArtistDTO();
-                        if (!DataHelper.Instance.Artists.Keys.Contains(item))
-                        {
-                            artDTO = DataHelper.GetArtist(item);
-                            if (artDTO == null)
-                                continue;
-                            try
-                            {
-                                DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
-                            }
-                            catch { }
-                        }
-                        else
-                        {
-                            artDTO = DataHelper.Instance.Artists[item];
-                        }
-                        if (string.IsNullOrEmpty(artDTO.name))
-                            continue;
-                        if (iArt++ > 0)
-                        {
-                            artistname.Append(", ");
-                        }
-                        artistname.AppendFormat(@"
-                                  <a class=""is-ghost"" href=""{1}"">{0}</a>
-                            ", artDTO.name, artDTO.link);
-                    }
-                }
-                col_left.AppendFormat(col, song.title, img, song.title, artistname.ToString(), duration);
+                col_left.AppendFormat(col, song.title, imgSong, song.title, GenerateArtistLink(song.artists), duration);
             }
             res.AppendFormat(main, col_left.ToString());
             for (int i = 3; i < 6 && i < songs.Count; i++)
             {
                 SongDTO song = songs[i];
-                string imgSong;
-                if (DataHelper.Instance.ThumbSong.Keys.Contains(song.encodeId))
-                {
-                    img = DataHelper.Instance.ThumbSong[song.encodeId];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(song.thumbnail);
-                    DataHelper.Instance.ThumbSong.Add(song.encodeId, img);
-                }
+                string imgSong = DataHelper.GetThumbnailSong(song.encodeId, img);
                 int iArt = 0;
                 string betweenDate = HelperUtility.getBetweenDate(song.ReleaseDate());
                 string duration = song.Duration();
@@ -535,394 +470,359 @@ namespace TDT.Core.ServiceImp
 
                 if (song.artists != null)
                 {
-                    foreach (var item in song.artists)
-                    {
-                        ArtistDTO artDTO = new ArtistDTO();
-                        if (!DataHelper.Instance.Artists.Keys.Contains(item))
-                        {
-                            artDTO = DataHelper.GetArtist(item);
-                            if (artDTO == null)
-                                continue;
-                            try
-                            {
-                                DataHelper.Instance.Artists.Add(artDTO.id, artDTO);
-                            }
-                            catch { }
-                        }
-                        else
-                        {
-                            artDTO = DataHelper.Instance.Artists[item];
-                        }
-                        if (string.IsNullOrEmpty(artDTO.name))
-                            continue;
-                        if (iArt++ > 0)
-                        {
-                            artistname.Append(", ");
-                        }
-                        artistname.AppendFormat(@"
-                                  <a class=""is-ghost"" href=""{1}"">{0}</a>
-                            ", artDTO.name, artDTO.link);
-                    }
+                    artistname.Append(GenerateArtistLink(song.artists));
                 }
-                col_right.AppendFormat(col, song.title, img, song.title, artistname.ToString(), duration);
+                col_right.AppendFormat(col, song.title, imgSong, song.title, artistname.ToString(), duration);
             }
             res.AppendFormat(main, col_right.ToString());
             return res.ToString();
         }
-        public string GenerateSingleED(List<ArtistDTO> artists, int optionList = 0)
+        
+        #region Song
+        public static string GenerateSongElement(SongDTO song)
         {
-            StringBuilder str = new StringBuilder();
-            foreach (var artist in artists)
-            {
-                string img;
-                if (DataHelper.Instance.ThumbArtist.ContainsKey(artist.id))
-                {
-                    img = DataHelper.Instance.ThumbArtist[artist.id];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(artist.thumbnail);
-                    try
-                    {
-                        DataHelper.Instance.ThumbArtist.Add(artist.id, img);
-                    }
-                    catch { }
-                }
-                SectionDTO secSingleED = artist.sections.Where(s => s.title.Equals("Single & EP")).First();
-                foreach (var item in secSingleED.items)
-                {
-                    str.AppendFormat(@"
-                    <div class=""zm-carousel"">
-                            <div class=""zm-carousel__container"" style=""transform: translate3d(0px, 0px, 0px);"">
-                                <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
-                                    <div class=""playlist-wrapper is-release-date"">
-                                        <div class=""zm-card"">
-                                            <div><a class="""" title=""{1}""
-                                                    href=""/album/Chai-Diep-Noong-Anh-Yeu-Em-Single-Double2T-Hoa-Minzy-DuongK/6BDIE6DO.html"">
-                                                    <div class=""zm-card-image"">
-                                                        <figure class=""image is-48x48""><img
-                                                                src=""0""
-                                                                alt=""""></figure>
-                                                    </div>
-                                                </a></div>
-                                            <div class=""zm-card-content"">
-                                                <h4 class=""title is-6""><a class="""" title=""{2}""
-                                                        href=""/album/Chai-Diep-Noong-Anh-Yeu-Em-Single-Double2T-Hoa-Minzy-DuongK/6BDIE6DO.html""><span><span><span><span>Chài
-                                                                        Điếp Noọng (Anh Yêu…</span></span></span><span
-                                                                style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span></span></a>
-                                                </h4>
-                                                <h3 class=""mt-10 subtitle"">Mới phát hành * 10/2023</h3>
-                                            </div>
+            string img = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail);
+            string format = @"
+                <div class=""select-item"">
+                    <div class=""checkbox-wrapper"">
+                        <label class=""checkbox""><input type=""checkbox"" /></label>
+                    </div>
+                    <div class=""list-item bor-b-1 media-item hide-right"">
+                        <div class=""media"">
+                            <div class=""media-left"">
+                                <div class=""song-prefix mar-r-10""><i class=""icon ic-song""></i></div>
+                                <div class=""song-thumb"">
+                                    <figure class=""image is-40x40"" title=""{0}"">
+                                        <img src=""{1}"" alt="""" />
+                                    </figure>
+                                    <div class=""opacity""></div>
+                                    <div class=""zm-actions-container"">
+                                        <div class=""zm-box zm-actions"">
+                                            <button class=""zm-btn zm-tooltip-btn animation-like is-hidden active is-hover-circle button""
+                                                tabindex=""0"">
+                                                <i class=""icon ic-like""></i><i class=""icon ic-like-full""></i></button><button
+                                                class=""zm-btn action-play button"" tabindex=""0"">
+                                                <i class=""icon action-play ic-play""></i></button><button
+                                                class=""zm-btn zm-tooltip-btn is-hidden is-hover-circle button"" tabindex=""0"">
+                                                <i class=""icon ic-more""></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
+                                <div class=""card-info"">
+                                    <div class=""title-wrapper"">
+                                        <span class=""item-title title""><span><span><span>{0}</span></span><span style=""
+                                    position: fixed;
+                                    visibility: hidden;
+                                    top: 0px;
+                                    left: 0px;
+                                  "">…</span></span></span>
+                                    </div>
+                                    <h3 class=""is-one-line is-truncate subtitle"">
+                                        {2}
+                                    </h3>
+                                </div>
                             </div>
-                        </div>
-            ",img, secSingleED.title,secSingleED.title);
-                }
-            }
-            return str.ToString();
-        }
-
-        public string GenerateAlbum(List<ArtistDTO> artists, int optionList = 0)
-        {
-            StringBuilder str = new StringBuilder();
-            foreach (var artist in artists)
-            {
-                string img;
-                if (DataHelper.Instance.ThumbArtist.ContainsKey(artist.id))
-                {
-                    img = DataHelper.Instance.ThumbArtist[artist.id];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(artist.thumbnail);
-                    try
-                    {
-                        DataHelper.Instance.ThumbArtist.Add(artist.id, img);
-                    }
-                    catch { }
-                }
-                SectionDTO secAlbum = artist.sections.Where(s => s.title.Equals("Album")).First();
-                foreach (var item in secAlbum.items)
-                {
-                    str.AppendFormat(@"
-                    <div class=""zm-carousel"">
-                            <div class=""zm-carousel__container"" style=""transform: translate3d(0px, 0px, 0px);"">
-                                <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
-                                    <div class=""playlist-wrapper is-release-date"">
-                                        <div class=""zm-card"">
-                                            <div><a class="""" title=""{1}""
-                                                    href=""/album/Chai-Diep-Noong-Anh-Yeu-Em-Single-Double2T-Hoa-Minzy-DuongK/6BDIE6DO.html"">
-                                                    <div class=""zm-card-image"">
-                                                        <figure class=""image is-48x48""><img
-                                                                src=""0""
-                                                                alt=""""></figure>
-                                                    </div>
-                                                </a></div>
-                                            <div class=""zm-card-content"">
-                                                <h4 class=""title is-6""><a class="""" title=""{2}""
-                                                        href=""/album/Chai-Diep-Noong-Anh-Yeu-Em-Single-Double2T-Hoa-Minzy-DuongK/6BDIE6DO.html""><span><span><span><span>Chài
-                                                                        Điếp Noọng (Anh Yêu…</span></span></span><span
-                                                                style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span></span></a>
-                                                </h4>
-                                                <h3 class=""mt-10 subtitle"">Mới phát hành * 10/2023</h3>
-                                            </div>
+                            <div class=""media-content"">
+                                <div class=""album-info"">{3}</div>
+                            </div>
+                            <div class=""media-right"">
+                                <div class=""hover-items"">
+                                    <div class=""level"">
+                                        <div class=""level-item""></div>
+                                        <div class=""level-item"">
+                                            <button class=""zm-btn zm-tooltip-btn is-hover-circle button"" tabindex=""0"">
+                                                <i class=""icon ic-karaoke""></i>
+                                            </button>
+                                        </div>
+                                        <div class=""level-item"">
+                                            <button class=""zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button""
+                                                tabindex=""0"">
+                                                <i class=""icon ic-like""></i><i class=""icon ic-like-full""></i>
+                                            </button>
+                                        </div>
+                                        <div class=""level-item"">
+                                            <button class=""zm-btn zm-tooltip-btn is-hover-circle button"" tabindex=""0"">
+                                                <i class=""icon ic-more""></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-            ", img, secAlbum.title, secAlbum.title);
-                }
-            }
-            return str.ToString();
-        }
-
-        public string GenerateTuyentap(List<ArtistDTO> artists, int optionList = 0)
-        {
-            StringBuilder str = new StringBuilder();
-            foreach (var artist in artists)
-            {
-                string img;
-                if (DataHelper.Instance.ThumbArtist.ContainsKey(artist.id))
-                {
-                    img = DataHelper.Instance.ThumbArtist[artist.id];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(artist.id);
-                    try
-                    {
-                        DataHelper.Instance.ThumbArtist.Add(artist.id, img);
-                    }
-                    catch { }
-                }
-                SectionDTO secTuyenTap = artist.sections.Where(s => s.title.Equals("Tuyển tập")).First();
-                foreach (var item in secTuyenTap.items)
-                {
-                    str.AppendFormat(@"
-                        <div class=""zm-carousel"">
-                            <div class=""zm-carousel__container"" style=""transform: translate3d(0px, 0px, 0px);"">
-                                <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
-                                    <div class=""playlist-wrapper is-normal"">
-                                        <div class=""zm-card"">
-                                            <div><a class="""" title=""{1}""
-                                                    href=""/album/Nhung-Bai-Hat-Hay-Nhat-Cua-Hoa-Minzy-Hoa-Minzy/ZWZCU80C.html"">
-                                                    <div class=""zm-card-image"">
-                                                        <figure class=""image is-48x48""><img
-                                                                src=""{0}""
-                                                                alt=""""></figure>
-                                                    </div>
-                                                </a></div>
-                                            <div class=""zm-card-content"">
-                                                <h4 class=""title is-6""><a class="""" title=""{2}""
-                                                        href=""/album/Nhung-Bai-Hat-Hay-Nhat-Cua-Hoa-Minzy-Hoa-Minzy/ZWZCU80C.html""><span><span><span><span>Những
-                                                                        Bài Hát Hay Nhất Của…</span></span></span><span
-                                                                style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span></span></a>
-                                                </h4>
-                                                <h3 class=""mt-10 subtitle""><a class=""is-spotlight is-ghost"" href=""/Hoa-Minzy"">Hòa Minzy<i
-                                                            class=""icon ic-star""></i></a></h3>
-                                            </div>
+                                <div class=""action-items"">
+                                    <div class=""level"">
+                                        <div class=""level-item"">
+                                            <button class=""zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button""
+                                                tabindex=""0"">
+                                                <i class=""icon ic-like""></i><i class=""icon ic-like-full""></i>
+                                            </button>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                     ",img, secTuyenTap.title, secTuyenTap.title);
-                }
-            }
-            return str.ToString();
-        }
-        public string GenerateXuatHien(List<ArtistDTO> artists, int optionList = 0)
-        {
-            StringBuilder str = new StringBuilder();
-            foreach (var artist in artists)
-            {
-                string img;
-                if (DataHelper.Instance.ThumbArtist.ContainsKey(artist.id))
-                {
-                    img = DataHelper.Instance.ThumbArtist[artist.id];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(artist.thumbnail);
-                    try
-                    {
-                        DataHelper.Instance.ThumbArtist.Add(artist.id, img);
-                    }
-                    catch { }
-                }
-                SectionDTO secXuatHien = artist.sections.Where(s => s.title.Equals("Xuất hiện trong")).First();
-                foreach (var item in secXuatHien.items)
-                {
-                    str.AppendFormat(@"
-                            <div class=""zm-carousel"">
-                                <div class=""zm-carousel__container"" style=""transform: translate3d(0px, 0px, 0px);"">
-                                    <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
-                                        <div class=""playlist-wrapper is-normal"">
-                                            <div class=""zm-card"">
-                                                <div><a class="""" title=""{1}""
-                                                        href=""/album/Ruot-Truyen-Thong-Vo-Hien-Dai-Hoang-Thuy-Linh-Hoa-Minzy-Phuong-My-Chi-KHANH/ZCIU9UDD.html"">
-                                                        <div class=""zm-card-image"">
-                                                            <figure class=""image is-48x48""><img
-                                                                    src=""{0}""
-                                                                    alt=""""></figure>
-                                                        </div>
-                                                    </a></div>
-                                                <div class=""zm-card-content"">
-                                                    <h4 class=""title is-6""><a class="""" title=""{1}""
-                                                            href=""/album/Ruot-Truyen-Thong-Vo-Hien-Dai-Hoang-Thuy-Linh-Hoa-Minzy-Phuong-My-Chi-KHANH/ZCIU9UDD.html""><span><span><span>Ruột
-                                                                        Truyền Thống Vỏ Hiện Đại</span></span><span
-                                                                    style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span></span></a>
-                                                    </h4>
-                                                    <h3 class=""mt-10 subtitle""><a class=""is-ghost"" href=""/Hoang-Thuy-Linh"">Hoàng Thùy Linh</a>, <a
-                                                            class=""is-spotlight is-ghost"" href=""/Hoa-Minzy"">Hòa Minzy<i
-                                                                class=""icon ic-star""></i></a>, <a class=""is-ghost"" href=""/Phuong-My-Chi"">Phương Mỹ
-                                                            Chi</a>...</h3>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                    ",img, secXuatHien.title, secXuatHien.title);
-                }
-            }
-            return str.ToString();
-        }
-
-        public string GenerateCoTheThich(List<ArtistDTO> artists, int optionList = 0)
-        {
-            StringBuilder str = new StringBuilder();
-            foreach (var artist in artists) 
-            {
-                string img;
-                if (DataHelper.Instance.ThumbArtist.ContainsKey(artist.id))
-                {
-                    img = DataHelper.Instance.ThumbArtist[artist.id];
-                }
-                else
-                {
-                    img = FirebaseService.Instance.getStorage(artist.thumbnail);
-                    try
-                    {
-                        DataHelper.Instance.ThumbArtist.Add(artist.id, img);
-                    }
-                    catch { }
-                }
-                SectionDTO secCoTheThich = artist.sections.Where(s => s.title.Equals("Xuất hiện trong")).First();
-                foreach (var item in secCoTheThich.items)
-                {
-                    str.AppendFormat(@"<div class=""zm-carousel"">
-                                            <div class=""zm-carousel__container"" style=""transform: translate3d(0px, 0px, 0px);"">
-                                                <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
-                                                    <div class=""zm-card zm-card--artist"">
-                                                        <div class=""image-wrapper"">
-                                                            <div class=""zm-card-image is-rounded""><a class="""" title=""Hiền Hồ"" href=""/Hien-Ho"">
-                                                                    <figure class=""image is-48x48""><img
-                                                                            src=""https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_jpeg/avatars/d/d/2/9/dd2944e9c478f2546d6e2da88fd5fa4a.jpg""
-                                                                            alt=""""></figure>
-                                                                    <div class=""opacity ""></div>
-                                                                    <div class=""zm-actions-container"">
-                                                                        <div class=""zm-box zm-actions artist-actions""><span class=""is-hidden""><button
-                                                                                    class=""zm-btn zm-tooltip-btn is-hidden is-hover-circle button""
-                                                                                    tabindex=""0""><i class=""icon ic-like""></i></button></span><button
-                                                                                class=""zm-btn action-play  button"" tabindex=""0""><i
-                                                                                    class=""icon action-play ic-24-Shuffle""></i></button><button
-                                                                                class=""zm-btn zm-tooltip-btn is-hidden is-hover-circle button"" tabindex=""0""><i
-                                                                                    class=""icon ic-more""></i></button></div>
-                                                                    </div>
-                                                                </a></div>
-                                                        </div>
-                                                        <div class=""zm-card-content"">
-                                                            <div class=""title""><a class=""is-ghost"" href=""/Hien-Ho""><span><span><span>Hiền Hồ</span></span><span
-                                                                            style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span></span></a>
-                                                            </div>
-                                                            <div class=""subtitle""><span class=""followers"">253K quan tâm</span></div>
-                                                        </div>
-                                                        <div class=""zm-card-footer""><span><button
-                                                                    class=""zm-btn is-outlined mar-t-15 mar-b-20 is-small is-upper button"" tabindex=""0""><i
-                                                                        class=""icon ic-addfriend""></i><span>Quan tâm</span></button></span></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>");
-                }
-            }
-            return str.ToString();
-        }
-        public string GenerateArtistInfo_footer(ArtistDTO artist)
-        {
-            StringBuilder str = new StringBuilder();
-            string img;
-            if (DataHelper.Instance.ThumbArtist.Keys.Contains(artist.id))
-            {
-                img = DataHelper.Instance.ThumbArtist[artist.id];
-            }
-            else
-            {
-                img = FirebaseService.Instance.getStorage(artist.thumbnail);
-                try
-                {
-                    DataHelper.Instance.ThumbArtist.Add(artist.id, img);
-                }
-                catch { }
-            }
-            str.AppendFormat(@"
-                   <div class=""container artist-biography"" style=""width: 1211.2px;"">
-                        <h3 class=""zm-section-title title is-2"">Về {1}</h3>
-                        <div class=""content"">
-                            <div class=""left"" style=""width: 590.594px; height: 393.729px;"">
-                                <figure class=""image is-48x48""><img
-                                        src=""{0}""
-                                        alt=""""></figure>
-                            </div>
-                            <div class=""right"">
-                                <div class=""description""><span><span><span>Năm 2014, Hòa Minzy lên ngôi Quán quân Học Viện Ngôi Sao. Tháng
-                                                11, cô phát hành</span><br><span>MV debut Thư Chưa Gửi Anh. </span><br><span>Năm 2015, ca
-                                                khúc Ăn Gì Đây (cùng Mr.T) trở thành hiện tượng trong giới trẻ, còn Mưa</span><br><span>Nhớ
-                                                đánh dấu lần đầu kết hợp giữa cô và nhạc sĩ Tiên Cookie. </span><br><span>Năm 2016, cô đạt
-                                                giải Thí sinh được yêu thích nhất của Gương Mặt Thân Quen. Cô</span><br><span>cũng đổi sang
-                                                phong cách trẻ trung với ca khúc nhạc dance Sống Không Hối Tiếc. </span><br><span><span>Năm
-                                                    2017, nhờ phần trình diễn trong Cặp Đôi Hoàn Hảo, cô được khán giả<span>... </span><span
-                                                        class=""read-more"" style=""color: rgba(254, 255, 255, 0.8);"">Xem
-                                                        thêm</span></span></span></span><span
-                                            style=""position: fixed; visibility: hidden; top: 0px; left: 0px;""><span>... </span><span
-                                                class=""read-more"" style=""color: rgba(254, 255, 255, 0.8);"">Xem thêm</span></span></span>
-                                </div>
-                                <div class=""statistic"">
-                                    <div class=""numb-follow"">
-                                        <h3 class=""title"">{2}</h3>
-                                        <h3 class=""subtitle"">Người quan tâm</h3>
-                                    </div>
-                                    <div class=""numb-awards"">
-                                        <h3 class=""title"">3</h3>
-                                        <h3 class=""subtitle"">Giải thưởng</h3>
-                                    </div>
-                                    <div class=""awards"" style=""--award-color: rgba(254, 255, 255, 0.8);""><i class=""icon""><svg width=""100%""
-                                                height=""100%"" viewBox=""0 0 56 40"" class=""zing-choice-award"">
-                                                <path fill=""currentColor""
-                                                    d=""M21.343 33.177c.678 0 1.253.152 1.725.454.472.303.813.72 1.023 1.253l-1.186.484c-.29-.661-.82-.992-1.586-.992-.339 0-.652.087-.938.26-.287.174-.513.418-.678.732-.166.315-.248.678-.248 1.09 0 .412.082.775.248 1.09.165.314.391.559.678.732.286.174.599.26.938.26.387 0 .72-.086.999-.26.278-.173.494-.426.647-.757l1.175.509c-.242.525-.602.94-1.078 1.247-.476.307-1.049.46-1.719.46-.613 0-1.162-.141-1.646-.424-.485-.282-.862-.672-1.132-1.168-.27-.496-.406-1.06-.406-1.689 0-.63.135-1.192.406-1.689.27-.496.647-.886 1.132-1.168.484-.283 1.033-.424 1.646-.424zm13.874 0c.613 0 1.166.146 1.659.436.492.29.875.686 1.15 1.186.274.5.411 1.054.411 1.66 0 .612-.137 1.17-.411 1.67-.275.5-.656.894-1.144 1.18-.489.287-1.043.43-1.665.43-.621 0-1.178-.143-1.67-.43-.493-.286-.876-.68-1.15-1.18-.275-.5-.412-1.058-.412-1.67 0-.614.137-1.171.411-1.672.275-.5.658-.893 1.15-1.18.493-.287 1.05-.43 1.671-.43zm10.303 0c.678 0 1.253.152 1.725.454.472.303.813.72 1.023 1.253l-1.187.484c-.29-.661-.819-.992-1.586-.992-.339 0-.651.087-.938.26-.286.174-.512.418-.678.732-.165.315-.248.678-.248 1.09 0 .412.083.775.248 1.09.166.314.392.559.678.732.287.174.6.26.938.26.388 0 .72-.086 1-.26.278-.173.494-.426.647-.757l1.174.509c-.242.525-.601.94-1.077 1.247-.476.307-1.05.46-1.72.46-.613 0-1.162-.141-1.646-.424-.484-.282-.861-.672-1.132-1.168-.27-.496-.405-1.06-.405-1.689 0-.63.135-1.192.405-1.689.27-.496.648-.886 1.132-1.168.484-.283 1.033-.424 1.647-.424zm6.658 0c.622 0 1.158.135 1.61.406.452.27.797.643 1.035 1.12.239.476.358 1.017.358 1.622 0 .161-.009.299-.025.412h-4.77c.057.589.267 1.043.63 1.361.363.32.787.479 1.271.479.396 0 .735-.091 1.017-.273.283-.181.509-.421.678-.72l1.077.52c-.282.509-.657.909-1.125 1.2-.469.29-1.03.435-1.683.435-.597 0-1.136-.141-1.616-.424-.48-.282-.856-.672-1.126-1.168-.27-.496-.406-1.055-.406-1.677 0-.589.131-1.136.394-1.64.262-.505.627-.906 1.095-1.205.468-.298.997-.448 1.586-.448zm-25.617-2.3v2.373l-.073.968h.073c.178-.306.442-.557.793-.75.351-.194.736-.29 1.156-.29.75 0 1.324.223 1.72.671.395.448.592 1.047.592 1.798v3.898h-1.295v-3.729c0-.476-.127-.835-.381-1.077-.255-.242-.58-.363-.975-.363-.298 0-.57.087-.817.26-.246.174-.44.406-.581.696-.141.29-.212.597-.212.92v3.293h-1.307v-8.668h1.307zm14.48 2.494v6.174h-1.308v-6.174h1.307zM21.491 0l5.573 14.824h15.471l-5.16 4.052h-10.31L22.891 8.805l-3.874 10.071H8.27l8.155 7.153-2.948 9.854-5.207 3.654 4.073-15.08L0 14.824h16.426L21.492 0zm13.725 34.376c-.347 0-.668.085-.962.254-.295.17-.531.412-.709.726-.177.315-.266.682-.266 1.102 0 .42.089.787.266 1.102.178.315.414.557.709.726.294.17.615.254.962.254s.666-.084.956-.254c.291-.17.525-.411.703-.726.177-.315.266-.682.266-1.102 0-.42-.089-.787-.266-1.102-.178-.314-.412-.557-.703-.726-.29-.17-.609-.254-.956-.254zm16.973-.085c-.436 0-.805.133-1.107.4-.303.266-.511.621-.624 1.065h3.426c-.016-.226-.089-.452-.218-.678-.129-.226-.317-.414-.563-.563-.246-.15-.55-.224-.914-.224zm-11.803-3.583c.242 0 .45.084.623.254.174.17.26.375.26.617s-.086.45-.26.624c-.174.173-.381.26-.623.26-.243 0-.45-.087-.624-.26-.173-.174-.26-.382-.26-.624s.087-.448.26-.617c.174-.17.381-.254.624-.254zm1.634-9.295c.662 0 1.271.117 1.828.35.557.235 1.029.562 1.416.981l-.92.92c-.589-.661-1.364-.992-2.324-.992-.565 0-1.094.135-1.586.405s-.884.656-1.174 1.156c-.29.5-.436 1.07-.436 1.707 0 .646.147 1.217.442 1.713.294.497.686.88 1.174 1.15.488.271 1.019.406 1.592.406.912 0 1.655-.286 2.228-.86.185-.177.34-.403.466-.677.125-.275.212-.577.26-.908h-2.978v-1.175h4.213c.048.275.072.509.072.703 0 .548-.086 1.07-.26 1.567-.173.497-.442.935-.805 1.314-.387.42-.851.74-1.392.962-.54.222-1.146.333-1.816.333-.823 0-1.582-.198-2.276-.593-.694-.395-1.245-.938-1.653-1.628-.407-.69-.611-1.46-.611-2.307s.204-1.616.611-2.306c.408-.69.959-1.233 1.653-1.628.694-.396 1.453-.593 2.276-.593zm-17.76.193v1.356l-4.504 6.053h4.552v1.26h-6.126v-1.356l4.54-6.054h-4.346v-1.259h5.884zm2.93 0v8.669h-1.332v-8.669h1.332zm3.523 0l3.922 6.368h.073l-.073-1.67v-4.698h1.32v8.669h-1.38l-4.117-6.695h-.072l.072 1.67v5.025h-1.32v-8.669h1.575z"">
-                                                </path>
-                                            </svg></i>
-                                        <div class=""zma-wrapper""><button class=""zm-btn zm-tooltip-btn is-hover-circle button""
-                                                tabindex=""0""><i class=""icon""><svg width=""100%"" height=""100%"" viewBox=""0 0 38 40"">
-                                                        <g fill=""none"" fill-rule=""evenodd"">
-                                                            <path fill=""currentColor""
-                                                                d=""M37.838 0v40H0V0h37.838zM6.645 30.47L5 33.778l3.307-.008-1.662-3.298zm11.905 0l-2.307 1.66 2.315 1.647-.008-3.306zm-2.317 0l-.32.001.01 3.306h.32l-.01-3.306zm-6.344 0h-.26l.942 3.307h.297l.913-2.98.91 2.98h.296l.941-3.306h-.26l-.834 2.97-.909-2.97h-.292l-.904 2.97-.84-2.97zm12.254 0h-1.27v3.307h.244v-1.355h1.017l.773 1.355h.28l-.8-1.388c.207-.057.373-.17.506-.345.133-.175.203-.374.203-.596 0-.269-.092-.496-.281-.69-.189-.193-.41-.287-.672-.287zm4.349 0h-1.32v3.307h1.32c.477 0 .873-.16 1.184-.477.316-.32.472-.713.472-1.176 0-.463-.156-.855-.472-1.172-.311-.32-.707-.481-1.184-.481zm4.457 0c-.29 0-.528.078-.724.239-.19.155-.286.361-.286.623 0 .16.053.293.11.389.057.092.205.192.295.247.043.028.114.06.205.096l.21.078.238.074c.295.091.514.183.652.279.138.096.21.229.21.408 0 .38-.3.64-.838.64-.534 0-.881-.247-1-.645l-.22.124c.153.462.605.755 1.22.755.328 0 .595-.077.795-.238.2-.16.3-.375.3-.641 0-.261-.1-.458-.343-.6-.119-.073-.229-.128-.333-.17-.1-.04-.243-.091-.429-.15-.29-.092-.495-.18-.624-.266-.128-.087-.19-.216-.19-.39 0-.361.295-.618.752-.618.414 0 .7.183.857.554l.215-.114c-.172-.399-.553-.673-1.072-.673zm-4.457.237c.406 0 .742.137 1.003.41.261.27.392.606.392 1.007 0 .402-.13.737-.392 1.011-.26.27-.597.406-1.003.406h-1.054v-2.834zm-4.349 0c.198 0 .364.07.502.217s.207.321.207.524c0 .204-.07.378-.207.525-.138.142-.304.212-.502.212h-1.026v-1.478zm3.029-7.511h-1.323v6.283h1.323v-6.283zm-18.87 0H5v6.283h1.266v-4.066l1.807 2.908h.147l1.807-2.917v4.075h1.256v-6.283H9.981l-1.835 2.97-1.844-2.97zm22.939 0c-.888 0-1.623.302-2.206.906-.584.595-.871 1.346-.871 2.235 0 .89.287 1.631.87 2.235.584.605 1.32.907 2.207.907 1.082 0 2.037-.553 2.544-1.424l-1.006-.596c-.279.527-.862.854-1.538.854-.575 0-1.04-.18-1.395-.552-.347-.37-.524-.846-.524-1.424 0-.587.177-1.062.524-1.433.355-.37.82-.552 1.395-.552.676 0 1.242.32 1.538.863l1.006-.595c-.507-.872-1.47-1.424-2.544-1.424zm-9.078 0c-.551 0-1.032.164-1.426.492-.394.319-.587.759-.587 1.303 0 .552.202.966.578 1.243.385.267.718.396 1.269.56.499.139.84.268 1.033.389.192.112.289.276.289.492 0 .371-.307.638-.98.638-.701 0-1.173-.31-1.41-.923l-1.032.596c.341.923 1.19 1.493 2.406 1.493.657 0 1.19-.164 1.602-.492.411-.328.621-.768.621-1.33 0-.345-.096-.647-.227-.854-.114-.207-.394-.423-.578-.535-.087-.06-.219-.12-.385-.181-.166-.07-.298-.121-.394-.147l-.42-.138c-.455-.138-.761-.268-.927-.38-.158-.12-.237-.276-.237-.466 0-.354.306-.604.805-.604.534 0 .928.259 1.173.777l1.015-.579c-.42-.854-1.199-1.354-2.188-1.354zm-6.372 0h-1.185v4.144c0 .651.216 1.17.649 1.558.432.387.986.58 1.661.58.684 0 1.238-.193 1.67-.58.433-.388.65-.907.65-1.558v-4.144H16.04v4.047c0 .643-.355 1.048-1.125 1.048s-1.125-.405-1.125-1.048v-4.047zM11.614 6.33H5.218v2.095h3.973L5 19.908v1.965h6.614v-2.096H7.336L11.614 8.1V6.33zm3.307 0h-2.315v15.542h2.315V6.33zm2.863 0h-2.202v15.542h2.274V12.53l3.505 9.343h2.157V6.33h-2.274v9.364l-3.46-9.364zM28.314 6c-1.01 0-1.877.314-2.603.943-.8.716-1.2 1.673-1.2 2.872v8.243c0 1.199.4 2.149 1.2 2.85.726.644 1.594.965 2.602.965 1.008 0 1.876-.321 2.602-.965.8-.701 1.201-1.651 1.201-2.85v-4.91h-4.07v1.972h1.802v2.938c0 .512-.145.903-.434 1.173-.289.27-.656.406-1.1.406-.446 0-.801-.132-1.068-.395-.312-.277-.467-.672-.467-1.184V9.815c0-.512.155-.906.467-1.184.267-.263.622-.395 1.067-.395.445 0 .812.135 1.101.406.29.27.434.661.434 1.173v.789h2.268v-.79c0-1.198-.4-2.155-1.2-2.871C30.188 6.314 29.32 6 28.312 6z"">
-                                                            </path>
-                                                        </g>
-                                                    </svg></i></button></div>
+                                        <div class=""level-item duration"">{4}</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                ",img, artist.name, artist.totalFollow);
+                </div>
+            ";
+            return string.Format(format, song.title, img, song.GetHtmlArtist(), song.GetHtmlAlbum(), song.Duration());
+        }
+        #endregion
+
+        #region Playlist
+        public static string GenerateAlbumSpecial(PlaylistDTO playlist)
+        {
+            string img = DataHelper.GetThumbnailPlaylist(playlist);
+            string format = @"
+                <a class="""" title=""{0}""
+                    href=""/Album?encodeId{1}"">
+                    <div class=""playlist-wrapper is-normal allow-click"">
+                        <div class=""zm-card"">
+                            <div class=""zm-card-image"">
+                                <figure class=""image is-48x48"">
+                                    <img src=""{2}""
+                                             alt="">
+                                </figure>
+                            </div>
+                            <div class=""zm-card-content"">
+                                <span>Single</span>
+                                <h3 class=""title"">
+                                    <span>
+                                        <span>
+                                            {0}
+                                        </span>
+                                        <span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span>
+                                    </span>
+                                </h3><span class=""artist-name"">
+                                    <h3 class=""is-one-line is-truncate subtitle"">
+                                        {4}
+                                    </h3>
+                                </span><span>{5}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <div class=""media-blur"">
+                    <div class=""cover-bg""
+                        style=""background-image: url({2});"">
+                    </div>
+                    <div class=""gradient-layer""></div>
+                    <div class=""blur-layer""></div>
+                </div>
+            ";
+            return string.Format(format, playlist.title, playlist.encodeId, img, GenerateArtistLink(playlist.artists), playlist.ContentLastUpdate());
+        }
+        public static string GeneratePlaylistElement(PlaylistDTO playlist, bool classColumn = false)
+        {
+            string img = DataHelper.GetThumbnailPlaylist(playlist);
+            string column = string.Empty;
+            if (classColumn)
+            {
+                column = " column mar-b-30 ";
+            }
+            string format = @"
+                <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3 {4} "">
+                    <div class=""playlist-wrapper is-normal"">
+                        <div class=""zm-card"">
+                            <div><a class="""" title=""{0}""
+                                    href=""/Album?encodeId={1}"">
+                                    <div class=""zm-card-image"">
+                                        <figure class=""image is-48x48""><img
+                                                src=""{2}""
+                                                alt=""""></figure>
+                                    </div>
+                                </a></div>
+                            <div class=""zm-card-content"">
+                                <h4 class=""title is-6""><a class="""" title=""{1}""
+                                        href=""/Album?encodeId={1}""><span><span><span>{0}</span></span><span
+                                                style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span></span></a>
+                                </h4>
+                                <h3 class=""mt-10 subtitle"">{3}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ";
+            return string.Format(format, playlist.title, playlist.encodeId, img, GenerateArtistLink(playlist.artists), column);
+        }
+        public static string GeneratePlaylistsElement(List<PlaylistDTO> playlists, bool classColumn = false)
+        {
+            string res = "";
+            if(playlists != null && playlists.Count > 0)
+            {
+                foreach (var item in playlists)
+                {
+                    res += GeneratePlaylistElement(item, classColumn);
+                }
+            }
+            return res;
+        }
+        public static string GeneratePlaylistsElement(List<string> playlists, bool classColumn = false)
+        {
+            string res = "";
+            if (playlists != null && playlists.Count > 0)
+            {
+                foreach (var item in playlists)
+                {
+                    PlaylistDTO playlist = DataHelper.GetPlaylist(item);
+                    if(playlist != null)
+                    {
+                        res += GeneratePlaylistElement(playlist, classColumn);
+                    }
+                }
+            }
+            return res;
+        }
+        #endregion
+
+        #region Artist
+        public static string GenerateArtistItemLink(ArtistDTO artist)
+        {
+            if(artist != null)
+            {
+                return $"<a class=\"is-ghost\" href=\"/Artist/Index?id={artist.id}\">{artist.name}</a>";
+            }
+            return string.Empty;
+        }
+        public static string GenerateArtistLink(List<ArtistDTO> artists)
+        {
+            string res = "";
+            if (artists != null && artists.Count > 0)
+            {
+                for (int i = 0; i < artists.Count; i++)
+                {
+                    ArtistDTO artist = artists[i];
+                    if (artist != null)
+                    {
+                        if (i > 0)
+                        {
+                            res += ", ";
+                        }
+                        res += GenerateArtistItemLink(artist);
+                    }
+                }
+            }
+            return res;
+        }
+        public static string GenerateArtistLink(List<string> artists)
+        {
+            string res = "";
+            if (artists != null && artists.Count > 0)
+            {
+                for (int i = 0; i < artists.Count; i++)
+                {
+                    ArtistDTO artist = DataHelper.GetArtist(artists[i]);
+                    if (artist != null)
+                    {
+                        if (i > 0)
+                        {
+                            res += ", ";
+                        }
+                        res += GenerateArtistItemLink(artist);
+                    }
+                }
+            }
+            return res;
+        }
+        public static string GenerateArtistElement(ArtistDTO artist)
+        {
+            string img = DataHelper.GetThumbnailArtist(artist.id, artist.thumbnail);
+            string format = @"
+                <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
+                    <div class=""zm-card zm-card--artist"">
+                        <div class=""image-wrapper"">
+                            <div class=""zm-card-image is-rounded""><a class="""" title=""{0}"" href=""/Artist/Index?id={1}"">
+                                    <figure class=""image is-48x48""><img
+                                            src=""{2}""
+                                            alt=""""></figure>
+                                    <div class=""opacity ""></div>
+                                    <div class=""zm-actions-container"">
+                                        <div class=""zm-box zm-actions artist-actions""><span class=""is-hidden""><button
+                                                    class=""zm-btn zm-tooltip-btn is-hidden is-hover-circle button"" tabindex=""0""><i
+                                                        class=""icon ic-like""></i></button></span><button
+                                                class=""zm-btn action-play  button"" tabindex=""0""><i
+                                                    class=""icon action-play ic-24-Shuffle""></i></button><button
+                                                class=""zm-btn zm-tooltip-btn is-hidden is-hover-circle button"" tabindex=""0""><i
+                                                    class=""icon ic-more""></i></button></div>
+                                    </div>
+                                </a></div>
+                        </div>
+                        <div class=""zm-card-content"">
+                            <div class=""title"">{3}</div>
+                            <div class=""subtitle""><span class=""followers"">{4} quan tâm</span></div>
+                        </div>
+                        <div class=""zm-card-footer""><span><button class=""zm-btn is-outlined mar-t-15 mar-b-20 is-small is-upper button""
+                                    tabindex=""0""><i class=""icon ic-addfriend""></i><span>Quan tâm</span></button></span></div>
+                    </div>
+                </div>
+            ";
+            return string.Format(format, artist.name, artist.id, img, GenerateArtistItemLink(artist), HelperUtility.GetCompactNum(artist.totalFollow));
+        }
+        public static string GenerateArtistsElement(List<ArtistDTO> artists)
+        {
+            if(artists != null && artists.Count > 0)
+            {
+                string res = "";
+                foreach (ArtistDTO artist in artists)
+                {
+                    res += GenerateArtistElement(artist);
+                }
+                return res;
+            }
+            return string.Empty;
+        }
+        public static string GenerateArtistsElement(List<string> artists)
+        {
+            string res = "";
+            if (artists != null && artists.Count > 0)
+            {
+                foreach (string item in artists)
+                {
+                    ArtistDTO artist = DataHelper.GetArtist(item);
+                    if(artist != null)
+                    {
+                        res += GenerateArtistElement(artist);
+                    }
+                }
+            }
+            return res;
+        }
+        public static string GenerateArtist(List<ArtistDTO> artists, int optionLast = 0)
+        {
+            StringBuilder str = new StringBuilder();
+            foreach (var artist in artists)
+            {
+                string img = DataHelper.GetThumbnailArtist(artist.id, artist.thumbnail);
+                str.AppendFormat(@"
+                    <div class=""zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3"">
+                        <div class=""playlist-wrapper is-description"">
+                            <div class=""zm-card"">
+                                <div>
+                                    <a class="""" title=""Những Bài Hát Hay Nhất Của {0}""
+                                       href=""/Artist/Index?id={1}"">
+                                        <div class=""zm-card-image"">
+                                            <figure class=""image is-48x48"">
+                                                <img src=""{2}"" alt="""" />
+                                            </figure>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class=""zm-card-content"">
+                                    <h3 class=""mt-10 subtitle"">
+                                        <span>
+                                            <span>
+                                                <a class=""is-ghost"" href=""/Artist/Index?id={3}"">{0}</a>
+                                            </span>
+                                            <span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;""></span>
+                                        </span>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ", artist.name, artist.id, img, artist.id);
+            }
             return str.ToString();
         }
-
-      
+        #endregion
     }
 }

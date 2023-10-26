@@ -18,13 +18,14 @@ namespace TDT.API.Controllers
     [ApiController]
     public class SongController : ControllerBase
     {
+        int limitRelease = 30;
         // GET: api/<SongController>
 
         [Route("LoadSongReleaseAll")]
         [HttpGet]
         public JsonResult LoadSongReleaseAll()
         {
-            Query query = FirestoreService.Instance.OrderByDescending(FirestoreService.CL_Song, "releaseDate").Limit(100);
+            Query query = FirestoreService.Instance.OrderByDescending(FirestoreService.CL_Song, "releaseDate").Limit(limitRelease);
             List<SongDTO> res = FirestoreService.Instance.Gets<SongDTO>(query);
             return new JsonResult(res);
         }
@@ -36,7 +37,7 @@ namespace TDT.API.Controllers
             string idGenreVN = APIHelper.GetStringValue($"{FirestoreService.CL_Genre}/GetId?alias={HelperUtility.GetAlias("Việt Nam")}");
             if (string.IsNullOrEmpty(idGenreVN))
                 return new JsonResult(null);
-            Query query = FirestoreService.Instance.WhereArrayContains(FirestoreService.CL_Song, "genreIds", idGenreVN).OrderByDescending("releaseDate").Limit(100);
+            Query query = FirestoreService.Instance.WhereArrayContains(FirestoreService.CL_Song, "genreIds", idGenreVN).OrderByDescending("releaseDate").Limit(limitRelease);
             List<SongDTO> res = FirestoreService.Instance.Gets<SongDTO>(query);
             return new JsonResult(res);
         }
@@ -50,7 +51,9 @@ namespace TDT.API.Controllers
         [HttpGet("{encodeId}")]
         public JsonResult Get(string encodeId)
         {
-            return new JsonResult(FirestoreService.Instance.Gets<ArtistDTO>(FirestoreService.CL_Artist, encodeId));
+            //var list1 = FirestoreService.Instance.Gets<SongDTO>(FirestoreService.Instance.GetCollectionReference("Song").OrderByDescending("encodeId").Limit(5));
+            //var list2 = FirestoreService.Instance.Gets<SongDTO>(FirestoreService.Instance.GetCollectionReference("Song").OrderByDescending("encodeId").StartAfter("ZZZZW6WE").Limit(3));
+            return new JsonResult(FirestoreService.Instance.Gets<SongDTO>(FirestoreService.CL_Song, encodeId));
         }
 
         [Route("InsertOrUpdate")]
