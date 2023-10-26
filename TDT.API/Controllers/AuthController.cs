@@ -93,7 +93,7 @@ namespace TDT.API.Controllers
         {
             try
             {
-                if (_db.Users.Any(u => u.UserName.Equals(model.UserName) || u.Email.Equals(model.Email) || u.PhoneNumber.Equals(model.PhoneNumber)))
+                if (_db.Users.Any(u => u.UserName.Equals(model.UserName) || u.Email.Equals(model.Email)))
                 {
                     return APIHelper.GetJsonResult(APIStatusCode.ExistingAccount);
                 }

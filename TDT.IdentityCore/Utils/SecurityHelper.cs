@@ -94,12 +94,15 @@ namespace TDT.IdentityCore.Utils
         /// <returns>JWT</returns>
         public string GenerateJWT(User userInfo, bool isExpr = true, double expr = 120)
         {
+            var listRoleGroup = "";
             var sercurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]));
             var credentials = new SigningCredentials(sercurityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Sub, userInfo.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, userInfo.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Name, userInfo.UserName),
+                new Claim(ClaimTypes.Role, listRoleGroup)
             };
             var token = new JwtSecurityToken(
                 _cfg["Jwt:Issuer"],
