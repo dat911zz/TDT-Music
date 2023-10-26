@@ -56,6 +56,7 @@ namespace TDT.Site.Controllers
                     AlbumController.d += song.duration;
                     AlbumController.q += 1;
                     res += Generator.GenerateSongElement(song);
+                    DataHelper.GetMP3(song.encodeId);
                 }
                 return JsonConvert.SerializeObject(new { html = res, quantity = AlbumController.q, duration = AlbumController.d, durationHtml = HelperUtility.GetTime(AlbumController.d)});
             }
