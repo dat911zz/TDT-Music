@@ -1,23 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using TDT.Core.Ultils;
-using Microsoft.AspNetCore.Http;
-using TDT.Core.Helper;
-using System.Linq;
-using X.PagedList;
-using TDT.Core.DTO.Firestore;
-using Google.Cloud.Firestore;
-using Google.Cloud.Firestore.V1;
-using System.Threading.Tasks;
-using TDT.Core.DTO;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.IO;
-using System;
-using TDT.Core.Enums;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using TDT.Core.DTO;
+using TDT.Core.DTO.Firestore;
 using TDT.Core.Extensions;
-using TDT.Core.Models;
+using TDT.Core.Helper;
+using TDT.Core.Ultils;
 using TDT.Core.Ultils.MVCMessage;
+using X.PagedList;
 
 namespace TDT.CAdmin.Controllers
 {
@@ -110,56 +105,61 @@ namespace TDT.CAdmin.Controllers
             return img;
         }
 
+      
+        public bool IsIdInUse(string id)
+        {
+            return _songs.Any(song => song.encodeId == id);
+        }
         public IActionResult Create()
         {
-            if(DataHelper.Instance.Genres.Count > 0)
+            if (DataHelper.Instance.Genres.Count > 0)
             {
                 ViewBag.MaGenre = new SelectList(_genres, "id", "name");
             }
             return View();
         }
 
-        public bool IsIdInUse(string id)
-        {
-            return _songs.Any(song => song.encodeId == id);
-        }
-
-
         [HttpPost]
-        public IActionResult Create([FromForm] FileUploadModel<SongDTO> fileData)
+        public IActionResult Create(SongDTO songdto, IFormFile uploadFile)
         {
             try
             {
-                if (ModelState.IsValid)
+
+                string id = string.Empty;
+                do
                 {
-                    string id = HelperUtility.GenerateRandomString(8);
-                    do
-                    {
-                        id = HelperUtility.GenerateRandomString(8);
-                    } while (IsIdInUse(id));
+                    id = HelperUtility.GenerateRandomString(8);
+                } while (IsIdInUse(id));
+                Stream image = uploadFile.OpenReadStream();
+                string thumbnail = id + "_" + DateTime.Now.ToShortDateString().Replace("/", "_") + "." + uploadFile.FileName.Split('.').Last();
+                string url = FirebaseService.Instance.pushFile(image, "Images/Song/0/" + thumbnail).Result;
+                DataHelper.Instance.ThumbSong.Add(id, url);
+                FirebaseService.Instance.pushFile(image, "Images/Song/1/" + thumbnail).Wait();
+                songdto.thumbnail = "Images/Song/0/" + thumbnail;
+                songdto.thumbnailM = "Images/Song/1/" + thumbnail;
 
-                    SongDTO roleDetail = APICallHelper.Post<SongDTO>(
-                    $"Song/InsertOrUpdate",
-                    token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
-                    requestBody: JsonConvert.SerializeObject(fileData)
-                    ).Result;
-                    if (roleDetail.Code == Core.Enums.APIStatusCode.ActionSucceeded)
-                    {
-                        //FlashMessage để truyền message từ đây sang action hoặc controller khác
-                        this.MessageContainer().AddFlashMessage("Tạo bài hát thành công!", ToastMessageType.Success);
-                    }
-                    else
-                    {
-                        //Truyền message trong nội bộ hàm
-                        this.MessageContainer().AddMessage(roleDetail.Msg, ToastMessageType.Error);
-                        return View();
-                    }
-
-                    return RedirectToAction(nameof(Index));
+                SongDTO Songfile = APICallHelper.Post<SongDTO>(
+                   $"Song/InsertOrUpdate",
+                   token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+                   requestBody: JsonConvert.SerializeObject(songdto)
+               ).Result;
+                //SongDTO Songfile = APICallHelper.Post<SongDTO>(
+                // $"Song/InsertOrUpdate",
+                // token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+                // requestBody: JsonConvert.SerializeObject(fileData)
+                // ).Result;
+                if (Songfile.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+                {
+                    //FlashMessage để truyền message từ đây sang action hoặc controller khác
+                    this.MessageContainer().AddFlashMessage("Tạo bài hát thành công!", ToastMessageType.Success);
                 }
-                return View();
-
-
+                else
+                {
+                    //Truyền message trong nội bộ hàm
+                    this.MessageContainer().AddMessage(Songfile.Msg, ToastMessageType.Error);
+                    return View();
+                }
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -188,13 +188,16 @@ namespace TDT.CAdmin.Controllers
         [HttpPost]
         public IActionResult Delete(string id)
         {
-            SongDTO song = new SongDTO();
-            if (id != null)
+            ResponseDataDTO<SongDTO> songDTO = APICallHelper.Delete<ResponseDataDTO<SongDTO>>($"Song/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            if (songDTO.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
-                song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
-                return View(song);
+                this.MessageContainer().AddFlashMessage("Xóa bài hát thành công!", ToastMessageType.Success);
             }
-            return View();
+            else
+            {
+                this.MessageContainer().AddFlashMessage(songDTO.Msg, ToastMessageType.Error);
+            }
+            return new JsonResult("ok");
         }
         public IActionResult Details(string id)
         {

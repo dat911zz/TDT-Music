@@ -71,7 +71,7 @@ namespace TDT.Core.DTO.Firestore
         [Display(Name = "Là toàn cầu")]
         [FirestoreProperty] public bool isWorldWide { get => _isWorldWide; set => _isWorldWide = value; }
 
-        [Required(ErrorMessage = "Vui lòng chọn file ảnh M!")]
+        //[Required(ErrorMessage = "Vui lòng chọn file ảnh M!")]
         [Display(Name = "Ảnh thu nhỏ M")]
         [FirestoreProperty] public string thumbnailM { get => _thumbnailM; set => _thumbnailM = value; }
 

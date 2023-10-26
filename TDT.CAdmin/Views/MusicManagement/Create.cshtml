@@ -44,7 +44,7 @@
 
                   <div class="form-group">
                         <label asp-for="thumbnailM" class="control-label"></label>
-                        <input asp-for="thumbnailM" readonly class="form-control" />
+                        <input asp-for="thumbnailM" name="uploadFile" type="file" class="form-control" />
                         <span asp-validation-for="thumbnailM" class="text-danger"></span>
                     </div> 
                     <div class="form-group">
@@ -52,11 +52,11 @@
                         <input asp-for="link" class="form-control" />
                         <span asp-validation-for="link" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+@*                     <div class="form-group">
                         <label asp-for="thumbnail" class="control-label"></label>
                         <input asp-for="thumbnail"  class="form-control" />
                         <span asp-validation-for="thumbnail" class="text-danger"></span>
-                    </div> 
+                    </div>  *@
                     <div class="form-group">
                         <label asp-for="duration" class="control-label"></label>
                         <input asp-for="duration" class="form-control" />
@@ -113,7 +113,7 @@
 
                     <div class="form-group">
                         <label asp-for="releaseDate" class="control-label"></label>
-                        <input asp-for="releaseDate" class="form-control" min="1800-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        <input asp-for="releaseDate" class="form-control" min="1800-01-01"  />
                         <span asp-validation-for="releaseDate" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -141,30 +141,30 @@
                                         
                     <div class="form-group">
                     <label asp-for="like" class="control-label"></label>
-                    <input asp-for="like" class="form-control" />
+                        <input asp-for="like" class="form-control" readonly value="0" />
                     <span asp-validation-for="like" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                     <label asp-for="listen" class="control-label"></label>
-                    <input asp-for="listen" class="form-control" />
+                        <input asp-for="listen" class="form-control" readonly value="0" />
                     <span asp-validation-for="listen" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
                     <label asp-for="comment" class="control-label"></label>
-                    <input asp-for="comment" class="form-control" />
+                        <input asp-for="comment" class="form-control" readonly value="0" />
                     <span asp-validation-for="comment" class="text-danger"></span>
                     </div>
-@*                      <div class="form-group">
-                    <label asp-for="Code" class="control-label"></label>
-                    <input asp-for="Code" class="form-control" />
-                    <span asp-validation-for="Code" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                    <label asp-for="Msg" class="control-label"></label>
-                    <input asp-for="Msg" class="form-control" />
-                    <span asp-validation-for="Msg" class="text-danger"></span>
-                    </div> *@
+    @*                      <div class="form-group">
+                        <label asp-for="Code" class="control-label"></label>
+                        <input asp-for="Code" class="form-control" />
+                        <span asp-validation-for="Code" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                        <label asp-for="Msg" class="control-label"></label>
+                        <input asp-for="Msg" class="form-control" />
+                        <span asp-validation-for="Msg" class="text-danger"></span>
+                        </div> *@
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-primary" />
                     </div>

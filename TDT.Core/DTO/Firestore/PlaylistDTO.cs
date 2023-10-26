@@ -1,5 +1,6 @@
 ﻿using Google.Cloud.Firestore;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace TDT.Core.DTO.Firestore
@@ -41,22 +42,49 @@ namespace TDT.Core.DTO.Firestore
         private int _listen;
         private bool _liked;
 
+        [Display(Name = "Mã ID")]
         [FirestoreProperty] public string encodeId { get => _encodeId; set => _encodeId = value; }
+
+        [Display(Name = "Tiêu Đề")]
         [FirestoreProperty] public string title { get => _title; set => _title = value; }
+
+        [Display(Name = "Ảnh")]
         [FirestoreProperty] public string thumbnail { get => _thumbnail; set => _thumbnail = value; }
+
+        [Display(Name = "Bản Chính Thức")]
         [FirestoreProperty] public bool isoffical { get => _isoffical; set => _isoffical = value; }
+
+        [Display(Name = "Link")]
         [FirestoreProperty] public string link { get => _link; set => _link = value; }
+
+        [Display(Name = "Indie")]
         [FirestoreProperty] public bool isIndie { get => _isIndie; set => _isIndie = value; }
+
+        [Display(Name = "Ngày Phát Hành")]
         [FirestoreProperty] public string releaseDate { get => _releaseDate; set => _releaseDate = value; }
+
+        [Display(Name = "Mô tả ngắn")]
         [FirestoreProperty] public string sortDescription { get => _sortDescription; set => _sortDescription = value; }
+        [Display(Name = "Phát Hành Tại ?")]
         [FirestoreProperty] public string releasedAt { get => _releasedAt; set => _releasedAt = value; }
+        [Display(Name = "Danh Sách Thể Loại")]
         [FirestoreProperty] public List<string> genreIds { get => _genreIds; set => _genreIds = value; }
+        [Display(Name = "PR")]
         [FirestoreProperty] public bool PR { get => _PR; set => _PR = value; }
+        [Display(Name = "Nghệ sĩ")]
         [FirestoreProperty] public List<string> artists { get => _artists; set => _artists = value; }
+        [Display(Name = "Tên nghệ sĩ")]
+
         [FirestoreProperty] public string artistsNames { get => _artistsNames; set => _artistsNames = value; }
+        [Display(Name = "playItemMode")]
         [FirestoreProperty] public int playItemMode { get => _playItemMode; set => _playItemMode = value; }
+        [Display(Name = "subType")]
+
         [FirestoreProperty] public int subType { get => _subType; set => _subType = value; }
+        [Display(Name = "uid")]
+
         [FirestoreProperty] public int uid { get => _uid; set => _uid = value; }
+        [Display(Name = "Ảnh ThumbanilM")]
         [FirestoreProperty] public string thumbnailM { get => _thumbnailM; set => _thumbnailM = value; }
         [FirestoreProperty] public bool isShuffle { get => _isShuffle; set => _isShuffle = value; }
         [FirestoreProperty] public bool isPrivate { get => _isPrivate; set => _isPrivate = value; }

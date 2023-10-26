@@ -56,11 +56,10 @@ namespace TDT.API.Controllers
         [Route("InsertOrUpdate")]
         [HttpPost]
         [Authorize]
-        public JsonResult InsertOrUpdate([FromForm] FileUploadModel<SongDTO> fileData)
+        public JsonResult InsertOrUpdate([FromBody] SongDTO song)
         {
-            Stream image = fileData.FileDetails.OpenReadStream();
-            List<string> paramCheck = new List<string>() { "encodeId", "title", "alias", "thumbnail", "thumbnailM" };
-            SongDTO song = fileData.srcObj;
+            
+            List<string> paramCheck = new List<string>() { "encodeId", "title", "alias", "thumbnail" };
             var resParam = HelperUtility.GetParamsIllegal(paramCheck, song);
             if (resParam.Count > 0)
             {
@@ -68,12 +67,6 @@ namespace TDT.API.Controllers
             }
             try
             {
-                string thumbnail = song.encodeId + "_" + DateTime.Now.ToShortDateString().Replace("/", "_") + "." + fileData.FileDetails.FileName.Split('.').Last();
-                string url = FirebaseService.Instance.pushFile(image, "Images/Song/0/" + thumbnail).Result;
-                DataHelper.Instance.ThumbArtist.Add(song.encodeId, url);
-                FirebaseService.Instance.pushFile(image, "Images/Song/1/" + thumbnail).Wait();
-                song.thumbnail = "Images/Song/0/" + thumbnail;
-                song.thumbnailM = "Images/Song/1/" + thumbnail;
                 FirestoreService.Instance.SetAsync(FirestoreService.CL_Song_Test, song.encodeId, song).Wait();      // Sửa Song Test
                 return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, new Dictionary<string, object>()
                     {
