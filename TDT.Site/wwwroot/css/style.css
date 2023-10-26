@@ -6601,4 +6601,10 @@ h2.widget-title:after {
 		-ms-flex-preferred-size: 190px;
 		flex-basis: 190px;
 	}
+	.zm-portal-modal {
+		width: 300px;
+		height: 300px;
+		display: none;
+		position: relative;
+	}
 }
