@@ -73,7 +73,6 @@ namespace TDT.CAdmin.Controllers
         public ActionResult Edit(string id)
         {
             ResponseDataDTO<User> userDetail = APICallHelper.Put<ResponseDataDTO<User>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
-
             return View(userDetail.Data.FirstOrDefault());
         }
         [HttpPost]
