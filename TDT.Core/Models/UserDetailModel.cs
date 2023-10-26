@@ -11,7 +11,6 @@ namespace TDT.Core.Models
     public partial class UserDetailModel
     {
         [DisplayName("Địa chỉ")]
-        [Required(ErrorMessage = "Vui lòng nhập địa chỉ!")]
         public string Address { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập email!")]
         public string Email { get; set; }

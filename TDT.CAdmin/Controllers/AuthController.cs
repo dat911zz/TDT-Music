@@ -22,11 +22,11 @@ namespace TDT.CAdmin.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<AuthController> _logger;
         private readonly ISecurityHelper _securityHelper;
         private readonly IEmailSender _mailSender;
 
-        public AuthController(ILogger<HomeController> logger, ISecurityHelper securityHelper, IEmailSender mailSender)
+        public AuthController(ILogger<AuthController> logger, ISecurityHelper securityHelper, IEmailSender mailSender)
         {
             _logger = logger;
             _securityHelper = securityHelper;

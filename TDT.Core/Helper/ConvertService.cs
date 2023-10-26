@@ -83,9 +83,19 @@ namespace TDT.Core.Helper
                         }
                         else
                         {
-                            someObjectType
+                            if ((someObjectType.GetProperty(item.Key)).ToString().Contains("Genre"))
+                            {
+                                Genre genre = convertToObjectFromDictionary<Genre>((IDictionary<string, object>)item.Value);
+                                someObjectType
+                                    .GetProperty(item.Key)
+                                    .SetValue(res, genre, null);
+                            }
+                            else
+                            {
+                                someObjectType
                                  .GetProperty(item.Key)
                                  .SetValue(res, item.Value, null);
+                            }
                         }
                     }
                 }

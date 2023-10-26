@@ -24,7 +24,6 @@ namespace TDT.API.Controllers
 {
     [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
-    [Authorize]
     public class AuthController : ControllerBase
     {
         private IConfiguration _cfg;
@@ -94,7 +93,7 @@ namespace TDT.API.Controllers
         {
             try
             {
-                if (_db.Users.Any(u => u.UserName.Equals(model.UserName)))
+                if (_db.Users.Any(u => u.UserName.Equals(model.UserName) || u.Email.Equals(model.Email)))
                 {
                     return APIHelper.GetJsonResult(APIStatusCode.ExistingAccount);
                 }
@@ -123,7 +122,7 @@ namespace TDT.API.Controllers
             User user = null;
             //Find user
             user = _db.Users.FirstOrDefault(u =>
-            u.UserName.Equals(login.UserName)
+            u.UserName.Equals(login.UserName) || u.Email.Equals(login.UserName)
             );
             if (user != null)
             {
@@ -136,6 +135,7 @@ namespace TDT.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult LockoutAccount(string username, [FromBody]DateTime lockoutEnd)
         {
             try
@@ -167,6 +167,7 @@ namespace TDT.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult UnlockAccount(string username)
         {
             try

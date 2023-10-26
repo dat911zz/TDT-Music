@@ -13,4 +13,9 @@
     <ProjectReference Include="..\TDT.Core\TDT.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Querys\MaiTrungTien\" />
+    <Folder Include="Querys\Dat\" />
+  </ItemGroup>
+
 </Project>

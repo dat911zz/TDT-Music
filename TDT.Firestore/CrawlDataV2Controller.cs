@@ -32,7 +32,7 @@ namespace TDT.Firestore
         }
         public async Task ClearCollection()
         {
-            await _service.DeleteAsync("TypePlayList");
+            //await _service.DeleteAsync("TypePlayList");
         }
         public async Task<IDictionary<string, object>> GetExistingSearchListAsync()
         {
