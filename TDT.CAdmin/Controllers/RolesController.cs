@@ -29,7 +29,7 @@ namespace TDT.CAdmin.Controllers
             ResponseDataDTO<RoleDTO> roles = APICallHelper.Get<ResponseDataDTO<RoleDTO>>("Role", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             ViewBag.SearchTerm = "";
             int pageNumber = (page ?? 1);
-            int pageSize = 10;
+            int pageSize = 6;
 
             // Lọc vai trò dựa trên từ khóa tìm kiếm
             if (!string.IsNullOrEmpty(searchTerm))

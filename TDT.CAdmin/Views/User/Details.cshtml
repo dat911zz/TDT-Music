@@ -11,11 +11,9 @@
         color: red;
     }
 </style>
-<h1>Details</h1>
-
+<h2>Thông tin tài khoản</h2>
+<hr/>
 <div>
-    <h4>User</h4>
-    <hr />
     <dl class="row">
         <dt class = "col-sm-3">
             Mã tài khoản
@@ -113,6 +111,6 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Cập nhật thông tin tài khoản", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Trở về trang trước</a>
 </div>

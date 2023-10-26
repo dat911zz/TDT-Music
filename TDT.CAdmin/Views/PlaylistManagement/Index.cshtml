@@ -16,6 +16,7 @@
 <p>
     <a asp-action="Create">Tạo Play List Mới</a>
 </p>
+<div class="table-container">
 <table class="table">
     <thead>
         <tr>
@@ -68,7 +69,7 @@
                 <td>
                         @{
                             string truncatedArtistsNames;
-                            if (item.artistsNames.Length != null)
+                            if (item.artistsNames != null)
                             {
                                 truncatedArtistsNames = item.artistsNames.Length > maxLength
                             ? item.artistsNames.Substring(0, maxLength) + "..."
@@ -102,6 +103,7 @@
         }
     </tbody>
 </table>
+</div>
 <div class="pagedList-container">
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @ViewBag.SearchTerm }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
 </div>

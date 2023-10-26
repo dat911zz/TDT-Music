@@ -90,13 +90,13 @@ namespace TDT.API.Controllers
         {
             try
             {
-                var role = _db.Permissions.FirstOrDefault(u => u.Id == id);
-                if (role == null || string.IsNullOrEmpty(role.Name))
+                var perm = _db.Permissions.FirstOrDefault(u => u.Id == id);
+                if (perm == null || string.IsNullOrEmpty(perm.Name))
                 {
                     return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "cập nhật " + CTR_NAME);
                 }
-                role.Name = model.Name;
-                role.Description = model.Description;
+                perm.Name = model.Name;
+                perm.Description = model.Description;
                 _db.SubmitChanges();
                 return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật " + CTR_NAME);
             }
