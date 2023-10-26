@@ -23,14 +23,14 @@ namespace TDT.CAdmin.Controllers
 {
     public class GenreController : Controller
     {
-       
+
         private List<Genre> _genres;
 
         public GenreController()
         {
             GetDataGenre();
         }
-        
+
         public void GetDataGenre()
         {
             if (DataHelper.Instance.Genres.Count <= 0)
@@ -71,7 +71,7 @@ namespace TDT.CAdmin.Controllers
             IPagedList<Genre> pagedList = lgenre == null ? new List<Genre>().ToPagedList() : lgenre.OrderByDescending(o => o.name).ToPagedList(pageNumber, pageSize);
             return View(pagedList);
         }
-            public IActionResult Create()
+        public IActionResult Create()
         {
             if (DataHelper.Instance.Genres.Count > 0)
             {
@@ -79,44 +79,136 @@ namespace TDT.CAdmin.Controllers
             }
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Create(Genre genre, IFormFile file)
+        {
+            try
+            {
+                if (genre == null)
+                {
+                    return BadRequest("Dữ liệu thể loại không hợp lệ.");
+                }
+                string id = string.Empty;
+                do
+                {
+                    id = HelperUtility.GenerateRandomString(8);
+                } while (IsIdInUse(id));
 
+                genre.id = id;
+                await FirestoreService.Instance.SetAsync(FirestoreService.CL_GenreTest, genre.id, genre);
+
+                if (file != null)
+                {
+                    var apiResponse = APICallHelper.Post<Genre>(
+                        "Genre/InsertOrUpdate",
+                        token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+                        requestBody: JsonConvert.SerializeObject(genre)
+                    ).Result;
+
+                    if (apiResponse.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+                    {
+                        this.MessageContainer().AddFlashMessage("Tạo Chủ Đề thành công!", ToastMessageType.Success);
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        this.MessageContainer().AddMessage(apiResponse.Msg, ToastMessageType.Error);
+                        return View();
+                    }
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Edit(string ID)
+        {
+            if (ID != null)
+            {
+                Genre lgenre = _genres.FirstOrDefault(s => s.id.Equals(ID));
+                return View(lgenre);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Genre genre, IFormFile file)
+        {
+            try
+            {
+                if (genre == null)
+                {
+                    return BadRequest("Dữ liệu thể loại không hợp lệ.");
+                }
+
+                string id = genre.id;
+                await FirestoreService.Instance.SetAsync(FirestoreService.CL_Genre, id, genre);
+
+                if (file != null)
+                {
+                    var apiResponse = APICallHelper.Post<Genre>(
+                        "Genre/InsertOrUpdate",
+                        token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+                        requestBody: JsonConvert.SerializeObject(genre)
+                    ).Result;
+
+                    if (apiResponse.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+                    {
+                        this.MessageContainer().AddFlashMessage("Cập nhật Chủ Đề thành công!", ToastMessageType.Success);
+
+                        return RedirectToAction(nameof(Index)); 
+                    }
+                    else
+                    {
+                        this.MessageContainer().AddMessage(apiResponse.Msg, ToastMessageType.Error);
+                        return View();
+                    }
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index)); 
+                }
+            }
+            catch
+            {
+                return View();
+            }
+        }
         public bool IsIdInUse(string id)
         {
             return _genres.Any(genre => genre.id == id);
         }
-        public IActionResult Edit(string id)
-        {
-            Genre lgenre = new Genre();
-            if (id != null)
-            {
-                lgenre = _genres.FirstOrDefault(s => s.id.Equals(id));
-                return View(lgenre);
-            }
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Edit(Genre lgenre)
-        {
-            return View();
-        }
+
+      
         [HttpPost]
         public IActionResult Delete(string id)
         {
-            Genre lgenre = new Genre();
-            if (id != null)
+            ResponseDataDTO<Genre> genre = APICallHelper.Delete<ResponseDataDTO<Genre>>($"Genre/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            if (genre.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
-                lgenre = _genres.FirstOrDefault(s => s.id.Equals(id));
-                return View(lgenre);
+                this.MessageContainer().AddFlashMessage("Xóa chủ đề thành công!", ToastMessageType.Success);
             }
-            return View();
+            else
+            {
+                this.MessageContainer().AddFlashMessage(genre.Msg, ToastMessageType.Error);
+            }
+            return new JsonResult("ok");
         }
         public IActionResult Details(string id)
         {
-            Genre lgenre = new Genre();
+            Genre genre = new Genre();
             if (id != null)
             {
-                lgenre = _genres.FirstOrDefault(s => s.id.Equals(id));
-                return View(lgenre);
+                genre = _genres.FirstOrDefault(s => s.id.Equals(id));
+                return View(genre);
 
             }
             return View();
