@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>TDT_Music</RootNamespace>
+    <RootNamespace>TDT.Site</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +13,10 @@
   <ItemGroup>
     <ProjectReference Include="..\TDT.Core\TDT.Core.csproj" />
     <ProjectReference Include="..\TDT.IdentityCore\TDT.IdentityCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\image\hub\" />
   </ItemGroup>
 
 </Project>

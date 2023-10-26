@@ -1,9 +1,15 @@
 ﻿using Google.Cloud.Firestore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using TDT.Core.DTO;
 using TDT.Core.DTO.Firestore;
+using TDT.Core.Enums;
 using TDT.Core.Helper;
+using TDT.Core.Ultils;
 
 namespace TDT.API.Controllers
 {
@@ -12,7 +18,7 @@ namespace TDT.API.Controllers
     public class PlaylistController : ControllerBase
     {
         // GET: api/<PlaylistController>
-        [Route("load")]
+        [Route("Load")]
         [HttpGet]
         public JsonResult Load()
         {
@@ -21,31 +27,69 @@ namespace TDT.API.Controllers
             return new JsonResult(result);
         }
 
-        // GET api/<PlaylistController>/5
+        [Route("Gets")]
+        [HttpGet]
+        public JsonResult Gets()
+        {
+            return new JsonResult(FirestoreService.Instance.Gets<PlaylistDTO>(FirestoreService.CL_Playlist));
+        }
+
         [HttpGet("{encodeId}")]
         public JsonResult Get(string encodeId)
         {
-            PlaylistDTO playlist = FirestoreService.Instance.Gets<PlaylistDTO>("Playlist", encodeId);
-            return new JsonResult(playlist);
+            return new JsonResult(FirestoreService.Instance.Gets<PlaylistDTO>(FirestoreService.CL_Playlist, encodeId));
         }
 
-        // POST api/<PlaylistController>
+        [Route("GetArrayContains")]
         [HttpPost]
-        public void Post([FromBody] string value)
+        public JsonResult GetArrayContains(string path, List<string> values)
         {
+            Query query = FirestoreService.Instance.WhereIn(FirestoreService.CL_Playlist, path, values);
+            return new JsonResult(FirestoreService.Instance.Gets<PlaylistDTO>(query));
         }
 
-        // PUT api/<PlaylistController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [Route("InsertOrUpdate")]
+        [HttpPost]
+        [Authorize]
+        public JsonResult InsertOrUpdate([FromForm] FileUploadModel<PlaylistDTO> fileData)
         {
+            Stream image = fileData.FileDetails.OpenReadStream();
+            List<string> paramCheck = new List<string>() { "encodeId", "title", "thumbnail", "thumbnailM" };
+            PlaylistDTO playlist = fileData.srcObj;
+            var resParam = HelperUtility.GetParamsIllegal(paramCheck, playlist);
+            if (resParam.Count > 0)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.NullParams, formatValue: string.Join(",", resParam.ToArray()));
+            }
+            try
+            {
+                string thumbnail = playlist.encodeId + "_" + DateTime.Now.ToShortDateString().Replace("/", "_") + "." + fileData.FileDetails.FileName.Split('.').Last();
+                string url = FirebaseService.Instance.pushFile(image, "Images/Playlist/0/" + thumbnail).Result;
+                DataHelper.Instance.ThumbArtist.Add(playlist.encodeId, url);
+                FirebaseService.Instance.pushFile(image, "Images/Playlist/1/" + thumbnail).Wait();
+                playlist.thumbnail = "Images/Playlist/0/" + thumbnail;
+                playlist.thumbnailM = "Images/Playlist/1/" + thumbnail;
+                FirestoreService.Instance.SetAsync(FirestoreService.CL_Playlist, playlist.encodeId, playlist).Wait();
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, new Dictionary<string, object>()
+                    {
+                        {"data", playlist}
+                    }, "cập nhật");
+            }
+            catch (Exception ex)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
+            }
         }
 
-        // DELETE api/<PlaylistController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{encodeId}")]
+        [Authorize]
+        public JsonResult Delete(string encodeId)
         {
-
+            FirestoreService.Instance.DeleteAsync(FirestoreService.CL_Playlist, encodeId).Wait();
+            return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa");
         }
     }
 }

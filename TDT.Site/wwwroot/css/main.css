@@ -2320,7 +2320,10 @@ h1.title, h3.title {
         }
 
     .playlist-wrapper .zm-card-content .subtitle {
-        font-size: 14px
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
 .playlist-wrapper.is-subtitle .title, .playlist-wrapper.is-subtitle .title a {
@@ -7932,7 +7935,7 @@ body .react-loading-skeleton {
     }
 
     .icon.ic-gif-playing-white {
-        background-image: url(https://zmp3-static.zmdcdn.me/skins/zmp3-v6.1/images/icons/icon-playing.gif)
+        background-image: url("/image/icons/icon-playing.gif")
     }
 
     .icon.ic-gif-playing-auto {

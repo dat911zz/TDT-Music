@@ -24,14 +24,29 @@ namespace TDT.Core.Ultils.MVCMessage
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            InitMessageViewData(filterContext);
-            base.OnActionExecuting(filterContext);
+            try
+            {
+                InitMessageViewData(filterContext);
+                base.OnActionExecuting(filterContext);
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            DisplayModelStateErrors((Controller)filterContext.Controller);
-            base.OnActionExecuted(filterContext);
+            try
+            {
+                DisplayModelStateErrors((Controller)filterContext.Controller);
+                base.OnActionExecuted(filterContext);
+            }
+            catch (Exception)
+            {
+                
+            }
+            
         }
 
         private void InitMessageViewData(ActionExecutingContext filterContext)

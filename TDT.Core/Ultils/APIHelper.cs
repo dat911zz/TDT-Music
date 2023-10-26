@@ -13,6 +13,8 @@ using TDT.Core.Enums;
 using TDT.Core.Models;
 using TDT.Core.Extensions;
 using Newtonsoft.Json;
+using TDT.Core.Helper;
+using System.Collections;
 
 namespace TDT.Core.Ultils
 {
@@ -49,6 +51,39 @@ namespace TDT.Core.Ultils
                 }
             }
             return JsonConvert.SerializeObject(jsonData);
+        }
+        public static T Get<T>(string collectionName, string id) where T : class, new()
+        {
+            string url = APICallHelper.DOMAIN + $"{collectionName}/{id}";
+            HttpService service = new HttpService(url);
+            string json = service.getJson();
+            if (string.IsNullOrEmpty(json))
+            {
+                return null;
+            }
+            return ConvertService.Instance.convertToObjectFromJson<T>(json);
+        }
+        public static string GetStringValue(string path)
+        {
+            string url = APICallHelper.DOMAIN + path;
+            HttpService service = new HttpService(url);
+            string json = service.getJson();
+            if(json.StartsWith("\""))
+                json = json.Substring(1);
+            if(json.EndsWith("\""))
+                json = json.Substring(0, json.Length - 1);
+            return json;
+        }
+        public static List<T> Gets<T>(string path) where T : class, new()
+        {
+            string url = APICallHelper.DOMAIN + path;
+            HttpService service = new HttpService(url);
+            string json = service.getJson();
+            if (string.IsNullOrEmpty(json))
+            {
+                return null;
+            }
+            return ConvertService.Instance.convertToObjectFromJson<List<T>>(json);
         }
     }
 }

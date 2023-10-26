@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using Newtonsoft.Json;
 using System.Linq;
-using System.Threading.Tasks;
-using TDT_Music.Models;
+using TDT.Core.DTO.Firestore;
+using TDT.Core.Extensions;
+using TDT.Core.Helper;
+using TDT.Core.ServiceImp;
 
-namespace TDT_Music.Controllers
+namespace TDT.Site.Controllers
 {
     public class HubController : Controller
     {
@@ -17,7 +17,32 @@ namespace TDT_Music.Controllers
         {
             _logger = logger;
         }
-        public IActionResult Index()
+        public IActionResult Top100()
+        {
+            if(DataHelper.Instance.Top100.Count <= 0)
+            {
+                DataHelper.Instance.Top100 = FirestoreService.Instance.Gets<TypePlaylistDTO>(FirestoreService.CL_TypePlaylist).OrderByDescending(t => t.title).ToList();
+            }
+            string json = JsonConvert.SerializeObject(DataHelper.Instance.Top100);
+            ViewData["ArrayTitleSection"] = json;
+            return View(DataHelper.Instance.Top100);
+        }
+        public string GetHtmlSectionTop100(string key)
+        {
+            TypePlaylistDTO type = DataHelper.Instance.Top100.Where(t => t.title.Equals(key)).FirstOrDefault();
+            if (type == null)
+            {
+                this.MessageContainer().AddFlashMessage("Lỗi load dữ liệu với key:" + key, TDT.Core.Ultils.MVCMessage.ToastMessageType.Error);
+                return string.Empty;
+            }
+            return Generator.GeneratePlaylistsElement(type.playlists, true);
+        }
+        public IActionResult new_release(string option)
+        {
+            ViewData["option"] = option;
+            return View();
+        }
+        public IActionResult Chill()
         {
             return View();
         }

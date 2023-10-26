@@ -1,0 +1,114 @@
+﻿@using TDT.Core.Models;
+@model UserIdentiyModel
+@{
+    Layout = null;
+    ViewData["Title"] = "TDT-Music";
+}
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="/css/login.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+</head>
+<div class="container" id="container">
+    <div class="form-container sign-up-container">
+        <form id="register-form" asp-action="Register" asp-controller="Auth">
+            <h1>Đăng ký</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social"><i class="fab fa-google"></i></a>
+                <a href="#" class="social"><b>Zalo</b></a>
+            </div>
+            <span>hoặc sử dụng email để tạo tài khoản</span>
+            <input name="username" required type="text" placeholder="Tên tài khoản" value="@Model.UserName" />
+            <input name="email" required type="email" placeholder="Email" value="@Model.Email" />
+            <input name="phone" required type="text" placeholder="Số điện thoại" value="@Model.PhoneNumber" />
+            <input name="password" required type="password" placeholder="Mật khẩu" value="@Model.Password" />
+            <button id="btn-register">Đăng ký</button>
+        </form>
+    </div>
+    <div class="form-container sign-in-container">
+        <form id="login-form" asp-action="Login" asp-controller="Auth">
+            <h1>Đăng nhập</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social"><i class="fab fa-google"></i></a>
+                <a href="#" class="social"><b>Zalo</b></a>
+            </div>
+            <span>hoặc đăng nhập bằng tài khoản của bạn</span>
+            <input name="username" type="email" placeholder="Email" required />
+            <input name="password" type="password" placeholder="Mật khẩu" required />
+            <a href="#">Quẩn mật khẩu?</a>
+            <button id="btn-login" type="submit">Đăng nhập</button>
+        </form>
+    </div>
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>Chào mừng bạn đã trở lại!</h1>
+                <p>Để truy cập vào tài nguyên của bạn, vui lòng đăng nhập</p>
+                <button class="ghost" id="signIn">Đăng nhập</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>Xin chào bạn mới!</h1>
+                <p>Để có trải nghiệm tốt hơn, vui lòng đăng ký tài khoản để sử dụng các dịch vụ của chúng tôi</p>
+                <button class="ghost" id="signUp">Đăng ký</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const signUpButton = document.getElementById('signUp');
+    const signInButton = document.getElementById('signIn');
+    var container = document.getElementById('container');
+
+    signUpButton.addEventListener('click', () => {
+        container.classList.add("right-panel-active");
+    });
+
+    signInButton.addEventListener('click', () => {
+        container.classList.remove("right-panel-active");
+    });
+    $(document).ready(function () {
+        @if (Model.UserName != null)
+        {
+            @Html.Raw("container.classList.add('right-panel-active');");
+        }
+        else
+        {
+            @Html.Raw("container.classList.remove('right-panel-active');");
+        }
+    });   
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/js/login.js"></script>
+<script>
+    //https://codeseven.github.io/toastr/demo.html
+    toastr.options = {
+        "closeButton": true,
+        "debug": true,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+    setTimeout(function () {
+        $('.ms_loader').hide();
+    }, 2000);
+</script>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+<partial name="_MessagesPartial" model="@ViewData["Messages"]"></partial>

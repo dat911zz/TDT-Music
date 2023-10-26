@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Hub";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    <link rel="stylesheet" href="~/css/hub.css" />
 }
 
 <main class="zm-section"
@@ -16,21 +17,11 @@
   ">
     <div class="container hub-detail-page">
         <div class="cover">
-            <div class="blur" style="
-      margin: 0 calc(var(--padding-section) * -1);
-      text-align: center;
-      padding-bottom: 35%;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 0;
-      background-color: var(--loading-bg);
-      background: url('https://photo-zmp3.zmdcdn.me/cover/c/9/b/3/c9b3c456eeabd9d4e3241666397d71aa.jpg');
-    "></div>
+            <div class="blur"
+                 style="background: url('/image/hub/chill.jpg') center center / cover no-repeat;">
+            </div>
             <div class="is-center-vertical"></div>
         </div>
-
         <div class="container detail-container">
             <div class="zm-section playlist-section channel-section">
                 <div class="container">
@@ -509,55 +500,7 @@
                     $('#playlist_chill_and_dance').html(data);
                 }
             });
-
-            // Thêm xử lý sự kiện cho điều khiển Carousel
-        var change = true;
-        var gal = $('.gallery-item');
-        var $i = 5;
-        var $i_prev = $(gal).length;
-
-        function nextGallery() {
-            if (change) {
-                change = false;
-                $('.gallery-item-first').removeClass('gallery-item-first').addClass('gallery-item-add');
-                $('.gallery-item-previous').removeClass('gallery-item-previous').addClass('gallery-item-first');
-                $('.gallery-item-selected').removeClass('gallery-item-selected').addClass('gallery-item-previous');
-                $('.gallery-item-next').removeClass('gallery-item-next').addClass('gallery-item-selected');
-                $('.gallery-item-last').removeClass('gallery-item-last').addClass('gallery-item-next');
-                $(gal).eq($i).removeClass('gallery-item-add').addClass('gallery-item-last');
-                $i = $i + 1 >= $(gal).length ? 0 : $i + 1;
-                $i_prev = $i_prev + 1 >= $(gal).length ? 0 : $i_prev + 1;
-                change = true;
-            }
-        }
-
-        function prevGallery() {
-            if (change) {
-                change = false;
-                $('.gallery-item-first').removeClass('gallery-item-first').addClass('gallery-item-add');
-                $('.gallery-item-previous').removeClass('gallery-item-previous').addClass('gallery-item-first');
-                $('.gallery-item-selected').removeClass('gallery-item-selected').addClass('gallery-item-previous');
-                $('.gallery-item-next').removeClass('gallery-item-next').addClass('gallery-item-selected');
-                $('.gallery-item-last').removeClass('gallery-item-last').addClass('gallery-item-next');
-                $(gal).eq($i).removeClass('gallery-item-add').addClass('gallery-item-last');
-                $i = $i - 1 < 0 ? $(gal).length - 1 : $i - 1;
-                $i_prev = $i_prev - 1 < 0 ? $(gal).length - 1 : $i_prev - 1;
-                change = true;
-            }
-        }
-
-        setInterval(function () {
-            nextGallery();
-        }, 10000);
-
-        $('.zm-carousel-control-prev').on('click', function () {
-            prevGallery();
         });
-
-        $('.zm-carousel-control-next').on('click', function () {
-            nextGallery();
-        });
-    });
     </script>
 
 

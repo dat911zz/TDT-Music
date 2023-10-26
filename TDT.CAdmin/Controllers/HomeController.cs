@@ -16,6 +16,10 @@ using TDT.Core.Models;
 using TDT.Core.Ultils;
 using TDT.Core.Ultils.MVCMessage;
 using TDT.IdentityCore.Utils;
+using System.Diagnostics.Eventing.Reader;
+using Microsoft.AspNetCore.Http;
+using System.Reflection;
+using static TDT.Core.Ultils.HelperUtility;
 
 namespace TDT.CAdmin.Controllers
 {
@@ -32,13 +36,18 @@ namespace TDT.CAdmin.Controllers
 		public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Start session");
-			this.MessageContainer().AddMessage(
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("NotifyUpdate")))
+            {
+                this.MessageContainer().AddMessage(
                 "Tính năng thông báo đã được cập nhật! " +
                 "Có thể sử dụng được tại các controller. " +
                 "Chi tiết vui lòng liên hệ Vũ Đạt để được biết thêm.",
                 ToastMessageType.Info
                 );
+                HttpContext.Session.SetString("NotifyUpdate", "1");
+            }
 
+            var allActions = Assembly.GetExecutingAssembly().GetAllControllerAction();
             //this.MessageContainer().AddException(new Exception("HEHE?"));
             //this.MessageContainer().AddErrorFlashMessage("Có lỗi xảy ra, vui lòng thực hiện lại!");
             //this.MessageContainer().AddMessage("OK nè!", ToastMessageType.Success);

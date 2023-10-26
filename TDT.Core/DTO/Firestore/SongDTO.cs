@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TDT.Core.Helper;
 using TDT.Core.Models;
+using TDT.Core.ServiceImp;
 
 namespace TDT.Core.DTO.Firestore
 {
@@ -40,46 +42,8 @@ namespace TDT.Core.DTO.Firestore
         private int _listen;
         private bool _liked;
         private int _comment;
-        public SongDTO()
-        {
-            
-        }
-        public SongDTO(SongDTO src)
-        {
-            _encodeId = src.encodeId;
-            _title = src.title;
-            _alias = src.alias;
-            _isOffical = src.isOffical;
-            _username = src.username;
-            _artistsNames = src.artistsNames;
-            _artists = src.artists;
-            _isWorldWide = src.isWorldWide;
-            _thumbnailM = src.thumbnailM;
-            _link = src.link;
-            _thumbnail = src.thumbnail;
-            _duration = src.duration;
-            _zingChoice = src.zingChoice;
-            _isPrivate = src.isPrivate;
-            _preRelease = src.preRelease;
-            _releaseDate = src.releaseDate;
-            _genreIds = src.genreIds;
-            _distributor = src.distributor;
-            _indicators = src.indicators;
-            _isIndie = src.isIndie;
-            _streamingStatus = src.streamingStatus;
-            _allowAudioAds = src.allowAudioAds;
-            _hasLyric = src.hasLyric;
-            _userid = src.userid;
-            _composers = src.composers;
-            _album = src.album;
-            _isRBT = src.isRBT;
-            _like = src.like;
-            _listen = src.listen;
-            _liked = src.liked;
-            _comment = src.comment;
-        }
 
-        [Display(Name = "Mã Hóa")]
+        [Display(Name = "Mã ID")]
         [FirestoreProperty] public string encodeId { get => _encodeId; set => _encodeId = value; }
         
         [Required(ErrorMessage = "Vui lòng nhập tiêu đề!")]
@@ -190,6 +154,30 @@ namespace TDT.Core.DTO.Firestore
             TimeSpan t = TimeSpan.FromSeconds(this.duration);
             string res = t.Minutes.ToString("00") + ":" + t.Seconds.ToString("00");
             return t.Hours == 0 ? res : t.Hours.ToString("00") + ":" + res;
+        }
+        public string GetHtmlArtist()
+        {
+            return Generator.GenerateArtistLink(this.artists);
+        }
+        public string GetHtmlAlbum()
+        {
+            string res = @"
+                <a href=""/Album/?encodeId={1}"">
+                    <span>
+                        <span>{0}</span>
+                    </span>
+                    <span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span>
+                </a>
+            ";
+            if (!string.IsNullOrEmpty(this.album))
+            {
+                PlaylistDTO album = DataHelper.GetPlaylist(this.album);
+                if(album != null)
+                {
+                    return string.Format(res, album.title, album.encodeId);
+                }
+            }
+            return string.Format(res, "", "");
         }
     }
 }

@@ -22,7 +22,7 @@ namespace TDT.Core.Models
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="TDT_QLDV")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="TDT-QLDV")]
 	public partial class QLDVModelDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -33,6 +33,9 @@ namespace TDT.Core.Models
     partial void InsertGroup(Group instance);
     partial void UpdateGroup(Group instance);
     partial void DeleteGroup(Group instance);
+    partial void InsertListeningHistory(ListeningHistory instance);
+    partial void UpdateListeningHistory(ListeningHistory instance);
+    partial void DeleteListeningHistory(ListeningHistory instance);
     partial void InsertLNK_GroupRole(LNK_GroupRole instance);
     partial void UpdateLNK_GroupRole(LNK_GroupRole instance);
     partial void DeleteLNK_GroupRole(LNK_GroupRole instance);
@@ -51,6 +54,12 @@ namespace TDT.Core.Models
     partial void InsertRole(Role instance);
     partial void UpdateRole(Role instance);
     partial void DeleteRole(Role instance);
+    partial void InsertUserActivity(UserActivity instance);
+    partial void UpdateUserActivity(UserActivity instance);
+    partial void DeleteUserActivity(UserActivity instance);
+    partial void InsertUserPlaylist(UserPlaylist instance);
+    partial void UpdateUserPlaylist(UserPlaylist instance);
+    partial void DeleteUserPlaylist(UserPlaylist instance);
     partial void InsertUser(User instance);
     partial void UpdateUser(User instance);
     partial void DeleteUser(User instance);
@@ -85,6 +94,14 @@ namespace TDT.Core.Models
 			get
 			{
 				return this.GetTable<Group>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ListeningHistory> ListeningHistories
+		{
+			get
+			{
+				return this.GetTable<ListeningHistory>();
 			}
 		}
 		
@@ -136,6 +153,22 @@ namespace TDT.Core.Models
 			}
 		}
 		
+		public System.Data.Linq.Table<UserActivity> UserActivities
+		{
+			get
+			{
+				return this.GetTable<UserActivity>();
+			}
+		}
+		
+		public System.Data.Linq.Table<UserPlaylist> UserPlaylists
+		{
+			get
+			{
+				return this.GetTable<UserPlaylist>();
+			}
+		}
+		
 		public System.Data.Linq.Table<User> Users
 		{
 			get
@@ -157,7 +190,7 @@ namespace TDT.Core.Models
 		
 		private string _Description;
 		
-		private System.Nullable<System.DateTime> _CreateDate = default(System.Nullable<System.DateTime>);
+		private System.Nullable<System.DateTime> _CreateDate;
 		
 		private EntitySet<LNK_GroupRole> _LNK_GroupRoles;
 		
@@ -173,6 +206,8 @@ namespace TDT.Core.Models
     partial void OnNameChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
+    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreateDateChanged();
     #endregion
 		
 		public Group()
@@ -242,12 +277,23 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true)]
 		public System.Nullable<System.DateTime> CreateDate
 		{
 			get
 			{
 				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
 			}
 		}
 		
@@ -322,6 +368,157 @@ namespace TDT.Core.Models
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ListeningHistory")]
+	public partial class ListeningHistory : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _UserId;
+		
+		private string _SongId;
+		
+		private System.Nullable<System.DateTime> _AccessDate;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUserIdChanging(System.Guid value);
+    partial void OnUserIdChanged();
+    partial void OnSongIdChanging(string value);
+    partial void OnSongIdChanged();
+    partial void OnAccessDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnAccessDateChanged();
+    #endregion
+		
+		public ListeningHistory()
+		{
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SongId", DbType="NVarChar(100) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string SongId
+		{
+			get
+			{
+				return this._SongId;
+			}
+			set
+			{
+				if ((this._SongId != value))
+				{
+					this.OnSongIdChanging(value);
+					this.SendPropertyChanging();
+					this._SongId = value;
+					this.SendPropertyChanged("SongId");
+					this.OnSongIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccessDate", DbType="DateTime", IsDbGenerated=true)]
+		public System.Nullable<System.DateTime> AccessDate
+		{
+			get
+			{
+				return this._AccessDate;
+			}
+			set
+			{
+				if ((this._AccessDate != value))
+				{
+					this.OnAccessDateChanging(value);
+					this.SendPropertyChanging();
+					this._AccessDate = value;
+					this.SendPropertyChanged("AccessDate");
+					this.OnAccessDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_ListeningHistory", Storage="_User", ThisKey="UserId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.ListeningHistories.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.ListeningHistories.Add(this);
+						this._UserId = value.Id;
+					}
+					else
+					{
+						this._UserId = default(System.Guid);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LNK_GroupRole")]
 	public partial class LNK_GroupRole : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -332,7 +529,7 @@ namespace TDT.Core.Models
 		
 		private int _RoleId;
 		
-		private System.Nullable<System.DateTime> _ClaimDate = default(System.Nullable<System.DateTime>);
+		private System.Nullable<System.DateTime> _ClaimDate;
 		
 		private EntityRef<Group> _Group;
 		
@@ -346,6 +543,8 @@ namespace TDT.Core.Models
     partial void OnGroupIdChanged();
     partial void OnRoleIdChanging(int value);
     partial void OnRoleIdChanged();
+    partial void OnClaimDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnClaimDateChanged();
     #endregion
 		
 		public LNK_GroupRole()
@@ -403,12 +602,23 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime", IsDbGenerated=true)]
 		public System.Nullable<System.DateTime> ClaimDate
 		{
 			get
 			{
 				return this._ClaimDate;
+			}
+			set
+			{
+				if ((this._ClaimDate != value))
+				{
+					this.OnClaimDateChanging(value);
+					this.SendPropertyChanging();
+					this._ClaimDate = value;
+					this.SendPropertyChanged("ClaimDate");
+					this.OnClaimDateChanged();
+				}
 			}
 		}
 		
@@ -511,7 +721,7 @@ namespace TDT.Core.Models
 		
 		private int _PermissionId;
 		
-		private System.Nullable<System.DateTime> _ClaimDate = default(System.Nullable<System.DateTime>);
+		private System.Nullable<System.DateTime> _ClaimDate;
 		
 		private EntityRef<Permission> _Permission;
 		
@@ -525,6 +735,8 @@ namespace TDT.Core.Models
     partial void OnRoleIdChanged();
     partial void OnPermissionIdChanging(int value);
     partial void OnPermissionIdChanged();
+    partial void OnClaimDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnClaimDateChanged();
     #endregion
 		
 		public LNK_RolePermission()
@@ -582,12 +794,23 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime", IsDbGenerated=true)]
 		public System.Nullable<System.DateTime> ClaimDate
 		{
 			get
 			{
 				return this._ClaimDate;
+			}
+			set
+			{
+				if ((this._ClaimDate != value))
+				{
+					this.OnClaimDateChanging(value);
+					this.SendPropertyChanging();
+					this._ClaimDate = value;
+					this.SendPropertyChanged("ClaimDate");
+					this.OnClaimDateChanged();
+				}
 			}
 		}
 		
@@ -690,7 +913,7 @@ namespace TDT.Core.Models
 		
 		private System.Guid _UserId;
 		
-		private System.Nullable<System.DateTime> _ClaimDate = default(System.Nullable<System.DateTime>);
+		private System.Nullable<System.DateTime> _ClaimDate;
 		
 		private EntityRef<Group> _Group;
 		
@@ -704,6 +927,8 @@ namespace TDT.Core.Models
     partial void OnGroupIdChanged();
     partial void OnUserIdChanging(System.Guid value);
     partial void OnUserIdChanged();
+    partial void OnClaimDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnClaimDateChanged();
     #endregion
 		
 		public LNK_UserGroup()
@@ -761,12 +986,23 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime", IsDbGenerated=true)]
 		public System.Nullable<System.DateTime> ClaimDate
 		{
 			get
 			{
 				return this._ClaimDate;
+			}
+			set
+			{
+				if ((this._ClaimDate != value))
+				{
+					this.OnClaimDateChanging(value);
+					this.SendPropertyChanging();
+					this._ClaimDate = value;
+					this.SendPropertyChanged("ClaimDate");
+					this.OnClaimDateChanged();
+				}
 			}
 		}
 		
@@ -869,7 +1105,7 @@ namespace TDT.Core.Models
 		
 		private int _RoleId;
 		
-		private System.Nullable<System.DateTime> _ClaimDate = default(System.Nullable<System.DateTime>);
+		private System.Nullable<System.DateTime> _ClaimDate;
 		
 		private EntityRef<Role> _Role;
 		
@@ -883,6 +1119,8 @@ namespace TDT.Core.Models
     partial void OnUserIdChanged();
     partial void OnRoleIdChanging(int value);
     partial void OnRoleIdChanged();
+    partial void OnClaimDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnClaimDateChanged();
     #endregion
 		
 		public LNK_UserRole()
@@ -940,12 +1178,23 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClaimDate", DbType="DateTime", IsDbGenerated=true)]
 		public System.Nullable<System.DateTime> ClaimDate
 		{
 			get
 			{
 				return this._ClaimDate;
+			}
+			set
+			{
+				if ((this._ClaimDate != value))
+				{
+					this.OnClaimDateChanging(value);
+					this.SendPropertyChanging();
+					this._ClaimDate = value;
+					this.SendPropertyChanged("ClaimDate");
+					this.OnClaimDateChanged();
+				}
 			}
 		}
 		
@@ -1050,7 +1299,7 @@ namespace TDT.Core.Models
 		
 		private string _Description;
 		
-		private System.Nullable<System.DateTime> _CreateDate = default(System.Nullable<System.DateTime>);
+		private System.Nullable<System.DateTime> _CreateDate;
 		
 		private EntitySet<LNK_RolePermission> _LNK_RolePermissions;
 		
@@ -1064,6 +1313,8 @@ namespace TDT.Core.Models
     partial void OnNameChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
+    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreateDateChanged();
     #endregion
 		
 		public Permission()
@@ -1132,12 +1383,23 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true)]
 		public System.Nullable<System.DateTime> CreateDate
 		{
 			get
 			{
 				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
 			}
 		}
 		
@@ -1199,7 +1461,7 @@ namespace TDT.Core.Models
 		
 		private string _Description;
 		
-		private System.Nullable<System.DateTime> _CreateDate = default(System.Nullable<System.DateTime>);
+		private System.Nullable<System.DateTime> _CreateDate;
 		
 		private EntitySet<LNK_GroupRole> _LNK_GroupRoles;
 		
@@ -1217,6 +1479,8 @@ namespace TDT.Core.Models
     partial void OnNameChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
+    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreateDateChanged();
     #endregion
 		
 		public Role()
@@ -1287,12 +1551,23 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true)]
 		public System.Nullable<System.DateTime> CreateDate
 		{
 			get
 			{
 				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
 			}
 		}
 		
@@ -1392,6 +1667,332 @@ namespace TDT.Core.Models
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserActivity")]
+	public partial class UserActivity : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private System.Guid _UserId;
+		
+		private string _Details;
+		
+		private System.Nullable<System.DateTime> _LogTime;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnUserIdChanging(System.Guid value);
+    partial void OnUserIdChanged();
+    partial void OnDetailsChanging(string value);
+    partial void OnDetailsChanged();
+    partial void OnLogTimeChanging(System.Nullable<System.DateTime> value);
+    partial void OnLogTimeChanged();
+    #endregion
+		
+		public UserActivity()
+		{
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Details", DbType="NVarChar(MAX)")]
+		public string Details
+		{
+			get
+			{
+				return this._Details;
+			}
+			set
+			{
+				if ((this._Details != value))
+				{
+					this.OnDetailsChanging(value);
+					this.SendPropertyChanging();
+					this._Details = value;
+					this.SendPropertyChanged("Details");
+					this.OnDetailsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogTime", DbType="DateTime", IsDbGenerated=true)]
+		public System.Nullable<System.DateTime> LogTime
+		{
+			get
+			{
+				return this._LogTime;
+			}
+			set
+			{
+				if ((this._LogTime != value))
+				{
+					this.OnLogTimeChanging(value);
+					this.SendPropertyChanging();
+					this._LogTime = value;
+					this.SendPropertyChanged("LogTime");
+					this.OnLogTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_UserActivity", Storage="_User", ThisKey="UserId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.UserActivities.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.UserActivities.Add(this);
+						this._UserId = value.Id;
+					}
+					else
+					{
+						this._UserId = default(System.Guid);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserPlaylist")]
+	public partial class UserPlaylist : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _UserId;
+		
+		private string _PlaylistId;
+		
+		private System.Nullable<System.DateTime> _CreateDate;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUserIdChanging(System.Guid value);
+    partial void OnUserIdChanged();
+    partial void OnPlaylistIdChanging(string value);
+    partial void OnPlaylistIdChanged();
+    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreateDateChanged();
+    #endregion
+		
+		public UserPlaylist()
+		{
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlaylistId", DbType="NVarChar(100) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string PlaylistId
+		{
+			get
+			{
+				return this._PlaylistId;
+			}
+			set
+			{
+				if ((this._PlaylistId != value))
+				{
+					this.OnPlaylistIdChanging(value);
+					this.SendPropertyChanging();
+					this._PlaylistId = value;
+					this.SendPropertyChanged("PlaylistId");
+					this.OnPlaylistIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true)]
+		public System.Nullable<System.DateTime> CreateDate
+		{
+			get
+			{
+				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_UserPlaylist", Storage="_User", ThisKey="UserId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.UserPlaylists.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.UserPlaylists.Add(this);
+						this._UserId = value.Id;
+					}
+					else
+					{
+						this._UserId = default(System.Guid);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Users")]
 	public partial class User : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -1420,11 +2021,17 @@ namespace TDT.Core.Models
 		
 		private int _AccessFailedCount;
 		
-		private System.Nullable<System.DateTime> _CreateDate = default(System.Nullable<System.DateTime>);
+		private System.Nullable<System.DateTime> _CreateDate;
+		
+		private EntitySet<ListeningHistory> _ListeningHistories;
 		
 		private EntitySet<LNK_UserGroup> _LNK_UserGroups;
 		
 		private EntitySet<LNK_UserRole> _LNK_UserRoles;
+		
+		private EntitySet<UserActivity> _UserActivities;
+		
+		private EntitySet<UserPlaylist> _UserPlaylists;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1452,12 +2059,17 @@ namespace TDT.Core.Models
     partial void OnLockoutEnabledChanged();
     partial void OnAccessFailedCountChanging(int value);
     partial void OnAccessFailedCountChanged();
+    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreateDateChanged();
     #endregion
 		
 		public User()
 		{
+			this._ListeningHistories = new EntitySet<ListeningHistory>(new Action<ListeningHistory>(this.attach_ListeningHistories), new Action<ListeningHistory>(this.detach_ListeningHistories));
 			this._LNK_UserGroups = new EntitySet<LNK_UserGroup>(new Action<LNK_UserGroup>(this.attach_LNK_UserGroups), new Action<LNK_UserGroup>(this.detach_LNK_UserGroups));
 			this._LNK_UserRoles = new EntitySet<LNK_UserRole>(new Action<LNK_UserRole>(this.attach_LNK_UserRoles), new Action<LNK_UserRole>(this.detach_LNK_UserRoles));
+			this._UserActivities = new EntitySet<UserActivity>(new Action<UserActivity>(this.attach_UserActivities), new Action<UserActivity>(this.detach_UserActivities));
+			this._UserPlaylists = new EntitySet<UserPlaylist>(new Action<UserPlaylist>(this.attach_UserPlaylists), new Action<UserPlaylist>(this.detach_UserPlaylists));
 			OnCreated();
 		}
 		
@@ -1681,12 +2293,36 @@ namespace TDT.Core.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime", IsDbGenerated=true)]
 		public System.Nullable<System.DateTime> CreateDate
 		{
 			get
 			{
 				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_ListeningHistory", Storage="_ListeningHistories", ThisKey="Id", OtherKey="UserId")]
+		public EntitySet<ListeningHistory> ListeningHistories
+		{
+			get
+			{
+				return this._ListeningHistories;
+			}
+			set
+			{
+				this._ListeningHistories.Assign(value);
 			}
 		}
 		
@@ -1716,6 +2352,32 @@ namespace TDT.Core.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_UserActivity", Storage="_UserActivities", ThisKey="Id", OtherKey="UserId")]
+		public EntitySet<UserActivity> UserActivities
+		{
+			get
+			{
+				return this._UserActivities;
+			}
+			set
+			{
+				this._UserActivities.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_UserPlaylist", Storage="_UserPlaylists", ThisKey="Id", OtherKey="UserId")]
+		public EntitySet<UserPlaylist> UserPlaylists
+		{
+			get
+			{
+				return this._UserPlaylists;
+			}
+			set
+			{
+				this._UserPlaylists.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -1734,6 +2396,18 @@ namespace TDT.Core.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_ListeningHistories(ListeningHistory entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_ListeningHistories(ListeningHistory entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
 		}
 		
 		private void attach_LNK_UserGroups(LNK_UserGroup entity)
@@ -1755,6 +2429,30 @@ namespace TDT.Core.Models
 		}
 		
 		private void detach_LNK_UserRoles(LNK_UserRole entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+		
+		private void attach_UserActivities(UserActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_UserActivities(UserActivity entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+		
+		private void attach_UserPlaylists(UserPlaylist entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_UserPlaylists(UserPlaylist entity)
 		{
 			this.SendPropertyChanging();
 			entity.User = null;
