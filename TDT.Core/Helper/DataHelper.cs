@@ -34,9 +34,11 @@ namespace TDT.Core.Helper
         public List<TypePlaylistDTO> Top100 = new List<TypePlaylistDTO>();
         public Dictionary<string, Genre> Genres = new Dictionary<string, Genre>();
         public Dictionary<string, ArtistDTO> Artists = new Dictionary<string, ArtistDTO>();
+
         public Dictionary<string, string> ThumbSong = new Dictionary<string, string>();
         public Dictionary<string, string> ThumbPlaylist = new Dictionary<string, string>();
         public Dictionary<string, string> ThumbArtist = new Dictionary<string, string>();
+        public Dictionary<string, string> MP3 = new Dictionary<string, string>();
         private Dictionary<string,SongDTO> _songs = new Dictionary<string, SongDTO>();
         private Dictionary<string,SongDTO> _songsNull = new Dictionary<string, SongDTO>();
         private Dictionary<string,PlaylistDTO> _playlists = new Dictionary<string, PlaylistDTO>();
@@ -479,6 +481,17 @@ namespace TDT.Core.Helper
                 DataHelper.Instance.ThumbArtist.Add(id, url);
             }
             catch { }
+            return url;
+        }
+        public static string GetMP3(string encodeId)
+        {
+            if (DataHelper.Instance.MP3.ContainsKey(encodeId))
+                return DataHelper.Instance.MP3[encodeId];
+            string url = FirebaseService.Instance.getStorage($"MP3/{encodeId}.mp3");
+            try
+            {
+                DataHelper.Instance.MP3.Add(encodeId, url);
+            }catch { }
             return url;
         }
     }

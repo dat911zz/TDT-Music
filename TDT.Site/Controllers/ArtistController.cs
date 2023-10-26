@@ -10,7 +10,7 @@ using TDT.Core.ServiceImp;
 using TDT.Core.Ultils;
 using static System.Collections.Specialized.BitVector32;
 
-namespace TDT_Music.Controllers
+namespace TDT.Site.Controllers
 {
     public class ArtistController : Controller
     {

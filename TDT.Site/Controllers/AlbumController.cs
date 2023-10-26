@@ -10,7 +10,7 @@ using TDT.Core.Helper;
 using TDT.Core.ServiceImp;
 using TDT.Core.Ultils;
 
-namespace TDT_Music.Controllers
+namespace TDT.Site.Controllers
 {
     public class AlbumController : Controller
     {

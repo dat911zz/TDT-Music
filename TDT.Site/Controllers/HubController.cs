@@ -7,7 +7,7 @@ using TDT.Core.Extensions;
 using TDT.Core.Helper;
 using TDT.Core.ServiceImp;
 
-namespace TDT_Music.Controllers
+namespace TDT.Site.Controllers
 {
     public class HubController : Controller
     {

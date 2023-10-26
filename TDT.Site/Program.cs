@@ -7,7 +7,7 @@ using NLog;
 using NLog.Web;
 using Microsoft.Extensions.Logging;
 
-namespace TDT_Music
+namespace TDT.Site
 {
     public class Program
     {

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using TDT.Site.Services
+<!DOCTYPE html>
 <html lang="vi" data-theme="purple">
 <head>
     <meta charset="utf-8" />
@@ -39,7 +40,7 @@
     </div>
 
     <div id="root">
-        <div class="zm-section zm-layout has-player">
+        <div class="zm-section zm-layout">
             <aside class="zm-sidebar">
                 <div class="zm-sidebar-wrapper">
                     <nav class="zm-navbar">
@@ -329,8 +330,7 @@
                                             <div class="thumbnail-wrapper">
                                                 <div class="thumbnail">
                                                     <figure class="image is-50x50">
-                                                        <img src="https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_webp/covers/9/2/92f893d85857a5afda233c0f81e1f6ed_1364048891.jpg"
-                                                            alt="" />
+                                                        <img src="" alt="" />
                                                     </figure>
                                                 </div>
                                             </div>
@@ -339,16 +339,16 @@
                                     <div class="media-content">
                                         <div class="is-mark level-left">
                                             <div class="song-info-wrapper">
-                                                <span class="song-title-item"><a class=""
-                                                        href="/bai-hat/Dong-Mau-Lac-Hong-Dan-Truong/ZWZ9790W.html">
+                                                <span class="song-title-item">
+                                                    <a class="" href="">
                                                         <div class="title-wrapper">
-                                                            <span class="item-title title">Dòng Máu Lạc Hồng</span>
+                                                            <span class="item-title title"></span>
                                                         </div>
                                                     </a></span>
                                             </div>
                                         </div>
                                         <h3 class="is-one-line is-truncate subtitle">
-                                            <a class="is-ghost" href="/Dan-Truong">Đan Trường</a>
+                                            <a class="is-ghost" href=""></a>
                                         </h3>
                                     </div>
                                     <div class="media-right">
@@ -389,19 +389,19 @@
                                 </div>
                             </div>
                             <div class="level-item mar-b-5">
-                                <span class="time left">01:35</span>
+                                <span class="time left">00:00</span>
                                 <div class="zm-duration-bar" style="display: flex; justify-content: center">
                                     <div class="zm-slider-bar" style="
-                        border-radius: 4px;
-                        background: linear-gradient(
-                          to right,
-                          var(--progressbar-active-bg) 0%,
-                          var(--progressbar-active-bg) 24.15697604080652%,
-                          var(--progressbar-player-bg) 24.15697604080652%,
-                          var(--progressbar-player-bg) 100%
-                        );
-                        align-self: center;
-                      ">
+                                        border-radius: 4px;
+                                        background: linear-gradient(
+                                          to right,
+                                          var(--progressbar-active-bg) 0%,
+                                          var(--progressbar-active-bg) 0%,
+                                          var(--progressbar-player-bg) 0%,
+                                          var(--progressbar-player-bg) 100%
+                                        );
+                                        align-self: center;
+                                      ">
                                         <div tabindex="0" aria-valuemax="392.829375" aria-valuemin="0"
                                             aria-valuenow="94.895698" draggable="false" role="slider"
                                             class="zm-slider-handle" style="
@@ -411,7 +411,7 @@
                         "></div>
                                     </div>
                                 </div>
-                                <span class="time right">06:33</span>
+                                <span class="time right">00:00</span>
                             </div>
                         </div>
                         <div class="player-controls-right level-right">
@@ -496,14 +496,6 @@
 
     <script type="text/javascript" src="~/js/plugins/player/tdt-player.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="~/js/plugins/swiper/js/swiper.min.js"></script>
-    <script type="text/javascript" src="~/js/plugins/player/tdt-player.js"></script>
-    <script type="text/javascript" src="~/js/plugins/player/volume.js"></script>
-    <script type="text/javascript" src="~/js/plugins/nice_select/jquery.nice-select.min.js"></script>
-    <script type="text/javascript" src="~/js/plugins/scroll/jquery.mCustomScrollbar.js"></script>
-    <script type="text/javascript" src="~/js/custom.js"></script>*@
 
     <script>
         //https://codeseven.github.io/toastr/demo.html
@@ -534,5 +526,26 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <partial name="_MessagesPartial" model="@ViewData["Messages"]"></partial>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        function checkShowPlayer() {
+            var layout = $('#root .zm-layout:first');
+            var cover = $('.now-playing-bar');
+            $.ajax({
+                url: "/Player/CheckShowPlayer",
+                success: function(data) {
+                    console.log(typeof(data));
+                    if(data) {
+                        layout.addClass("has-player");
+                        cover.show();
+                    }
+                    else {
+                        cover.hide();
+                    }
+                }
+            });
+        }
+        checkShowPlayer();
+    </script>
 </body>
 </html>

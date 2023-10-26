@@ -1,15 +1,4 @@
-﻿//const player = document.querySelector("#tdt-audio");
-//const musicName = document.querySelector(".tdt-track-name");
-//const playPauseButton = document.querySelector(".tdt-play");
-//const prevButton = document.querySelector(".tdt-previous");
-//const nextButton = document.querySelector(".tdt-next");
-//const currentTime = document.querySelector(".tdt-current-time");
-//const duration = document.querySelector(".tdt-duration");
-//const progressBar = document.querySelector(".tdt-seek-bar");
-//const progress = document.querySelector(".tdt-play-bar");
-//const sound = document.querySelector('.knob-wrapper');
-
-const icon_await = `
+﻿const icon_await = `
     <i class="icon">
         <svg class="lds-spinner" width="40px" height="40px" fill="#f1f1f1" viewBox="0 0 100 100"
             preserveAspectRatio="xMidYMid" style="background: none;">
@@ -215,7 +204,6 @@ const updateTime = () => {
         ? (player.currentTime / durationFormatted) * 100
         : 0;
 
-    console.log(mouse_down);
     if (!mouse_down) {
         setProgressHandler(progressWidth);
         progress.style.background = "linear-gradient( to right, var(--progressbar-active-bg) 0%, var(--progressbar-active-bg) " + progressWidth + "%, var(--progressbar-player-bg) " + progressWidth + "%, var(--progressbar-player-bg) 100% )";
@@ -246,13 +234,11 @@ $(progress).mousedown(function (et) {
         down_newTime = (e.offsetX / progress.offsetWidth) * player.duration;
         setProgressHandler(e.offsetX, "px");
         progress.style.background = "linear-gradient( to right, var(--progressbar-active-bg) 0%, var(--progressbar-active-bg) " + e.offsetX + "px, var(--progressbar-player-bg) " + e.offsetX + "px, var(--progressbar-player-bg) 100% )";
-        console.log(down_newTime);
         moving = true;
     }
 }).mouseup(function () {
     progress.onmousemove = function () { };
     player.currentTime = down_newTime;
-    console.log($(this), down_newTime);
     mouse_down = false;
 });
 
@@ -344,7 +330,6 @@ const changeMusic = (type = "next") => {
         }
         
     }
-    console.log(index);
     playPauseButton.innerHTML = icon_await;
     player.src = songs[index].src;
     info_imgsong.src = songs[index].imgSong;
@@ -355,7 +340,7 @@ const changeMusic = (type = "next") => {
         playPause();
     updateTime();
 };
-changeMusic("init");
+//changeMusic("init");
 
 function setIconPlay() {
     if (player.paused) {

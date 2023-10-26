@@ -7,9 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using TDT.Core.Extensions;
 using TDT.Core.Ultils.MVCMessage;
-using TDT_Music.Models;
+using TDT.Site.Models;
 
-namespace TDT_Music.Controllers
+namespace TDT.Site.Controllers
 {
     public class HomeController : Controller
     {
