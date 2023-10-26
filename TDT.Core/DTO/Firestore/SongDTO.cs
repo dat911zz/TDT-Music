@@ -50,7 +50,7 @@ namespace TDT.Core.DTO.Firestore
 
         [Display(Name = "Tiêu đề")]
         [FirestoreProperty] public string title { get => _title; set => _title = value; }
-        [Required(ErrorMessage = "Nhập bí danh!")]
+        //[Required(ErrorMessage = "Nhập bí danh!")]
 
         [Display(Name = "Bí danh")]
         [FirestoreProperty] public string alias { get => _alias; set => _alias = value; }
@@ -62,18 +62,18 @@ namespace TDT.Core.DTO.Firestore
         [Required(ErrorMessage = "Vui lòng nhập tên người dùng!")]
         [FirestoreProperty] public string username { get => _username; set => _username = value; }
 
-        [Required(ErrorMessage = "Vui nhập tên nghệ xĩ!")]
+        //[Required(ErrorMessage = "Vui nhập tên nghệ xĩ!")]
         [Display(Name = "Tên nghệ sĩ")]
         [FirestoreProperty] public string artistsNames { get => _artistsNames; set => _artistsNames = value; }
 
-        [Required(ErrorMessage = "Vui lòng nhập danh sách nghệ sĩ!")]
+        //[Required(ErrorMessage = "Vui lòng nhập danh sách nghệ sĩ!")]
         [Display(Name = "Danh sách nghệ sĩ")]
         [FirestoreProperty] public List<string> artists { get => _artists; set => _artists = value; }
         
         [Display(Name = "Là toàn cầu")]
         [FirestoreProperty] public bool isWorldWide { get => _isWorldWide; set => _isWorldWide = value; }
 
-        [Required(ErrorMessage = "Vui lòng chọn file ảnh M!")]
+        //[Required(ErrorMessage = "Vui lòng chọn file ảnh M!")]
         [Display(Name = "Ảnh thu nhỏ M")]
         [FirestoreProperty] public string thumbnailM { get => _thumbnailM; set => _thumbnailM = value; }
 
