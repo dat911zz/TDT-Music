@@ -524,24 +524,8 @@
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>
-        function checkShowPlayer() {
-            var layout = $('#root .zm-layout:first');
-            var cover = $('.now-playing-bar');
-            $.ajax({
-                url: "/Player/CheckShowPlayer",
-                success: function(data) {
-                    console.log(typeof(data));
-                    if(data) {
-                        layout.addClass("has-player");
-                        cover.show();
-                    }
-                    else {
-                        cover.hide();
-                    }
-                }
-            });
-        }
         checkShowPlayer();
+        changeIconActionPlay();
     </script>
 </body>
 </html>

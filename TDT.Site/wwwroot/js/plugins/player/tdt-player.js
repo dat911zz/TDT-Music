@@ -104,48 +104,41 @@ const info_nameSong = document.querySelector(".player-controls__container .media
 const info_nameArtist = document.querySelector(".player-controls__container .media-content .subtitle");
 
 //import songs from "./songs.js";
-var songs = [
-    {
-        imgSong: "https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_jpeg/cover/8/6/7/d/867dea78919c4ad9e000d1385c9042ab.jpg",
-        src: "",
-        nameSong: "Quả Phụ Tướng",
-        nameArtist: `<a class="is-ghost" href="/nghe-si/Dunghoangpham">Dunghoangpham</a>`
-    },
-    {
-        imgSong: "https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_jpeg/cover/b/f/0/1/bf0182328238f2a252496a63e51f1f74.jpg",
-        src: "",
-        nameSong: "Cắt Đôi Nỗi Sầu",
-        nameArtist: `<a class="is-ghost" href="/Tang-Duy-Tan">Tăng Duy Tân</a>, <a class="is-ghost" href="/nghe-si/Drum7">Drum7</a>`
-    },
-    {
-        imgSong: "https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_jpeg/cover/6/d/9/6/6d961b2a82f151a0f9af7de928e8f809.jpg",
-        src: "",
-        nameSong: "À Lôi",
-        nameArtist: `<a class="is-ghost" href="/nghe-si/Double2T">Double2T</a>, <a class="is-ghost" href="/Masew">Masew</a>`
-    }
-];
-let index = 0;
+var songs = [];
+let index = getCurIndex();
 var isInit = false;
-var isShuffle = false;
+var isShuffle = getIsShuffle();
 var isRepeat = false;
 var isRepeatOne = false;
 
 var mouse_down = false;
 var down_newTime = 0;
 
+setIconShuffle(isShuffle);
+changeMusic("init");
+
 prevButton.onclick = () => changeMusic("prev");
 nextButton.onclick = () => changeMusic();
 
 shuffleButton.onclick = function() {
-    if (this.classList.contains('is-active')) {
-        this.classList.remove('is-active');
+    if (isShuffle) {
         isShuffle = false;
     }
     else {
-        this.classList.add('is-active');
         isShuffle = true;
     }
+    setIsShuffle(isShuffle);
+    setIconShuffle(isShuffle);
 };
+
+function setIconShuffle(check) {
+    if (check) {
+        this.classList.add('is-active');
+    }
+    else {
+        this.classList.remove('is-active');
+    }
+}
 
 repeateButton.onclick = function () {
     if (!this.classList.contains('is-active')) {
@@ -182,6 +175,7 @@ const playPause = () => {
         player.pause();
         playPauseButton.innerHTML = icon_play;
     }
+    changeIconActionPlay();
 };
 
 player.ontimeupdate = () => updateTime();
@@ -289,7 +283,7 @@ volumeButton.onclick = function () {
 
 
 const changeMusic = (type = "next") => {
-    if (type !== "init") {
+    if (type !== "init" && type !== "cur") {
         if (isRepeatOne) {
             index = index;
         }
@@ -331,16 +325,17 @@ const changeMusic = (type = "next") => {
         
     }
     playPauseButton.innerHTML = icon_await;
-    player.src = songs[index].src;
-    info_imgsong.src = songs[index].imgSong;
-    info_nameSong.innerHTML = songs[index].nameSong;
-    info_nameArtist.innerHTML = songs[index].nameArtist;
+    if (index < songs.length) {
+        player.src = songs[index].Src;
+        info_imgsong.src = songs[index].Thumbnail;
+        info_nameSong.innerHTML = songs[index].Name;
+        info_nameArtist.innerHTML = songs[index].Artists;
+    }
     //musicName.innerHTML = songs[index].name;
     if (type !== "init")
         playPause();
     updateTime();
 };
-//changeMusic("init");
 
 function setIconPlay() {
     if (player.paused) {
@@ -349,4 +344,112 @@ function setIconPlay() {
     else {
         playPauseButton.innerHTML = icon_pause;
     }
+}
+
+function checkShowPlayer(type = "init") {
+    var layout = $('#root .zm-layout:first');
+    var cover = $('.now-playing-bar');
+    $.ajax({
+        url: "/Player/CheckShowPlayer",
+        success: function (data) {
+            if (data) {
+                layout.addClass("has-player");
+                cover.show();
+                $.ajax({
+                    url: "/Player/GetSrc",
+                    success: function (data) {
+                        if (data != '') {
+                            songs = [];
+                            songs = JSON.parse(data);
+                            changeMusic(type);
+                        }
+                    }
+                });
+            }
+            else {
+                cover.hide();
+            }
+        }
+    });
+}
+
+function changeIconActionPlay() {
+    var icon = $('.header-thumbnail i.action-play')
+    if (player.paused) {
+        icon.addClass('ic-svg-play-circle');
+        icon.removeClass('ic-gif-playing-white');
+        Inif (!setFirst) {
+            $('button.btn-play-all').html(`<i class="icon ic-play"></i><span>Phát tất cả</span>`);
+        }
+        else {
+            $('button.btn-play-all').html(`<i class="icon ic-play"></i><span>Tiếp tục phát</span>`);
+        }
+    }
+    else {
+        icon.addClass('ic-gif-playing-white');
+        icon.removeClass('ic-svg-play-circle');
+        $('button.btn-play-all').html(`<i class="icon ic-pause"></i><span>Tạm dừng</span>`);
+    }
+}
+
+var setFirst = false;
+$('button.btn-play-all').click(function () {
+    if (!setFirst) {
+        var arrId = [];
+        $('div[data-id]').each(function (index, item) {
+            arrId.push($(item).data('id'));
+        });
+        playPauseButton.innerHTML = icon_await;
+        $.ajax({
+            type: "POST",
+            url: "/Player/SetSrc",
+            data: {
+                list: arrId
+            },
+            success: function () {
+                actionButton();
+            }
+        });
+        setFirst = true;
+    }
+    else {
+        $(playPauseButton).trigger('click');
+    }
+});
+
+function actionButton() {
+    if (player.paused) {
+        checkShowPlayer("cur");
+    }
+    else {
+        checkShowPlayer();
+    }
+    changeIconActionPlay();
+}
+
+function getCurIndex() {
+    $.ajax({
+        url: "/Player/GetCurIndex",
+        success: function (data) {
+            return data;
+        }
+    });
+}
+
+function getIsShuffle() {
+    $.ajax({
+        url: "/Player/GetIsShuffle",
+        success: function (data) {
+            return data;
+        }
+    });
+}
+function setIsShuffle(value) {
+    $.ajax({
+        type: "POST",
+        url: "/Player/SetIsShuffle",
+        data: {
+            value: value
+        }
+    });
 }

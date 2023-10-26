@@ -483,7 +483,7 @@ namespace TDT.Core.ServiceImp
         {
             string img = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail);
             string format = @"
-                <div class=""select-item"">
+                <div class=""select-item"" data-id=""{5}"">
                     <div class=""checkbox-wrapper"">
                         <label class=""checkbox""><input type=""checkbox"" /></label>
                     </div>
@@ -564,7 +564,7 @@ namespace TDT.Core.ServiceImp
                     </div>
                 </div>
             ";
-            return string.Format(format, song.title, img, song.GetHtmlArtist(), song.GetHtmlAlbum(), song.Duration());
+            return string.Format(format, song.title, img, song.GetHtmlArtist(), song.GetHtmlAlbum(), song.Duration(), song.encodeId);
         }
         #endregion
 

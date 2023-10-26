@@ -101,6 +101,17 @@ namespace TDT.Core.ServiceImp
                     }
                     catch { }
                 }
+                foreach (SongDTO song in songs)
+                {
+                    try
+                    {
+                        if (!DataHelper.Instance.MP3.ContainsKey(song.encodeId))
+                        {
+                            string url = DataHelper.GetMP3(song.encodeId);
+                        }
+                    }
+                    catch { }
+                }
             }
             return new JsonResult("true");
         }
