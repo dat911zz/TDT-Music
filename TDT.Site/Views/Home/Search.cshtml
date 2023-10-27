@@ -1,0 +1,283 @@
+﻿@{
+    ViewData["Title"] = "Tìm Kiếm";
+    <link rel="stylesheet" href="~/css/search.css" />
+    string key = ViewData["key"].ToString();
+}
+<style>
+    .checkbox {
+        display:none;
+    }
+
+    .no-content-box {
+        width: 100%;
+        padding: 30px 0;
+        min-height: 220px;
+        background-color: var(--alpha-bg);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center
+    }
+</style>
+<main class="zm-section" id="body-scroll"
+    style="position: absolute; inset: 0px; overflow: hidden scroll; margin-right: -6px; margin-bottom: 0px;">
+    <div class="container">
+        <nav class="zm-navbar zm-search-narbar zm-navbar-wrap">
+            <div class="zm-narbar-container">
+                <h3 class="title">Kết Quả Tìm Kiếm</h3>
+                <ul class="zm-navbar-menu">
+                    <li class="zm-navbar-item is-active song">
+                        <div class="navbar-link"><a class="">Bài hát</a></div>
+                    </li>
+                    <li class="zm-navbar-item playlist">
+                        <div class="navbar-link"><a class="">playlist/album</a>
+                        </div>
+                    </li>
+                    <li class="zm-navbar-item artist">
+                        <div class="navbar-link"><a class="">Nghệ sĩ/OA</a></div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="list list-border">
+                @for (int i = 0; i < 5; i++)
+                {
+                <div class="select-item">
+                    <div class="checkbox-wrapper"><label class="checkbox"><input type="checkbox"></label></div>
+                    <div class="list-item bor-b-1 media-item hide-right is-vip">
+                        <div class="media">
+                            <div class="media-left">
+                                <div class="song-prefix mar-r-15"><i class="icon ic-song"></i></div>
+                                <div class="song-thumb">
+                                    <figure class="image  loading is-40x40" title="">
+                                        <img src=""
+                                             alt="">
+                                    </figure>
+                                    <div class="opacity "></div>
+                                    <div class="zm-actions-container">
+                                        <div class="zm-box zm-actions">
+                                            <button class="zm-btn zm-tooltip-btn animation-like is-hidden active is-hover-circle button"
+                                                    tabindex="0">
+                                                <i class="icon ic-like"></i><i class="icon ic-like-full"></i>
+                                            </button><button class="zm-btn action-play  button" tabindex="0">
+                                                <i class="icon action-play ic-play"></i>
+                                            </button><button class="zm-btn zm-tooltip-btn is-hidden is-hover-circle button"
+                                                             tabindex="0">
+                                                <i class="icon ic-more"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-info">
+                                    <div class="title-wrapper">
+                                        <span class="item-title has-icon title">
+                                            <span>
+                                                <span><span></span></span><span style="position: fixed; visibility: hidden; top: 0px; left: 0px;">…</span>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <h3 class="is-one-line is-truncate subtitle loading">
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="media-content">
+                                <div class="loading"></div>
+                            </div>
+                            <div class="media-right">
+                                <div class="hover-items">
+                                    <div class="level">
+                                        <div class="level-item"></div>
+                                        <div class="level-item">
+                                            <button class="zm-btn zm-tooltip-btn is-hover-circle button" tabindex="0">
+                                                <i class="icon ic-karaoke"></i>
+                                            </button>
+                                        </div>
+                                        <div class="level-item">
+                                            <button class="zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button"
+                                                    tabindex="0">
+                                                <i class="icon ic-like"></i><i class="icon ic-like-full"></i>
+                                            </button>
+                                        </div>
+                                        <div class="level-item">
+                                            <button class="zm-btn zm-tooltip-btn is-hover-circle button" tabindex="0">
+                                                <i class="icon ic-more"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="action-items">
+                                    <div class="level">
+                                        <div class="level-item">
+                                            <button class="zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button"
+                                                    tabindex="0">
+                                                <i class="icon ic-like"></i><i class="icon ic-like-full"></i>
+                                            </button>
+                                        </div>
+                                        <div class="level-item duration loading"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+    
+</main>
+
+<script>
+    var htmlNodata = `<div class="no-content-box"><i class="icon main-icon ic-svg-dics-music-icon"></i><span class="no-content-text">Không có tìm thấy dữ liệu phù hợp</span></div>`;
+    var htmlLoadingPlaylist = ``;
+    for (var i = 0; i < 5; i++) {
+        htmlLoadingPlaylist += `
+                <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
+                    <div class="playlist-wrapper is-description">
+                        <div class="zm-card">
+                            <div>
+                                <a class="" title=""
+                                   href="">
+                                    <div class="zm-card-image">
+                                        <figure class="loading image is-48x48">
+                                            <img src="" alt="" />
+                                        </figure>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="zm-card-content">
+                                <h3 class="loading mt-10 subtitle">
+                                    <span>
+                                        <span>
+                                            <span></span>
+                                            <br />
+                                            <span></span>
+                                        </span>
+                                        <span style="position: fixed; visibility: hidden; top: 0px; left: 0px; ">…</span>
+                                    </span>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        `;
+    }
+    var htmlLoadingArtist = ``;
+    for(var i = 0; i < 5; i++) {
+        htmlLoadingArtist += `
+                <div class="zm-carousel-item is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
+                                                            <div class="zm-card zm-card--artist">
+                                                                <div class="image-wrapper">
+                                                                    <div class="zm-card-image is-rounded">
+                                                                        <a class="" title="">
+                                                                            <figure class="image loading is-48x48">
+                                                                                <img src="">
+                                                                            </figure>
+                                                                            <div class="opacity "></div>
+                                                                            <div class="zm-actions-container">
+                                                                                <div class="zm-box zm-actions artist-actions">
+                                                                                    <button class="zm-btn zm-tooltip-btn animation-like is-hidden active is-hover-circle button"
+                                                                                            tabindex="0">
+                                                                                        <i class="icon ic-like"></i><i class="icon ic-like-full"></i>
+                                                                                    </button><button class="zm-btn action-play  button"
+                                                                                                     tabindex="0">
+                                                                                        <i class="icon action-play ic-24-Shuffle"></i>
+                                                                                    </button><button class="zm-btn zm-tooltip-btn is-hidden is-hover-circle button" tabindex="0">
+                                                                                        <i class="icon ic-more"></i>
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="zm-card-content">
+                                                                    <div class="title loading">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="zm-card-footer">
+                                                                    <button class="zm-btn is-outlined active mar-t-15 mar-b-20 is-small is-upper button"
+                                                                            tabindex="0">
+                                                                        <i class="icon ic-addfriend"></i><span>Quan tâm</span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+        `;
+    }
+
+    function getSong() {
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetHtmlSong",
+            data: {
+                key: "@Html.Raw(key)"
+            },
+            success: function(data) {
+                if (data != '') {
+                    $('.list').html(data);
+                }
+                else {
+                    $('.list').html(htmlNodata);
+                }
+            }
+        });
+    }
+    function getPlaylist() {
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetHtmlPlaylist",
+            data: {
+                key: "@Html.Raw(key)"
+            },
+            success: function (data) {
+                if (data != '') {
+                    $('.list').html(data);
+                }
+                else {
+                    $('.list').html(htmlNodata);
+                }
+            }
+        });
+    }
+    function getArtist() {
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetHtmlArtist",
+            data: {
+                key: "@Html.Raw(key)"
+            },
+            success: function (data) {
+                if (data != '') {
+                    $('.list').html(data);
+                }
+                else {
+                    $('.list').html(htmlNodata);
+                }
+            }
+        });
+    }
+    $(document).ready(function () {
+        if("@Html.Raw(key)" != "") {
+            $('input[name="key"]').val("@Html.Raw(key)");
+        }
+        getSong();
+        $('.song').click(function () {
+            $('.zm-navbar-item.is-active').removeClass('is-active');
+            $(this).addClass('is-active');
+            getSong();
+        });
+        $('.playlist').click(function () {
+            $('.zm-navbar-item.is-active').removeClass('is-active');
+            $(this).addClass('is-active');
+            $('.list').html(htmlLoadingPlaylist);
+            getPlaylist();
+        });
+        $('.artist').click(function () {
+            $('.zm-navbar-item.is-active').removeClass('is-active');
+            $(this).addClass('is-active');
+            $('.list').html(htmlLoadingArtist);
+            getArtist();
+        });
+    });
+</script>

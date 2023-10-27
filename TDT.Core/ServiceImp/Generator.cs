@@ -16,6 +16,94 @@ namespace TDT.Core.ServiceImp
 {
     public static class Generator
     {
+        public static string AddPlaylistModal = @"
+            <div id=""react-cool-portal"">
+                <div class=""zm-portal-modal"">
+                    <div class=""modal is-active"">
+                        <div role=""presentation"" class=""modal-background"">
+                            <div class=""modal-content"">
+                                <div class=""form-playlist-content""><button
+                                        class=""zm-btn zm-tooltip-btn close-btn is-hover-circle button"" tabindex=""0""><i
+                                            class=""icon ic-close""></i></button>
+                                    <h3 class=""title"">Tạo playlist mới</h3>
+                                    <form><input class=""input"" placeholder=""Nhập tên playlist"" value="""">
+                                        <div class=""option"">
+                                            <div>
+                                                <h3 class=""title"">Công khai</h3>
+                                                <h3 class=""subtitle"">Mọi người có thể nhìn thấy playlist này</h3>
+                                            </div>
+                                            <div><i class=""icon ic-svg-switch""><svg id=""Layer_1"" x=""0px"" y=""0px"" width=""24px""
+                                                        height=""15px"" viewBox=""0 0 24 15"" xml:space=""preserve"">
+                                                        <style type=""text/css"">
+                                                            .st1 {
+                                                                fill-rule: evenodd;
+                                                                clip-rule: evenodd;
+                                                                fill: #FFFFFF;
+                                                            }
+                                                        </style>
+                                                        <path id=""Rectangle-8"" class=""st0""
+                                                            d=""M16.5,0h-9C3.4,0,0,3.4,0,7.5l0,0C0,11.6,3.4,15,7.5,15h9c4.1,0,7.5-3.4,7.5-7.5l0,0 C24,3.4,20.6,0,16.5,0z"">
+                                                        </path>
+                                                        <circle id=""Oval-2"" class=""st1"" cx=""16.5"" cy=""7.5"" r=""6.5""></circle>
+                                                    </svg></i><i class=""icon ic-svg-switch zm-switch-off is-hide""><svg id=""Layer_1""
+                                                        x=""0px"" y=""0px"" width=""24px"" height=""15px"" viewBox=""0 0 24 15""
+                                                        xml:space=""preserve"">
+                                                        <style type=""text/css"">
+                                                            .st1 {
+                                                                fill-rule: evenodd;
+                                                                clip-rule: evenodd;
+                                                                fill: #FFFFFF;
+                                                            }
+                                                        </style>
+                                                        <path id=""Rectangle-8"" class=""st0""
+                                                            d=""M7.5,0h9C20.6,0,24,3.4,24,7.5l0,0c0,4.1-3.4,7.5-7.5,7.5h-9C3.4,15,0,11.6,0,7.5l0,0 C0,3.4,3.4,0,7.5,0z"">
+                                                        </path>
+                                                        <circle id=""Oval-2"" class=""st1"" cx=""7.5"" cy=""7.5"" r=""6.5""></circle>
+                                                    </svg></i></div>
+                                        </div>
+                                        <div class=""option"">
+                                            <div>
+                                                <h3 class=""title"">Phát ngẫu nhiên</h3>
+                                                <h3 class=""subtitle"">Luôn phát ngẫu nhiên tất cả bài hát</h3>
+                                            </div>
+                                            <div><i class=""icon ic-svg-switch""><svg id=""Layer_1"" x=""0px"" y=""0px"" width=""24px""
+                                                        height=""15px"" viewBox=""0 0 24 15"" xml:space=""preserve"">
+                                                        <style type=""text/css"">
+                                                            .st1 {
+                                                                fill-rule: evenodd;
+                                                                clip-rule: evenodd;
+                                                                fill: #FFFFFF;
+                                                            }
+                                                        </style>
+                                                        <path id=""Rectangle-8"" class=""st0""
+                                                            d=""M16.5,0h-9C3.4,0,0,3.4,0,7.5l0,0C0,11.6,3.4,15,7.5,15h9c4.1,0,7.5-3.4,7.5-7.5l0,0 C24,3.4,20.6,0,16.5,0z"">
+                                                        </path>
+                                                        <circle id=""Oval-2"" class=""st1"" cx=""16.5"" cy=""7.5"" r=""6.5""></circle>
+                                                    </svg></i><i class=""icon ic-svg-switch zm-switch-off is-hide""><svg id=""Layer_1""
+                                                        x=""0px"" y=""0px"" width=""24px"" height=""15px"" viewBox=""0 0 24 15""
+                                                        xml:space=""preserve"">
+                                                        <style type=""text/css"">
+                                                            .st1 {
+                                                                fill-rule: evenodd;
+                                                                clip-rule: evenodd;
+                                                                fill: #FFFFFF;
+                                                            }
+                                                        </style>
+                                                        <path id=""Rectangle-8"" class=""st0""
+                                                            d=""M7.5,0h9C20.6,0,24,3.4,24,7.5l0,0c0,4.1-3.4,7.5-7.5,7.5h-9C3.4,15,0,11.6,0,7.5l0,0 C0,3.4,3.4,0,7.5,0z"">
+                                                        </path>
+                                                        <circle id=""Oval-2"" class=""st1"" cx=""7.5"" cy=""7.5"" r=""6.5""></circle>
+                                                    </svg></i></div>
+                                        </div><button class=""zm-btn mar-t-20 is-outlined active is-fullwidth is-upper button""
+                                            tabindex=""-1"" disabled=""""><i class=""icon""></i><span>Tạo mới</span></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ";
         public static string GenerateSongRelease(List<SongDTO> songs)
         {
             StringBuilder str = new StringBuilder();
