@@ -1,0 +1,148 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Core.Common;
+@using X.PagedList;
+@model IPagedList<TDT.Core.DTO.Firestore.ArtistDTO>
+
+@{
+    ViewData["Title"] = "Danh sách nghệ sĩ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2 class="title-admin">Danh Sách Nghệ Sĩ</h2>
+@{
+    int maxLength = 20; // Đặt giá trị tối đa
+}
+<div class="row">
+    <div class="col-3">
+        <a type="button" class="btn btn-outline-dark" asp-action="Create">Thêm Nghệ Sĩ Mới</a>
+    </div>
+    <div class="col-6">
+        @{
+            if (ViewBag.SearchTerm != "")
+            {
+                <p>Số nghệ sĩ tìm được: @ViewBag.SoNS</p>
+            }
+        }
+    </div>
+    <div class="col-3 input-group mb-3 ">
+        <input type="text" class="form-control border" placeholder="Nhập nghệ sĩ cần tìm"
+               aria-label="Nhập vào vai trò cần tìm" aria-describedby="button-search"
+               id="searchTerm" value="@ViewBag.SearchTerm">
+        <div class="input-group-append">
+            <button class="btn btn-outline-dark" type="button" id="button-search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID Nghệ sĩ</th>
+                <th>Ảnh</th>
+                <th>Tên Nghệ Sĩ</th>
+                <th>Ngày Sinh</th>
+                <th>Quốc tịch</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+
+
+                <tr>
+                    <td scope="row">
+                        @Html.DisplayFor(modelItem => item.id)
+                    </td>
+                    <td class="img_song" encodeid="@item.id" thumbnail="@item.thumbnail">
+                    </td>
+                    <td>
+                        @{
+                            string truncatedTitle = item.name.Length > maxLength
+                            ? item.name.Substring(0, maxLength) + "..."
+                            : item.name;
+                        }
+                        @truncatedTitle
+                    </td>
+
+                    <td>
+                        @{
+                            string truncatedArtistsNames = item.birthday.Length > maxLength
+                            ? item.birthday.Substring(0, maxLength) + "..."
+                            : item.birthday;
+                        }
+                        @truncatedArtistsNames
+
+
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.national)
+                    </td>
+
+                    <td class="btn-control">
+                        <a onclick="DVNConfirm('Xóa', 'Vai Trò' , '/ArtistManagement/Delete' , '@item.sectionId')">
+                            <div class="fa fa-window-close text-danger" aria-hidden="true"></div>
+                        </a>
+                        <a href="@Url.Action("Details", "ArtistManagement", new { id = item.id})">
+                            <div class="fa fa-bars" aria-hidden="true"></div>
+                        </a>
+                        <a href="@Url.Action("Edit", "ArtistManagement", new { id = item.id})">
+                            <div class="fa fa-wrench text-warning " aria-hidden="true"></div>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<!-- Hiển thị điều hướng phân trang -->
+<div class="pagedList-container">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @ViewBag.SearchTerm }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
+</div>
+
+<script>
+    $(".img_song").each(function (e, val) {
+        var id = $(this).attr("encodeid");
+        var thumbnail = $(this).attr("thumbnail");
+        loadImg(this, id, thumbnail);
+        console.log(id, thumbnail);
+
+    })
+    function loadImg(that, _id, _thumbnail) {
+        $.ajax({
+            url: "/MusicManagement/LoadImg",
+            data: {
+                encodeID: _id,
+                thumbnail: _thumbnail
+            },
+            success: function (data) {
+                // $('#img_song').html(data);
+                $(that).html('<img src="' + data + '"/>');
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#button-search').click(function () {
+            var searchTerm = $('#searchTerm').val();
+            window.location.href = '@Url.Action("Index", new { page = 1})' + '&searchTerm=' + searchTerm;
+        });
+        $('#searchTerm').keypress(function (e) {
+            var key = e.which;
+            if (key == 13) {
+                var searchTerm = $('#searchTerm').val();
+                window.location.href = '@Url.Action("Index", new { page =  1})' + '&searchTerm=' + searchTerm;
+            }
+        });
+        // $('.pagedList').click(function () {
+        //     var searchTerm = $('#searchTerm').val();
+        //     window.location.href = '@Url.Action("Index", new { page = Model.PageNumber})' + '&searchTerm=' + searchTerm;
+        // });
+    });
+
+
+</script>
+

@@ -50,11 +50,10 @@ namespace TDT.API.Controllers
         [Route("InsertOrUpdate")]
         [HttpPost]
         [Authorize]
-        public JsonResult InsertOrUpdate([FromForm] FileUploadModel<ArtistDTO> fileData)
+        public JsonResult InsertOrUpdate([FromBody] ArtistDTO artist)
         {
-            Stream image = fileData.FileDetails.OpenReadStream();
+          
             List<string> paramCheck = new List<string>() { "id", "alias", "thumbnail", "thumbnailM" };
-            ArtistDTO artist = fileData.srcObj;
             var resParam = HelperUtility.GetParamsIllegal(paramCheck, artist);
             if (resParam.Count > 0)
             {
@@ -62,13 +61,7 @@ namespace TDT.API.Controllers
             }
             try
             {
-                string thumbnail = artist.id + "_" + DateTime.Now.ToShortDateString().Replace("/", "_") + "." + fileData.FileDetails.FileName.Split('.').Last();
-                string url = FirebaseService.Instance.pushFile(image, "Images/Artist/0/" + thumbnail).Result;
-                DataHelper.Instance.ThumbArtist.Add(artist.id, url);
-                FirebaseService.Instance.pushFile(image, "Images/Artist/1/" + thumbnail).Wait();
-                artist.thumbnail = "Images/Artist/0/" + thumbnail;
-                artist.thumbnailM = "Images/Artist/1/" + thumbnail;
-                FirestoreService.Instance.SetAsync(FirestoreService.CL_Artist, artist.id, artist).Wait();
+                FirestoreService.Instance.SetAsync(FirestoreService.CL_Artist_Test, artist.id, artist).Wait();
                 return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, new Dictionary<string, object>()
                     {
                         {"data", artist}
@@ -87,7 +80,7 @@ namespace TDT.API.Controllers
         [Authorize]
         public JsonResult Delete(string id)
         {
-            FirestoreService.Instance.DeleteAsync(FirestoreService.CL_Artist, id).Wait();
+            FirestoreService.Instance.DeleteAsync(FirestoreService.CL_Artist_Test, id).Wait();
             return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa");
         }
     }

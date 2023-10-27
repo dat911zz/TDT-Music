@@ -1,0 +1,112 @@
+﻿@model TDT.Core.DTO.Firestore.ArtistDTO
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Chỉnh sửa thông tin nghệ sĩ</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="id" class="control-label"></label>
+                <input asp-for="id" class="form-control" readonly />
+                <span asp-validation-for="id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="name" class="control-label"></label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="link" class="control-label"></label>
+                <input asp-for="link" class="form-control" />
+                <span asp-validation-for="link" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="alias" class="control-label"></label>
+                <input asp-for="alias" class="form-control" />
+                <span asp-validation-for="alias" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="cover" class="control-label"></label>
+                <input asp-for="cover" class="form-control" />
+                <span asp-validation-for="cover" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="thumbnail" class="control-label"></label>
+                <input asp-for="thumbnail" readonly class="form-control" />
+                <span asp-validation-for="thumbnail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="biography" class="control-label"></label>
+                <input asp-for="biography" class="form-control" />
+                <span asp-validation-for="biography" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sortBiography" class="control-label"></label>
+                <input asp-for="sortBiography" class="form-control" />
+                <span asp-validation-for="sortBiography" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="thumbnailM" class="control-label"></label>
+                <input asp-for="thumbnailM" class="form-control" />
+                <span asp-validation-for="thumbnailM" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="national" class="control-label"></label>
+                <input asp-for="national" class="form-control" />
+                <span asp-validation-for="national" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="birthday" class="control-label"></label>
+                <input asp-for="birthday" class="form-control" />
+                <span asp-validation-for="birthday" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="realname" class="control-label"></label>
+                <input asp-for="realname" class="form-control" />
+                <span asp-validation-for="realname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="totalFollow" class="control-label"></label>
+                <input asp-for="totalFollow" class="form-control" />
+                <span asp-validation-for="totalFollow" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="follow" class="control-label"></label>
+                <input asp-for="follow" class="form-control" />
+                <span asp-validation-for="follow" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" style=" opacity:1;" asp-for="spotlight" /> @Html.DisplayNameFor(model => model.spotlight)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

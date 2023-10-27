@@ -1,0 +1,105 @@
+﻿@model TDT.Core.DTO.Firestore.ArtistDTO
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="title-admin">Chi tiết thông tin nghệ sĩ: @Html.DisplayFor(model => model.name)</h1>
+<div class="row">
+    <div class="col-sm-7">
+        <table class="table">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.id)</th>
+                <td>@Html.DisplayFor(model => model.id)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.name)</th>
+                <td>@Html.DisplayFor(model => model.name)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.link)</th>
+                <td>@Html.DisplayFor(model => model.link)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.spotlight)</th>
+                <td>@Html.DisplayFor(model => model.spotlight)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.alias)</th>
+                <td>@Html.DisplayFor(model => model.alias)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.playlistId)</th>
+                <td>@Html.DisplayFor(model => model.playlistId)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.cover)</th>
+                <td>@Html.DisplayFor(model => model.thumbnail)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.biography)</th>
+                <td>@Html.DisplayFor(model => model.biography)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.sortBiography)</th>
+                <td>@Html.DisplayFor(model => model.sortBiography)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.thumbnailM)</th>
+                <td>@Html.DisplayFor(model => model.thumbnailM)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.national)</th>
+                <td>@Html.DisplayFor(model => model.national)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.birthday)</th>
+                <td>@Html.DisplayFor(model => model.birthday)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.realname)</th>
+                <td>@Html.DisplayFor(model => model.realname)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.totalFollow)</th>
+                <td>@Html.DisplayFor(model => model.follow)</td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="col-sm-5 text-center ">
+        <p class="badge badge-primary">@Html.DisplayNameFor(model => model.thumbnailM)</p>
+        <p class="img_song img-fluid" encodeid="@Model.id" thumbnail="@Model.thumbnailM">
+        </p>
+        <p class="badge badge-primary">@Html.DisplayNameFor(model => model.thumbnail)</p>
+        <p class="img_song" encodeid="@Model.id" thumbnail="@Model.thumbnail"></p>
+    </div>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Trở về trang trước</a>
+</div>
+<script>
+    $(".img_song").each(function (e, val) {
+        var id = $(this).attr("encodeid");
+        var thumbnail = $(this).attr("thumbnail");
+        loadImg(this, id, thumbnail);
+        console.log(id, thumbnail);
+
+    })
+    function loadImg(that, _id, _thumbnail) {
+        $.ajax({
+            url: "/MusicManagement/LoadImg",
+            data: {
+                encodeID: _id,
+                thumbnail: _thumbnail
+            },
+            success: function (data) {
+                // $('#img_song').html(data);
+                $(that).html('<img style="width: 200px;" class="thumbnail" src="' + data + '"/>');
+            }
+        });
+    }
+
+</script>

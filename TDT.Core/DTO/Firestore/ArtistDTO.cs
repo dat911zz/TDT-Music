@@ -1,11 +1,12 @@
 ﻿using Google.Cloud.Firestore;
 using System.Collections.Generic;
 using System.Linq;
+using TDT.Core.Models;
 
 namespace TDT.Core.DTO.Firestore
 {
     [FirestoreData]
-    public class ArtistDTO
+    public class ArtistDTO : APIResponseModel
     {
         private string _id;
         private string _name;
