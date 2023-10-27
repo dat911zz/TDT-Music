@@ -393,7 +393,7 @@ function checkShowPlayer(type = "init") {
 }
 $(document).ready(function () {
     start();
-    $('.player-controls__container').click(function () {
+    $('#cur_link_playlist').click(function () {
         redirectPlaylist(); 
     });
 });
