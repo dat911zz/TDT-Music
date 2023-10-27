@@ -20,6 +20,8 @@ using System.Diagnostics.Eventing.Reader;
 using Microsoft.AspNetCore.Http;
 using System.Reflection;
 using static TDT.Core.Ultils.HelperUtility;
+using System.Threading;
+using Newtonsoft.Json;
 
 namespace TDT.CAdmin.Controllers
 {
@@ -35,6 +37,36 @@ namespace TDT.CAdmin.Controllers
 		
 		public async Task<IActionResult> Index()
         {
+            #region Import actions to permission if newer
+            //try
+            //{
+            //    var allActions = Assembly.GetExecutingAssembly().GetAllControllerAction();
+            //    ResponseDataDTO<PermissionDTO> permissionRes = APICallHelper.Get<ResponseDataDTO<PermissionDTO>>("Permission", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+
+            //    foreach (var action in allActions)
+            //    {
+            //        var perm = action.ActionType.Split('.')[3] + "_" + action.Name;
+
+            //        if (!permissionRes.Data.Any(p => p.Name.Equals(perm)))
+            //        {
+            //            ResponseDataDTO<PermissionDTO> roleDetail = APICallHelper.Post<ResponseDataDTO<PermissionDTO>>(
+            //               $"Permission",
+            //               token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+            //               requestBody: JsonConvert.SerializeObject(new Permission()
+            //               {
+            //                   Name = perm,
+            //                   Description = "Quyền truy cập vào action " + perm
+            //               })
+            //               ).Result;
+            //        }
+
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw;
+            //}
+            #endregion
             _logger.LogInformation("Start session");
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("NotifyUpdate")))
             {
@@ -47,13 +79,14 @@ namespace TDT.CAdmin.Controllers
                 HttpContext.Session.SetString("NotifyUpdate", "1");
             }
 
-            var allActions = Assembly.GetExecutingAssembly().GetAllControllerAction();
+            #region Example for using Toast message
             //this.MessageContainer().AddException(new Exception("HEHE?"));
             //this.MessageContainer().AddErrorFlashMessage("Có lỗi xảy ra, vui lòng thực hiện lại!");
             //this.MessageContainer().AddMessage("OK nè!", ToastMessageType.Success);
             //this.MessageContainer().AddMessage("Cảnh báo nè!", ToastMessageType.Warning);
             //this.MessageContainer().AddMessage("Thông báo nè!", ToastMessageType.Info);
             //this.MessageContainer().AddMessage("Lỗi do mèo làm nè!", ToastMessageType.Error);
+            #endregion
 
             //var test = Directory.GetCurrentDirectory();
             //ResponseDataDTO<User> userDetail = APICallHelper.Get<ResponseDataDTO<User>>("user", token: auth.Token).Result;

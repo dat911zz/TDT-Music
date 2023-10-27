@@ -47,7 +47,7 @@ namespace TDT.CAdmin.Controllers
         public IActionResult Index(string searchTerm, int? page)
         {
             ViewBag.SearchTerm = "";
-            int pageSize = 10;
+            int pageSize = 6;
             int pageNumber = (page ?? 1);
             List<PlaylistDTO> lsong = _playlists;
 
