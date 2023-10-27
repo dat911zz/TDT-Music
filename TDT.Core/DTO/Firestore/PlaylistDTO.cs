@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using TDT.Core.Helper;
+using TDT.Core.Models;
 using TDT.Core.ServiceImp;
 using TDT.Core.Ultils;
 
 namespace TDT.Core.DTO.Firestore
 {
     [FirestoreData]
-    public class PlaylistDTO
+    public class PlaylistDTO : APIResponseModel
     {
         private string _encodeId;
         private string _title;
