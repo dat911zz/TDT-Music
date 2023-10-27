@@ -1,7 +1,7 @@
 ﻿@using TDT.Core.DTO.Firestore
 @using Newtonsoft.Json
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Album";
     List<SongDTO> songs = ViewData["songs"] as List<SongDTO>;
     string imgPlaylist = ViewData["thumbnail"].ToString();
     string contentLastUpdate = Model.ContentLastUpdate().ToShortDateString();
