@@ -5,14 +5,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1>Chỉnh sửa bài hát @Model.title</h1>
 
 <h4>SongDTO</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="encodeId" class="control-label"></label>
                 <input asp-for="encodeId" class="form-control" readonly />
@@ -73,6 +74,9 @@
                     <input class="form-check-input" asp-for="zingChoice" /> @Html.DisplayNameFor(model => model.zingChoice)
                 </label>
             </div>
+            </div>
+            </div>
+    <div class="col-md-6">
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="isPrivate" /> @Html.DisplayNameFor(model => model.isPrivate)
@@ -150,6 +154,7 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
             </div>
         </form>
     </div>

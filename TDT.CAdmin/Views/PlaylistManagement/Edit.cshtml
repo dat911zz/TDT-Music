@@ -153,12 +153,12 @@
             </div>
         </div>
         <div class="col-md-4">
-@*             <p class="badge badge-primary">@Html.DisplayNameFor(model => model.thumbnailM)</p>
+            <p class="badge badge-primary">@Html.DisplayNameFor(model => model.thumbnailM)</p>
             <p class="img_song img-fluid" encodeid="@Model.encodeId" thumbnail="@Model.thumbnailM">
-            </p> *@
-            <p class="badge badge-primary">@Html.DisplayNameFor(model => model.thumbnail)</p>
+            </p>
+@*             <p class="badge badge-primary">Ảnh</p>
             <p class="img_song" encodeid="@Model.encodeId" thumbnail="@Model.thumbnail"></p>
-
+ *@
             <div class="form-group">
                 <label  class="control-label">Chọn ảnh mới</label>
                 <input asp-for="thumbnail" class="form-control" name="uploadFile" type="file" />
