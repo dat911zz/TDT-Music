@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TDT.Core.Helper;
+using TDT.Core.ServiceImp;
 
 namespace TDT.Site.Services
 {
@@ -22,8 +23,13 @@ namespace TDT.Site.Services
         #endregion
 
         #region Const
-        private static int index = 0;
-        private static int cur_Duration = 0;
+        public static int CurIndex = 0;
+        public static int CurDuration = 0;
+        public static bool IsShuffle = false;
+        public static bool IsRepeat = false;
+        public static bool IsRepeatOne = false;
+        public static string CurUrl = "";
+
         private static Dictionary<string, Player> players = new Dictionary<string, Player>();
         #endregion
 
@@ -33,10 +39,17 @@ namespace TDT.Site.Services
         }
         public static void SetPlayer(List<string> songIds)
         {
+            Dictionary<string, Player> temp = new Dictionary<string, Player>();
             foreach (string songId in songIds)
             {
                 if (players.ContainsKey(songId))
+                {
+                    if(!temp.ContainsKey(songId))
+                    {
+                        temp.Add(songId, players[songId]);
+                    }
                     continue;
+                }
                 var song = DataHelper.GetSong(songId);
                 if (song != null)
                 {
@@ -45,9 +58,15 @@ namespace TDT.Site.Services
                         Id = song.encodeId,
                         Name = song.title,
                         Thumbnail = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail),
-                        Src = DataHelper.GetMP3(song.encodeId)
+                        Src = DataHelper.GetMP3(song.encodeId),
+                        Artists = Generator.GenerateArtistLink(song.artists)
                     });
+                    temp.Add(songId, players[songId]);
                 }
+            }
+            if(temp.Count > 0)
+            {
+                players = temp;
             }
         }
     }
@@ -58,5 +77,6 @@ namespace TDT.Site.Services
         public string Name { get; set; }
         public string Thumbnail { get; set; }
         public string Src { get; set; }
+        public string Artists { get; set; }
     }
 }

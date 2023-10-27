@@ -32,7 +32,9 @@ namespace TDT.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
             services.AddApiVersioning(cfg =>
             {
                 cfg.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);

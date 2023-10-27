@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -20,17 +20,13 @@ namespace TDT.CAdmin.Controllers
         public RolesController(ILogger<RolesController> logger)
         {
             _logger = logger;
-
-
         }
-        // GET: Roles_Controller
         public ActionResult Index(string? searchTerm, int? page)
         {
             ResponseDataDTO<RoleDTO> roles = APICallHelper.Get<ResponseDataDTO<RoleDTO>>("Role", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             ViewBag.SearchTerm = "";
             int pageNumber = (page ?? 1);
-            int pageSize = 10;
-
+            int pageSize = 6;
             // Lọc vai trò dựa trên từ khóa tìm kiếm
             if (!string.IsNullOrEmpty(searchTerm))
             {
@@ -41,24 +37,18 @@ namespace TDT.CAdmin.Controllers
                 }
                 else return View();
             }
-
             IPagedList<RoleDTO> pagedList = roles.Data == null ? new List<RoleDTO>().ToPagedList() : roles.Data.OrderByDescending(o => o.CreateDate).ToPagedList(pageNumber, pageSize);
-            
             return View(pagedList);
         }
-        // GET: Roles_Controller/Details/5
         public ActionResult Details(int id)
         {
             ResponseDataDTO<RoleDTO> roleDetail = APICallHelper.Get<ResponseDataDTO<RoleDTO>>($"Role/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             return View(roleDetail.Data.FirstOrDefault());
         }
-
-        // GET: Roles_Controller/Create
         public ActionResult Create()
         {
             return View();
         }
-
         // POST: Roles_Controller/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -80,12 +70,10 @@ namespace TDT.CAdmin.Controllers
                        ).Result;
                     if (roleDetail.Code == Core.Enums.APIStatusCode.ActionSucceeded)
                     {
-                        //FlashMessage để truyền message từ đây sang action hoặc controller khác
                         this.MessageContainer().AddFlashMessage("Tạo  vai trò thành công!", ToastMessageType.Success);
                     }
                     else
                     {
-                        //Truyền message trong nội bộ hàm
                         this.MessageContainer().AddMessage(roleDetail.Msg, ToastMessageType.Error);
                         return View();
                     }
@@ -93,23 +81,17 @@ namespace TDT.CAdmin.Controllers
                     return RedirectToAction(nameof(Index));
                 }
                 return View();
-
-
             }
             catch
             {
                 return View();
             }
         }
-
-        // GET: Roles_Controller/Edit/5
         public ActionResult Edit(int id)
         {
             ResponseDataDTO<RoleDTO> roleDetail = APICallHelper.Get<ResponseDataDTO<RoleDTO>>($"Role/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             return View(roleDetail.Data.FirstOrDefault());
         }
-
-        // POST: Roles_Controller/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, RoleDTO role)
@@ -125,12 +107,10 @@ namespace TDT.CAdmin.Controllers
                         ).Result;
                     if (roleDetail.Code == Core.Enums.APIStatusCode.ActionSucceeded)
                     {
-                        //FlashMessage để truyền message từ đây sang action hoặc controller khác
                         this.MessageContainer().AddFlashMessage("Sửa vai trò thành công!", ToastMessageType.Success);
                     }
                     else
                     {
-                        //Truyền message trong nội bộ hàm
                         this.MessageContainer().AddMessage(roleDetail.Msg, ToastMessageType.Error);
                         return View();
                     }
@@ -143,8 +123,6 @@ namespace TDT.CAdmin.Controllers
                 return View();
             }
         }
-
-        // POST: Roles_Controller/Delete/5
         [HttpPost]
         public ActionResult Delete(int id)
         {
@@ -159,6 +137,5 @@ namespace TDT.CAdmin.Controllers
             }
             return new JsonResult("ok");
         }
-
     }
 }
