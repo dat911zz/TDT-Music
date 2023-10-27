@@ -89,7 +89,7 @@ namespace TDT.API.Controllers
         [Authorize]
         public JsonResult Delete(string encodeId)
         {
-            FirestoreService.Instance.DeleteAsync(FirestoreService.CL_Song, encodeId).Wait();
+            FirestoreService.Instance.DeleteAsync(FirestoreService.CL_Song_Test, encodeId).Wait();
             return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa");
         }
     }
