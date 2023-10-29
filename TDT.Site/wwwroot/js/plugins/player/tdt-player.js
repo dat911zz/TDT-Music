@@ -545,3 +545,38 @@ function setCurPlaylist() {
         }
     });
 }
+
+function getIndexSong(id) {
+    return songs.findIndex(function (item) { return item.Id == id })
+}
+
+function sortHtmlPlaylist(arrId) {
+    $.ajax({
+        type: "POST",
+        url: "/Player/GetSrc",
+        data: {
+            list: arrId
+        },
+        success: function (data) {
+            if (data != '') {
+                temp = JSON.parse(data);
+                $('.playlist-content [data-id]').each(function (index, item) {
+                    if ($(item).attr("data-index") == undefined) {
+                        $(item).attr("data-index", temp.findIndex(function (itemp) { return itemp.Id == $(item).attr("data-id") }));
+                    }
+                });
+                var objs = $('.playlist-content [data-index]');
+                var objArr = Array.from(objs);
+                let sorted = objArr.sort((a, b) => {
+                    if (parseFloat($(a).attr("data-index")) < parseFloat($(b).attr("data-index"))) return -1;
+                    if (parseFloat($(a).attr("data-index")) > parseFloat($(b).attr("data-index"))) return 1;
+                    return 0;
+                });
+                $('#songs').html('');
+                $(sorted).each(function (index, item) {
+                    $('#songs').append(item);
+                });
+            }
+        }
+    });
+}

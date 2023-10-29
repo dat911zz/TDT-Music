@@ -26,12 +26,6 @@ namespace TDT.Site.Controllers
 
         public IActionResult Index()
         {
-            //this.MessageContainer().AddMessage(
-            //    "Tính năng thông báo đã được cập nhật! " +
-            //    "Có thể sử dụng được tại các controller. " +
-            //    "Chi tiết vui lòng liên hệ Vũ Đạt để được biết thêm.",
-            //    ToastMessageType.Info
-            //    );
             return View();
         }
 

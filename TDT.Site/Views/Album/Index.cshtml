@@ -270,6 +270,9 @@
                     }
                     $(q).html(dt.quantity);
                     $(d).html(dt.durationHtml);
+                },
+                complete: function () {
+                    sortHtmlPlaylist(arrSongId);
                 }
             });
         }
