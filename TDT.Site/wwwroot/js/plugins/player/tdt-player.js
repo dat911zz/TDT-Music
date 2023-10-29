@@ -99,6 +99,7 @@ const sound = document.querySelector('.zm-player-volume .zm-slider-bar');
 const soundhandler = document.querySelector('.zm-player-volume .zm-slider-handle');
 
 // info song
+const info_urlAlbum = document.querySelector(".player-controls__container .media-left a");
 const info_imgsong = document.querySelector(".player-controls__container .thumbnail img");
 const info_nameSong = document.querySelector(".player-controls__container .media-content .item-title");
 const info_nameArtist = document.querySelector(".player-controls__container .media-content .subtitle");
@@ -345,10 +346,15 @@ const changeMusic = (type = "next") => {
         index = 0;
     }
     if (index < songs.length) {
+        if (songs[index].Src == "") {
+            changeMusic("next");
+            return;
+        }
         player.src = songs[index].Src;
         info_imgsong.src = songs[index].Thumbnail;
         info_nameSong.innerHTML = songs[index].Name;
         info_nameArtist.innerHTML = songs[index].Artists;
+        info_urlAlbum.href = songs[index].UrlPlaylist;
     }
     //musicName.innerHTML = songs[index].name;
     if (type !== "init")
@@ -393,7 +399,10 @@ function checkShowPlayer(type = "init") {
 }
 $(document).ready(function () {
     start();
-    $('#cur_link_playlist').click(function () {
+    $('.player-controls__container .media div, .player-controls__container .level-item, .player-controls__player-bar').click(function (e) {
+        e.stopPropagation();
+    });
+    $('.player-controls__container').click(function () {
         redirectPlaylist(); 
     });
 });
@@ -576,7 +585,21 @@ function sortHtmlPlaylist(arrId) {
                 $(sorted).each(function (index, item) {
                     $('#songs').append(item);
                 });
+                setEvent();
             }
         }
     });
+}
+
+function setEvent() {
+    $('.select-item button.action-play').each(function (i, item) {
+        $(item).click(function () {
+            var parent = $(this).parents('.select-item');
+            var iParent = parseInt(parent.attr("data-index"));
+            console.log(iParent)
+            if (songs[iParent].Src == "") {
+                SendNotiWarning("Vui lòng nâng cấp Premium để được trải nghiệm");
+            }
+        });
+    })
 }

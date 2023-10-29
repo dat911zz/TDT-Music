@@ -84,6 +84,12 @@ namespace TDT.Site.Controllers
             return Generator.GenerateArtistsElement(list);
         }
 
+        [HttpPost]
+        public void ShowNotiWarning([FromForm] string noti)
+        {
+            this.MessageContainer().AddFlashMessage(noti, ToastMessageType.Warning);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(int statusCode, string msg = "Có lỗi đã xảy ra!")
         {

@@ -9,6 +9,7 @@ using TDT.Core.Extensions;
 using TDT.Core.Helper;
 using TDT.Core.ServiceImp;
 using TDT.Core.Ultils;
+using TDT.Core.Ultils.MVCMessage;
 
 namespace TDT.Site.Controllers
 {
