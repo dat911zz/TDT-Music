@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Google.Cloud.Firestore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -24,8 +25,8 @@ namespace TDT.CAdmin.Controllers
         public MusicManagementController()
         {
 
-            GetDataMusic();
-            GetDataGenre();
+            //GetDataMusic();
+            //GetDataGenre();
         }
         public void GetDataMusic()
         {
@@ -69,25 +70,37 @@ namespace TDT.CAdmin.Controllers
                 _genres = DataHelper.Instance.Genres.Values.ToList();
             }
         }
+        //public IActionResult Index(string searchTerm, int? page)
+        //{
+        //    ViewBag.SearchTerm = "";
+        //    int pageSize = 6;
+        //    int pageNumber = (page ?? 1);
+        //    List<SongDTO> lsong = _songs;
+
+        //    if (DataHelper.Instance.Songs.Count > 0)
+        //    {
+        //        if (!string.IsNullOrEmpty(searchTerm))
+        //        {
+        //            lsong = _songs.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).ToList();
+        //            ViewBag.SearchTerm = searchTerm;
+        //            //pageSize = lsong.Count;
+        //            ViewBag.SoBH = lsong.Count;
+        //        }
+        //    }
+        //    IPagedList<SongDTO> pagedList = lsong == null ? new List<SongDTO>().ToPagedList() : lsong.OrderByDescending(o => o.releaseDate).ToPagedList(pageNumber, pageSize);
+        //    return View(pagedList);
+        //}
         public IActionResult Index(string searchTerm, int? page)
         {
             ViewBag.SearchTerm = "";
             int pageSize = 6;
             int pageNumber = (page ?? 1);
-            List<SongDTO> lsong = _songs;
-
-            if (DataHelper.Instance.Songs.Count > 0)
-            {
-                if (!string.IsNullOrEmpty(searchTerm))
-                {
-                    lsong = _songs.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).ToList();
-                    ViewBag.SearchTerm = searchTerm;
-                    //pageSize = lsong.Count;
-                    ViewBag.SoBH = lsong.Count;
-                }
-            }
-            IPagedList<SongDTO> pagedList = lsong == null ? new List<SongDTO>().ToPagedList() : lsong.OrderByDescending(o => o.releaseDate).ToPagedList(pageNumber, pageSize);
-            return View(pagedList);
+            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).OrderBy("releaseDate").Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
+            List<SongDTO> lsong = FirestoreService.Instance.Gets<SongDTO>(query);
+            int sobs =(int) FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Count().GetSnapshotAsync().Result.Count;
+            ViewBag.SoBH = sobs;
+            PageList<List<SongDTO>> pageList = new PageList<List<SongDTO>>(pageNumber, pageSize, sobs,lsong);
+            return View(pageList);
         }
         [HttpGet]
         public string LoadImg(string encodeID, string thumbnail)
@@ -234,11 +247,18 @@ namespace TDT.CAdmin.Controllers
         public IActionResult Details(string id)
         {
             SongDTO song = new SongDTO();
-            if (id != null)
-            {
-                song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
-                return View(song);
+            //if (id != null)
+            //{
+            //    song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
+            //    return View(song);
 
+            //}
+            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).WhereEqualTo("encodeId", id);
+            List<SongDTO> lsong = FirestoreService.Instance.Gets<SongDTO>(query);
+            if(lsong != null)
+            {
+                song = lsong[0];
+                return View(song);
             }
             return View();
         }
