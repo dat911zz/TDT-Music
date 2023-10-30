@@ -20,6 +20,7 @@ namespace TDTFirestore
                 //ctr.TransfersRealtimeToFireStorge_GenreAsync()
                 //ctr.TransfersRealtimeToFireStorge_LyricAsync()
                 //ctr.UpdateDataTypeSong()
+                //ctr.UpdateDataTypePlaylist()
             );
         }
     }

@@ -8,10 +8,10 @@ using TDT.Core.Models;
 using TDT.Core.ServiceImp;
 using TDT.Core.Ultils;
 
-namespace TDT.Core.DTO.Firestore
+namespace TDT.Firestore.ModelUpdate
 {
     [FirestoreData]
-    public class PlaylistDTO : APIResponseModel
+    public class Playlist
     {
         private string _encodeId;
         private string _title;
@@ -108,7 +108,7 @@ namespace TDT.Core.DTO.Firestore
         [FirestoreProperty] public int listen { get => _listen; set => _listen = value; }
         [FirestoreProperty] public bool liked { get => _liked; set => _liked = value; }
 
-        public bool compare(PlaylistDTO other)
+        public bool compare(Playlist other)
         {
             if(this.title != other.title || this.releasedAt != other.releasedAt || this.artistsNames != other.artistsNames ||
                 this.description != other.description || this.sortDescription != other.sortDescription || 
@@ -121,10 +121,10 @@ namespace TDT.Core.DTO.Firestore
             }
             return true;
         }
-        public DateTime ContentLastUpdate()
-        {
-            return (new DateTime(1970, 1, 1, 0, 0, 0)).AddSeconds(this.contentLastUpdate);
-        }
+        //public DateTime ContentLastUpdate()
+        //{
+        //    return (new DateTime(1970, 1, 1, 0, 0, 0)).AddMilliseconds(long.Parse(this.contentLastUpdate.Length > 0 ? this.contentLastUpdate.PadRight(13, '0') : this.contentLastUpdate));
+        //}
         public string GetHtmlArtist()
         {
             return Generator.GenerateArtistLink(this.artists);
@@ -133,31 +133,31 @@ namespace TDT.Core.DTO.Firestore
         {
             return HelperUtility.GetCompactNum(this.like);
         }
-        public string SumDuration()
-        {
-            if(this.songs != null && this.songs.Count > 0)
-            {
-                long sum = 0;
-                foreach (var item in this.songs)
-                {
-                    SongDTO song = DataHelper.GetSong(item);
-                    if(song != null)
-                    {
-                        sum += song.duration;
-                    }
-                }
-                return HelperUtility.GetTime(sum);
-            }
-            return "0 giờ 0 phút";
-        }
+        //public string SumDuration()
+        //{
+        //    if(this.songs != null && this.songs.Count > 0)
+        //    {
+        //        long sum = 0;
+        //        foreach (var item in this.songs)
+        //        {
+        //            SongDTO song = DataHelper.GetSong(item);
+        //            if(song != null)
+        //            {
+        //                sum += song.duration;
+        //            }
+        //        }
+        //        return HelperUtility.GetTime(sum);
+        //    }
+        //    return "0 giờ 0 phút";
+        //}
         public string GetHtmlArtistElement()
         {
             return Generator.GenerateArtistsElement(this.artists);
         }
-        public string GetHtmlPlaylistSuggest()
-        {
-            List<PlaylistDTO> playlists = DataHelper.GetPlaylistSuggest(this);
-            return Generator.GeneratePlaylistsElement(playlists.Take(5).ToList());
-        }
+        //public string GetHtmlPlaylistSuggest()
+        //{
+        //    List<Playlist> playlists = DataHelper.GetPlaylistSuggest(this);
+        //    return Generator.GeneratePlaylistsElement(playlists.Take(5).ToList());
+        //}
     }
 }

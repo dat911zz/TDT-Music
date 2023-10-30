@@ -150,5 +150,17 @@ namespace TDT.Firestore
         //        await FirestoreService.Instance.SetAsync("Song", song.encodeId, songUpdate);
         //    }
         //}
+
+        //public async Task UpdateDataTypePlaylist()
+        //{
+        //    List<PlaylistDTO> playlists = FirestoreService.Instance.Gets<PlaylistDTO>("Playlist");
+        //    int i = 0;
+        //    foreach (PlaylistDTO playlist in playlists)
+        //    {
+        //        Console.WriteLine(i++);
+        //        ModelUpdate.Playlist playlistUpdate = ConvertService.Instance.ConvertUpdateType(playlist);
+        //        await FirestoreService.Instance.SetAsync("Playlist", playlistUpdate.encodeId, playlistUpdate);
+        //    }
+        //}
     }
 }

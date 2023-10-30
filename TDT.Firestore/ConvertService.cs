@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TDT.Core.DTO.Firestore;
+using TDT.Core.Ultils;
 using TDT.Firestore.ModelClone;
 
 namespace TDT.Firestore
@@ -391,6 +393,65 @@ namespace TDT.Firestore
         //    result.listen = song.listen;
         //    result.liked = song.liked;
         //    result.comment = song.comment;
+        //    return result;
+        //}
+
+        //public ModelUpdate.Playlist ConvertUpdateType(PlaylistDTO playlist)
+        //{
+        //    ModelUpdate.Playlist result = new ModelUpdate.Playlist();
+        //    result.encodeId = playlist.encodeId;
+        //    result.title = playlist.title;
+        //    result.thumbnail = playlist.thumbnail;
+        //    result.isoffical = playlist.isoffical;
+        //    result.link = playlist.link;
+        //    result.isIndie = playlist.isIndie;
+        //    try
+        //    {
+        //        result.releaseDate = HelperUtility.GetTicks(DateTime.Parse(playlist.releaseDate));
+        //    }
+        //    catch
+        //    {
+        //        result.releaseDate = 0;
+        //    }
+        //    result.sortDescription = playlist.sortDescription;
+        //    try
+        //    {
+        //        result.releasedAt = long.Parse(playlist.releasedAt);
+        //    }
+        //    catch
+        //    {
+        //        result.releasedAt = 0;
+        //    }
+        //    result.genreIds = playlist.genreIds;
+        //    result.PR = playlist.PR;
+        //    result.artists = playlist.artists;
+        //    result.artistsNames = playlist.artistsNames;
+        //    result.playItemMode = playlist.playItemMode;
+        //    result.subType = playlist.subType;
+        //    result.uid = playlist.uid;
+        //    result.thumbnailM = playlist.thumbnailM;
+        //    result.isShuffle = playlist.isShuffle;
+        //    result.isPrivate = playlist.isPrivate;
+        //    result.userName = playlist.userName;
+        //    result.isAlbum = playlist.isAlbum;
+        //    result.textType = playlist.textType;
+        //    result.isSingle = playlist.isSingle;
+        //    result.distributor = playlist.distributor;
+        //    result.aliasTitle = playlist.aliasTitle;
+        //    result.sectionId = playlist.sectionId;
+        //    try
+        //    {
+        //        result.contentLastUpdate = long.Parse(playlist.contentLastUpdate);
+        //    }
+        //    catch
+        //    {
+        //        result.contentLastUpdate = 0;
+        //    }
+        //    result.songs = playlist.songs;
+        //    result.bannerAdaptiveId = playlist.bannerAdaptiveId;
+        //    result.like = playlist.like;
+        //    result.listen = playlist.listen;
+        //    result.liked = playlist.liked;
         //    return result;
         //}
     }
