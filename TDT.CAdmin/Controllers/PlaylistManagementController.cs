@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using TDT.Core.DTO;
 using TDT.Core.DTO.Firestore;
@@ -44,7 +47,7 @@ namespace TDT.CAdmin.Controllers
         public IActionResult Index(string searchTerm, int? page)
         {
             ViewBag.SearchTerm = "";
-            int pageSize = 10;
+            int pageSize = 6;
             int pageNumber = (page ?? 1);
             List<PlaylistDTO> lsong = _playlists;
 
@@ -82,39 +85,116 @@ namespace TDT.CAdmin.Controllers
             }
             return img;
         }
-
+        public bool IsIdInUse(string id)
+        {
+            return _playlists.Any(pl => pl.encodeId == id);
+        }
         public IActionResult Create()
         {
 
             return View();
         }
         [HttpPost]
-        public IActionResult Create(PlaylistDTO song, IFormFile file)
+        public IActionResult Create(PlaylistDTO playlist, IFormFile uploadFile)
         {
-            if (ModelState.IsValid)
+            string id = string.Empty;
+            do
             {
-                if (file != null && file.Length > 0 && file.ContentType == "audio/mpeg")
+                id = HelperUtility.GenerateRandomString(8);
+
+            } while (IsIdInUse(id));
+            try
+            {
+                playlist.encodeId = id;
+                Stream image = uploadFile.OpenReadStream();
+                string thumbnail = id + "_" + DateTime.Now.ToString("yyyyMMddHHmmssfff").Replace("/", "_") + "." + uploadFile.FileName.Split('.').Last();
+                string url = FirebaseService.Instance.pushFile(image, "Images/Playlist/0/" + thumbnail).Result;
+                DataHelper.Instance.ThumbArtist.Add(id, url);
+                FirebaseService.Instance.pushFile(image, "Images/Playlist/1/" + thumbnail).Wait();
+                playlist.thumbnail = "Images/Playlist/0/" + thumbnail;
+                playlist.thumbnailM = "Images/Playlist/1/" + thumbnail;
+
+                PlaylistDTO Songfile = APICallHelper.Post<PlaylistDTO>(
+                   $"Playlist/InsertOrUpdate",
+                   token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+                   requestBody: JsonConvert.SerializeObject(playlist)
+               ).Result;
+
+                if (Songfile.Code == Core.Enums.APIStatusCode.ActionSucceeded)
                 {
-
+                    //FlashMessage để truyền message từ đây sang action hoặc controller khác
+                    this.MessageContainer().AddFlashMessage("Tạo playlist thành công!", ToastMessageType.Success);
                 }
+                else
+                {
+                    //Truyền message trong nội bộ hàm
+                    this.MessageContainer().AddMessage(Songfile.Msg, ToastMessageType.Error);
+                    return View();
+                }
+                return RedirectToAction(nameof(Index));
             }
-
-            return View();
+            catch
+            {
+                return View();
+            }
         }
 
 
-        public IActionResult Edit(string? encodeId)
+        public IActionResult Edit(string? id)
         {
+            PlaylistDTO song = new PlaylistDTO();
+            if (id != null)
+            {
+                song = _playlists.FirstOrDefault(s => s.encodeId.Equals(id));
+                return View(song);
+            }
             return View();
         }
         [HttpPost]
-        public IActionResult Edit(PlaylistDTO song)
+        public IActionResult Edit(PlaylistDTO playlist, IFormFile uploadFile)
         {
-            return View();
+            try
+            {
+                playlist.encodeId = "KG2WFIDW";
+                if (uploadFile != null)
+                {
+                    Stream image = uploadFile.OpenReadStream();
+                    string thumbnail = playlist.encodeId + "_" + DateTime.Now.ToString("yyyyMMddHHmmssfff").Replace("/", "_") + "." + uploadFile.FileName.Split('.').Last();
+                    string url = FirebaseService.Instance.pushFile(image, "Images/Playlist/0/" + thumbnail).Result;
+                    DataHelper.Instance.ThumbSong.Add(playlist.encodeId, url);
+                    FirebaseService.Instance.pushFile(image, "Images/Playlist/1/" + thumbnail).Wait();
+                    playlist.thumbnail = "Images/Playlist/0/" + thumbnail;
+                    playlist.thumbnailM = "Images/Playlist/1/" + thumbnail;
+                }
+
+                PlaylistDTO Songfile = APICallHelper.Post<PlaylistDTO>(
+                $"Playlist/InsertOrUpdate",
+                token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+                requestBody: JsonConvert.SerializeObject(playlist)
+                ).Result;
+
+                if (Songfile.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+                {
+                    //FlashMessage để truyền message từ đây sang action hoặc controller khác
+                    this.MessageContainer().AddFlashMessage("Sửa Play list thành công!", ToastMessageType.Success);
+                }
+                else
+                {
+                    //Truyền message trong nội bộ hàm
+                    this.MessageContainer().AddMessage(Songfile.Msg, ToastMessageType.Error);
+                    return View();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
         }
         [HttpPost]
         public IActionResult Delete(string id)
         {
+            id = "a";
             ResponseDataDTO<PlaylistDTO> playlistDTO = APICallHelper.Delete<ResponseDataDTO<PlaylistDTO>>($"Playlist/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             if (playlistDTO.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {

@@ -39,10 +39,16 @@ namespace TDT.API.Controllers
         [HttpGet("{username}")]
         public IActionResult Get(string username)
         {
-            var user = _db.Users.Where(u => u.UserName.Equals(username.Trim()));
+            var user = _db.Users.Select(s => new UserIdentiyModel { 
+                UserName = s.UserName,
+                Address = s.Address,
+                PhoneNumber = s.PhoneNumber,
+                Email = s.Email,
+                Password = "***"
+            }).Where(u => u.UserName.Equals(username.Trim()));
             return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
                 {
-                    {"data", user}
+                    {"data", user }
                 }, "Lấy dữ liệu");
         }
 

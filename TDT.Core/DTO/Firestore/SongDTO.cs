@@ -59,7 +59,7 @@ namespace TDT.Core.DTO.Firestore
         [FirestoreProperty] public bool isOffical { get => _isOffical; set => _isOffical = value; }
 
         [Display(Name = "Tên người dùng")]
-        [Required(ErrorMessage = "Vui lòng nhập tên người dùng!")]
+        //[Required(ErrorMessage = "Vui lòng nhập tên người dùng!")]
         [FirestoreProperty] public string username { get => _username; set => _username = value; }
 
         //[Required(ErrorMessage = "Vui nhập tên nghệ xĩ!")]

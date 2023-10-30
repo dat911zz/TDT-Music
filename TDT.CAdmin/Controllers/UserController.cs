@@ -27,7 +27,7 @@ namespace TDT.CAdmin.Controllers
         {
             ResponseDataDTO<UserDTO> users = APICallHelper.Get<ResponseDataDTO<UserDTO>>("user", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             int pageNumber = (page ?? 1);
-            int pageSize = 7;
+            int pageSize = 6;
             IPagedList<UserDTO> pagedList = users.Data == null ? new List<UserDTO>().ToPagedList() : users.Data.OrderByDescending(o => o.CreateDate).ToPagedList(pageNumber, pageSize);
             return View(pagedList);
         }
@@ -72,13 +72,14 @@ namespace TDT.CAdmin.Controllers
         [HttpGet]
         public ActionResult Edit(string id)
         {
-            ResponseDataDTO<User> userDetail = APICallHelper.Put<ResponseDataDTO<User>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            ResponseDataDTO<UserIdentiyModel> userDetail = APICallHelper.Get<ResponseDataDTO<UserIdentiyModel>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+
             return View(userDetail.Data.FirstOrDefault());
         }
         [HttpPost]
-        public ActionResult Edit(User model)
+        public ActionResult Edit(UserIdentiyModel model)
         {
-            ResponseDataDTO<User> res = APICallHelper.Post<ResponseDataDTO<User>>($"user/{model.UserName.Trim()}",
+            ResponseDataDTO<UserDetailModel> res = APICallHelper.Put<ResponseDataDTO<UserDetailModel>>($"user/{model.UserName.Trim()}",
                 JsonConvert.SerializeObject(model),
                 token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value)
                 .Result;

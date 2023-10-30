@@ -72,7 +72,7 @@ namespace TDT.CAdmin.Controllers
         public IActionResult Index(string searchTerm, int? page)
         {
             ViewBag.SearchTerm = "";
-            int pageSize = 10;
+            int pageSize = 6;
             int pageNumber = (page ?? 1);
             List<SongDTO> lsong = _songs;
 
@@ -112,10 +112,10 @@ namespace TDT.CAdmin.Controllers
         }
         public IActionResult Create()
         {
-            if (DataHelper.Instance.Genres.Count > 0)
-            {
-                ViewBag.MaGenre = new SelectList(_genres, "id", "name");
-            }
+            //    if (DataHelper.Instance.Genres.Count > 0)
+            //    {
+            //        ViewBag.MaGenre = new SelectList(_genres, "id", "name");
+            //    }
             return View();
         }
 
@@ -177,15 +177,49 @@ namespace TDT.CAdmin.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Edit(SongDTO song)
+        public IActionResult Edit(SongDTO song, IFormFile uploadFile)
         {
-            return View();
+            try
+            {
+                if(uploadFile != null) {
+                    Stream image = uploadFile.OpenReadStream();
+                    string thumbnail = song.encodeId + "_" + DateTime.Now.ToString("yyyyMMddHHmmssfff").Replace("/", "_") + "." + uploadFile.FileName.Split('.').Last();
+                    string url = FirebaseService.Instance.pushFile(image, "Images/Song/0/" + thumbnail).Result;
+                    DataHelper.Instance.ThumbSong.Add(song.encodeId, url);
+                    FirebaseService.Instance.pushFile(image, "Images/Song/1/" + thumbnail).Wait();
+                    song.thumbnail = "Images/Song/0/" + thumbnail;
+                    song.thumbnailM = "Images/Song/1/" + thumbnail;
+                }
+                SongDTO Songfile = APICallHelper.Post<SongDTO>(
+                $"Song/InsertOrUpdate",
+                token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+                requestBody: JsonConvert.SerializeObject(song)
+                ).Result;
+
+                if (Songfile.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+                {
+                    //FlashMessage để truyền message từ đây sang action hoặc controller khác
+                    this.MessageContainer().AddFlashMessage("Sửa hát thành công!", ToastMessageType.Success);
+                }
+                else
+                {
+                    //Truyền message trong nội bộ hàm
+                    this.MessageContainer().AddMessage(Songfile.Msg, ToastMessageType.Error);
+                    return View();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
         }
 
 
         [HttpPost]
         public IActionResult Delete(string id)
         {
+            id = "2123";
             ResponseDataDTO<SongDTO> songDTO = APICallHelper.Delete<ResponseDataDTO<SongDTO>>($"Song/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             if (songDTO.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
