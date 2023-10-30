@@ -177,3 +177,67 @@ body {
     text-align: center;
     font-weight: bold;
 }
+
+
+
+/*Phân trang 2*/
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+    .pagination ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+    }
+
+    .pagination a {
+        padding: 5px 10px;
+        margin: 0 5px;
+        color: #007bff;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+        .pagination a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+    .pagination .active a {
+        background-color: #007bff !important;
+        color: #fff;
+        border: 1px solid #007bff !important;
+        box-shadow: 0 0 5px #007bff !important; /* Tạo hiệu ứng nổi lên */
+        border-radius: 5px;
+    }
+
+        .pagination .active a:hover {
+            background-color: #0056b3;
+        }
+
+#pageInput {
+    width: 50px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#goToPageButton {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #007bff;
+    box-shadow: 0 0 5px #007bff !important; /* Tạo hiệu ứng nổi lên */
+
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    #goToPageButton:hover {
+        background-color: #c82333;
+    }

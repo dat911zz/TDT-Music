@@ -147,7 +147,7 @@ namespace TDT.Core.DTO.Firestore
         [FirestoreProperty] public int comment { get => _comment; set => _comment = value; }
         public DateTime ReleaseDate()
         {
-            return (new DateTime(1975, 1, 1, 0, 0, 0)).AddMilliseconds(long.Parse(13 - this.releaseDate.Length > 0 ? this.releaseDate.PadRight(13, '0') : this.releaseDate));
+            return (new DateTime(1970, 1, 1, 0, 0, 0)).AddSeconds(long.Parse(this.releaseDate));
         }
         public string Duration()
         {

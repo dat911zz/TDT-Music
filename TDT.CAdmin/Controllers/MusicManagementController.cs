@@ -95,11 +95,11 @@ namespace TDT.CAdmin.Controllers
             ViewBag.SearchTerm = "";
             int pageSize = 6;
             int pageNumber = (page ?? 1);
-            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).OrderBy("releaseDate").Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
+            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).OrderByDescending("releaseDate").Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
             List<SongDTO> lsong = FirestoreService.Instance.Gets<SongDTO>(query);
-            int sobs =(int) FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Count().GetSnapshotAsync().Result.Count;
+            int sobs = (int)FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Count().GetSnapshotAsync().Result.Count;
             ViewBag.SoBH = sobs;
-            PageList<List<SongDTO>> pageList = new PageList<List<SongDTO>>(pageNumber, pageSize, sobs,lsong);
+            PageList<List<SongDTO>> pageList = new PageList<List<SongDTO>>(pageNumber, pageSize, sobs, lsong);
             return View(pageList);
         }
         [HttpGet]
