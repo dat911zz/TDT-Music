@@ -123,5 +123,10 @@ namespace TDT.Core.Ultils
 
             return randomString.ToString();
         }
+
+        public static long GetTicks(DateTime dateTime)
+        {
+            return (long)dateTime.Subtract(new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+        }
     }
 }
