@@ -29,7 +29,7 @@ namespace TDT.CAdmin.Controllers
 
         public void GetDataArtist()
         {
-            if (DataHelper.Instance.Songs.Count <= 0)
+            if (DataHelper.Instance.Artists.Count <= 0)
             {
                 artist = APIHelper.Gets<ArtistDTO>($"{FirestoreService.CL_Artist}");
                 if (artist != null)
@@ -127,7 +127,7 @@ namespace TDT.CAdmin.Controllers
                     if (artist.Code == Core.Enums.APIStatusCode.ActionSucceeded)
                     {
                         //FlashMessage để truyền message từ đây sang action hoặc controller khác
-                        this.MessageContainer().AddFlashMessage("Tạo bài hát thành công!", ToastMessageType.Success);
+                        this.MessageContainer().AddFlashMessage("Tạo nghệ sĩ thành công!", ToastMessageType.Success);
                     }
                     else
                     {
