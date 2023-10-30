@@ -148,7 +148,7 @@ namespace TDT.Firestore
         //    result.username = song.username;
         //    result.artistsNames = song.artistsNames;
         //    result.artists = new Dictionary<string, string>();
-        //    if(song.artists != null)
+        //    if (song.artists != null)
         //    {
         //        foreach (Artist artist in song.artists)
         //        {
@@ -173,14 +173,14 @@ namespace TDT.Firestore
         //    result.hasLyric = song.hasLyric;
         //    result.userid = song.userid;
         //    result.composers = new Dictionary<string, string>();
-        //    if(song.composers != null)
+        //    if (song.composers != null)
         //    {
         //        foreach (Composer composer in song.composers)
         //        {
         //            result.composers[composer.id] = composer.alias;
         //        }
         //    }
-        //    if(song.album != null)
+        //    if (song.album != null)
         //    {
         //        result.album = song.album.encodeId;
         //    }
@@ -348,6 +348,43 @@ namespace TDT.Firestore
         //    {
         //        result.composers = song.composers.Keys.ToList();
         //    }
+        //    result.album = song.album;
+        //    result.isRBT = song.isRBT;
+        //    result.like = song.like;
+        //    result.listen = song.listen;
+        //    result.liked = song.liked;
+        //    result.comment = song.comment;
+        //    return result;
+        //}
+
+        //public ModelUpdate.Song ConvertUpdateType(SongDTO song)
+        //{
+        //    ModelUpdate.Song result = new ModelUpdate.Song();
+        //    result.encodeId = song.encodeId;
+        //    result.title = song.title;
+        //    result.alias = song.alias;
+        //    result.isOffical = song.isOffical;
+        //    result.username = song.username;
+        //    result.artistsNames = song.artistsNames;
+        //    result.artists = song.artists;
+        //    result.isWorldWide = song.isWorldWide;
+        //    result.thumbnailM = song.thumbnailM;
+        //    result.link = song.link;
+        //    result.thumbnail = song.thumbnail;
+        //    result.duration = song.duration;
+        //    result.zingChoice = song.zingChoice;
+        //    result.isPrivate = song.isPrivate;
+        //    result.preRelease = song.preRelease;
+        //    result.releaseDate = long.Parse(song.releaseDate);
+        //    result.genreIds = song.genreIds;
+        //    result.distributor = song.distributor;
+        //    result.indicators = song.indicators;
+        //    result.isIndie = song.isIndie;
+        //    result.streamingStatus = song.streamingStatus;
+        //    result.allowAudioAds = song.allowAudioAds;
+        //    result.hasLyric = song.hasLyric;
+        //    result.userid = song.userid;
+        //    result.composers = song.composers;
         //    result.album = song.album;
         //    result.isRBT = song.isRBT;
         //    result.like = song.like;

@@ -6,16 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Querys\**" />
+    <EmbeddedResource Remove="Querys\**" />
+    <None Remove="Querys\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Google.Cloud.Firestore" Version="3.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TDT.Core\TDT.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Querys\MaiTrungTien\" />
-    <Folder Include="Querys\Dat\" />
   </ItemGroup>
 
 </Project>

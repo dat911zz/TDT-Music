@@ -1,0 +1,41 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Core.Common;
+@using X.PagedList;
+@model TDT.Core.DTO.Firestore.Genre
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="title-admin">Chi Tiết Chủ Đề : @Html.DisplayFor(model => model.name)</h1>
+<div class="row">
+    <div class="col-sm-7">
+        <table class="table">
+            <tr>
+                <th>Mã ID </th>
+                <td>@Html.DisplayFor(model => model.id)</td>
+            </tr>
+            <tr>
+                <th>Tiêu Đề </th>
+                <td>@Html.DisplayFor(model => model.title)</td>
+            </tr>
+            <tr>
+                <th>Bí Danh </th>
+                <td>@Html.DisplayFor(model => model.alias)</td>
+            </tr>
+            <tr>
+                <th>Tên Chủ Đề </th>
+                <td>@Html.DisplayFor(model => model.name)</td>
+            </tr>
+            <tr>
+                <th>Link </th>
+                <td>@Html.DisplayFor(model => model.link)</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Trở về trang trước</a>
+</div>

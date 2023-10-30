@@ -61,7 +61,7 @@ namespace TDT.Core.Helper
             for (int i = 0; i < 3; i++)
             {
                 List<SongDTO> res_s = new List<SongDTO>();
-                string releaseDate = "";
+                long releaseDate = 0;
                 int count = 0;
                 for (int j = iStartArr; j < arrSong.Count; j++)
                 {
@@ -100,7 +100,7 @@ namespace TDT.Core.Helper
             for (int i = 0; i < 3; i++)
             {
                 List<SongDTO> res_s = new List<SongDTO>();
-                string releaseDate = "";
+                long releaseDate = 0;
                 int count = 0;
                 for (int j = iStartArr; j < arrSong.Count; j++)
                 {

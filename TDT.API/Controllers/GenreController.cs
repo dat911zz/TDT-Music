@@ -43,7 +43,7 @@ namespace TDT.API.Controllers
             Genre g = genres.First();
             return new JsonResult(g.id);
         }
-
+         
         [Route("InsertOrUpdate")]
         [HttpPost]
         [Authorize]
@@ -59,7 +59,7 @@ namespace TDT.API.Controllers
             }
             try
             {
-                FirestoreService.Instance.SetAsync(FirestoreService.CL_Genre, genre.id, genre).Wait();
+                FirestoreService.Instance.SetAsync(FirestoreService.CL_GenreTest, genre.id, genre).Wait();
                 return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, new Dictionary<string, object>()
                     {
                         {"data", genre}
