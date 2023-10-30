@@ -6,10 +6,10 @@ using TDT.Core.Helper;
 using TDT.Core.Models;
 using TDT.Core.ServiceImp;
 
-namespace TDT.Core.DTO.Firestore
+namespace TDT.Firestore.ModelUpdate
 {
     [FirestoreData]
-    public class SongDTO : APIResponseModel
+    public class Song
     {
         private string _encodeId;
         private string _title;
@@ -145,10 +145,10 @@ namespace TDT.Core.DTO.Firestore
 
         [Display(Name = "Số lượt bình luận")]
         [FirestoreProperty] public int comment { get => _comment; set => _comment = value; }
-        public DateTime ReleaseDate()
-        {
-            return (new DateTime(1970, 1, 1, 0, 0, 0)).AddSeconds(this.releaseDate);
-        }
+        //public DateTime ReleaseDate()
+        //{
+        //    return (new DateTime(1975, 1, 1, 0, 0, 0)).AddMilliseconds(long.Parse(13 - this.releaseDate.Length > 0 ? this.releaseDate.PadRight(13, '0') : this.releaseDate));
+        //}
         public string Duration()
         {
             TimeSpan t = TimeSpan.FromSeconds(this.duration);
@@ -159,25 +159,25 @@ namespace TDT.Core.DTO.Firestore
         {
             return Generator.GenerateArtistLink(this.artists);
         }
-        public string GetHtmlAlbum()
-        {
-            string res = @"
-                <a href=""/Album/?encodeId={1}"">
-                    <span>
-                        <span>{0}</span>
-                    </span>
-                    <span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span>
-                </a>
-            ";
-            if (!string.IsNullOrEmpty(this.album))
-            {
-                PlaylistDTO album = DataHelper.GetPlaylist(this.album);
-                if(album != null)
-                {
-                    return string.Format(res, album.title, album.encodeId);
-                }
-            }
-            return string.Format(res, "", "");
-        }
+        //public string GetHtmlAlbum()
+        //{
+        //    string res = @"
+        //        <a href=""/Album/?encodeId={1}"">
+        //            <span>
+        //                <span>{0}</span>
+        //            </span>
+        //            <span style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span>
+        //        </a>
+        //    ";
+        //    if (!string.IsNullOrEmpty(this.album))
+        //    {
+        //        PlaylistDTO album = DataHelper.GetPlaylist(this.album);
+        //        if(album != null)
+        //        {
+        //            return string.Format(res, album.title, album.encodeId);
+        //        }
+        //    }
+        //    return string.Format(res, "", "");
+        //}
     }
 }

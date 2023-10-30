@@ -26,12 +26,6 @@ namespace TDT.Site.Controllers
 
         public IActionResult Index()
         {
-            //this.MessageContainer().AddMessage(
-            //    "Tính năng thông báo đã được cập nhật! " +
-            //    "Có thể sử dụng được tại các controller. " +
-            //    "Chi tiết vui lòng liên hệ Vũ Đạt để được biết thêm.",
-            //    ToastMessageType.Info
-            //    );
             return View();
         }
 
@@ -88,6 +82,12 @@ namespace TDT.Site.Controllers
             List<ArtistDTO> list = DataHelper.Instance.Artists.Values.OrderByDescending(x => x.totalFollow)
                 .Where(x => !string.IsNullOrEmpty(x.alias) && x.alias.ToLower().Contains(alias)).Take(30).ToList();
             return Generator.GenerateArtistsElement(list);
+        }
+
+        [HttpPost]
+        public void ShowNotiWarning([FromForm] string noti)
+        {
+            this.MessageContainer().AddFlashMessage(noti, ToastMessageType.Warning);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
