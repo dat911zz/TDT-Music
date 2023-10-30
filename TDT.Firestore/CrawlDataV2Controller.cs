@@ -6,6 +6,7 @@ using TDT.Core.Helper;
 using TDT.Core.Ultils;
 using TDT.Core.Helper.Firestore;
 using System.Linq;
+using TDT.Core.DTO.Firestore;
 
 namespace TDT.Firestore
 {
@@ -137,6 +138,16 @@ namespace TDT.Firestore
         //        {
         //            await FirestoreService.Instance.SetAsync< Core.DTO.Firestore.LyricDTO >("Lyric", lyric.encodeId, lyric);
         //        }
+        //    }
+        //}
+
+        //public async Task UpdateDataTypeSong()
+        //{
+        //    List<SongDTO> songs = FirestoreService.Instance.Gets<SongDTO>("Song");
+        //    foreach (SongDTO song in songs)
+        //    {
+        //        ModelUpdate.Song songUpdate = ConvertService.Instance.ConvertUpdateType(song);
+        //        await FirestoreService.Instance.SetAsync("Song", song.encodeId, songUpdate);
         //    }
         //}
     }

@@ -119,6 +119,8 @@ getIsRepeatOne();
 var mouse_down = false;
 var down_newTime = 0;
 
+var noti = false;
+
 prevButton.onclick = () => changeMusic("prev");
 nextButton.onclick = () => changeMusic();
 
@@ -347,8 +349,15 @@ const changeMusic = (type = "next") => {
     }
     if (index < songs.length) {
         if (songs[index].Src == "") {
+            if (noti) {
+                SendNotiWarning("Vui lòng nâng cấp Premium để được trải nghiệm");
+                noti = false;
+            }
             changeMusic("next");
             return;
+        }
+        else {
+            noti = false;
         }
         player.src = songs[index].Src;
         info_imgsong.src = songs[index].Thumbnail;
@@ -397,15 +406,6 @@ function checkShowPlayer(type = "init") {
         }
     });
 }
-$(document).ready(function () {
-    start();
-    $('.player-controls__container .media div, .player-controls__container .level-item, .player-controls__player-bar').click(function (e) {
-        e.stopPropagation();
-    });
-    $('.player-controls__container').click(function () {
-        redirectPlaylist(); 
-    });
-});
 
 function changeIconActionPlay() {
     var icon = $('.header-thumbnail i.action-play')
@@ -425,33 +425,6 @@ function changeIconActionPlay() {
         $('button.btn-play-all').html(`<i class="icon ic-pause"></i><span>Tạm dừng</span>`);
     }
 }
-
-var setFirst = false;
-$('button.btn-play-all').click(function () {
-    if (!setFirst) {
-        var arrId = [];
-        $('div[data-id]').each(function (index, item) {
-            arrId.push($(item).data('id'));
-        });
-        playPauseButton.innerHTML = icon_await;
-        $.ajax({
-            type: "POST",
-            url: "/Player/SetSrc",
-            data: {
-                list: arrId
-            },
-            success: function () {
-                actionButton();
-            }
-        });
-        setFirst = true;
-        setCurPlaylist();
-    }
-    else {
-        $(playPauseButton).trigger('click');
-    }
-});
-
 function actionButton() {
     if (player.paused) {
         checkShowPlayer("cur");
@@ -591,14 +564,56 @@ function sortHtmlPlaylist(arrId) {
     });
 }
 
+$(document).ready(function () {
+    start();
+    $('.player-controls__container .media div, .player-controls__container .level-item, .player-controls__player-bar').click(function (e) {
+        e.stopPropagation();
+    });
+    $('.player-controls__container').click(function () {
+        redirectPlaylist();
+    });
+});
+
+var setFirst = false;
+$('button.btn-play-all').click(function () {
+    if (!setFirst) {
+        var arrId = [];
+        $('div[data-id]').each(function (index, item) {
+            arrId.push($(item).data('id'));
+        });
+        playPauseButton.innerHTML = icon_await;
+        $.ajax({
+            type: "POST",
+            url: "/Player/SetSrc",
+            data: {
+                list: arrId
+            },
+            success: function () {
+                actionButton();
+            }
+        });
+        setFirst = true;
+        setCurPlaylist();
+    }
+    else {
+        $(playPauseButton).trigger('click');
+    }
+});
+
 function setEvent() {
     $('.select-item button.action-play').each(function (i, item) {
         $(item).click(function () {
-            var parent = $(this).parents('.select-item');
+            playPauseButton.innerHTML = icon_await;
+            var parent = $(item).parents('.select-item');
             var iParent = parseInt(parent.attr("data-index"));
-            console.log(iParent)
-            if (songs[iParent].Src == "") {
-                SendNotiWarning("Vui lòng nâng cấp Premium để được trải nghiệm");
+            index = iParent;
+            setCurIndex(index);
+            noti = true;
+            if (!setFirst) {
+                $('button.btn-play-all').trigger('click');
+            }
+            else {
+                changeMusic("cur");
             }
         });
     })
