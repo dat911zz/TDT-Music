@@ -20,6 +20,7 @@ using TDT.Core.Enums;
 
 namespace TDT.CAdmin.Controllers
 {
+    [AllowAnonymous]
     public class AuthController : Controller
     {
         private readonly ILogger<AuthController> _logger;

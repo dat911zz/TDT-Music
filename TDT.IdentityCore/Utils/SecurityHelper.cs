@@ -8,8 +8,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using TDT.Core.DTO;
+using TDT.Core.Extensions;
 using TDT.Core.Models;
+using TDT.Core.Ultils;
 
 namespace TDT.IdentityCore.Utils
 {
@@ -24,6 +28,8 @@ namespace TDT.IdentityCore.Utils
         private static readonly int SALT_SIZE = 32;
         private static readonly int ITERATIONS = 3000;
         private readonly IConfiguration _cfg;
+        public static Dictionary<string, PermissionDTO> permDic = new Dictionary<string, PermissionDTO>();
+
         public SecurityHelper(IConfiguration cfg)
         {
             _cfg = cfg;
@@ -160,6 +166,54 @@ namespace TDT.IdentityCore.Utils
             catch (Exception ex)
             {               
                 return null;
+            }
+        }
+        private static readonly object _lock = new object();
+        public static void GetCurrentPermissions(HttpContext context)
+        {
+            try
+            {
+                new Thread(async () =>
+                {
+                    ResponseDataDTO<RoleDTO> resRole = APICallHelper.Get<ResponseDataDTO<RoleDTO>>(
+                        $"UserRole/{context.User.Identity.Name}",
+                                token: context.User.GetToken()).Result;
+                    
+                    if (resRole.Data != null && resRole.Data.Count > 0)
+                    {
+                        foreach (var role in resRole.Data)
+                        {
+                            try
+                            {
+                                ResponseDataDTO<PermissionDTO> resPerm = await APICallHelper.Get<ResponseDataDTO<PermissionDTO>>(
+                                $"RolePermission/{role.Id}",
+                                    token: context.User.GetToken());
+                                lock (_lock)
+                                {
+                                    if (resPerm.Data != null && resPerm.Data.Count > 0)
+                                    {
+                                        foreach (var perm in resPerm.Data)
+                                        {
+                                            if (!permDic.ContainsKey(perm.Name))
+                                            {
+                                                permDic.Add(perm.Name, perm);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                
+                            }                       
+                        }
+                    }
+                }).Start();
+            }
+            catch (Exception ex)
+            {
+
+
             }
         }
     }

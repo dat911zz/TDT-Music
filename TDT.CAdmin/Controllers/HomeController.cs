@@ -33,41 +33,18 @@ namespace TDT.CAdmin.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-        }
-		
-		public async Task<IActionResult> Index()
-        {
-            #region Import actions to permission if newer
-            //try
-            //{
-            //    var allActions = Assembly.GetExecutingAssembly().GetAllControllerAction();
-            //    ResponseDataDTO<PermissionDTO> permissionRes = APICallHelper.Get<ResponseDataDTO<PermissionDTO>>("Permission", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
 
-            //    foreach (var action in allActions)
-            //    {
-            //        var perm = action.ActionType.Split('.')[3] + "_" + action.Name;
-
-            //        if (!permissionRes.Data.Any(p => p.Name.Equals(perm)))
-            //        {
-            //            ResponseDataDTO<PermissionDTO> roleDetail = APICallHelper.Post<ResponseDataDTO<PermissionDTO>>(
-            //               $"Permission",
-            //               token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
-            //               requestBody: JsonConvert.SerializeObject(new Permission()
-            //               {
-            //                   Name = perm,
-            //                   Description = "Quyền truy cập vào action " + perm
-            //               })
-            //               ).Result;
-            //        }
-
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw;
-            //}
+            #region Load all data if newer
+            DataBindings.Instance.LoadDataFromAPI(HttpContext, _logger);
             #endregion
+        }
+
+        public IActionResult Index()
+        {
+            
             _logger.LogInformation("Start session");
+            SecurityHelper.GetCurrentPermissions(HttpContext);
+
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("NotifyUpdate")))
             {
                 this.MessageContainer().AddMessage(
@@ -93,6 +70,7 @@ namespace TDT.CAdmin.Controllers
             //ResponseDataDTO<User> res = APICallHelper.Get<ResponseDataDTO<User>>($"user/{pUser}", token: auth.Token).Result;
             return View();
         }
+        [Authorize(Policy = "UserPolicy")]
         public IActionResult Privacy()
         {
             return View();
@@ -103,6 +81,10 @@ namespace TDT.CAdmin.Controllers
         public IActionResult Error(int statusCode, string msg = "Có lỗi đã xảy ra!")
         {
             ViewBag.ErrorCode = statusCode != 0 ? statusCode : 404;
+            if (statusCode == 401)
+            {
+                msg = "Truy cập bị từ chối!";
+            }
             ViewBag.ErrorContent = msg;
             return View();
         }

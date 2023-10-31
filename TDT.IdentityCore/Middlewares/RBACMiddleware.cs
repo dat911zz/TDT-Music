@@ -1,13 +1,20 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Google.Api;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TDT.Core.DTO;
+using TDT.Core.Extensions;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
 using TDT.IdentityCore.Utils;
@@ -32,8 +39,9 @@ namespace TDT.IdentityCore.Middlewares
                     await context.SignOutAsync();
                 }
             }
-          
+            
             await _next(context);
         }
+        
     }
 }

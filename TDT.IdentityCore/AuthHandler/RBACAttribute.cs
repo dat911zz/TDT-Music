@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -44,6 +45,9 @@ namespace TDT.CAdmin.Filters
                         await fillterContext.HttpContext.SignOutAsync();
                     }
                 }
+                string actionName = fillterContext.RouteData.Values["action"].ToString();
+                string controllerName = fillterContext.RouteData.Values["controller"].ToString();
+
                 // authorization
                 //var user = (User)context.HttpContext.Items["User"];
                 //if (user == null)

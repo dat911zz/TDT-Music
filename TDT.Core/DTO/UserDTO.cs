@@ -27,7 +27,7 @@ namespace TDT.Core.DTO
 
         private int _AccessFailedCount;
 
-        private System.DateTime _CreateDate;
+        private System.DateTime? _CreateDate;
         public Guid Id { get => _Id; set => _Id = value; }
         [Display(Name = "Tên đăng nhập")]
         [Required(ErrorMessage = "Vui lòng nhập tên đăng nhập!")]
@@ -49,6 +49,6 @@ namespace TDT.Core.DTO
         public DateTimeOffset? LockoutEnd { get => _LockoutEnd; set => _LockoutEnd = value; }
         public bool LockoutEnabled { get => _LockoutEnabled; set => _LockoutEnabled = value; }
         public int AccessFailedCount { get => _AccessFailedCount; set => _AccessFailedCount = value; }
-        public DateTime CreateDate { get => _CreateDate; set => _CreateDate = value; }
+        public DateTime? CreateDate { get => _CreateDate; set => _CreateDate = value; }
     }
 }
