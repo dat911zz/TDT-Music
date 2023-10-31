@@ -1,4 +1,5 @@
-﻿@using TDT.Site.Services
+﻿@using TDT.Core.Extensions;
+@using TDT.Site.Services
 @using TDT.Core.ServiceImp
 @{
     var user = Context.User.Identity.Name == null ? "" : Context.User.Identity.Name;
@@ -13,6 +14,11 @@
     <meta name="description" content="Music">
     <meta name="keywords" content="">
     <link rel="shortcut icon" href="~/image/logo_TDT_Devil-circle.png" type="image/x-icon" />
+    <style>
+        #body-scroll {
+            scroll-behavior: smooth;
+        }
+    </style>
 
     @*<link rel="stylesheet" type="text/css" href="~/css/fonts.css">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -35,7 +41,7 @@
     <link rel="stylesheet" href="~/css/zplayer.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
-
+    @Html.AddSharedCSS("css/HoldOn.css")
     <style>
         .modal-content .close-btn {
             cursor:pointer;
@@ -391,16 +397,7 @@
             </header>
             <div class="zm-box zm-mainpage">
                 <div style="position: relative; overflow: hidden; width: 100%; height: 100%">
-                    <main class="zm-section" id="body-scroll" style="
-                position: absolute;
-                inset: 0px;
-                overflow: hidden scroll;
-                margin-right: -6px;
-                margin-bottom: 0px;
-              ">
-                        @RenderBody()
-                        <div id="zmp3_Player_Overlay" class="mar-b-30" style="bottom: 90px;"></div>
-                    </main>
+                    @RenderBody()
                     <div class="track-horizontal" style="
                 position: absolute;
                 height: 6px;
@@ -587,7 +584,6 @@
                             </div>
                         </div>
                     </div>
-                    <div id="cur_link_playlist" style="width:100%; height:100%;"></div>
                 </div>
             </div>
         </div>
@@ -612,8 +608,7 @@
         </div>
     </div>
 
-    @RenderBody()
-
+    @Html.AddSharedScript("js/HoldOn.js")
     <script type="text/javascript" src="~/js/plugins/player/tdt-player.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @*<script src="~/lib/jquery/dist/jquery.min.js"></script>

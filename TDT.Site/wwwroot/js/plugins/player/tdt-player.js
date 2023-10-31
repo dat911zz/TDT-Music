@@ -80,6 +80,8 @@
 `;
 const icon_play = `<i class="icon ic-play-circle-outline"></i>`;
 const icon_pause = `<i class="icon ic-pause-circle-outline"></i>`;
+const icon_action_play = `<i class="icon action-play ic-play"></i>`;
+const icon_action_gif = `<i class="icon action-play ic-gif-playing-white"></i>`;
 const icon_repeat = `<i class="icon ic-repeat"></i>`;
 const icon_repeatone = `<i class="icon ic-repeat-one"></i>`;
 
@@ -179,6 +181,15 @@ function setIconRepeate() {
 
 function start() {
     changeMusic("init");
+    getCurTime();
+    sleep(1000).then(() => {
+        getIsPlaying();
+    });
+    if (index !== undefined) {
+        sleep(3000).then(() => {
+            changeIconActionPlay();
+        });
+    }
 }
 
 playPauseButton.onclick = () => playPause();
@@ -189,9 +200,11 @@ const playPause = () => {
     }
     if (player.paused) {
         player.play();
-        playPauseButton.innerHTML = icon_pause;        
+        playPauseButton.innerHTML = icon_pause; 
+        setIsPlaying(true);
     } else {
         player.pause();
+        setIsPlaying(false);
         playPauseButton.innerHTML = icon_play;
     }
     changeIconActionPlay();
@@ -202,7 +215,11 @@ player.onended = () => changeMusic();
 
 const updateTime = () => {
     if (playPauseButton.querySelector('.lds-spinner')) {
-        setIconPlay();
+        //setIconPlay();
+        changeIconActionPlay();
+    }
+    if (!player.paused) {
+        setCurTime(player.currentTime);
     }
     const currentMinutes = Math.floor(player.currentTime / 60);
     const currentSeconds = Math.floor(player.currentTime % 60);
@@ -320,7 +337,7 @@ const changeMusic = (type = "next") => {
                 }
                 else {
                     player.pause();
-                    setIconPlay();
+                    //setIconPlay();
                 }
             }
             else {
@@ -334,7 +351,7 @@ const changeMusic = (type = "next") => {
                 }
                 else {
                     player.pause();
-                    setIconPlay();
+                    //setIconPlay();
                 }
             }
             else {
@@ -350,7 +367,7 @@ const changeMusic = (type = "next") => {
     if (index < songs.length) {
         if (songs[index].Src == "") {
             if (noti) {
-                SendNotiWarning("Vui lòng nâng cấp Premium để được trải nghiệm");
+                toastr.warning("Vui lòng nâng cấp Premium để được trải nghiệm");
                 noti = false;
             }
             changeMusic("next");
@@ -364,6 +381,7 @@ const changeMusic = (type = "next") => {
         info_nameSong.innerHTML = songs[index].Name;
         info_nameArtist.innerHTML = songs[index].Artists;
         info_urlAlbum.href = songs[index].UrlPlaylist;
+        changeIconActionPlay();
     }
     //musicName.innerHTML = songs[index].name;
     if (type !== "init")
@@ -408,8 +426,17 @@ function checkShowPlayer(type = "init") {
 }
 
 function changeIconActionPlay() {
-    var icon = $('.header-thumbnail i.action-play')
+    var icon = $('.header-thumbnail i.action-play');
+    $('.select-item .list-item.active').removeClass('active');
+    $('.select-item .list-item i.action-play.ic-gif-playing-white').removeClass('ic-gif-playing-white').addClass('ic-play');
+    $('.select-item[data-index=' + index + '] .list-item').addClass('active');
+    let curElement = $('.select-item[data-index=' + index + ']');
+    if (curElement.length > 0) {
+        $('#body-scroll').scrollTop(curElement.position().top - 150);
+    }
     if (player.paused) {
+        playPauseButton.innerHTML = icon_play;
+        $('.select-item[data-index=' + index + '] button.action-play').html(icon_action_play);
         icon.addClass('ic-svg-play-circle');
         icon.removeClass('ic-gif-playing-white');
         if (!setFirst) {
@@ -420,6 +447,8 @@ function changeIconActionPlay() {
         }
     }
     else {
+        playPauseButton.innerHTML = icon_pause;
+        $('.select-item[data-index=' + index + '] button.action-play').html(icon_action_gif);
         icon.addClass('ic-gif-playing-white');
         icon.removeClass('ic-svg-play-circle');
         $('button.btn-play-all').html(`<i class="icon ic-pause"></i><span>Tạm dừng</span>`);
@@ -449,6 +478,24 @@ function setCurIndex(index) {
         url: "/Player/SetCurIndex",
         data: {
             index: index
+        }
+    });
+}
+
+function getCurTime() {
+    $.ajax({
+        url: "/Player/GetCurTime",
+        success: function (data) {
+            player.currentTime = data;
+        }
+    });
+}
+function setCurTime(time) {
+    $.ajax({
+        type: "POST",
+        url: "/Player/SetCurTime",
+        data: {
+            time: time.toString().replace('.', ',')
         }
     });
 }
@@ -504,6 +551,25 @@ function setIsRepeatOne(value) {
     $.ajax({
         type: "POST",
         url: "/Player/SetIsRepeatOne",
+        data: {
+            value: value
+        }
+    });
+}
+function getIsPlaying() {
+    $.ajax({
+        url: "/Player/GetIsPlaying",
+        success: function (data) {
+            if (data) {
+                playPause();
+            }
+        }
+    });
+}
+function setIsPlaying(value) {
+    $.ajax({
+        type: "POST",
+        url: "/Player/SetIsPlaying",
         data: {
             value: value
         }
@@ -601,6 +667,12 @@ $('button.btn-play-all').click(function () {
 });
 
 function setEvent() {
+    var headerNoCheck = `
+        <div class="sort-wrapper"><div class="zm-dropdown zm-group-dropdown mar-r-10"><div class="zm-dropdown-trigger-btn"><button class="zm-btn button" tabindex="0"><i class="icon ic-24-Sort"></i></button></div><div class="zm-dropdown-content"><div class="zm-dropdown-list-item">Mặc định</div><div class="zm-dropdown-list-item">Tên bài hát (A-Z)</div><div class="zm-dropdown-list-item">Tên ca sĩ (A-Z)</div><div class="zm-dropdown-list-item">Tên Album (A-Z)</div></div></div><div class="column-text">Bài hát</div></div>
+    `;
+    var headerCheck = `
+        <div class="actions"><label class="checkbox"><input type="checkbox"></label><button class="zm-btn action-btn add-queue-btn button" tabindex="0"><i class="icon ic-add-play-now"></i><span>Thêm vào danh sách phát</span></button><div id="select-menu-id" class="more-btn-wrapper"><button class="zm-btn action-btn more-btn button" tabindex="0"><i class="icon ic-more"></i></button></div></div>
+    `;
     $('.select-item button.action-play').each(function (i, item) {
         $(item).click(function () {
             playPauseButton.innerHTML = icon_await;
@@ -616,5 +688,23 @@ function setEvent() {
                 changeMusic("cur");
             }
         });
-    })
+    });
+    $('input[type=checkbox]').click(function () {
+        var allCheckbox = $('input[type=checkbox]');
+        if ($(this).is(':checked')) {
+            $(this).parents().closest('.select-item').addClass('is-selected');
+        }
+        else {
+            $(this).parents().closest('.select-item').removeClass('is-selected');
+        }
+        var isChecked = allCheckbox.is(function () { return $(this).is(':checked'); });
+        if (isChecked) {
+            $('.song-list-select').addClass('isChecked');
+            $('.song-list-select .select-header > .media-left').html(headerCheck);
+        }
+        else {
+            $('.song-list-select').removeClass('isChecked');
+            $('.song-list-select .select-header > .media-left').html(headerNoCheck);
+        }
+    });
 }

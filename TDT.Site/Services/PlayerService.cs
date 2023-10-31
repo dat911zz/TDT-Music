@@ -28,7 +28,9 @@ namespace TDT.Site.Services
         public static bool IsShuffle = false;
         public static bool IsRepeat = false;
         public static bool IsRepeatOne = false;
+        public static bool IsPlaying = false;
         public static string CurUrl = "";
+        public static double CurTime = 0;
 
         private static Dictionary<string, Player> players = new Dictionary<string, Player>();
         #endregion

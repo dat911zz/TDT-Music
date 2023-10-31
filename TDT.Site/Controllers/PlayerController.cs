@@ -57,6 +57,16 @@ namespace TDT.Site.Controllers
         public void SetCurIndex([FromForm] int index)
         {
             PlayerService.CurIndex = index;
+            PlayerService.CurTime = 0;
+        }
+        public double GetCurTime()
+        {
+            return PlayerService.CurTime;
+        }
+        [HttpPost]
+        public void SetCurTime([FromForm] double time)
+        {
+            PlayerService.CurTime = time;
         }
 
         public bool GetIsShuffle()
@@ -86,6 +96,15 @@ namespace TDT.Site.Controllers
         public void SetIsRepeatOne([FromForm] bool value)
         {
             PlayerService.IsRepeatOne = value;
+        }
+        public bool GetIsPlaying()
+        {
+            return PlayerService.IsPlaying;
+        }
+        [HttpPost]
+        public void SetIsPlaying([FromForm] bool value)
+        {
+            PlayerService.IsPlaying = value;
         }
 
         public string GetCurUrl()
