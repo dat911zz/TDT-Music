@@ -77,17 +77,17 @@ namespace TDT.Core.Helper
                         }
                         else if (t == typeof(Int64))
                         {
-                            try
-                            {
-                                someObjectType
-                                 .GetProperty(item.Key)
-                                 .SetValue(res, int.Parse(item.Value.ToString()), null);
-                            }
-                            catch
+                            if(item.Value.ToString().Length > int.MaxValue.ToString().Length)
                             {
                                 someObjectType
                                  .GetProperty(item.Key)
                                  .SetValue(res, long.Parse(item.Value.ToString()), null);
+                            }
+                            else
+                            {
+                                someObjectType
+                                 .GetProperty(item.Key)
+                                 .SetValue(res, int.Parse(item.Value.ToString()), null);
                             }
                         }
                         else
