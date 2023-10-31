@@ -67,7 +67,7 @@ namespace TDT.Core.Helper
                 {
                     iStartArr++;
                     SongDTO itemCheck = arrSong[j];
-                    if (!releaseDate.Equals(itemCheck.releaseDate) || (releaseDate.Equals(itemCheck.releaseDate) && !res_s.Select(x => x.thumbnail).Contains(itemCheck.thumbnail)))
+                    if (!releaseDate.Equals(itemCheck.releaseDate) || (releaseDate.Equals(itemCheck.releaseDate)))
                     {
                         res_s.Add(itemCheck);
                         count++;
@@ -106,7 +106,7 @@ namespace TDT.Core.Helper
                 {
                     iStartArr++;
                     SongDTO itemCheck = arrSong[j];
-                    if (!releaseDate.Equals(itemCheck.releaseDate) || (releaseDate.Equals(itemCheck.releaseDate) && !res_s.Select(x => x.thumbnail).Contains(itemCheck.thumbnail)))
+                    if (!releaseDate.Equals(itemCheck.releaseDate) || (releaseDate.Equals(itemCheck.releaseDate)))
                     {
                         res_s.Add(itemCheck);
                         count++;
