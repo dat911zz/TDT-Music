@@ -13,7 +13,7 @@ namespace TDT.Site.Controllers
     {
         public bool CheckShowPlayer()
         {
-            return PlayerService.GetPlayers().Count > 0;
+            return !PlayerService.StackIsEmpty();
         }
         public string GetSrc()
         {
@@ -21,14 +21,25 @@ namespace TDT.Site.Controllers
         }
 
         [HttpPost]
-        public void SetSrc([FromForm] string[] list)
+        public void SetSrc([FromForm] string[] list, int? index = null, string id = null)
         {
             PlayerService.SetPlayer(list.ToList());
+            if(index != null && !string.IsNullOrEmpty(id))
+            {
+                PlayerService.ChoosePlayer((int)index, id);
+            }
         }
+        [HttpPost]
+        public void ChoosePlayer([FromForm] int index, string id)
+        {
+            PlayerService.ChoosePlayer(index, id);
+        }
+
         [HttpPost]
         public string GetSrc([FromForm] string[] list)
         {
             Dictionary<string, Player> temp = new Dictionary<string, Player>();
+            int i = 0;
             foreach (string songId in list)
             {
                 if (temp.ContainsKey(songId))
@@ -39,6 +50,7 @@ namespace TDT.Site.Controllers
                     temp.Add(song.encodeId, new Player
                     {
                         Id = song.encodeId,
+                        Index = i++,
                         Name = song.title,
                         Thumbnail = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail),
                         Src = DataHelper.GetMP3(song.encodeId),
@@ -47,6 +59,17 @@ namespace TDT.Site.Controllers
                 }
             }
             return JsonConvert.SerializeObject(temp.Values.ToList());
+        }
+
+        [HttpPost]
+        public JsonResult ChangeMusic([FromForm] string type)
+        {
+            Player player = PlayerService.ChangeMusic(type);
+            if(player == null)
+            {
+                return new JsonResult("");
+            }
+            return new JsonResult(JsonConvert.SerializeObject(player));
         }
 
         public int GetCurIndex()
@@ -77,6 +100,7 @@ namespace TDT.Site.Controllers
         public void SetIsShuffle([FromForm] bool value)
         {
             PlayerService.IsShuffle = value;
+            PlayerService.ShuffleStack();
         }
 
         public bool GetIsRepeat()
@@ -109,12 +133,12 @@ namespace TDT.Site.Controllers
 
         public string GetCurUrl()
         {
-            return PlayerService.CurUrl;
+            return PlayerService.UrlStack;
         }
         [HttpPost]
         public void SetCurUrl([FromForm] string url)
         {
-            PlayerService.CurUrl = url;
+            PlayerService.UrlStack = url;
         }
     }
 }

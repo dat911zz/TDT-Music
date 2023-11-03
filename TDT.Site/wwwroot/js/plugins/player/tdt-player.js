@@ -108,8 +108,9 @@ const info_nameArtist = document.querySelector(".player-controls__container .med
 
 //import songs from "./songs.js";
 var songs = [];
-let index = 0;
-getCurIndex();
+var cur_song = undefined;
+var url_stack = undefined;
+
 var isInit = false;
 var isShuffle = false;
 getIsShuffle()
@@ -181,11 +182,12 @@ function setIconRepeate() {
 
 function start() {
     changeMusic("init");
+    setUrlStack();
     getCurTime();
     sleep(1000).then(() => {
         getIsPlaying();
     });
-    if (index !== undefined) {
+    if (cur_song !== undefined) {
         sleep(3000).then(() => {
             changeIconActionPlay();
         });
@@ -317,76 +319,57 @@ volumeButton.onclick = function () {
     }
 };
 
-
-const changeMusic = (type = "next") => {
-    if (type !== "init" && type !== "cur") {
-        if (isRepeatOne) {
-            index = index;
+function importSong(type) {
+    if (cur_song != undefined) {
+        if (!PlayerShowing) {
+            showPlayer();
         }
-        else if (isShuffle) {
-            var cur = index;
-            while (cur == index) {
-                cur = Math.floor(Math.random() * songs.length);
-            }
-            index = cur;
-        }
-        else if (type == "next") {
-            if (index + 1 == songs.length) {
-                if (isRepeat) {
-                    index = 0;
+        if (cur_song != undefined) {
+            if (cur_song.Src == "") {
+                if (noti) {
+                    toastr.warning("Vui lòng nâng cấp Premium để được trải nghiệm");
+                    noti = false;
                 }
-                else {
-                    player.pause();
-                    //setIconPlay();
-                }
+                changeMusic("next");
+                return;
             }
             else {
-                index += 1;
-            }
-        }
-        else if (type == "prev") {
-            if (index - 1 < 0) {
-                if (isRepeat) {
-                    index = songs.length - 1;
-                }
-                else {
-                    player.pause();
-                    //setIconPlay();
-                }
-            }
-            else {
-                index -= 1;
-            }
-        }
-        setCurIndex(index);
-    }
-    playPauseButton.innerHTML = icon_await;
-    if (index == undefined) {
-        index = 0;
-    }
-    if (index < songs.length) {
-        if (songs[index].Src == "") {
-            if (noti) {
-                toastr.warning("Vui lòng nâng cấp Premium để được trải nghiệm");
                 noti = false;
             }
-            changeMusic("next");
-            return;
+            player.src = cur_song.Src;
+            info_imgsong.src = cur_song.Thumbnail;
+            info_nameSong.innerHTML = cur_song.Name;
+            info_nameArtist.innerHTML = cur_song.Artists;
+            info_urlAlbum.href = cur_song.UrlPlaylist;
+            changeIconActionPlay();
         }
-        else {
-            noti = false;
-        }
-        player.src = songs[index].Src;
-        info_imgsong.src = songs[index].Thumbnail;
-        info_nameSong.innerHTML = songs[index].Name;
-        info_nameArtist.innerHTML = songs[index].Artists;
-        info_urlAlbum.href = songs[index].UrlPlaylist;
-        changeIconActionPlay();
+        if (type !== "init")
+            playPause();
+        updateTime();
     }
-    //musicName.innerHTML = songs[index].name;
-    if (type !== "init")
-        playPause();
-    updateTime();
+    else {
+        showPlayer(false);
+    }
+}
+
+const changeMusic = (type = "next") => {
+    playPauseButton.innerHTML = icon_await;
+    $.ajax({
+        type: "POST",
+        url: "/Player/ChangeMusic?=" + type,
+        data: {
+            type: type
+        },
+        success: function (data) {
+            if (data == '') {
+                cur_song = undefined;
+            }
+            else {
+                cur_song = JSON.parse(data);
+            }
+            importSong(type);
+        }
+    });
 };
 
 function setIconPlay() {
@@ -398,28 +381,31 @@ function setIconPlay() {
     }
 }
 
-function checkShowPlayer(type = "init") {
+var PlayerShowing = false;
+function showPlayer(show = true) {
     var layout = $('#root .zm-layout:first');
     var cover = $('.now-playing-bar');
+    if (show) {
+        layout.addClass("has-player");
+        cover.show();
+        PlayerShowing = true;
+    }
+    else {
+        cover.hide();
+        layout.removeClass("has-player");
+        PlayerShowing = false;
+    }
+}
+function checkShowPlayer(type = "init") {
     $.ajax({
         url: "/Player/CheckShowPlayer",
         success: function (data) {
             if (data) {
-                layout.addClass("has-player");
-                cover.show();
-                $.ajax({
-                    url: "/Player/GetSrc",
-                    success: function (data) {
-                        if (data != '') {
-                            songs = [];
-                            songs = JSON.parse(data);
-                            changeMusic(type);
-                        }
-                    }
-                });
+                showPlayer(true);
+                changeMusic(type);
             }
             else {
-                cover.hide();
+                showPlayer(false);
             }
         }
     });
@@ -429,29 +415,35 @@ function changeIconActionPlay() {
     var icon = $('.header-thumbnail i.action-play');
     $('.select-item .list-item.active').removeClass('active');
     $('.select-item .list-item i.action-play.ic-gif-playing-white').removeClass('ic-gif-playing-white').addClass('ic-play');
-    $('.select-item[data-index=' + index + '] .list-item').addClass('active');
-    let curElement = $('.select-item[data-index=' + index + ']');
-    if (curElement.length > 0) {
-        $('#body-scroll').scrollTop(curElement.position().top - 150);
-    }
-    if (player.paused) {
-        playPauseButton.innerHTML = icon_play;
-        $('.select-item[data-index=' + index + '] button.action-play').html(icon_action_play);
-        icon.addClass('ic-svg-play-circle');
-        icon.removeClass('ic-gif-playing-white');
-        if (!setFirst) {
-            $('button.btn-play-all').html(`<i class="icon ic-play"></i><span>Phát tất cả</span>`);
+    if (cur_song != undefined && $('.select-item[data-index=' + cur_song.Index + '][data-id=' + cur_song.Id + '] .list-item').length > 0) { 
+        $('.select-item[data-index=' + cur_song.Index + '][data-id=' + cur_song.Id + '] .list-item').addClass('active');
+        let curElement = $('.select-item[data-index=' + cur_song.Index + '][data-id=' + cur_song.Id + ']');
+        if (curElement.length > 0) {
+            $('#body-scroll').scrollTop(curElement.position().top - 150);
+        }
+        if (player.paused) {
+            playPauseButton.innerHTML = icon_play;
+            $('.select-item[data-index=' + cur_song.Index + '][data-id=' + cur_song.Id + '] button.action-play').html(icon_action_play);
+            if (url_stack == window.location.href) {
+                icon.addClass('ic-svg-play-circle');
+                icon.removeClass('ic-gif-playing-white');
+                if (!setFirst) {
+                    $('button.btn-play-all').html(`<i class="icon ic-play"></i><span>Phát tất cả</span>`);
+                }
+                else {
+                    $('button.btn-play-all').html(`<i class="icon ic-play"></i><span>Tiếp tục phát</span>`);
+                }
+            }
         }
         else {
-            $('button.btn-play-all').html(`<i class="icon ic-play"></i><span>Tiếp tục phát</span>`);
+            playPauseButton.innerHTML = icon_pause;
+            $('.select-item[data-index=' + cur_song.Index + '][data-id=' + cur_song.Id + '] button.action-play').html(icon_action_gif);
+            if (url_stack == window.location.href) {
+                icon.addClass('ic-gif-playing-white');
+                icon.removeClass('ic-svg-play-circle');
+                $('button.btn-play-all').html(`<i class="icon ic-pause"></i><span>Tạm dừng</span>`);
+            }
         }
-    }
-    else {
-        playPauseButton.innerHTML = icon_pause;
-        $('.select-item[data-index=' + index + '] button.action-play').html(icon_action_gif);
-        icon.addClass('ic-gif-playing-white');
-        icon.removeClass('ic-svg-play-circle');
-        $('button.btn-play-all').html(`<i class="icon ic-pause"></i><span>Tạm dừng</span>`);
     }
 }
 function actionButton() {
@@ -468,7 +460,7 @@ function getCurIndex() {
     $.ajax({
         url: "/Player/GetCurIndex",
         success: function (data) {
-            index = data;
+            //index = data;
         }
     });
 }
@@ -576,27 +568,28 @@ function setIsPlaying(value) {
     });
 }
 
-function redirectPlaylist() {
+function setUrlStack() {
     $.ajax({
         url: "/Player/GetCurUrl",
         success: function (data) {
-            window.location = data;
+            url_stack = data;
         }
     });
 }
 function setCurPlaylist() {
+    url_stack = window.location.href;
     $.ajax({
         type: "POST",
         url: "/Player/SetCurUrl",
         data: {
-            url: window.location.href
+            url: url_stack
         }
     });
 }
 
-function getIndexSong(id) {
-    return songs.findIndex(function (item) { return item.Id == id })
-}
+//function getIndexSong(id) {
+//    return songs.findIndex(function (item) { return item.Id == id })
+//}
 
 function sortHtmlPlaylist(arrId) {
     $.ajax({
@@ -636,14 +629,18 @@ $(document).ready(function () {
         e.stopPropagation();
     });
     $('.player-controls__container').click(function () {
-        redirectPlaylist();
+        window.location = url_stack;
     });
 });
 
 var setFirst = false;
+var iSongStart = null;
+var idSongStart = null;
 $('button.btn-play-all').click(function () {
     if (!setFirst) {
+        setFirst = true;
         var arrId = [];
+        setCurPlaylist();
         $('div[data-id]').each(function (index, item) {
             arrId.push($(item).data('id'));
         });
@@ -652,14 +649,14 @@ $('button.btn-play-all').click(function () {
             type: "POST",
             url: "/Player/SetSrc",
             data: {
-                list: arrId
+                list: arrId,
+                index: iSongStart,
+                id: idSongStart
             },
             success: function () {
                 actionButton();
             }
         });
-        setFirst = true;
-        setCurPlaylist();
     }
     else {
         $(playPauseButton).trigger('click');
@@ -677,15 +674,24 @@ function setEvent() {
         $(item).click(function () {
             playPauseButton.innerHTML = icon_await;
             var parent = $(item).parents('.select-item');
-            var iParent = parseInt(parent.attr("data-index"));
-            index = iParent;
-            setCurIndex(index);
+            iSongStart = parseInt(parent.attr("data-index"));
+            idSongStart = parent.attr("data-id");
             noti = true;
             if (!setFirst) {
                 $('button.btn-play-all').trigger('click');
             }
             else {
-                changeMusic("cur");
+                $.ajax({
+                    type: "POST",
+                    url: "/Player/ChoosePlayer",
+                    data: {
+                        index: iSongStart,
+                        id: idSongStart
+                    },
+                    success: function () {
+                        changeMusic("cur");
+                    }
+                });
             }
         });
     });
