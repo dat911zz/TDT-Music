@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,41 +66,40 @@ namespace TDT.CAdmin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(RoleDTO role, IFormCollection frm)
         {
+            ViewBag.perms = DataBindings.Instance.Permissions;
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var perms = frm["RolePerms"].ToList();
+                    var currentPerms = frm["RolePerms"].ToList();
                     if (role.Name == "" || role.Description == "")
                     {
                         this.MessageContainer().AddMessage("Vui lòng điền đẩy đủ thông tin!", ToastMessageType.Warning);
                         return View();
                     }
-                    ResponseDataDTO<RoleDTO> resRole = APICallHelper.Post<ResponseDataDTO<RoleDTO>>(
+                    ResponseDataDTO<int>[] resRole = await Task.WhenAll(APICallHelper.Post<ResponseDataDTO<int>>(
                        $"Role",
                        token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
                        requestBody:JsonConvert.SerializeObject(role)
-                       ).Result;
-
-                    await DataBindings.Instance.LoadRoles(HttpContext.User.GetToken(), _logger, 1000);
-                    if (resRole.Code != APIStatusCode.ActionSucceeded)
+                       ));
+                    int roleId = resRole[0].Data.FirstOrDefault();
+                    await DataBindings.Instance.LoadRoles(HttpContext.User.GetToken(), _logger);
+                    if (resRole[0].Code != APIStatusCode.ActionSucceeded)
                     {
                         //FlashMessage để truyền message từ đây sang action hoặc controller khác
-                        this.MessageContainer().AddMessage(resRole.Msg, ToastMessageType.Error);
-                        ViewBag.roles = DataBindings.Instance.Roles;
+                        this.MessageContainer().AddMessage(resRole[0].Msg, ToastMessageType.Error);
                         return View();
                     }
                     foreach (var perm in DataBindings.Instance.Permissions)
                     {
-                        if (perms.Any(r => r.Equals(role.Id.ToString())))
+                        if (currentPerms.Any(c => perm.Id.ToString().Equals(c)))
                         {
                             APIResponseModel resPerm = APICallHelper.Post<APIResponseModel>(
-                            $"RolePermission?roleId={role.Id}&permId={perm.Id}",
+                            $"RolePermission?roleId={roleId}&permId={perm.Id}",
                             token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
-                            if (resRole.Code != APIStatusCode.ActionSucceeded)
+                            if (resRole[0].Code != APIStatusCode.ActionSucceeded)
                             {
-                                this.MessageContainer().AddMessage(resRole.Msg, ToastMessageType.Error);
-                                ViewBag.roles = DataBindings.Instance.Roles;
+                                this.MessageContainer().AddMessage(resRole[0].Msg, ToastMessageType.Error);
                                 return View();
                             }
                         }
@@ -110,13 +110,13 @@ namespace TDT.CAdmin.Controllers
                             token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
                         }
                     }
-                    if (resRole.Code == APIStatusCode.ActionSucceeded)
+                    if (resRole[0].Code == APIStatusCode.ActionSucceeded)
                     {
                         this.MessageContainer().AddFlashMessage("Tạo vai trò thành công!", ToastMessageType.Success);
                     }
                     else
                     {
-                        this.MessageContainer().AddMessage(resRole.Msg, ToastMessageType.Error);
+                        this.MessageContainer().AddMessage(resRole[0].Msg, ToastMessageType.Error);
                         return View();
                     }
 
@@ -126,41 +126,67 @@ namespace TDT.CAdmin.Controllers
             }
             catch
             {
+                //If failed -> delete role
+                this.MessageContainer().AddFlashMessage("Tạo vai trò thất bại!", ToastMessageType.Error);
                 return View();
             }
         }
         public ActionResult Edit(int id)
         {
             ResponseDataDTO<RoleDTO> roleDetail = APICallHelper.Get<ResponseDataDTO<RoleDTO>>($"Role/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
-            ResponseDataDTO<RoleDTO> resPerms = APICallHelper.Get<ResponseDataDTO<RoleDTO>>(
+            ResponseDataDTO<PermissionDTO> resPerms = APICallHelper.Get<ResponseDataDTO<PermissionDTO>>(
             $"RolePermission/{roleDetail.Data.FirstOrDefault().Id}",
                         token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             ViewBag.rolePerms = resPerms.Data;
+            ViewBag.perms = DataBindings.Instance.Permissions;
             return View(roleDetail.Data.FirstOrDefault());
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, RoleDTO role)
+        public ActionResult Edit(int id, RoleDTO role, IFormCollection frm)
         {
             try
             {
+                var perms = frm["UserRoles"].ToList();
+                ViewBag.perms = DataBindings.Instance.Permissions;
+
                 if (ModelState.IsValid)
                 {
-                    ResponseDataDTO<RoleDTO> roleDetail = APICallHelper.Put<ResponseDataDTO<RoleDTO>>(
+                    ResponseDataDTO<RoleDTO> res = APICallHelper.Put<ResponseDataDTO<RoleDTO>>(
                         $"Role/{id}",
                         token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
                         requestBody: JsonConvert.SerializeObject(role)
                         ).Result;
-                    if (roleDetail.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+                    if (res.Code != APIStatusCode.ActionSucceeded)
                     {
-                        this.MessageContainer().AddFlashMessage("Sửa vai trò thành công!", ToastMessageType.Success);
-                    }
-                    else
-                    {
-                        this.MessageContainer().AddMessage(roleDetail.Msg, ToastMessageType.Error);
+                        this.MessageContainer().AddMessage(res.Msg, ToastMessageType.Error);
                         return View();
                     }
-                    return RedirectToAction(nameof(Index));
+                    foreach (var perm in DataBindings.Instance.Permissions)
+                    {
+                        if (perms.Any(r => r.Equals(perm.Id.ToString())))
+                        {
+                            APIResponseModel resRole = APICallHelper.Post<APIResponseModel>(
+                            $"RolePermission?permId={perm.Id}&roleId={role.Id}",
+                            token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+                            if (resRole.Code != APIStatusCode.Exist)
+                            {
+                                if (resRole.Code != APIStatusCode.ActionSucceeded)
+                                {
+                                    this.MessageContainer().AddMessage(resRole.Msg, ToastMessageType.Error);
+                                    return View();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            APIResponseModel resRole = APICallHelper.Delete<APIResponseModel>(
+                            $"RolePermission?permId= {perm.Id}&roleId={role.Id}",
+                            token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+                        }
+                    }
+                    this.MessageContainer().AddFlashMessage($"Đã cập nhật thông tin cho vai trò {role.Name}!", ToastMessageType.Success);
+                    return RedirectToAction("Index");
                 }
                 return View();
             }

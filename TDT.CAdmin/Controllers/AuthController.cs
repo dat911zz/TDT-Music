@@ -57,11 +57,12 @@ namespace TDT.CAdmin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var auth = APICallHelper.Post<AuthDTO>("auth/login?isCadmin=true", new LoginModel()
+                var request = await Task.WhenAll(APICallHelper.Post<AuthDTO>("auth/login?isCadmin=true", new LoginModel()
                 {
                     UserName = model.UserName,
                     Password = model.Password
-                }.ToString()).Result;
+                }.ToString()));
+                var auth = request[0];
                 if (string.IsNullOrEmpty(auth.Token))
                 {
                     ViewBag.Error = new HtmlString(auth.Msg);
@@ -70,6 +71,17 @@ namespace TDT.CAdmin.Controllers
                 var claims = _securityHelper.ValidateToken(auth.Token);
                 var listAddClaim = claims.ToList();
                 listAddClaim.Add(new Claim("token", auth.Token));
+
+                await Task.WhenAll(SecurityHelper.GetCurrentPermissions(model.UserName, auth.Token));
+                if (SecurityHelper.permDic.Count == 0)
+                {
+                    ViewBag.Error = new HtmlString("Tài khoản này không có quyền truy cập vào hệ thống!");
+                    return View();
+                }
+                foreach (var perm in SecurityHelper.permDic)
+                {
+                    listAddClaim.Add(new Claim(perm.Value.Name, "Permission"));
+                }
                 claims = listAddClaim.AsEnumerable();
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var testTime = long.Parse(claims.FirstOrDefault(x => x.Type == "exp").Value);
@@ -83,6 +95,7 @@ namespace TDT.CAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
+            SecurityHelper.permDic.Clear();
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }

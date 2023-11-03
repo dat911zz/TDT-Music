@@ -60,9 +60,10 @@ nav {
 #sidebar > ul > li > a > span.menu-title:hover{
     cursor: default;
 }
-.btn-control a{
+.btn-control a {
     padding: 0 5px 0 5px;
-    font-size: 20px;
+    font-size: 15px;
+    vertical-align: text-bottom;
     text-decoration: none !important;
 }
 .btn-control a div{

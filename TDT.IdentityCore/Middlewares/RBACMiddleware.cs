@@ -34,8 +34,9 @@ namespace TDT.IdentityCore.Middlewares
             if (context.User.Claims.Count() > 0)
             {
                 var time = long.Parse(context.User.FindFirstValue("exp"));
-                if (DateTimeOffset.FromUnixTimeSeconds(time).UtcDateTime <= DateTime.UtcNow)
+                if (DateTimeOffset.FromUnixTimeSeconds(time).UtcDateTime <= DateTime.UtcNow || SecurityHelper.permDic.Count == 0)
                 {
+                    SecurityHelper.permDic.Clear();
                     await context.SignOutAsync();
                 }
             }

@@ -28,7 +28,6 @@ namespace TDT.IdentityCore.Utils
         private static readonly int SALT_SIZE = 32;
         private static readonly int ITERATIONS = 3000;
         private readonly IConfiguration _cfg;
-        public static Dictionary<string, PermissionDTO> permDic = new Dictionary<string, PermissionDTO>();
 
         public SecurityHelper(IConfiguration cfg)
         {
@@ -100,16 +99,15 @@ namespace TDT.IdentityCore.Utils
         /// <returns>JWT</returns>
         public string GenerateJWT(User userInfo, bool isExpr = true, double expr = 120)
         {
-            var listRoleGroup = "";
             var sercurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]));
             var credentials = new SigningCredentials(sercurityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[] {
+            IList<Claim> claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Sub, userInfo.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, userInfo.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Name, userInfo.UserName),
-                new Claim(ClaimTypes.Role, listRoleGroup)
             };
+
             var token = new JwtSecurityToken(
                 _cfg["Jwt:Issuer"],
                 _cfg["Jwt:Audience"],
@@ -169,52 +167,77 @@ namespace TDT.IdentityCore.Utils
             }
         }
         private static readonly object _lock = new object();
-        public static void GetCurrentPermissions(HttpContext context)
+        public static Dictionary<string, PermissionDTO> permDic = new Dictionary<string, PermissionDTO>();
+
+        public static async Task GetCurrentPermissions(string username, string token)
         {
             try
             {
-                new Thread(async () =>
+                ResponseDataDTO<RoleDTO>[] resRole = await Task.WhenAll(APICallHelper.Get<ResponseDataDTO<RoleDTO>>(
+                        $"UserRole/{username}",
+                                token: token));
+
+                if (resRole[0].Data != null && resRole[0].Data.Count > 0)
                 {
-                    ResponseDataDTO<RoleDTO> resRole = APICallHelper.Get<ResponseDataDTO<RoleDTO>>(
-                        $"UserRole/{context.User.Identity.Name}",
-                                token: context.User.GetToken()).Result;
-                    
-                    if (resRole.Data != null && resRole.Data.Count > 0)
+                    foreach (var role in resRole[0].Data)
                     {
-                        foreach (var role in resRole.Data)
+                        try
                         {
-                            try
+                            ResponseDataDTO<PermissionDTO>[] resPerm = await Task.WhenAll(APICallHelper.Get<ResponseDataDTO<PermissionDTO>>(
+                            $"RolePermission/{role.Id}",
+                                token: token));
+                            if (resPerm[0].Data != null && resPerm[0].Data.Count > 0)
                             {
-                                ResponseDataDTO<PermissionDTO> resPerm = await APICallHelper.Get<ResponseDataDTO<PermissionDTO>>(
-                                $"RolePermission/{role.Id}",
-                                    token: context.User.GetToken());
-                                lock (_lock)
+                                foreach (var perm in resPerm[0].Data)
                                 {
-                                    if (resPerm.Data != null && resPerm.Data.Count > 0)
+                                    if (!permDic.ContainsKey(perm.Name))
                                     {
-                                        foreach (var perm in resPerm.Data)
-                                        {
-                                            if (!permDic.ContainsKey(perm.Name))
-                                            {
-                                                permDic.Add(perm.Name, perm);
-                                            }
-                                        }
+                                        permDic.Add(perm.Name, perm);
                                     }
                                 }
                             }
-                            catch (Exception ex)
-                            {
-                                
-                            }                       
+
                         }
+                        catch (Exception ex) { }
                     }
-                }).Start();
+                }
             }
-            catch (Exception ex)
+            catch (Exception ex) { }
+        }
+        public static async Task<Dictionary<string, PermissionDTO>> GetPermissionsAsync(string role, string token)
+        {
+            Dictionary<string, PermissionDTO> permDic = new Dictionary<string, PermissionDTO>();
+
+            try
             {
+                ResponseDataDTO<RoleDTO>[] resRole = await Task.WhenAll(APICallHelper.Get<ResponseDataDTO<RoleDTO>>(
+                        $"Role/GetByName/{role}",
+                                token: token));
 
+                if (resRole[0].Data != null && resRole[0].Data.Count > 0)
+                {
+                    try
+                    {
+                        ResponseDataDTO<PermissionDTO>[] resPerm = await Task.WhenAll(APICallHelper.Get<ResponseDataDTO<PermissionDTO>>(
+                        $"RolePermission/{resRole[0].Data[0].Id}",
+                            token: token));
+                        if (resPerm[0].Data != null && resPerm[0].Data.Count > 0)
+                        {
+                            foreach (var perm in resPerm[0].Data)
+                            {
+                                if (!permDic.ContainsKey(perm.Name))
+                                {
+                                    permDic.Add(perm.Name, perm);
+                                }
+                            }
+                        }
 
+                    }
+                    catch (Exception ex) { }
+                }
             }
+            catch (Exception ex) { }
+            return permDic;
         }
     }
 }

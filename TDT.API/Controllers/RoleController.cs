@@ -59,6 +59,21 @@ namespace TDT.API.Controllers
                     {"data", role}
                 }, "Lấy dữ liệu");
         }
+        [HttpGet("GetByName/{name}")]
+        public IActionResult GetByName(string name)
+        {
+            var role = _db.Roles.Where(u => u.Name.Equals(name)).Select(r => new RoleDTO
+            {
+                Id = r.Id,
+                Name = r.Name,
+                Description = r.Description,
+                CreateDate = r.CreateDate
+            });
+            return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
+                {
+                    {"data", role}
+                }, "Lấy dữ liệu");
+        }
 
         [HttpPost]
         public IActionResult Insert([FromBody] RoleDTO model)
@@ -75,7 +90,18 @@ namespace TDT.API.Controllers
                 role.Description = model.Description;
                 _db.Roles.InsertOnSubmit(role);
                 _db.SubmitChanges();
-                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "thêm " + CTR_NAME);
+                int roleId = _db.Roles.Where(u => u.Name == role.Name).Select(r => new RoleDTO
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Description = r.Description,
+                    CreateDate = r.CreateDate
+                }).FirstOrDefault().Id;
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, new Dictionary<string, object>
+                {
+                    { "data", new int[] {roleId } }
+                },
+                formatValue: "thêm " + CTR_NAME);
             }
             catch (Exception ex)
             {

@@ -6,7 +6,7 @@
     top: 0;
     bottom: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgb(0 0 0 / 60%);
     z-index: 9999;
 }
 
@@ -694,40 +694,40 @@
             animation: sk-circleFadeDelay 1.2s infinite ease-in-out both;
         }
 
-        .sk-fading-circle .sk-circle-child:nth-child(1)::before {
+        .sk-fading-circle .sk-circle-child:nth-child(12)::before {
             background-color: red;
         }
-        .sk-fading-circle .sk-circle-child:nth-child(2)::before {
+        .sk-fading-circle .sk-circle-child:nth-child(11)::before {
             background-color: orangered;
         }
-        .sk-fading-circle .sk-circle-child:nth-child(3)::before {
+        .sk-fading-circle .sk-circle-child:nth-child(10)::before {
             background-color: orange;
         }
-        .sk-fading-circle .sk-circle-child:nth-child(4)::before {
+        .sk-fading-circle .sk-circle-child:nth-child(9)::before {
             background-color: yellow;
         }
-        .sk-fading-circle .sk-circle-child:nth-child(5)::before {
+        .sk-fading-circle .sk-circle-child:nth-child(8)::before {
             background-color: greenyellow;
         }
-        .sk-fading-circle .sk-circle-child:nth-child(6)::before {
+        .sk-fading-circle .sk-circle-child:nth-child(7)::before {
             background-color: lawngreen;
         }
-        .sk-fading-circle .sk-circle-child:nth-child(7)::before {
+        .sk-fading-circle .sk-circle-child:nth-child(6)::before {
             background-color: cyan;
         }
-        .sk-fading-circle .sk-circle-child:nth-child(8)::before {
+        .sk-fading-circle .sk-circle-child:nth-child(5)::before {
             background-color: dodgerblue;
         }
-        .sk-fading-circle .sk-circle-child:nth-child(9)::before {
+        .sk-fading-circle .sk-circle-child:nth-child(4)::before {
             background-color: blue;
         }
-        .sk-fading-circle .sk-circle-child:nth-child(10)::before {
+        .sk-fading-circle .sk-circle-child:nth-child(3)::before {
             background-color: blueviolet;
         }
-        .sk-fading-circle .sk-circle-child:nth-child(11)::before {
+        .sk-fading-circle .sk-circle-child:nth-child(2)::before {
             background-color: darkviolet;
         }
-        .sk-fading-circle .sk-circle-child:nth-child(12)::before {
+        .sk-fading-circle .sk-circle-child:nth-child(1)::before {
             background-color: mediumvioletred;
         }
 

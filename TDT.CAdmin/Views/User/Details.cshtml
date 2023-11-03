@@ -112,7 +112,7 @@
         <dt class="col-sm-3">
             Danh sách role đã đăng ký
         </dt>
-        <dd class="col-sm-9">
+        <dd class="col-sm-9" style="height: 200px; overflow: auto">
             @if(ViewBag.roles.Count != 0){
                 string rs = "";
                 @foreach (var role in (IList<RoleDTO>)ViewBag.roles)
@@ -120,7 +120,7 @@
                     rs += @role.Name + ", ";
                 }
                 rs = rs.Substring(0, rs.Length - 2);
-                <span>@rs</span>
+                <div>@rs</div>
             }
             else
             {

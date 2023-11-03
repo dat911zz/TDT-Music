@@ -43,7 +43,6 @@ namespace TDT.CAdmin.Controllers
         {
             
             _logger.LogInformation("Start session");
-            SecurityHelper.GetCurrentPermissions(HttpContext);
 
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("NotifyUpdate")))
             {
@@ -70,7 +69,6 @@ namespace TDT.CAdmin.Controllers
             //ResponseDataDTO<User> res = APICallHelper.Get<ResponseDataDTO<User>>($"user/{pUser}", token: auth.Token).Result;
             return View();
         }
-        [Authorize(Policy = "UserPolicy")]
         public IActionResult Privacy()
         {
             return View();

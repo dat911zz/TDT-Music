@@ -158,8 +158,7 @@ namespace TDT.CAdmin.Controllers
                 this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Error);
                 return View();
             }
-
-            await DataBindings.Instance.LoadUsers(HttpContext.User.GetToken(), _logger);
+            DataBindings.Instance.LoadUsers(HttpContext.User.GetToken(), _logger);
             var users = DataBindings.Instance.Users;
             if (res.Code != APIStatusCode.ActionSucceeded)
             {
@@ -175,12 +174,15 @@ namespace TDT.CAdmin.Controllers
                     APIResponseModel resRole = APICallHelper.Post<APIResponseModel>(
                     $"UserRole?username={model.UserName}&roleId={role.Id}",
                     token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
-                    if (resRole.Code != APIStatusCode.ActionSucceeded)
+                    if (resRole.Code != APIStatusCode.Exist)
                     {
-                        this.MessageContainer().AddMessage(resRole.Msg, ToastMessageType.Error);
-                        ViewBag.roles = DataBindings.Instance.Roles;
-                        return View();
-                    }
+                        if (resRole.Code != APIStatusCode.ActionSucceeded)
+                        {
+                            this.MessageContainer().AddMessage(resRole.Msg, ToastMessageType.Error);
+                            ViewBag.roles = DataBindings.Instance.Roles;
+                            return View();
+                        }
+                    }                   
                 }
                 else
                 {
@@ -189,6 +191,7 @@ namespace TDT.CAdmin.Controllers
                     token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
                 }
             }
+            this.MessageContainer().AddFlashMessage($"Đã cập nhật thông tin cho tài khoản {model.UserName}!", ToastMessageType.Success);
             return RedirectToAction("Index");
         }
         [HttpPost]

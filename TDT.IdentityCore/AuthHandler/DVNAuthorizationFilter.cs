@@ -18,6 +18,7 @@ using TDT.Core.DTO;
 using TDT.Core.Extensions;
 using TDT.Core.Ultils;
 using TDT.IdentityCore.Utils;
+using Microsoft.AspNetCore.Authentication;
 
 namespace TDT.IdentityCore.AuthHandler
 {
@@ -26,30 +27,36 @@ namespace TDT.IdentityCore.AuthHandler
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            //if (!context.HttpContext.Request.Path.Value.Contains("Error"))
-            //{
-            //    bool hasAllowAnonymous = context.ActionDescriptor.EndpointMetadata
-            //                     .Any(em => em.GetType() == typeof(AllowAnonymousAttribute));
-            //    bool hasClaims = context.HttpContext.User.Claims.Count() > 0;
+            if (!context.HttpContext.Request.Path.Value.Contains("Error"))
+            {
+                bool hasAllowAnonymous = context.ActionDescriptor.EndpointMetadata
+                                 .Any(em => em.GetType() == typeof(AllowAnonymousAttribute));
+                bool hasClaims = context.HttpContext.User.Claims.Count() > 0;
 
-            //    if (hasAllowAnonymous && !hasClaims) return;
+                if (hasAllowAnonymous && !hasClaims) return;
 
-            //    var request = context.HttpContext.Request;
-            //    if (request.RouteValues.Count > 0)
-            //    {
-            //        var currentUser = context.HttpContext.User.Identity.Name;
-            //        string controller = request.RouteValues["controller"].ToString();
-            //        string action = request.RouteValues["action"].ToString();
-            //        string targetPerm = controller + "Controller" + "_" + action;
+                var request = context.HttpContext.Request;
+                if (request.RouteValues.Count > 0)
+                {
+                    var currentUser = context.HttpContext.User;
+                    string controller = request.RouteValues["controller"].ToString();
+                    string action = request.RouteValues["action"].ToString();
+                    string targetPerm = controller + "Controller" + "_" + action;
 
-            //        //var curPerms = resRole.Data;
-
-            //        if (!SecurityHelper.permDic.ContainsKey(targetPerm) && SecurityHelper.permDic.Count > 0)
-            //        {
-            //            context.HttpContext.Response.Redirect("/Home/Error?statusCode=401");
-            //        }
-            //    }
-            //}
+                    //var curPerms = resRole.Data;
+                    if (SecurityHelper.permDic.Count == 0)
+                    {
+                        context.HttpContext.SignOutAsync();
+                    }
+                    else
+                    {
+                        if (!SecurityHelper.permDic.ContainsKey(targetPerm))
+                        {
+                            context.HttpContext.Response.Redirect("/Home/Error?statusCode=401");
+                        }
+                    }                   
+                }
+            }
         }
 
         public void OnActionExecuting(ActionExecutingContext context)

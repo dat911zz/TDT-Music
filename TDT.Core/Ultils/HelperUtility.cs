@@ -107,7 +107,6 @@ namespace TDT.Core.Ultils
                     Name = s.Name,
                     ActionType = s.DeclaringType.FullName
                 });
-
         }
         public static string GenerateRandomString(int length)
         {

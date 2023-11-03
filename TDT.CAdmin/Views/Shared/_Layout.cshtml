@@ -177,16 +177,9 @@
     <!--End of Tawk.to Script-->
 
     <script>
-        jQuery(function ($) {
-            $(window).on('load', function () {
-                SplashScreen.open();
-            });
-        })
-        $(document).ready(function () {
-            setTimeout(() => {
-                SplashScreen.close();
-            }, 500);
-        }); 
+        $(window).bind('beforeunload', function () {
+            HoldOn.open();
+        });
         $(document).ready(function () {
             var temp_black = {
                 "--bg-temp": "#12151e", "--bg-main-content": "#12151e", "--nav-link-hover": "#0f1015",
