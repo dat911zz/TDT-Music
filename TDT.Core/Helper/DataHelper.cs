@@ -61,13 +61,13 @@ namespace TDT.Core.Helper
             for (int i = 0; i < 3; i++)
             {
                 List<SongDTO> res_s = new List<SongDTO>();
-                string releaseDate = "";
+                long releaseDate = 0;
                 int count = 0;
                 for (int j = iStartArr; j < arrSong.Count; j++)
                 {
                     iStartArr++;
                     SongDTO itemCheck = arrSong[j];
-                    if (!releaseDate.Equals(itemCheck.releaseDate) || (releaseDate.Equals(itemCheck.releaseDate) && !res_s.Select(x => x.thumbnail).Contains(itemCheck.thumbnail)))
+                    if (!releaseDate.Equals(itemCheck.releaseDate) || (releaseDate.Equals(itemCheck.releaseDate)))
                     {
                         res_s.Add(itemCheck);
                         count++;
@@ -100,13 +100,13 @@ namespace TDT.Core.Helper
             for (int i = 0; i < 3; i++)
             {
                 List<SongDTO> res_s = new List<SongDTO>();
-                string releaseDate = "";
+                long releaseDate = 0;
                 int count = 0;
                 for (int j = iStartArr; j < arrSong.Count; j++)
                 {
                     iStartArr++;
                     SongDTO itemCheck = arrSong[j];
-                    if (!releaseDate.Equals(itemCheck.releaseDate) || (releaseDate.Equals(itemCheck.releaseDate) && !res_s.Select(x => x.thumbnail).Contains(itemCheck.thumbnail)))
+                    if (!releaseDate.Equals(itemCheck.releaseDate) || (releaseDate.Equals(itemCheck.releaseDate)))
                     {
                         res_s.Add(itemCheck);
                         count++;

@@ -59,7 +59,8 @@ namespace TDT.Site.Services
                         Name = song.title,
                         Thumbnail = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail),
                         Src = DataHelper.GetMP3(song.encodeId),
-                        Artists = Generator.GenerateArtistLink(song.artists)
+                        Artists = Generator.GenerateArtistLink(song.artists),
+                        UrlPlaylist = string.IsNullOrEmpty(song.album) ? "" : $"/Album?encodeId={song.album}"
                     });
                     temp.Add(songId, players[songId]);
                 }
@@ -78,5 +79,6 @@ namespace TDT.Site.Services
         public string Thumbnail { get; set; }
         public string Src { get; set; }
         public string Artists { get; set; }
+        public string UrlPlaylist { get; set; }
     }
 }

@@ -26,3 +26,17 @@ function ChangeGallery(i) {
 function RedirectError(statuscode, msg) {
     window.location = "/Home/Error/?statusCode=" + statuscode + "&msg=" + msg;
 }
+
+function SendNotiWarning(noti) {
+    $.ajax({
+        type: "POST",
+        url: "/Home/ShowNotiWarning",
+        data: {
+            noti: noti
+        }
+    });
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

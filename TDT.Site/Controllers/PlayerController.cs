@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using TDT.Core.Helper;
+using TDT.Core.ServiceImp;
 using TDT.Site.Services;
 
 namespace TDT.Site.Controllers
@@ -22,6 +24,29 @@ namespace TDT.Site.Controllers
         public void SetSrc([FromForm] string[] list)
         {
             PlayerService.SetPlayer(list.ToList());
+        }
+        [HttpPost]
+        public string GetSrc([FromForm] string[] list)
+        {
+            Dictionary<string, Player> temp = new Dictionary<string, Player>();
+            foreach (string songId in list)
+            {
+                if (temp.ContainsKey(songId))
+                    continue;
+                var song = DataHelper.GetSong(songId);
+                if (song != null)
+                {
+                    temp.Add(song.encodeId, new Player
+                    {
+                        Id = song.encodeId,
+                        Name = song.title,
+                        Thumbnail = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail),
+                        Src = DataHelper.GetMP3(song.encodeId),
+                        Artists = Generator.GenerateArtistLink(song.artists)
+                    });
+                }
+            }
+            return JsonConvert.SerializeObject(temp.Values.ToList());
         }
 
         public int GetCurIndex()
