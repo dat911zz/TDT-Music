@@ -21,10 +21,10 @@
         box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
     }
     .table-container tbody tr:hover {
-        background: #449fb1;
+        background: #00cefb40;
     }
     .table-container tbody tr:hover td {
-        color: #ffff;
+        /*color: #ffff;*/
     }
     .table-container td.img_song{
         height: 60px;

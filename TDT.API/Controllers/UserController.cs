@@ -4,6 +4,9 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using TDT.Core.DTO;
 using TDT.Core.Enums;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
@@ -39,17 +42,27 @@ namespace TDT.API.Controllers
         [HttpGet("{username}")]
         public IActionResult Get(string username)
         {
-            var user = _db.Users.Select(s => new UserIdentiyModel { 
+            IList<UserDTO> user = new List<UserDTO>();
+            user = _db.Users.Select(s => new UserDTO
+            {
                 UserName = s.UserName,
                 Address = s.Address,
                 PhoneNumber = s.PhoneNumber,
                 Email = s.Email,
-                Password = "***"
-            }).Where(u => u.UserName.Equals(username.Trim()));
+                PasswordHash = "",
+                CreateDate = s.CreateDate,
+                LockoutEnabled = s.LockoutEnabled,
+                LockoutEnd = s.LockoutEnd,
+                AccessFailedCount = s.AccessFailedCount,
+                EmailConfirmed = s.EmailConfirmed,
+                PhoneNumberConfirmed = s.PhoneNumberConfirmed,
+                Id = s.Id
+            }).Where(u => u.UserName.Equals(username.Trim())).ToList();
+
             return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
-                {
-                    {"data", user }
-                }, "Lấy dữ liệu");
+            {
+                {"data", user }
+            }, "Lấy dữ liệu");
         }
 
         [HttpPut("{username}")]
@@ -65,7 +78,10 @@ namespace TDT.API.Controllers
                 user.Email = model.Email;
                 user.Address = model.Address;
                 user.PhoneNumber = model.PhoneNumber;
-                user.PasswordHash = SecurityHelper.HashPassword(model.Password);
+                if (!string.IsNullOrEmpty(model.Password))
+                {
+                    user.PasswordHash = SecurityHelper.HashPassword(model.Password);
+                }
                 _db.SubmitChanges();
                 return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "cập nhật " + CTR_NAME);
             }

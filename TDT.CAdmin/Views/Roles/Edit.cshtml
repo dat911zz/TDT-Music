@@ -1,51 +1,91 @@
-﻿@model TDT.Core.DTO.RoleDTO
+﻿@using TDT.Core.DTO;
+@model TDT.Core.DTO.RoleDTO
 
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    IList<PermissionDTO> perms = ViewBag.perms ?? new List<PermissionDTO>();
+    IList<PermissionDTO> rolePerms = ViewBag.rolePerms ?? new List<PermissionDTO>();
 }
-<style>
-
-</style>
-<h1 class="title-admin"> Edit</h1>
-
-<h4>RoleDTO</h4>
+<h2 class="title-admin">Chỉnh sửa vai trò</h2>
 <hr />
-<div class="row">
+<form asp-action="Edit" class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" readonly />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control"  />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreateDate" class="control-label"></label>
-                <input asp-for="CreateDate" class="form-control"  readonly/>
-                <span asp-validation-for="CreateDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Id" class="control-label"></label>
+            <input asp-for="Id" class="form-control" readonly />
+            <span asp-validation-for="Id" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CreateDate" class="control-label"></label>
+            <input asp-for="CreateDate" class="form-control" readonly />
+            <span asp-validation-for="CreateDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Lưu" class="btn btn-primary" />
+        </div>
     </div>
-</div>
-
+    <div class="col-md-2"></div>
+    <div class="form-group col-md-5">
+        <label class="control-label">
+            Phân quyền cho vai trò
+            <input id="choose-all-role" title="Chọn tất cả" style="margin-left: 10px" type="checkbox" value="">
+        </label>
+        <div class="row roles role-assigment-panel">
+            @foreach (var perm in perms)
+            {
+                string chk = "";
+                @if (rolePerms.Any(r => r.Id == perm.Id))
+                {
+                    chk = "checked";
+                }
+                <label class="col-md-12">
+                    <input style="margin-left: 10px" type="checkbox" name="UserRoles" value="@perm.Id" @chk>
+                    <span>@perm.Name</span>
+                </label>
+            }
+        </div>
+    </div>
+</form>
 <div>
     <a asp-action="Index">Trở về trang trước</a>
 </div>
 
+<script>    
+    checkAllInputChecked();
+    $('.roles input[name="UserRoles"]').on('change', function (e) {
+        console.log('change?');
+        checkAllInputChecked();
+    });
+    $('#choose-all-role').on('click', function (e) {
+        var checkboxs = $('.roles input[type="checkbox"]');
+        if ($(this).is(':checked')) {
+            checkboxs.prop('checked', true);
+        } else {
+            checkboxs.prop('checked', false);
+        }
+    });
+    function checkAllInputChecked(){
+        if ($('.roles input[name="UserRoles"]:checked').length == $('.roles input[name="UserRoles"]').length) {
+            $('#choose-all-role').prop('checked', true);
+        }else{
+            $('#choose-all-role').prop('checked', false);
+        }
+    }
+</script>
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

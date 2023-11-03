@@ -8,8 +8,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using TDT.Core.DTO;
+using TDT.Core.Extensions;
 using TDT.Core.Models;
+using TDT.Core.Ultils;
 
 namespace TDT.IdentityCore.Utils
 {
@@ -24,6 +28,7 @@ namespace TDT.IdentityCore.Utils
         private static readonly int SALT_SIZE = 32;
         private static readonly int ITERATIONS = 3000;
         private readonly IConfiguration _cfg;
+
         public SecurityHelper(IConfiguration cfg)
         {
             _cfg = cfg;
@@ -94,16 +99,15 @@ namespace TDT.IdentityCore.Utils
         /// <returns>JWT</returns>
         public string GenerateJWT(User userInfo, bool isExpr = true, double expr = 120)
         {
-            var listRoleGroup = "";
             var sercurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]));
             var credentials = new SigningCredentials(sercurityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[] {
+            IList<Claim> claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Sub, userInfo.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, userInfo.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Name, userInfo.UserName),
-                new Claim(ClaimTypes.Role, listRoleGroup)
             };
+
             var token = new JwtSecurityToken(
                 _cfg["Jwt:Issuer"],
                 _cfg["Jwt:Audience"],
@@ -161,6 +165,79 @@ namespace TDT.IdentityCore.Utils
             {               
                 return null;
             }
+        }
+        private static readonly object _lock = new object();
+        public static Dictionary<string, PermissionDTO> permDic = new Dictionary<string, PermissionDTO>();
+
+        public static async Task GetCurrentPermissions(string username, string token)
+        {
+            try
+            {
+                ResponseDataDTO<RoleDTO>[] resRole = await Task.WhenAll(APICallHelper.Get<ResponseDataDTO<RoleDTO>>(
+                        $"UserRole/{username}",
+                                token: token));
+
+                if (resRole[0].Data != null && resRole[0].Data.Count > 0)
+                {
+                    foreach (var role in resRole[0].Data)
+                    {
+                        try
+                        {
+                            ResponseDataDTO<PermissionDTO>[] resPerm = await Task.WhenAll(APICallHelper.Get<ResponseDataDTO<PermissionDTO>>(
+                            $"RolePermission/{role.Id}",
+                                token: token));
+                            if (resPerm[0].Data != null && resPerm[0].Data.Count > 0)
+                            {
+                                foreach (var perm in resPerm[0].Data)
+                                {
+                                    if (!permDic.ContainsKey(perm.Name))
+                                    {
+                                        permDic.Add(perm.Name, perm);
+                                    }
+                                }
+                            }
+
+                        }
+                        catch (Exception ex) { }
+                    }
+                }
+            }
+            catch (Exception ex) { }
+        }
+        public static async Task<Dictionary<string, PermissionDTO>> GetPermissionsAsync(string role, string token)
+        {
+            Dictionary<string, PermissionDTO> permDic = new Dictionary<string, PermissionDTO>();
+
+            try
+            {
+                ResponseDataDTO<RoleDTO>[] resRole = await Task.WhenAll(APICallHelper.Get<ResponseDataDTO<RoleDTO>>(
+                        $"Role/GetByName/{role}",
+                                token: token));
+
+                if (resRole[0].Data != null && resRole[0].Data.Count > 0)
+                {
+                    try
+                    {
+                        ResponseDataDTO<PermissionDTO>[] resPerm = await Task.WhenAll(APICallHelper.Get<ResponseDataDTO<PermissionDTO>>(
+                        $"RolePermission/{resRole[0].Data[0].Id}",
+                            token: token));
+                        if (resPerm[0].Data != null && resPerm[0].Data.Count > 0)
+                        {
+                            foreach (var perm in resPerm[0].Data)
+                            {
+                                if (!permDic.ContainsKey(perm.Name))
+                                {
+                                    permDic.Add(perm.Name, perm);
+                                }
+                            }
+                        }
+
+                    }
+                    catch (Exception ex) { }
+                }
+            }
+            catch (Exception ex) { }
+            return permDic;
         }
     }
 }

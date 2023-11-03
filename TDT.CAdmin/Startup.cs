@@ -1,17 +1,20 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Security.Claims;
 using TDT.CAdmin.Areas.Identity.Data;
 using TDT.CAdmin.Filters;
 using TDT.CAdmin.Models;
@@ -37,7 +40,9 @@ namespace TDT.CAdmin
         {
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddCors();
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddControllersWithViews(cfg =>
+                    cfg.Filters.Add<DVNAuthorizationFilter>())
+                .AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddTransient<IEmailSender, MailingService>();
             services.AddTransient<ISecurityHelper, SecurityHelper>();
@@ -48,13 +53,24 @@ namespace TDT.CAdmin
                     {                      
                         cfg.LoginPath = new PathString("/Auth/Login");
                         cfg.LogoutPath = new PathString("/Auth/Logout");
+                        cfg.AccessDeniedPath = new PathString("/Home/Error?errorCode=401");
                     }
                 );
-            services.AddScoped<IAuthorizationHandler, PoliciesAuthorizationHandler>();
-            services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
+            services.AddAuthorization(cfg =>
+            {
+                cfg.AddPolicy("UserPolicy", policyBuilder =>
+                {
+                    policyBuilder.UserRequireCustomClaim(ClaimTypes.Email);
+                    policyBuilder.UserRequireCustomClaim(ClaimTypes.Name);
+                });
+            });
+            //services.AddScoped<IAuthorizationHandler, PoliciesAuthorizationHandler>();
+            //services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
+            services.AddScoped<IActionFilter, DVNAuthorizationFilter>();
             services.AddMvc(cfg =>
             {
                 cfg.Filters.Add<MessagesFilter>();
+                cfg.Filters.Add<DVNAuthorizationFilter>();
             }).AddControllersAsServices();
             services.AddSession();
             //services.Configure<IdentityEmailService>(Configuration);

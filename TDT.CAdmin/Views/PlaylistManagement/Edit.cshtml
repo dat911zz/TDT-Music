@@ -5,13 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>PlaylistDTO</h4>
+<h2 class="title-admin">Chỉnh sửa thông tin playlist</h2>
 <hr />
 
-    <form asp-action="Edit">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
@@ -24,7 +22,7 @@
                 <input asp-for="title" class="form-control" />
                 <span asp-validation-for="title" class="text-danger"></span>
             </div>
-          
+
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="isoffical" /> @Html.DisplayNameFor(model => model.isoffical)
@@ -80,7 +78,7 @@
                 <input asp-for="uid" class="form-control" />
                 <span asp-validation-for="uid" class="text-danger"></span>
             </div>
-           
+
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="isShuffle" /> @Html.DisplayNameFor(model => model.isShuffle)
@@ -166,21 +164,21 @@
             <p class="badge badge-primary">@Html.DisplayNameFor(model => model.thumbnailM)</p>
             <p class="img_song img-fluid" encodeid="@Model.encodeId" thumbnail="@Model.thumbnailM">
             </p>
-@*             <p class="badge badge-primary">Ảnh</p>
+            @*             <p class="badge badge-primary">Ảnh</p>
             <p class="img_song" encodeid="@Model.encodeId" thumbnail="@Model.thumbnail"></p>
- *@
+            *@
             <div class="form-group">
-                <label  class="control-label">Chọn ảnh mới</label>
+                <label class="control-label">Chọn ảnh mới</label>
                 <input class="form-control" name="uploadFile" type="file" />
-     
+
             </div>
         </div>
     </div>
-        <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
-    </form>
-   
+    <div class="form-group">
+        <input type="submit" value="Lưu" class="btn btn-primary" />
+    </div>
+</form>
+
 
 
 
@@ -189,7 +187,9 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 <script>
     $(".img_song").each(function (e, val) {

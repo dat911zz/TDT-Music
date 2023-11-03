@@ -15,10 +15,10 @@ namespace TDT.Core.Models
         [Required(ErrorMessage = "Vui lòng nhập email!")]
         public string Email { get; set; }
         [DisplayName("Mật khẩu")]
-        [Required(ErrorMessage = "Vui lòng nhập mật khẩu!")]
         public string Password { get; set; }
         [DisplayName("Số điện thoại")]
         [Required(ErrorMessage = "Vui lòng nhập số điện thoại!")]
         public string PhoneNumber { get; set; }
+        public DateTime? CreateDate { get; set; }
     }
 }

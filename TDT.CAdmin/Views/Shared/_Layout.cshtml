@@ -16,6 +16,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="~/css/style.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/SplashScreen.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     @Html.AddSharedCSS("css/HoldOn.css")
     @Html.AddSharedCSS("css/shared.css")
@@ -162,6 +163,9 @@
         <div class="container-fluid page-body-wrapper">
             <partial name="_NavPartial" />
             <div id="main-content">
+                <div id="breadcrumb">
+                    <p></p>
+                </div>
                 @RenderBody()
             </div>
         </div>
@@ -171,10 +175,11 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="~/js/SplashScreen.js"></script>
     @Html.AddSharedScript("js/HoldOn.js")
     @Html.AddSharedScript("js/shared.js")
     <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
+    @* <script type="text/javascript">
         var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         (function () {
             var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
@@ -184,10 +189,13 @@
             s1.setAttribute('crossorigin', '*');
             s0.parentNode.insertBefore(s1, s0);
         })();
-    </script>
+    </script> *@
     <!--End of Tawk.to Script-->
 
     <script>
+        $(window).bind('beforeunload', function () {
+            HoldOn.open();
+        });
         $(document).ready(function () {
             var temp_black = {
                 "--bg-temp": "#12151e", "--bg-main-content": "#12151e", "--nav-link-hover": "#0f1015",
@@ -228,6 +236,47 @@
                         $('#temp_white').trigger('click');
                     }
                 }
+            });
+            var crumbs = location.pathname.split('/');
+            console.log(crumbs);
+            crumbs[0] = "Home";
+            if (crumbs[1] == "Home") {
+                crumbs = new Array("Home", "");
+            }
+            console.log(crumbs);
+
+            len = function (obj) {
+                var L = 0;
+                $.each(obj, function (i, elem) {
+                    L++;
+                });
+                return L;
+            };
+
+            var UpdateBreadcrumbs = function () {
+                var i = 0;
+                $.each(crumbs, function (idx, value) {
+                    if (idx < 2) {
+                        $("#breadcrumb p").append('<a href="' + value + '">' + value + '</a>');
+                    } else {
+                        $("#breadcrumb p").append('<span>' + value + '</span>');
+                    }
+                    if (i != len(crumbs) - 1) {
+                        $("#breadcrumb p").append('&nbsp;&nbsp;/&nbsp;&nbsp;');
+                    }
+                    i++;
+                });
+                $("a").click(function (event) {
+                    // event.preventDefault();
+                });
+            };
+
+            UpdateBreadcrumbs();
+
+            $('a').click(function () {
+                $("#breadcrumb p").text("");
+                crumbs[$(this).attr("name")] = $(this).attr("href");
+                UpdateBreadcrumbs();
             });
         });
         //https://codeseven.github.io/toastr/demo.html
