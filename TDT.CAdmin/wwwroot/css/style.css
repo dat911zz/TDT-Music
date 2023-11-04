@@ -7436,8 +7436,11 @@ dt {
   font-weight: 700; }
 
 dd {
-  margin-bottom: .5rem;
-  margin-left: 0; }
+    margin-bottom: .5rem;
+    margin-top: .5rem;
+    margin-left: 0;
+    height: 18px;
+}
 
 blockquote {
   margin: 0 0 1rem; }
@@ -7801,10 +7804,13 @@ pre {
     max-width: 1140px; } }
 
 .row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-right: -0.75rem;
-  margin-left: -0.75rem; }
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -0.75rem;
+    margin-left: -0.75rem;
+    align-content: center;
+    align-items: center;
+}
 
 .no-gutters {
   margin-right: 0;

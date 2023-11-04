@@ -28,13 +28,13 @@ namespace TDT.API.Controllers
         [HttpGet("{username}")]
         public IActionResult Get(string username)
         {
-            var roles = _db.Users.Where(u => u.UserName.Equals(username)).FirstOrDefault()?.LNK_UserRoles.Select(s => new RoleDTO
+            var roles = _db.LNK_UserRoles.Where(r => r.User.UserName.Equals(username)).Select(s => new RoleDTO
             {
                 Id = s.Role.Id,
                 Name = s.Role.Name,
                 Description = s.Role.Description,
                 CreateDate = s.Role.CreateDate
-            });
+            }).ToList();
             return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
             {
                     {"data", roles ?? new List<RoleDTO>()}
@@ -50,6 +50,10 @@ namespace TDT.API.Controllers
                     return APIHelper.GetJsonResult(APIStatusCode.Exist);
                 }
                 var user = _db.Users.FirstOrDefault(u => u.UserName.Equals(username));
+                if (user == null)
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.AccountNotFound);
+                }
                 _db.LNK_UserRoles.InsertOnSubmit(new LNK_UserRole
                 {
                     UserId = user.Id,

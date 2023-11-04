@@ -102,7 +102,8 @@ namespace TDT.API
             });
             services.AddTransient<IEmailSender, MailingService>();
             services.AddTransient<ISecurityHelper, SecurityHelper>();
-            services.AddSingleton(new QLDVModelDataContext(Configuration.GetConnectionString("AdminConnection")));
+            services.AddTransient(provider => new QLDVModelDataContext(Configuration.GetConnectionString("AdminConnection")));
+            //services.AddSingleton(new QLDVModelDataContext(Configuration.GetConnectionString("AdminConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
