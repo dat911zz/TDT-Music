@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -31,8 +32,9 @@ namespace TDT.CAdmin.Controllers
             _logger = logger;
             
         }
-        public IActionResult Index(string? searchTerm, int? page)
+        public async Task<IActionResult> Index(string? searchTerm, int? page)
         {
+            await DataBindings.Instance.LoadUsers(User.GetToken());
             var users = DataBindings.Instance.Users;
             ViewBag.SearchTerm = "";
             int pageNumber = (page ?? 1);
@@ -66,7 +68,7 @@ namespace TDT.CAdmin.Controllers
                     "Auth/Register",
                     JsonConvert.SerializeObject(user),
                     token: HttpContext.User.GetToken()).Result;
-                await DataBindings.Instance.LoadUsers(HttpContext.User.GetToken(), _logger, 500);
+                await DataBindings.Instance.LoadUsers(HttpContext.User.GetToken());
                 if (resUser.Code != APIStatusCode.ActionSucceeded)
                 {
                     //FlashMessage để truyền message từ đây sang action hoặc controller khác
@@ -158,7 +160,7 @@ namespace TDT.CAdmin.Controllers
                 this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Error);
                 return View();
             }
-            DataBindings.Instance.LoadUsers(HttpContext.User.GetToken(), _logger);
+            await DataBindings.Instance.LoadUsers(HttpContext.User.GetToken());
             var users = DataBindings.Instance.Users;
             if (res.Code != APIStatusCode.ActionSucceeded)
             {
@@ -195,20 +197,22 @@ namespace TDT.CAdmin.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public async Task<ActionResult> Delete(string id)
+        public ActionResult Delete(string id)
         {
             ResponseDataDTO<User> res = APICallHelper.Delete<ResponseDataDTO<User>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             if (res.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
                 //FlashMessage để truyền message từ đây sang action hoặc controller khác
                 this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Success);
+                
+                UserDTO user = DataBindings.Instance.Users.FirstOrDefault(u => u.UserName.Equals(id));
+                DataBindings.Instance.Users.Remove(user);
             }
             else
             {
                 //Truyền message trong nội bộ hàm
                 this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Error);
             }
-            await DataBindings.Instance.LoadUsers(HttpContext.User.GetToken(), _logger);
             var users = DataBindings.Instance.Users;
             return new JsonResult("ok");
         }

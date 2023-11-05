@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -238,6 +239,44 @@ namespace TDT.IdentityCore.Utils
             }
             catch (Exception ex) { }
             return permDic;
+        }       
+        public static async void ImportControllerAction(IEnumerable<CtrlAction> ctrlActions)
+        {
+            bool isUpdateMode = false;
+            string token = DataBindings.Instance.LoginAsAPI();
+            await DataBindings.Instance.LoadPermissions(token);
+            foreach (var item in ctrlActions)
+            {
+                var name = item.ActionType.Split('.')[3] + "_" + item.Name;
+                var permission = new PermissionDTO()
+                {
+                    Name = name,
+                    Description = "Quyền truy cập vào Action " + item.Name + " thuộc Controller " + item.ActionType.Split('.')[3]
+                };
+                var perm = DataBindings.Instance.Permissions.FirstOrDefault(p => p.Name.Equals(name));
+                if (!name.Contains("Auth"))
+                {
+                    if (perm != null)
+                    {
+                        if (isUpdateMode)
+                        {
+                            var resUpdate = await Task.WhenAll(APICallHelper.Put<ResponseDataDTO<PermissionDTO>>(
+                                $"Permission/{perm.Id}",
+                                token: token,
+                                requestBody: JsonConvert.SerializeObject(permission)
+                                ));
+                        }                     
+                    }
+                    else
+                    {
+                        var resInsert = await Task.WhenAll(APICallHelper.Post<ResponseDataDTO<PermissionDTO>>(
+                               $"Permission",
+                               token: token,
+                               requestBody: JsonConvert.SerializeObject(permission)
+                               ));
+                    }
+                }                        
+            }
         }
     }
 }

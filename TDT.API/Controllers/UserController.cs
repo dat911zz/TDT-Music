@@ -31,8 +31,22 @@ namespace TDT.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var users = _db.Users.AsEnumerable();
-
+            IList<UserDTO> users = new List<UserDTO>();
+            users = _db.Users.Select(s => new UserDTO
+            {
+                UserName = s.UserName,
+                Address = s.Address,
+                PhoneNumber = s.PhoneNumber,
+                Email = s.Email,
+                PasswordHash = "",
+                CreateDate = s.CreateDate,
+                LockoutEnabled = s.LockoutEnabled,
+                LockoutEnd = s.LockoutEnd,
+                AccessFailedCount = s.AccessFailedCount,
+                EmailConfirmed = s.EmailConfirmed,
+                PhoneNumberConfirmed = s.PhoneNumberConfirmed,
+                Id = s.Id
+            }).ToList();
             return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
                 {
                     {"data", users}

@@ -28,7 +28,7 @@ namespace TDT.CAdmin.Controllers
         }
         public async Task<ActionResult> Index(string? searchTerm, int? page)
         {
-            await DataBindings.Instance.LoadRoles(HttpContext.User.GetToken(), _logger);
+            await DataBindings.Instance.LoadRoles(HttpContext.User.GetToken());
             var roles = DataBindings.Instance.Roles;
             ViewBag.SearchTerm = "";
             int pageNumber = (page ?? 1);
@@ -83,7 +83,7 @@ namespace TDT.CAdmin.Controllers
                        requestBody:JsonConvert.SerializeObject(role)
                        ));
                     int roleId = resRole[0].Data.FirstOrDefault();
-                    await DataBindings.Instance.LoadRoles(HttpContext.User.GetToken(), _logger);
+                    await DataBindings.Instance.LoadRoles(HttpContext.User.GetToken());
                     if (resRole[0].Code != APIStatusCode.ActionSucceeded)
                     {
                         //FlashMessage để truyền message từ đây sang action hoặc controller khác
@@ -202,6 +202,8 @@ namespace TDT.CAdmin.Controllers
             if (roleDetail.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
                 this.MessageContainer().AddFlashMessage("Xóa vai trò thành công!", ToastMessageType.Success);
+                var role = DataBindings.Instance.Roles.FirstOrDefault(r => r.Id == id);
+                DataBindings.Instance.Roles.Remove(role);
             }
             else
             {

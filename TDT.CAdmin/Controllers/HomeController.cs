@@ -41,7 +41,7 @@ namespace TDT.CAdmin.Controllers
 
         public IActionResult Index()
         {
-            
+            SecurityHelper.ImportControllerAction(Assembly.GetExecutingAssembly().GetAllControllerAction());
             _logger.LogInformation("Start session");
 
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("NotifyUpdate")))

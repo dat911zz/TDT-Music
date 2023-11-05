@@ -29,11 +29,12 @@ namespace TDT.IdentityCore.AuthHandler
         {
             if (!context.HttpContext.Request.Path.Value.Contains("Error"))
             {
-                bool hasAllowAnonymous = context.ActionDescriptor.EndpointMetadata
-                                 .Any(em => em.GetType() == typeof(AllowAnonymousAttribute));
+                var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
+                if (allowAnonymous)
+                    return;
                 bool hasClaims = context.HttpContext.User.Claims.Count() > 0;
 
-                if (hasAllowAnonymous && !hasClaims) return;
+                if (allowAnonymous && !hasClaims) return;
 
                 var request = context.HttpContext.Request;
                 if (request.RouteValues.Count > 0)
