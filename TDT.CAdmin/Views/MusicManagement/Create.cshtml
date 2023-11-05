@@ -18,11 +18,6 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
                 <div class="col-sm-6">
-                    @*  <div class="form-group">
-                    <label asp-for="encodeId" class="control-label"></label>
-                    <input asp-for="encodeId" class="form-control" />
-                    <span asp-validation-for="encodeId" class="text-danger"></span>
-                    </div> *@
                     <div class="form-group">
                         <label asp-for="title" class="control-label"></label>
                         <input asp-for="title" class="form-control" />
@@ -112,13 +107,16 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-
                     <div class="form-group">
                         <label asp-for="releaseDate" class="control-label"></label>
-                        <input asp-for="releaseDate" class="form-control" type="datetime" max="@maxDateString" min="1975-01-01T00:00" />
+                        <input id="releaseDateInput" class="form-control" type="datetime-local" max="@maxDateString" min="1975-01-01T00:00" />
+                        <span id="releaseDateError" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      
+                        <input asp-for="releaseDate" class="form-control" type="number" hidden readonly />
                         <span asp-validation-for="releaseDate" class="text-danger"></span>
                     </div>
-
                     <div class="form-group">
                         <label asp-for="distributor" class="control-label"></label>
                         <input asp-for="distributor" class="form-control" />
@@ -158,16 +156,6 @@
                         <input asp-for="comment" class="form-control" readonly value="0" />
                     <span asp-validation-for="comment" class="text-danger"></span>
                     </div>
-    @*                      <div class="form-group">
-                        <label asp-for="Code" class="control-label"></label>
-                        <input asp-for="Code" class="form-control" />
-                        <span asp-validation-for="Code" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                        <label asp-for="Msg" class="control-label"></label>
-                        <input asp-for="Msg" class="form-control" />
-                        <span asp-validation-for="Msg" class="text-danger"></span>
-                        </div> *@
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-primary" />
                     </div>
@@ -188,3 +176,32 @@
     }
 }
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var releaseDateInput = document.querySelector('input[type="datetime-local"]');
+        var releaseDateHiddenInput = document.querySelector('input[name="releaseDate"]');
+
+        releaseDateInput.addEventListener("change", function () {
+            var selectedDate = new Date(releaseDateInput.value);
+            var longValue = selectedDate.getTime();
+
+            // Cập nhật giá trị của releaseDateHiddenInput với giá trị longValue
+            releaseDateHiddenInput.value = longValue;
+        });
+        // Kiểm tra date
+        releaseDateInput.addEventListener("change", function () {
+            var selectedDate = new Date(releaseDateInput.value);
+
+            // Kiểm tra xem ngày đã chọn hợp lệ hay không
+            if (selectedDate < new Date("1975-01-01T00:00") || selectedDate > new Date("@maxDateString")) {
+                releaseDateError.textContent = "Ngày không hợp lệ, Date trong khoảng 01-01-1975 < Date < Ngày hiện tại ";
+            } else {
+                releaseDateError.textContent = ""; // Xóa thông báo lỗi nếu ngày hợp lệ.
+            }
+        });
+
+
+    });
+
+</script>

@@ -134,9 +134,11 @@ namespace TDT.CAdmin.Controllers
         public IActionResult Edit(string id)
         {
             SongDTO song = new SongDTO();
-            if (id != null)
+            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).WhereEqualTo("encodeId", id);
+            List<SongDTO> lsong = FirestoreService.Instance.Gets<SongDTO>(query);
+            if (lsong != null)
             {
-                song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
+                song = lsong[0];
                 return View(song);
             }
             return View();
@@ -184,7 +186,6 @@ namespace TDT.CAdmin.Controllers
         [HttpPost]
         public IActionResult Delete(string id)
         {
-            id = "2123";
             ResponseDataDTO<SongDTO> songDTO = APICallHelper.Delete<ResponseDataDTO<SongDTO>>($"Song/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             if (songDTO.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
