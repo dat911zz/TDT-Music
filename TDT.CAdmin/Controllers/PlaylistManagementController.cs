@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Google.Cloud.Firestore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -20,48 +21,60 @@ namespace TDT.CAdmin.Controllers
         private List<PlaylistDTO> _playlists;
         public PlaylistManagementController()
         {
-            GetDataPlayList();
         }
-        public void GetDataPlayList()
-        {
-            if (DataHelper.Instance.Playlists.Count <= 0)
-            {
-                _playlists = APIHelper.Gets<PlaylistDTO>($"{FirestoreService.CL_Playlist}"+ "/Gets");
+        //public void GetDataPlayList()
+        //{
+        //    if (DataHelper.Instance.Playlists.Count <= 0)
+        //    {
+        //        _playlists = APIHelper.Gets<PlaylistDTO>($"{FirestoreService.CL_Playlist}"+ "/Gets");
 
-                if (_playlists != null)
-                {
-                    foreach (PlaylistDTO playlist in _playlists)
-                    {
-                        if (!DataHelper.Instance.Playlists.Keys.Contains(playlist.encodeId))
-                        {
-                            DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                _playlists = DataHelper.Instance.Playlists.Values.ToList();
-            }
-        }
+        //        if (_playlists != null)
+        //        {
+        //            foreach (PlaylistDTO playlist in _playlists)
+        //            {
+        //                if (!DataHelper.Instance.Playlists.Keys.Contains(playlist.encodeId))
+        //                {
+        //                    DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        _playlists = DataHelper.Instance.Playlists.Values.ToList();
+        //    }
+        //}
+        //public IActionResult Index(string searchTerm, int? page)
+        //{
+        //    ViewBag.SearchTerm = "";
+        //    int pageSize = 6;
+        //    int pageNumber = (page ?? 1);
+        //    List<PlaylistDTO> lsong = _playlists;
+
+        //    if (DataHelper.Instance.Playlists.Count > 0)
+        //    {
+        //        if (!string.IsNullOrEmpty(searchTerm))
+        //        {
+        //            lsong = _playlists.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).ToList();
+        //            ViewBag.SearchTerm = searchTerm;
+        //            ViewBag.SoBH = lsong.Count;
+        //        }
+        //    }
+        //    IPagedList<PlaylistDTO> pagedList = lsong == null ? new List<PlaylistDTO>().ToPagedList() : lsong.OrderByDescending(o => o.releaseDate).ToPagedList(pageNumber, pageSize);
+        //    return View(pagedList);
+        //}
+
         public IActionResult Index(string searchTerm, int? page)
         {
             ViewBag.SearchTerm = "";
             int pageSize = 6;
             int pageNumber = (page ?? 1);
-            List<PlaylistDTO> lsong = _playlists;
-
-            if (DataHelper.Instance.Playlists.Count > 0)
-            {
-                if (!string.IsNullOrEmpty(searchTerm))
-                {
-                    lsong = _playlists.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).ToList();
-                    ViewBag.SearchTerm = searchTerm;
-                    ViewBag.SoBH = lsong.Count;
-                }
-            }
-            IPagedList<PlaylistDTO> pagedList = lsong == null ? new List<PlaylistDTO>().ToPagedList() : lsong.OrderByDescending(o => o.releaseDate).ToPagedList(pageNumber, pageSize);
-            return View(pagedList);
+            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Playlist).OrderByDescending("releaseDate").Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
+            List<PlaylistDTO> playlists = FirestoreService.Instance.Gets<PlaylistDTO>(query);
+            int soplist = (int)FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Playlist).Count().GetSnapshotAsync().Result.Count;
+            ViewBag.SoBH = soplist;
+            PageList<List<PlaylistDTO>> pageList = new PageList<List<PlaylistDTO>>(pageNumber, pageSize, soplist, playlists);
+            return View(pageList);
         }
         [HttpGet]
         public string LoadImg(string encodeID, string thumbnail)

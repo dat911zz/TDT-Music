@@ -20,56 +20,11 @@ namespace TDT.CAdmin.Controllers
     public class MusicManagementController : Controller
     {
         private List<SongDTO> _songs;
-        private List<Genre> _genres;
-
         public MusicManagementController()
         {
 
-            //GetDataMusic();
-            //GetDataGenre();
         }
-        public void GetDataMusic()
-        {
-            if (DataHelper.Instance.Songs.Count <= 0)
-            {
-                _songs = APIHelper.Gets<SongDTO>($"{FirestoreService.CL_Song}");
-                if (_songs != null)
-                {
-                    foreach (SongDTO song in _songs)
-                    {
-                        if (!DataHelper.Instance.Songs.Keys.Contains(song.encodeId))
-                        {
-                            DataHelper.Instance.Songs.Add(song.encodeId, song);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                _songs = DataHelper.Instance.Songs.Values.ToList();
-            }
-        }
-        public void GetDataGenre()
-        {
-            if (DataHelper.Instance.Genres.Count <= 0)
-            {
-                _genres = APIHelper.Gets<Genre>($"{FirestoreService.CL_Genre}");
-                if (_genres != null)
-                {
-                    foreach (Genre genre in _genres)
-                    {
-                        if (!DataHelper.Instance.Genres.Keys.Contains(genre.id))
-                        {
-                            DataHelper.Instance.Genres.Add(genre.id, genre);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                _genres = DataHelper.Instance.Genres.Values.ToList();
-            }
-        }
+        
         //public IActionResult Index(string searchTerm, int? page)
         //{
         //    ViewBag.SearchTerm = "";
@@ -120,15 +75,14 @@ namespace TDT.CAdmin.Controllers
 
       
         public bool IsIdInUse(string id)
-        {
-            return _songs.Any(song => song.encodeId == id);
+        { 
+            ResponseDataDTO<SongDTO> songdto = APICallHelper.Get<ResponseDataDTO<SongDTO>>($"Song/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            if (songdto != null)
+                return true;
+            return false;
         }
         public IActionResult Create()
         {
-            //    if (DataHelper.Instance.Genres.Count > 0)
-            //    {
-            //        ViewBag.MaGenre = new SelectList(_genres, "id", "name");
-            //    }
             return View();
         }
 
@@ -152,7 +106,7 @@ namespace TDT.CAdmin.Controllers
                 FirebaseService.Instance.pushFile(image, "Images/Song/1/" + thumbnail).Wait();
                 songdto.thumbnail = "Images/Song/0/" + thumbnail;
                 songdto.thumbnailM = "Images/Song/1/" + thumbnail;
-
+               
                 SongDTO Songfile = APICallHelper.Post<SongDTO>(
                    $"Song/InsertOrUpdate",
                    token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
@@ -177,8 +131,6 @@ namespace TDT.CAdmin.Controllers
                 return View();
             }
         }
-
-
         public IActionResult Edit(string id)
         {
             SongDTO song = new SongDTO();
@@ -247,12 +199,6 @@ namespace TDT.CAdmin.Controllers
         public IActionResult Details(string id)
         {
             SongDTO song = new SongDTO();
-            //if (id != null)
-            //{
-            //    song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
-            //    return View(song);
-
-            //}
             Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).WhereEqualTo("encodeId", id);
             List<SongDTO> lsong = FirestoreService.Instance.Gets<SongDTO>(query);
             if(lsong != null)

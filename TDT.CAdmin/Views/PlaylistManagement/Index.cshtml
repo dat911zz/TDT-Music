@@ -1,7 +1,7 @@
-﻿@using X.PagedList.Mvc.Core;
-@using X.PagedList.Mvc.Core.Common;
-@using X.PagedList;
-@model IPagedList<TDT.Core.DTO.Firestore.PlaylistDTO>
+﻿@using TDT.Core.DTO.Firestore;
+@using TDT.Core.Helper;
+@model PageList<List<PlaylistDTO>>
+
 
 @{
     ViewData["Title"] = "Index";
@@ -65,7 +65,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.Items)
             {
                 <tr>
                     <td>
@@ -138,10 +138,47 @@
     </table>
 </div>
 
-<div class="pagedList-container">
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @ViewBag.SearchTerm }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
+<!-- Hiển thị điều hướng phân trang -->
+<div class="pagination">
+    <ul>
+        @if (Model.PageNumber > 1)
+        {
+            <li><a asp-action="Index" asp-route-page="1"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a></li>
+            @if (Model.PageNumber > 4)
+            {
+                <li><span>...</span></li>
+            }
+            @for (var i = Model.PageNumber - 3; i < Model.PageNumber; i++)
+            {
+                if (i > 0)
+                {
+                    <li><a asp-action="Index" asp-route-page="@i">@i</a></li>
+                }
+            }
+        }
+        <li class="active"><a>@Model.PageNumber</a></li>
+        @for (var i = Model.PageNumber + 1; i <= Model.PageNumber + 3; i++)
+        {
+            if (i <= Model.TotalPages)
+            {
+                <li><a asp-action="Index" asp-route-page="@i">@i</a></li>
+            }
+        }
+        @if (Model.PageNumber < Model.TotalPages)
+        {
+            @if (Model.PageNumber < Model.TotalPages - 3)
+            {
+                <li><span>...</span></li>
+            }
+            <li><a asp-action="Index" asp-route-page="@Model.TotalPages"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a></li>
+        }
+    </ul>
 </div>
-
+<div>
+    Đến Trang
+    <input type="text" id="pageInput" name="pageInput" style="width: 60px;"> / @Model.TotalPages
+    <div class="btn" id="goToPageButton">Đến</div>
+</div>
 
 <script>
     $(".img_song").each(function (e, val) {
@@ -176,5 +213,18 @@
                 window.location.href = '@Url.Action("Index", new { page =  1})' + '&searchTerm=' + searchTerm;
             }
         });
+        $('#goToPageButton').click(function (e) {
+            e.preventDefault();
+            var pageInput = $('#pageInput').val();
+            var maxpage = @Model.TotalPages;
+            if (pageInput && !isNaN(pageInput) && pageInput > 0) {
+                if (pageInput > maxpage) {
+                    pageInput = maxpage;
+                }
+                var url = "/PlaylistManagement?page=" + pageInput;
+                window.location.href = url;
+            }
+        });
+
     });
 </script>

@@ -70,7 +70,7 @@ namespace TDT.API.Controllers
             }
             try
             {
-                FirestoreService.Instance.SetAsync(FirestoreService.CL_Song_Test, song.encodeId, song).Wait();      // Sửa Song Test
+                FirestoreService.Instance.SetAsync(FirestoreService.CL_Song, song.encodeId, song).Wait();      // Sửa Song Test
                 return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, new Dictionary<string, object>()
                     {
                         {"data", song}
@@ -89,7 +89,7 @@ namespace TDT.API.Controllers
         [Authorize]
         public JsonResult Delete(string encodeId)
         {
-            FirestoreService.Instance.DeleteAsync(FirestoreService.CL_Song_Test, encodeId).Wait();
+            FirestoreService.Instance.DeleteAsync(FirestoreService.CL_Song, encodeId).Wait();
             return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa");
         }
     }
