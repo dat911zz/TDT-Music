@@ -10,7 +10,7 @@ namespace TDT.Core.Extensions
 {
     public static class HtmlHelperExtension
     {
-        private static string BASE_URL = "https://localhost:44300/";
+        private static string BASE_URL = "https://tdt-api.somee.com/";
         public static IHtmlContent AddSharedScript(this IHtmlHelper html, string path)
         {
             if (html == null || path == null)
