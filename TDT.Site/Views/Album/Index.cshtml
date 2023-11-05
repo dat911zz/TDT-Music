@@ -250,12 +250,16 @@
 
 <script>
     $(document).ready(function () {
+        fromStack = "@Html.Raw(ViewData["fromstack"])";
+        titleStack = "@Html.Raw(ViewData["titlestack"])";
         var checkFirst = false;
         var json = `@Html.Raw(JsonConvert.SerializeObject(Model.songs))`;
         var arrSongId = JSON.parse(json);
         var max = Math.ceil(arrSongId.length / 5);
         var q = $('#quantity-song');
         var d = $('#sum-duration-song');
+        var iComplete = 1;
+        HoldOn.open();
         for(var i = 1; i <= max; i++) {
             $.ajax({
                 url: "/Album/GetHtmlSong?page=" + i + "&json=" + json,
@@ -273,6 +277,10 @@
                 },
                 complete: function () {
                     sortHtmlPlaylist(arrSongId);
+                    iComplete++;
+                    if (iComplete == max) {
+                        HoldOn.close();
+                    }
                 }
             });
         }

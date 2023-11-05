@@ -13,7 +13,7 @@ namespace TDT.Site.Controllers
     {
         public bool CheckShowPlayer()
         {
-            return !PlayerService.StackIsEmpty();
+            return !PlayerService.Instance.StackIsEmpty();
         }
         public string GetSrc()
         {
@@ -21,18 +21,23 @@ namespace TDT.Site.Controllers
         }
 
         [HttpPost]
-        public void SetSrc([FromForm] string[] list, int? index = null, string id = null)
+        public void SetSrc([FromForm] string[] list, string from = null, string title = null, int? index = null, string id = null)
         {
-            PlayerService.SetPlayer(list.ToList());
+            PlayerService.Instance.SetPlayer(list.ToList());
             if(index != null && !string.IsNullOrEmpty(id))
             {
-                PlayerService.ChoosePlayer((int)index, id);
+                PlayerService.Instance.ChoosePlayer((int)index, id);
+            }
+            if(!string.IsNullOrEmpty(from) && !string.IsNullOrEmpty(title))
+            {
+                PlayerService.Instance.StackFrom = from;
+                PlayerService.Instance.StackTitle = title;
             }
         }
         [HttpPost]
         public void ChoosePlayer([FromForm] int index, string id)
         {
-            PlayerService.ChoosePlayer(index, id);
+            PlayerService.Instance.ChoosePlayer(index, id);
         }
 
         [HttpPost]
@@ -64,7 +69,7 @@ namespace TDT.Site.Controllers
         [HttpPost]
         public JsonResult ChangeMusic([FromForm] string type)
         {
-            Player player = PlayerService.ChangeMusic(type);
+            Player player = PlayerService.Instance.ChangeMusic(type);
             if(player == null)
             {
                 return new JsonResult("");
@@ -100,7 +105,7 @@ namespace TDT.Site.Controllers
         public void SetIsShuffle([FromForm] bool value)
         {
             PlayerService.IsShuffle = value;
-            PlayerService.ShuffleStack();
+            PlayerService.Instance.ShuffleStack();
         }
 
         public bool GetIsRepeat()
@@ -139,6 +144,10 @@ namespace TDT.Site.Controllers
         public void SetCurUrl([FromForm] string url)
         {
             PlayerService.UrlStack = url;
+        }
+        public string GetHtmlStack()
+        {
+            return PlayerService.Instance.GetHtmlStack();
         }
     }
 }

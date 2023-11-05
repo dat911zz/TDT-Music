@@ -136,6 +136,7 @@ shuffleButton.onclick = function() {
     }
     setIsShuffle(isShuffle);
     setIconShuffle(isShuffle);
+    changeStack();
 };
 
 function setIconShuffle(check) {
@@ -192,6 +193,53 @@ function start() {
             changeIconActionPlay();
         });
     }
+    $('.queue-expand-button').click(function () {
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active');
+            if ($('.now-playing-bar > .player-queue').length > 0) {
+                $('.now-playing-bar > .player-queue').remove();
+            }
+        }
+        else {
+            $(this).addClass('active');
+            changeStack();
+        }
+    });
+}
+
+function changeStack() {
+    if ($('.queue-expand-button').hasClass('active')) {
+        if ($('.now-playing-bar > .player-queue').length > 0) {
+            $('.now-playing-bar > .player-queue').remove();
+        }
+        $.ajax({
+            url: "/Player/GetHtmlStack",
+            success: function (data) {
+                $('.now-playing-bar > .player-controls').before(data);
+                changeIconActionPlay();
+                $('.player-queue__list > div[data-index] .list-item button.action-play').each(function (i, item) {
+                    $(item).click(function () {
+                        playPauseButton.innerHTML = icon_await;
+                        var parent = $(this).parents('div[data-index]');
+                        iSongStart = parseInt(parent.attr("data-index"));
+                        idSongStart = parent.attr("data-id");
+                        noti = true;
+                        $.ajax({
+                            type: "POST",
+                            url: "/Player/ChoosePlayer",
+                            data: {
+                                index: iSongStart,
+                                id: idSongStart
+                            },
+                            success: function () {
+                                changeMusic("cur");
+                            }
+                        });
+                    });
+                });
+            }
+        });
+    }
 }
 
 playPauseButton.onclick = () => playPause();
@@ -201,7 +249,7 @@ const playPause = () => {
         isInit = true;
     }
     if (player.paused) {
-        player.play();
+        player.play().catch(err => { });
         playPauseButton.innerHTML = icon_pause; 
         setIsPlaying(true);
     } else {
@@ -324,36 +372,35 @@ function importSong(type) {
         if (!PlayerShowing) {
             showPlayer();
         }
-        if (cur_song != undefined) {
-            if (cur_song.Src == "") {
-                if (noti) {
-                    toastr.warning("Vui lòng nâng cấp Premium để được trải nghiệm");
-                    noti = false;
-                }
-                changeMusic("next");
-                return;
-            }
-            else {
+        if (cur_song.Src == "") {
+            if (noti) {
+                toastr.warning("Vui lòng nâng cấp Premium để được trải nghiệm");
                 noti = false;
             }
-            player.src = cur_song.Src;
-            info_imgsong.src = cur_song.Thumbnail;
-            info_nameSong.innerHTML = cur_song.Name;
-            info_nameArtist.innerHTML = cur_song.Artists;
-            info_urlAlbum.href = cur_song.UrlPlaylist;
-            changeIconActionPlay();
+            changeMusic("next");
+            return;
         }
+        else {
+            noti = false;
+        }
+        changeStack();
+        player.src = cur_song.Src;
+        info_imgsong.src = cur_song.Thumbnail;
+        info_nameSong.innerHTML = cur_song.Name;
+        info_nameArtist.innerHTML = cur_song.Artists;
+        info_urlAlbum.href = cur_song.UrlPlaylist;
+        changeIconActionPlay();
         if (type !== "init")
             playPause();
         updateTime();
     }
     else {
+        setPauseAll();
         showPlayer(false);
     }
 }
 
 const changeMusic = (type = "next") => {
-    playPauseButton.innerHTML = icon_await;
     $.ajax({
         type: "POST",
         url: "/Player/ChangeMusic?=" + type,
@@ -424,9 +471,9 @@ function changeIconActionPlay() {
         if (player.paused) {
             playPauseButton.innerHTML = icon_play;
             $('.select-item[data-index=' + cur_song.Index + '][data-id=' + cur_song.Id + '] button.action-play').html(icon_action_play);
+            $('.player-queue__container .media.is-active button.action-play').html(icon_action_play);
             if (url_stack == window.location.href) {
-                icon.addClass('ic-svg-play-circle');
-                icon.removeClass('ic-gif-playing-white');
+                icon.addClass('ic-svg-play-circle').removeClass('ic-gif-playing-white');
                 if (!setFirst) {
                     $('button.btn-play-all').html(`<i class="icon ic-play"></i><span>Phát tất cả</span>`);
                 }
@@ -438,6 +485,7 @@ function changeIconActionPlay() {
         else {
             playPauseButton.innerHTML = icon_pause;
             $('.select-item[data-index=' + cur_song.Index + '][data-id=' + cur_song.Id + '] button.action-play').html(icon_action_gif);
+            $('.player-queue__container .media.is-active button.action-play').html(icon_action_gif);
             if (url_stack == window.location.href) {
                 icon.addClass('ic-gif-playing-white');
                 icon.removeClass('ic-svg-play-circle');
@@ -445,6 +493,18 @@ function changeIconActionPlay() {
             }
         }
     }
+}
+function setPauseAll() {
+    player.pause();
+    $('.select-item .list-item.active').removeClass('active');
+    $('.select-item .list-item i.action-play.ic-gif-playing-white').removeClass('ic-gif-playing-white').addClass('ic-play');
+    playPauseButton.innerHTML = icon_play;
+    $('.player-queue__container .media.is-active button.action-play').html(icon_action_play);
+    $('.header-thumbnail i.action-play').addClass('ic-svg-play-circle').removeClass('ic-gif-playing-white');
+    $('button.btn-play-all').html(`<i class="icon ic-play"></i><span>Phát tất cả</span>`);
+    setFirst = false;
+    iSongStart = null;
+    idSongStart = null;
 }
 function actionButton() {
     if (player.paused) {
@@ -636,6 +696,8 @@ $(document).ready(function () {
 var setFirst = false;
 var iSongStart = null;
 var idSongStart = null;
+var fromStack = null;
+var titleStack = null;
 $('button.btn-play-all').click(function () {
     if (!setFirst) {
         setFirst = true;
@@ -650,6 +712,8 @@ $('button.btn-play-all').click(function () {
             url: "/Player/SetSrc",
             data: {
                 list: arrId,
+                from: fromStack,
+                title: titleStack,
                 index: iSongStart,
                 id: idSongStart
             },

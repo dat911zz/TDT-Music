@@ -1,16 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
-using System.Collections.Generic;
-using System.Data.Linq.Mapping;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.WebSockets;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
 using TDT.Core.Ultils;
-using static Google.Cloud.Firestore.V1.StructuredAggregationQuery.Types.Aggregation.Types;
 
 namespace TDT.Core.ServiceImp
 {
@@ -439,8 +432,6 @@ namespace TDT.Core.ServiceImp
                 ", playlist.title, $"/Album?encodeId={playlist.encodeId}", img, GenerateArtistLink(playlist.artists), column);
             return str.ToString(); 
         }
-
-        
 
         public static string GenerateArtistInfo(ArtistDTO artist)
         {

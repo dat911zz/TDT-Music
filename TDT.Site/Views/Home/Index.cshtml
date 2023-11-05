@@ -1,7 +1,26 @@
 ﻿@using TDT.Core.DTO;
 @using TDT.Core.Helper;
+@using TDT.Core.Extensions;
 @{
     ViewData["Title"] = "Home Page";
+    var loadRelease = "";
+    string itemColRelease = HtmlHelperExtension.GetString(Html.PartialAsync("/views/partial/_ItemSongLoading.cshtml").Result);
+    for(int i = 0; i < 3; i++)
+    {
+        string col = "";
+        for(int j = 0; j < 4; j++)
+        {
+            col += itemColRelease;
+        }
+        loadRelease += string.Format(
+                                    @"
+                                        <div class=""column mar-b-0 is-fullhd-4 is-widescreen-4 is-desktop-4 is-touch-6 is-tablet-6"">
+                                            <div class=""list"">
+                                                {0}
+                                            </div>
+                                        </div>
+                                    ", col);
+    }
 }
 
 <main class="zm-section" id="body-scroll"
@@ -162,34 +181,11 @@
                 </a>
             </h3>
             <div class="genre-select">
-                <button class="zm-btn active button genre_all" tabindex="0">Tất cả</button>
                 <button class="zm-btn button genre_vn" tabindex="0">Việt Nam</button>
+                <button class="zm-btn active button genre_all" tabindex="0">Tất cả</button>
             </div>
             <div id="song_release" class="columns is-multiline">
-                <div class="column mar-b-0 is-fullhd-4 is-widescreen-4 is-desktop-4 is-touch-6 is-tablet-6">
-                    <div class="list">
-                        @for(int i = 0; i < 4; i++)
-                        {
-                            @await Html.PartialAsync("/views/partial/_ItemSongLoading.cshtml")
-                        }
-                    </div>
-                </div>
-                <div class="column mar-b-0 is-fullhd-4 is-widescreen-4 is-desktop-4 is-touch-6 is-tablet-6">
-                    <div class="list">
-                        @for(int i = 0; i < 4; i++)
-                        {
-                            @await Html.PartialAsync("/views/partial/_ItemSongLoading.cshtml")
-                        }
-                    </div>
-                </div>
-                <div class="column mar-b-0 is-fullhd-4 is-widescreen-4 is-desktop-4 is-touch-6 is-tablet-6">
-                    <div class="list">
-                        @for (int i = 0; i < 4; i++)
-                        {
-                            @await Html.PartialAsync("/views/partial/_ItemSongLoading.cshtml")
-                        }
-                    </div>
-                </div>
+                @* @Html.Raw(loadRelease) *@
             </div>
         </div>
         <div class="zm-section playlist-section channel-section pad-0">
@@ -309,7 +305,7 @@
 
 <script>
     function loadSongReleaseAll() {
-        HoldOn.open();
+        $('#song_release').html(`@Html.Raw(loadRelease)`);
         $.ajax({
             url: "/Share/GetHtmlSongReleaseAll",
             success: function (data) {
@@ -320,12 +316,11 @@
                 $('.genre_all').addClass('active');
                 $('#all_release').attr("href", "/Hub/new_release?option=0");
                 $('#song_release').html(data);
-                HoldOn.close();
             }
         });
     }
     function loadSongReleaseVN() {
-        HoldOn.open();
+        $('#song_release').html(`@Html.Raw(loadRelease)`);
         $.ajax({
             url: "/Share/GetHtmlSongReleaseVN",
             success: function (data) {
@@ -336,7 +331,6 @@
                 $('.genre_vn').addClass('active');
                 $('#all_release').attr("href", "/Hub/new_release?option=1");
                 $('#song_release').html(data);
-                HoldOn.close();
             }
         });
     }
@@ -349,7 +343,7 @@
         $('.genre_vn').click(function () {
             loadSongReleaseVN();
         });
-        loadSongReleaseAll();
+        loadSongReleaseVN();
         $.ajax({
             url: "/Share/GetHtmlPlaylistChill",
             success: function (data) {
