@@ -54,18 +54,11 @@ namespace TDT.CAdmin
                         cfg.LoginPath = new PathString("/Auth/Login");
                         cfg.LogoutPath = new PathString("/Auth/Logout");
                         cfg.AccessDeniedPath = new PathString("/Home/Error?errorCode=401");
+                        //cfg.SlidingExpiration = true;
+                        cfg.ExpireTimeSpan = TimeSpan.FromMinutes(Configuration.GetValue<double>("IdleTimeoutMinutes"));
                     }
                 );
-            services.AddAuthorization(cfg =>
-            {
-                cfg.AddPolicy("UserPolicy", policyBuilder =>
-                {
-                    policyBuilder.UserRequireCustomClaim(ClaimTypes.Email);
-                    policyBuilder.UserRequireCustomClaim(ClaimTypes.Name);
-                });
-            });
-            //services.AddScoped<IAuthorizationHandler, PoliciesAuthorizationHandler>();
-            //services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
+            services.AddAuthorization();
             services.AddScoped<IActionFilter, DVNAuthorizationFilter>();
             services.AddMvc(cfg =>
             {

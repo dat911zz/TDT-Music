@@ -25,7 +25,10 @@ namespace TDT.Core.Models
                 return instance;
             }
         }
-        private DataBindings(){}
+        private DataBindings(){
+        Users ??= new List<UserDTO>();
+                    Roles ??= new List<RoleDTO>();
+                    Permissions ??= new List<PermissionDTO>();}
         public IList<RoleDTO> Roles { get; set; }
         public IList<PermissionDTO> Permissions { get; set; }
         public IList<UserDTO> Users { get; set; }
@@ -51,9 +54,10 @@ namespace TDT.Core.Models
                     {
                         token = context.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value;
                     }
-                    await LoadUsers(token, logger);
-                    await LoadRoles(token, logger);
-                    await LoadPermissions(token, logger);
+
+                    await LoadUsers(token);
+                    await LoadRoles(token);
+                    await LoadPermissions(token);
                 }).Start();
                 
             }
@@ -62,33 +66,53 @@ namespace TDT.Core.Models
                 logger.LogCritical(ex, "Exception");
             }
         }
-        public async Task LoadRoles(string token, ILogger logger)
+        public async Task LoadRoles(string token)
         {
             if (string.IsNullOrEmpty(token))
             {
                 token = LoginAsAPI();
             }
             ResponseDataDTO<RoleDTO>[] rolesRes = await Task.WhenAll(APICallHelper.Get<ResponseDataDTO<RoleDTO>>("Role", token: token));
-            Roles = rolesRes[0].Data;
+            foreach (var role in rolesRes[0].Data)
+            {
+                if (!Roles.Any(r => r.Id == role.Id))
+                {
+                    Roles.Add(role);
+                }
+            }
+            //Roles = rolesRes[0].Data;
         }
-        public async Task LoadPermissions(string token, ILogger logger)
+        public async Task LoadPermissions(string token)
         {
             if (string.IsNullOrEmpty(token))
             {
                 token = LoginAsAPI();
             }
             ResponseDataDTO<PermissionDTO>[] permsRes = await Task.WhenAll(APICallHelper.Get<ResponseDataDTO<PermissionDTO>>("Permission", token: token));
-            Permissions = permsRes[0].Data;
+            foreach (var perm in permsRes[0].Data)
+            {
+                if (!Permissions.Any(p => p.Id == perm.Id))
+                {
+                    Permissions.Add(perm);
+                }
+            }
+            //Permissions = permsRes[0].Data;
         }
-        public async Task LoadUsers(string token, ILogger logger, int iterator = 2000)
+        public async Task LoadUsers(string token)
         {
             if (string.IsNullOrEmpty(token))
             {
                 token = LoginAsAPI();
             }
             ResponseDataDTO<UserDTO>[] usersRes = await Task.WhenAll(APICallHelper.Get<ResponseDataDTO<UserDTO>>("User", token: token));
-            Task.Delay(iterator).Wait();
-            Users = usersRes[0].Data;
+            foreach (var user in usersRes[0].Data)
+            {
+                if (!Users.Any(u => u.UserName.Equals(user.UserName)))
+                {
+                    Users.Add(user);
+                }
+            }
+            //Users = usersRes[0].Data;
         }
     }
 }
