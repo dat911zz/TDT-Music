@@ -5,18 +5,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Chỉnh sửa bài hát @Model.title</h1>
+<h1>Edit</h1>
 
 <h4>SongDTO</h4>
 <hr />
-
+<div class="row">
+    <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="row">
-        <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="encodeId" class="control-label"></label>
-                <input asp-for="encodeId" class="form-control" readonly />
+                <input asp-for="encodeId" class="form-control" readonly hidden />
                 <span asp-validation-for="encodeId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -74,9 +73,6 @@
                     <input class="form-check-input" asp-for="zingChoice" /> @Html.DisplayNameFor(model => model.zingChoice)
                 </label>
             </div>
-            </div>
-            </div>
-    <div class="col-md-6">
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="isPrivate" /> @Html.DisplayNameFor(model => model.isPrivate)
@@ -134,27 +130,26 @@
             </div>
             <div class="form-group">
                 <label asp-for="like" class="control-label"></label>
-                <input asp-for="like" class="form-control" readonly />
+                <input asp-for="like" class="form-control" />
                 <span asp-validation-for="like" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="listen" class="control-label"></label>
-                <input asp-for="listen" class="form-control" readonly />
+                <input asp-for="listen" class="form-control" />
                 <span asp-validation-for="listen" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="liked" readonly /> @Html.DisplayNameFor(model => model.liked)
+                    <input class="form-check-input" asp-for="liked" /> @Html.DisplayNameFor(model => model.liked)
                 </label>
             </div>
             <div class="form-group">
                 <label asp-for="comment" class="control-label"></label>
-                <input asp-for="comment" class="form-control" readonly />
+                <input asp-for="comment" class="form-control" />
                 <span asp-validation-for="comment" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Lưu" class="btn btn-primary" />
-            </div>
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>

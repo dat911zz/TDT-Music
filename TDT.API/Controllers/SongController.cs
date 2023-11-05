@@ -62,7 +62,7 @@ namespace TDT.API.Controllers
         public JsonResult InsertOrUpdate([FromBody] SongDTO song)
         {
             
-            List<string> paramCheck = new List<string>() { "encodeId", "title", "alias", "thumbnail" };
+            List<string> paramCheck = new List<string>() { "encodeId", "title", "thumbnail" };
             var resParam = HelperUtility.GetParamsIllegal(paramCheck, song);
             if (resParam.Count > 0)
             {

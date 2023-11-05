@@ -19,12 +19,11 @@ namespace TDT.CAdmin.Controllers
 {
     public class MusicManagementController : Controller
     {
-        private List<SongDTO> _songs;
+
         public MusicManagementController()
         {
 
         }
-        
         //public IActionResult Index(string searchTerm, int? page)
         //{
         //    ViewBag.SearchTerm = "";
@@ -45,12 +44,20 @@ namespace TDT.CAdmin.Controllers
         //    IPagedList<SongDTO> pagedList = lsong == null ? new List<SongDTO>().ToPagedList() : lsong.OrderByDescending(o => o.releaseDate).ToPagedList(pageNumber, pageSize);
         //    return View(pagedList);
         //}
+        public bool IsIdInUse(string id)
+        {
+            ResponseDataDTO<SongDTO> songdto = APICallHelper.Get<ResponseDataDTO<SongDTO>>($"Song/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            if (songdto != null)
+                return true;
+            return false;
+        }
         public IActionResult Index(string searchTerm, int? page)
         {
             ViewBag.SearchTerm = "";
-            int pageSize = 6;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
-            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).OrderByDescending("releaseDate").Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
+            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
+            //Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).OrderByDescending("releaseDate").Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
             List<SongDTO> lsong = FirestoreService.Instance.Gets<SongDTO>(query);
             int sobs = (int)FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Count().GetSnapshotAsync().Result.Count;
             ViewBag.SoBH = sobs;
@@ -61,25 +68,8 @@ namespace TDT.CAdmin.Controllers
         public string LoadImg(string encodeID, string thumbnail)
         {
             string img;
-            if (DataHelper.Instance.ThumbSong.Keys.Contains(encodeID))
-            {
-                img = DataHelper.Instance.ThumbSong[encodeID];
-            }
-            else
-            {
-                img = FirebaseService.Instance.getStorage(thumbnail);
-                DataHelper.Instance.ThumbSong.Add(encodeID, img);
-            }
+            img = FirebaseService.Instance.getStorage(thumbnail);
             return img;
-        }
-
-      
-        public bool IsIdInUse(string id)
-        { 
-            ResponseDataDTO<SongDTO> songdto = APICallHelper.Get<ResponseDataDTO<SongDTO>>($"Song/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
-            if (songdto != null)
-                return true;
-            return false;
         }
         public IActionResult Create()
         {
@@ -91,7 +81,6 @@ namespace TDT.CAdmin.Controllers
         {
             try
             {
-
                 string id = string.Empty;
                 do
                 {
@@ -181,7 +170,6 @@ namespace TDT.CAdmin.Controllers
                 return View();
             }
         }
-
 
         [HttpPost]
         public IActionResult Delete(string id)
