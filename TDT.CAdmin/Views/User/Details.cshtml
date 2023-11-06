@@ -1,4 +1,5 @@
-﻿@model TDT.Core.Models.User
+﻿@using TDT.Core.DTO;
+@model TDT.Core.Models.User
 
 @{
     ViewData["Title"] = "Details";
@@ -15,12 +16,12 @@
 <hr/>
 <div>
     <dl class="row">
-        <dt class = "col-sm-3">
+        @* <dt class = "col-sm-3">
             Mã tài khoản
         </dt>
         <dd class = "col-sm-9">
             @Html.DisplayFor(model => model.Id)
-        </dd>
+        </dd> *@
         <dt class = "col-sm-3">
             Tên tài khoản
         </dt>
@@ -106,11 +107,29 @@
             Ngày tạo lập
         </dt>
         <dd class = "col-sm-9">
-            @Html.DisplayFor(model => model.CreateDate)
+            @Model.CreateDate?.ToString("dd/MM/yyyy HH:mm:ss")
+        </dd>
+        <dt class="col-sm-3">
+            Danh sách role đã đăng ký
+        </dt>
+        <dd class="col-sm-9" style="height: 200px; overflow: auto">
+            @if(ViewBag.roles.Count != 0){
+                string rs = "";
+                @foreach (var role in (IList<RoleDTO>)ViewBag.roles)
+                {
+                    rs += @role.Name + ", ";
+                }
+                rs = rs.Substring(0, rs.Length - 2);
+                <div>@rs</div>
+            }
+            else
+            {
+                <span style="color:red">Chưa có role nào</span>
+            }
         </dd>
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Cập nhật thông tin tài khoản", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Cập nhật thông tin tài khoản", "Edit", new { id = Model.UserName }) |
     <a asp-action="Index">Trở về trang trước</a>
 </div>

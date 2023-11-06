@@ -1,51 +1,80 @@
-﻿@model TDT.Core.Models.UserIdentiyModel
+﻿@using TDT.Core.DTO;
+@model TDT.Core.Models.UserIdentiyModel
 
 @{
     ViewData["Title"] = "Tạo tài khoản";
+    IList<RoleDTO> roles = ViewBag.roles ?? new List<RoleDTO>();
 }
 
-<h2>Tạo mới tài khoản</h2>
+<h2 class="title-admin">Tạo mới tài khoản</h2>
 <hr />
-<div class="row">
+<form asp-action="Create" class="row" style="align-items: flex-start;">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Tạo tài khoản" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="UserName" class="control-label"></label>
+            <input asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address" class="control-label"></label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="control-label"></label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="control-label"></label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
 
+        <div class="form-group">
+            <input type="submit" value="Tạo tài khoản" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="form-group col-md-5">
+        <label class="control-label">
+            Phân quyền tài khoản
+            <input id="choose-all-role" title="Chọn tất cả" style="margin-left: 10px" type="checkbox" value="">
+        </label>
+        <div class="row roles role-assigment-panel">
+            @foreach (var role in roles)
+            {
+                <label class="col-md-4">
+                    <input style="margin-left: 10px" type="checkbox" name="UserRoles" value="@role.Id">
+                    <span>@role.Name</span>
+                </label>
+            }
+        </div>
+    </div>
+</form>
+
+<script>
+    $('#choose-all-role').on('click', function (e) {
+        var checkboxs = $('.roles input[type="checkbox"]');
+        if ($(this).is(':checked')) {
+            checkboxs.prop('checked', true);
+        } else {
+            checkboxs.prop('checked', false);
+        }
+    });
+</script>
 <div>
     <a asp-action="Index">Trở về trang trước</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

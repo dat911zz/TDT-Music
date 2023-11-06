@@ -25,7 +25,7 @@ namespace TDT.IdentityCore.Middlewares
         {
             var _logger = _loggerFactory.CreateLogger<ErrorHandlerMiddleware>();
             try
-            {                
+            {
                 await _next(context);
                 switch (context.Response.StatusCode)
                 {
@@ -62,7 +62,7 @@ namespace TDT.IdentityCore.Middlewares
                 _logger.LogError($"Exception: {error.Message}\n{error.StackTrace}");
                 HandlerError(
                     context, 
-                    "Có lỗi đã xảy ra!"
+                    error.Message
                     );
             }
         }

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TDT.Core.DTO;
 using TDT.Core.Extensions;
 using TDT.Core.Models;
@@ -24,9 +25,9 @@ namespace TDT.CAdmin.Controllers
 
         }
         // GET: PermissionController
-        public ActionResult Index(string? searchTerm, int? page)
+        public async Task<ActionResult> Index(string? searchTerm, int? page)
         {
-            ResponseDataDTO<PermissionDTO> permission = APICallHelper.Get<ResponseDataDTO<PermissionDTO>>("Permission", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            await DataBindings.Instance.LoadPermissions(User.GetToken());
             ViewBag.SearchTerm = "";
             int pageNumber = (page ?? 1);
             int pageSize = 6;
@@ -34,15 +35,15 @@ namespace TDT.CAdmin.Controllers
             // Lọc vai trò dựa trên từ khóa tìm kiếm
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                if (permission.Data != null)
+                if (DataBindings.Instance.Permissions != null)
                 {
-                    permission.Data = permission.Data.Where(r => r.Name.ToLower().Contains(searchTerm.ToLower())).ToList();
+                    DataBindings.Instance.Permissions = DataBindings.Instance.Permissions.Where(r => r.Name.ToLower().Contains(searchTerm.ToLower())).ToList();
                     ViewBag.SearchTerm = searchTerm;
                 }
                 else return View();
             }
 
-            IPagedList<PermissionDTO> pagedList = permission.Data == null ? new List<PermissionDTO>().ToPagedList() : permission.Data.OrderByDescending(o => o.CreateDate).ToPagedList(pageNumber, pageSize);
+            IPagedList<PermissionDTO> pagedList = DataBindings.Instance.Permissions == null ? new List<PermissionDTO>().ToPagedList() : DataBindings.Instance.Permissions.OrderByDescending(o => o.CreateDate).ToPagedList(pageNumber, pageSize);
 
             return View(pagedList);
         }
@@ -73,12 +74,12 @@ namespace TDT.CAdmin.Controllers
                         this.MessageContainer().AddMessage("Vui lòng điền đẩy đủ thông tin!", ToastMessageType.Warning);
                         return View();
                     }
-                    ResponseDataDTO<PermissionDTO> roleDetail = APICallHelper.Post<ResponseDataDTO<PermissionDTO>>(
+                    ResponseDataDTO<PermissionDTO> res = APICallHelper.Post<ResponseDataDTO<PermissionDTO>>(
                        $"Permission",
                        token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
                        requestBody: JsonConvert.SerializeObject(permission)
                        ).Result;
-                    if (roleDetail.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+                    if (res.Code == Core.Enums.APIStatusCode.ActionSucceeded)
                     {
                         //FlashMessage để truyền message từ đây sang action hoặc controller khác
                         this.MessageContainer().AddFlashMessage("Tạo quyền thành công!", ToastMessageType.Success);
@@ -86,7 +87,7 @@ namespace TDT.CAdmin.Controllers
                     else
                     {
                         //Truyền message trong nội bộ hàm
-                        this.MessageContainer().AddMessage(roleDetail.Msg, ToastMessageType.Error);
+                        this.MessageContainer().AddMessage(res.Msg, ToastMessageType.Error);
                         return View();
                     }
 
@@ -151,6 +152,8 @@ namespace TDT.CAdmin.Controllers
             if (roleDetail.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
                 this.MessageContainer().AddFlashMessage("Xóa quyền thành công!", ToastMessageType.Success);
+                var perm = DataBindings.Instance.Permissions.FirstOrDefault(p => p.Id == id);
+                DataBindings.Instance.Permissions.Remove(perm);
             }
             else
             {

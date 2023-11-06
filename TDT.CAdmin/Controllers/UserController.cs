@@ -1,10 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Firebase.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using TDT.CAdmin.Models;
 using TDT.Core.DTO;
 using TDT.Core.Enums;
 using TDT.Core.Extensions;
@@ -12,6 +18,7 @@ using TDT.Core.Models;
 using TDT.Core.Ultils;
 using TDT.Core.Ultils.MVCMessage;
 using X.PagedList;
+using User = TDT.Core.Models.User;
 
 namespace TDT.CAdmin.Controllers
 {
@@ -19,35 +26,80 @@ namespace TDT.CAdmin.Controllers
     public class UserController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        
         public UserController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            
         }
-        public IActionResult Index(int? page)
+        public async Task<IActionResult> Index(string? searchTerm, int? page)
         {
-            ResponseDataDTO<UserDTO> users = APICallHelper.Get<ResponseDataDTO<UserDTO>>("user", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            await DataBindings.Instance.LoadUsers(User.GetToken());
+            var users = DataBindings.Instance.Users;
+            ViewBag.SearchTerm = "";
             int pageNumber = (page ?? 1);
             int pageSize = 6;
-            IPagedList<UserDTO> pagedList = users.Data == null ? new List<UserDTO>().ToPagedList() : users.Data.OrderByDescending(o => o.CreateDate).ToPagedList(pageNumber, pageSize);
+            // Lọc vai trò dựa trên từ khóa tìm kiếm
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                if (users != null)
+                {
+                    users = users.Where(u => u.UserName.ToLower().Contains(searchTerm.ToLower())).ToList();
+                    ViewBag.SearchTerm = searchTerm;
+                }
+                else return View();
+            }
+            IPagedList<UserDTO> pagedList = users == null ? new List<UserDTO>().ToPagedList() : users.OrderByDescending(o => o.CreateDate).ToPagedList(pageNumber, pageSize);
             return View(pagedList);
         }
         [HttpGet]
         public ActionResult Create()
         {
-            
+            ViewBag.roles = DataBindings.Instance.Roles;
             return View();
         }
         [HttpPost]
-        public ActionResult Create(UserIdentiyModel user)
+        public async Task<ActionResult> Create(UserIdentiyModel user, IFormCollection frm)
         {
             if (ModelState.IsValid)
             {
-                ResponseDataDTO<UserIdentiyModel> response = APICallHelper.Post<ResponseDataDTO<UserIdentiyModel>>(
+                var roles = frm["UserRoles"].ToList();
+                ResponseDataDTO<UserIdentiyModel> resUser = APICallHelper.Post<ResponseDataDTO<UserIdentiyModel>>(
                     "Auth/Register",
                     JsonConvert.SerializeObject(user),
-                    token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+                    token: HttpContext.User.GetToken()).Result;
+                await DataBindings.Instance.LoadUsers(HttpContext.User.GetToken());
+                if (resUser.Code != APIStatusCode.ActionSucceeded)
+                {
+                    //FlashMessage để truyền message từ đây sang action hoặc controller khác
+                    this.MessageContainer().AddMessage(resUser.Msg, ToastMessageType.Error);
+                    ViewBag.roles = DataBindings.Instance.Roles;
+                    return View();
+                }
+                foreach (var role in DataBindings.Instance.Roles)
+                {
+                    if (roles.Any(r => r.Equals(role.Id.ToString())))
+                    {
+                        APIResponseModel resRole = APICallHelper.Post<APIResponseModel>(
+                        $"UserRole?username={user.UserName}&roleId={role.Id}",
+                        token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+                        if (resRole.Code != APIStatusCode.ActionSucceeded)
+                        {
+                            this.MessageContainer().AddMessage(resRole.Msg, ToastMessageType.Error);
+                            ViewBag.roles = DataBindings.Instance.Roles;
+                            return View();
+                        }
+                    }
+                    else
+                    {
+                        APIResponseModel resRole = APICallHelper.Delete<APIResponseModel>(
+                        $"UserRole?username={user.UserName}&roleId={role.Id}",
+                        token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+                    }
+                }
+                
 
-                if (response.Code == APIStatusCode.ActionSucceeded)
+                if (resUser.Code == APIStatusCode.ActionSucceeded)
                 {
                     //FlashMessage để truyền message từ đây sang action hoặc controller khác
                     this.MessageContainer().AddFlashMessage("Tạo tài khoản thành công!", ToastMessageType.Success);
@@ -55,7 +107,8 @@ namespace TDT.CAdmin.Controllers
                 else
                 {
                     //Truyền message trong nội bộ hàm
-                    this.MessageContainer().AddMessage(response.Msg, ToastMessageType.Error);
+                    this.MessageContainer().AddMessage(resUser.Msg, ToastMessageType.Error);
+                    ViewBag.roles = DataBindings.Instance.Roles;
                     return View();
                 }
 
@@ -66,34 +119,82 @@ namespace TDT.CAdmin.Controllers
         }
         public ActionResult Details(string id)
         {
-            ResponseDataDTO<User> userDetail = APICallHelper.Get<ResponseDataDTO<User>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;            
-            return View(userDetail.Data.FirstOrDefault());
+            ResponseDataDTO<User> userDetail = APICallHelper.Get<ResponseDataDTO<User>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            User user = userDetail.Data.FirstOrDefault();
+            ResponseDataDTO<RoleDTO> resRole = APICallHelper.Get<ResponseDataDTO<RoleDTO>>(
+            $"UserRole/{user.UserName}",
+                        token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            ViewBag.roles = resRole.Data;
+            return View(user);
         }
         [HttpGet]
         public ActionResult Edit(string id)
         {
-            ResponseDataDTO<UserIdentiyModel> userDetail = APICallHelper.Get<ResponseDataDTO<UserIdentiyModel>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
-
-            return View(userDetail.Data.FirstOrDefault());
+            ViewBag.roles = DataBindings.Instance.Roles;
+            ResponseDataDTO<UserDTO> userDetail = APICallHelper.Get<ResponseDataDTO<UserDTO>>($"user/{id.Trim()}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            ResponseDataDTO<RoleDTO> resRole = APICallHelper.Get<ResponseDataDTO<RoleDTO>>(
+            $"UserRole/{userDetail.Data.FirstOrDefault().UserName}",
+                        token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            ViewBag.userRoles = resRole.Data;
+            var userIdentity = userDetail.Data.Select(s => new UserIdentiyModel
+            {
+                UserName = s.UserName,
+                Address = s.Address,
+                PhoneNumber = s.PhoneNumber,
+                Email = s.Email,
+                CreateDate = s.CreateDate,
+                Password = ""
+            }).FirstOrDefault();
+            return View(userIdentity);
         }
         [HttpPost]
-        public ActionResult Edit(UserIdentiyModel model)
+        public async Task<ActionResult> Edit(UserIdentiyModel model, IFormCollection frm)
         {
+            var roles = frm["UserRoles"].ToList();
             ResponseDataDTO<UserDetailModel> res = APICallHelper.Put<ResponseDataDTO<UserDetailModel>>($"user/{model.UserName.Trim()}",
                 JsonConvert.SerializeObject(model),
-                token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value)
+                token: HttpContext.User.GetToken())
                 .Result;
-            if (res.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+            if (res.Code != APIStatusCode.ActionSucceeded)
+            {
+                this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Error);
+                return View();
+            }
+            await DataBindings.Instance.LoadUsers(HttpContext.User.GetToken());
+            var users = DataBindings.Instance.Users;
+            if (res.Code != APIStatusCode.ActionSucceeded)
             {
                 //FlashMessage để truyền message từ đây sang action hoặc controller khác
-                this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Success);
+                this.MessageContainer().AddMessage(res.Msg, ToastMessageType.Error);
+                ViewBag.roles = DataBindings.Instance.Roles;
+                return View();
             }
-            else
+            foreach (var role in DataBindings.Instance.Roles)
             {
-                //Truyền message trong nội bộ hàm
-                this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Error);
+                if (roles.Any(r => r.Equals(role.Id.ToString())))
+                {
+                    APIResponseModel resRole = APICallHelper.Post<APIResponseModel>(
+                    $"UserRole?username={model.UserName}&roleId={role.Id}",
+                    token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+                    if (resRole.Code != APIStatusCode.Exist)
+                    {
+                        if (resRole.Code != APIStatusCode.ActionSucceeded)
+                        {
+                            this.MessageContainer().AddMessage(resRole.Msg, ToastMessageType.Error);
+                            ViewBag.roles = DataBindings.Instance.Roles;
+                            return View();
+                        }
+                    }                   
+                }
+                else
+                {
+                    APIResponseModel resRole = APICallHelper.Delete<APIResponseModel>(
+                    $"UserRole?username={model.UserName}&roleId={role.Id}",
+                    token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+                }
             }
-            return View(model);
+            this.MessageContainer().AddFlashMessage($"Đã cập nhật thông tin cho tài khoản {model.UserName}!", ToastMessageType.Success);
+            return RedirectToAction("Index");
         }
         [HttpPost]
         public ActionResult Delete(string id)
@@ -103,70 +204,17 @@ namespace TDT.CAdmin.Controllers
             {
                 //FlashMessage để truyền message từ đây sang action hoặc controller khác
                 this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Success);
+                
+                UserDTO user = DataBindings.Instance.Users.FirstOrDefault(u => u.UserName.Equals(id));
+                DataBindings.Instance.Users.Remove(user);
             }
             else
             {
                 //Truyền message trong nội bộ hàm
                 this.MessageContainer().AddFlashMessage(res.Msg, ToastMessageType.Error);
             }
+            var users = DataBindings.Instance.Users;
             return new JsonResult("ok");
         }
-        
-        //    public ActionResult Edit(int id)
-        //    {
-        //        List<string> cvList = new List<string>() { "Nhân Viên", "Quản trị viên" };
-        //        Session["CVList"] = new SelectList(cvList);
-        //        return View(_services.DbContext.QueryTable<TaiKhoanV2>("TaiKhoan").SingleOrDefault(x => x.MaTaiKhoan == id));
-        //    }
-        //    [HttpPost]
-        //    public ActionResult Edit(TaiKhoanV2 model)
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            var account = _services.DbContext.QueryTable<TaiKhoanV2>("TaiKhoan").SingleOrDefault(x => x.MaTaiKhoan == model.MaTaiKhoan);
-        //            //Update
-        //            var result = _services.DbContext.Exceute("exec SP_CapNhatTaiKhoan @matk, '@tendn', '@mk', N'@cv'",
-        //                new
-        //                {
-        //                    matk = model.MaTaiKhoan,
-        //                    tendn = model.TenDN,
-        //                    mk = model.MatKhau,
-        //                    cv = model.ChucVu
-        //                });
-        //            if (result == 0)
-        //            {
-        //                throw new Exception("Thao tác thất bại, vui lòng kiểm tra lại!");
-        //            }
-        //            return RedirectToAction("Index");
-        //        }
-        //        return View();
-        //    }
-
-        //    [HttpPost]
-        //    public string Delete(int id)
-        //    {
-        //        try
-        //        {
-        //            var account = _services.DbContext.QueryTable<TaiKhoanV2>("TaiKhoan").SingleOrDefault(x => x.MaTaiKhoan == id);
-
-        //            if (account == null)
-        //            {
-        //                return "Không tìm thấy tài khoản!";
-        //            }
-        //            var result = _services.DbContext.Exceute("" +
-        //                "exec SP_XoaTaiKhoan @maTK",
-        //                    new
-        //                    {
-        //                        matk = account.MaTaiKhoan,
-        //                    }
-        //            );
-        //            return "ok";
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return ex.Message;
-        //        }
-
-        //    }
     }
 }

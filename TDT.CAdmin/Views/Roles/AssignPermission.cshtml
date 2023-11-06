@@ -1,0 +1,186 @@
+﻿@using TDT.Core.DTO;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Core.Common;
+@using X.PagedList;
+@model IPagedList<TDT.Core.DTO.RoleDTO>
+@{
+    ViewData["Title"] = "Phân quyền cho các vai trò";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    table {
+        border-spacing: 0;
+        border-collapse: collapse;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    td, th, .row:not(:first-child), .col:not(:first-child) {
+        cursor: pointer;
+        padding: 10px;
+        position: relative;
+    }
+
+        td:hover:not(:first-child)::before,
+        .row:hover:not(:first-child)::before {
+            background-color: #00cefb40;
+            content: '\00a0';
+            height: 100%;
+            left: -5000px;
+            position: absolute;
+            top: 0;
+            width: 10000px;
+            z-index: -1;
+        }
+
+        td:not(:first-child):hover::after,
+        .col:not(:first-child):hover::after {
+            background-color: #00cefb40;
+            content: '\00a0';
+            height: 10000px;
+            left: 0;
+            position: absolute;
+            top: -5000px;
+            width: 100%;
+            z-index: -1;
+        }
+
+    .role-cell {
+        text-align: center;
+    }
+    .verticalTableHeader {
+        text-align: center;
+        white-space: nowrap;
+        transform-origin: 50% 50%;
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+
+        .verticalTableHeader:before {
+            content: '';
+            padding-top: 110%; /* takes width as reference, + 10% for faking some extra padding */
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+</style>
+<h2 class="title-admin">Bảng phân quyền</h2>
+
+<div class="row">
+    <div class="col-3">
+        <a type="button" class="btn btn-outline-dark" asp-action="AssignPermission" title="Phân quyền">
+            Lưu thay đổi
+            <div class="fa" aria-hidden="true">
+                <svg style="fill: #00d25b;" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512">
+                    <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c1.8 0 3.5-.2 5.3-.5c-76.3-55.1-99.8-141-103.1-200.2c-16.1-4.8-33.1-7.3-50.7-7.3H178.3zm308.8-78.3l-120 48C358 277.4 352 286.2 352 296c0 63.3 25.9 168.8 134.8 214.2c5.9 2.5 12.6 2.5 18.5 0C614.1 464.8 640 359.3 640 296c0-9.8-6-18.6-15.1-22.3l-120-48c-5.7-2.3-12.1-2.3-17.8 0zM591.4 312c-3.9 50.7-27.2 116.7-95.4 149.7V273.8L591.4 312z" />
+                </svg>
+            </div>
+        </a>
+    </div>
+    <div class="col-6"></div>
+    <div class="col-3 input-group mb-3 ">
+        <input type="text" class="form-control border" placeholder="Nhập vào vai trò cần tìm"
+               aria-label="Nhập vào vai trò cần tìm" aria-describedby="button-search"
+               id="searchTerm" value="@ViewBag.SearchTerm">
+        <div class="input-group-append">
+            <button class="btn btn-outline-dark" type="button" id="button-search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                @if (ViewBag.perms.Count > 0)
+                {
+                    <th></th>
+                    @foreach (var perm in (IList<PermissionDTO>)ViewBag.perms)
+                    {
+                        <th perm-id="@perm.Id">
+                            @perm.Name
+                        </th>
+                    }                   
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="font-weight: bold">
+                            <input style="margin-left: 10px" type="checkbox" class="chk-full-perm">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        @if (ViewBag.perms.Count > 0)
+                        {
+                            @foreach (var perm in (IList<PermissionDTO>)ViewBag.perms)
+                            {
+                                <td class="role-cell">
+                                    <input class="role-box" style="margin-left: 10px" type="checkbox" name="RolePermission" value="@perm.Id">
+                                </td>
+                            }
+                        }                       
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="pagedList-container">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @ViewBag.SearchTerm }), new PagedListRenderOptions { LiElementClasses = new[] { "pagedList" } })
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('#button-search').click(function () {
+            var searchTerm = $('#searchTerm').val();
+            window.location.href = '@Url.Action("Index", new { page = 1 })' + '&searchTerm=' + searchTerm;
+        });
+        $('#searchTerm').keypress(function (e) {
+            var key = e.which;
+            if (key == 13) {
+                var searchTerm = $('#searchTerm').val();
+                window.location.href = '@Url.Action("Index", new { page = 1 })' + '&searchTerm=' + searchTerm;
+            }
+        });
+
+    });
+    $('.chk-full-perm').on('click', function (e) {
+        var checkboxs = $(this).parents('tr:first').find('.role-box');
+        if ($(this).is(':checked')) {
+            checkboxs.prop('checked', true);
+        } else {
+            checkboxs.prop('checked', false);
+        }
+    });
+    $('.role-cell').on('click', function (e) {
+        // var checkbox = $(this).children('.role-box');
+        // console.log('click', checkbox);
+        // if (checkbox.is(':checked')) {
+        //     checkbox.prop('checked', false);
+        // } else {
+        //     checkbox.prop('checked', true);
+        // }
+        var chk = $(this).children('.role-box').get(0);
+        if (e.target != chk) {
+            chk.checked = !chk.checked;
+        }
+    });
+</script>
