@@ -28,7 +28,7 @@ namespace TDT.Core.DTO.Firestore
         private string _artistsNames;
         private int _playItemMode;
         private int _subType;
-        private int _uid;
+        private string _uid;
         private string _thumbnailM;
         private bool _isShuffle;
         private bool _isPrivate;
@@ -88,7 +88,7 @@ namespace TDT.Core.DTO.Firestore
         [FirestoreProperty] public int subType { get => _subType; set => _subType = value; }
         [Display(Name = "uid")]
 
-        [FirestoreProperty] public int uid { get => _uid; set => _uid = value; }
+        [FirestoreProperty] public string uid { get => _uid; set => _uid = value; }
         [Display(Name = "Ảnh ThumbanilM")]
         [FirestoreProperty] public string thumbnailM { get => _thumbnailM; set => _thumbnailM = value; }
         [FirestoreProperty] public bool isShuffle { get => _isShuffle; set => _isShuffle = value; }
