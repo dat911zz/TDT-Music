@@ -42,8 +42,8 @@ namespace TDT.Site.Services
         private List<Player> StackPlayer = new List<Player>();
         private List<Player> HistoryPlayer = new List<Player>();
 
-        public string StackFrom = "Từ ...";
-        public string StackTitle = "Tiêu đề";
+        public string StackFrom = "";
+        public string StackTitle = "";
         #endregion
 
         public static Player NewPlayer(string songId, int index)
@@ -218,15 +218,8 @@ namespace TDT.Site.Services
         {
             if (StackIsEmpty())
                 return "";
-            string itemActive = GetHtmlItemSongActiveInStack(StackPlayer[0]);
-            string list = "";
-            for (int i = 1; i < StackPlayer.Count; i++)
-            {
-                if (!string.IsNullOrEmpty(StackPlayer[i].Src))
-                {
-                    list += GetHtmlItemSongInStack(StackPlayer[i]);
-                }
-            }
+            string itemActive = GetHtmlItemSongActiveInStack();
+            string list = GetHtmlSongsInStack();
             string recommend = "";
             List<SongDTO> songs = DataHelper.Instance.Songs.Values.Take(5).ToList();
             foreach (SongDTO song in songs)
@@ -234,7 +227,7 @@ namespace TDT.Site.Services
                 recommend += GetHtmlItemRecommend(song);
             }
             string res = @"
-                <div class=""player-queue player-queue-animation-enter-done"">
+                <div class=""player-queue player-queue-animation-exit player-queue-animation-exit-active"">
                     <div class=""player-queue__container"">
                         <div class=""player-queue__header"">
                             <div class=""level tab-bars"">
@@ -268,7 +261,7 @@ namespace TDT.Site.Services
                                     style=""position: absolute; inset: 0px; overflow: hidden scroll; margin-right: -6px; margin-bottom: 0px;"">
                                     <div style=""width: 100%; height: 100%; position: absolute; top: 0px;"">
                                         <div class=""player-queue__list undefined""
-                                            style=""box-sizing: border-box; margin-top: 0px; padding-top:110px;"">
+                                            style=""box-sizing: border-box; margin-top: 0px; padding-top:116px;"">
                                             " 
                                                 + list + 
                                             @"
@@ -333,8 +326,23 @@ namespace TDT.Site.Services
             ";
             return res;
         }
-        public static string GetHtmlItemSongActiveInStack(Player player)
+        public string GetHtmlSongsInStack()
         {
+            string list = "";
+            for (int i = 1; i < StackPlayer.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(StackPlayer[i].Src))
+                {
+                    list += GetHtmlItemSongInStack(StackPlayer[i]);
+                }
+            }
+            return list;
+        }
+        public static string GetHtmlItemSongActiveInStack()
+        {
+            if (PlayerService.Instance.StackIsEmpty())
+                return "";
+            Player player = PlayerService.Instance.StackPlayer[0];
             SongDTO song = DataHelper.GetSong(player.Id);
             string img = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail);
             string res = @"
@@ -379,16 +387,23 @@ namespace TDT.Site.Services
         }
         public static string GetHtmlHeaderNextSong()
         {
-            string res = @"
-                <div class=""next-songs"">
-                    <h3 class=""title is-6"">Tiếp theo</h3>
+            string sub = "";
+            if(!string.IsNullOrEmpty(PlayerService.Instance.StackFrom) && !string.IsNullOrEmpty(PlayerService.Instance.StackTitle))
+            {
+                sub = string.Format(@"
                     <h3 class=""subtitle is-6""><span>Từ {0}</span><a class=""""
                             href=""{1}""><span><span><span><span>{2}</span></span></span><span
                                     style=""position: fixed; visibility: hidden; top: 0px; left: 0px;"">…</span></span></a>
                     </h3>
+                ", PlayerService.Instance.StackFrom, UrlStack, PlayerService.Instance.StackTitle);
+            }
+            string res = @"
+                <div class=""next-songs"">
+                    <h3 class=""title is-6"">Tiếp theo</h3>
+                    {0}
                 </div>
             ";
-            return string.Format(res, PlayerService.Instance.StackFrom, UrlStack, PlayerService.Instance.StackTitle);
+            return string.Format(res, sub);
         }
         public static string GetHtmlItemSongInStack(Player player)
         {

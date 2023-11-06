@@ -149,5 +149,17 @@ namespace TDT.Site.Controllers
         {
             return PlayerService.Instance.GetHtmlStack();
         }
+        public string GetHtmlActiveInStack()
+        {
+            return PlayerService.GetHtmlItemSongActiveInStack();
+        }
+        public string GetHtmlHeaderNextSong()
+        {
+            return PlayerService.GetHtmlHeaderNextSong();
+        }
+        public string GetHtmlSongsInStack()
+        {
+            return PlayerService.Instance.GetHtmlSongsInStack();
+        }
     }
 }
