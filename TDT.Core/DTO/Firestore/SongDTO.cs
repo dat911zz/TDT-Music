@@ -53,6 +53,7 @@ namespace TDT.Core.DTO.Firestore
         //[Required(ErrorMessage = "Nhập bí danh!")]
 
         [Display(Name = "Bí danh")]
+
         [FirestoreProperty] public string alias { get => _alias; set => _alias = value; }
 
         [Display(Name = "Làm chính thức")]
@@ -62,7 +63,7 @@ namespace TDT.Core.DTO.Firestore
         //[Required(ErrorMessage = "Vui lòng nhập tên người dùng!")]
         [FirestoreProperty] public string username { get => _username; set => _username = value; }
 
-        //[Required(ErrorMessage = "Vui nhập tên nghệ xĩ!")]
+        [Required(ErrorMessage = "Vui nhập tên nghệ sĩ!")]
         [Display(Name = "Tên nghệ sĩ")]
         [FirestoreProperty] public string artistsNames { get => _artistsNames; set => _artistsNames = value; }
 

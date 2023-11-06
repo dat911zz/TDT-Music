@@ -33,7 +33,7 @@ function validateVnPhoneNumber(input) {
     const inputValue = input.value;
     const regex = /^0\d{9,10}$/;
     if (!regex.test(inputValue)) {
-        alert("Số điện thoại không hợp lệ (chỉ dành cho số điện thoại di động Việt Nam).");
+        ("Số điện thoại không hợp lệ (chỉ dành cho số điện thoại di động Việt Nam).");
     }
 }
 // Xét date thanh long

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TDT.CAdmin.Models;
+using TDT.Core.ServiceImp;
 
 namespace TDT.CAdmin
 {
@@ -40,6 +41,8 @@ namespace TDT.CAdmin
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    new Task(() => { new ShareController().LoadSongs(); }).Start();
+                    new Task(() => { new ShareController().LoadPlaylist(); }).Start();
                 })
                 .ConfigureLogging(logging =>
                 {

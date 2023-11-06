@@ -19,31 +19,10 @@ namespace TDT.CAdmin.Controllers
 {
     public class MusicManagementController : Controller
     {
-
         public MusicManagementController()
         {
-
+           
         }
-        //public IActionResult Index(string searchTerm, int? page)
-        //{
-        //    ViewBag.SearchTerm = "";
-        //    int pageSize = 6;
-        //    int pageNumber = (page ?? 1);
-        //    List<SongDTO> lsong = _songs;
-
-        //    if (DataHelper.Instance.Songs.Count > 0)
-        //    {
-        //        if (!string.IsNullOrEmpty(searchTerm))
-        //        {
-        //            lsong = _songs.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).ToList();
-        //            ViewBag.SearchTerm = searchTerm;
-        //            //pageSize = lsong.Count;
-        //            ViewBag.SoBH = lsong.Count;
-        //        }
-        //    }
-        //    IPagedList<SongDTO> pagedList = lsong == null ? new List<SongDTO>().ToPagedList() : lsong.OrderByDescending(o => o.releaseDate).ToPagedList(pageNumber, pageSize);
-        //    return View(pagedList);
-        //}
         public bool IsIdInUse(string id)
         {
             ResponseDataDTO<SongDTO> songdto = APICallHelper.Get<ResponseDataDTO<SongDTO>>($"Song/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
@@ -56,11 +35,25 @@ namespace TDT.CAdmin.Controllers
             ViewBag.SearchTerm = "";
             int pageSize = 10;
             int pageNumber = (page ?? 1);
-            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
-            //Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).OrderByDescending("releaseDate").Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
-            List<SongDTO> lsong = FirestoreService.Instance.Gets<SongDTO>(query);
-            int sobs = (int)FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Count().GetSnapshotAsync().Result.Count;
-            ViewBag.SoBH = sobs;
+            List<SongDTO> lsong = null;
+            int sobs = 0;
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
+                lsong = FirestoreService.Instance.Gets<SongDTO>(query);
+                sobs = (int)FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Count().GetSnapshotAsync().Result.Count;
+                ViewBag.SoBH = sobs;
+            }
+            else if (DataHelper.Instance.Songs.Count > 0)
+            {
+                var _songs = DataHelper.Instance.Songs.Values.ToList();
+                lsong = _songs.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).ToList();
+                ViewBag.SoBH = lsong.Count;
+                sobs = lsong.Count;
+                lsong = _songs.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).Skip((int)((pageNumber - 1) * pageSize)).Take(pageSize).ToList();
+                ViewBag.SearchTerm = searchTerm;
+            }
+
             PageList<List<SongDTO>> pageList = new PageList<List<SongDTO>>(pageNumber, pageSize, sobs, lsong);
             return View(pageList);
         }
@@ -73,8 +66,26 @@ namespace TDT.CAdmin.Controllers
         }
         public IActionResult Create()
         {
+            if (DataHelper.Instance.Playlists.Count > 0)
+            {
+                List<PlaylistDTO> albums = DataHelper.Instance.Playlists.Values.ToList();
+
+                // Giới hạn số ký tự trong tùy chọn của combobox
+                int maxCharacters = 30;
+                foreach (var album in albums)
+                {
+                    if (album.title.Length > maxCharacters)
+                    {
+                        album.title = album.title.Substring(0, maxCharacters); // Giới hạn ký tự
+                    }
+                }
+
+                ViewBag.Albums = new SelectList(albums, "encodeId", "title");
+            }
+
             return View();
         }
+
 
         [HttpPost]
         public IActionResult Create(SongDTO songdto, IFormFile uploadFile)
@@ -85,7 +96,7 @@ namespace TDT.CAdmin.Controllers
                 do
                 {
                     id = HelperUtility.GenerateRandomString(8);
-                 
+
                 } while (IsIdInUse(id));
                 songdto.encodeId = id;
                 Stream image = uploadFile.OpenReadStream();
@@ -95,7 +106,7 @@ namespace TDT.CAdmin.Controllers
                 FirebaseService.Instance.pushFile(image, "Images/Song/1/" + thumbnail).Wait();
                 songdto.thumbnail = "Images/Song/0/" + thumbnail;
                 songdto.thumbnailM = "Images/Song/1/" + thumbnail;
-               
+
                 SongDTO Songfile = APICallHelper.Post<SongDTO>(
                    $"Song/InsertOrUpdate",
                    token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
@@ -106,6 +117,14 @@ namespace TDT.CAdmin.Controllers
                 {
                     //FlashMessage để truyền message từ đây sang action hoặc controller khác
                     this.MessageContainer().AddFlashMessage("Tạo bài hát thành công!", ToastMessageType.Success);
+                    if (DataHelper.Instance.Songs.ContainsKey(songdto.encodeId))
+                    {
+                        DataHelper.Instance.Songs[songdto.encodeId] = songdto;
+                    }
+                    else
+                    {
+                        DataHelper.Instance.Songs.Add(songdto.encodeId, songdto);
+                    }
                 }
                 else
                 {
@@ -137,7 +156,8 @@ namespace TDT.CAdmin.Controllers
         {
             try
             {
-                if(uploadFile != null) {
+                if (uploadFile != null)
+                {
                     Stream image = uploadFile.OpenReadStream();
                     string thumbnail = song.encodeId + "_" + DateTime.Now.ToString("yyyyMMddHHmmssfff").Replace("/", "_") + "." + uploadFile.FileName.Split('.').Last();
                     string url = FirebaseService.Instance.pushFile(image, "Images/Song/0/" + thumbnail).Result;
@@ -156,6 +176,14 @@ namespace TDT.CAdmin.Controllers
                 {
                     //FlashMessage để truyền message từ đây sang action hoặc controller khác
                     this.MessageContainer().AddFlashMessage("Sửa hát thành công!", ToastMessageType.Success);
+                    if(DataHelper.Instance.Songs.ContainsKey(song.encodeId))
+                    {
+                        DataHelper.Instance.Songs[song.encodeId] = song;
+                    }
+                    else
+                    {
+                        DataHelper.Instance.Songs.Add(song.encodeId, song);
+                    }
                 }
                 else
                 {
@@ -178,6 +206,10 @@ namespace TDT.CAdmin.Controllers
             if (songDTO.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
                 this.MessageContainer().AddFlashMessage("Xóa bài hát thành công!", ToastMessageType.Success);
+                if(DataHelper.Instance.Songs.ContainsKey(id))
+                {
+                    DataHelper.Instance.Songs.Remove(id);
+                }
             }
             else
             {
@@ -190,7 +222,7 @@ namespace TDT.CAdmin.Controllers
             SongDTO song = new SongDTO();
             Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).WhereEqualTo("encodeId", id);
             List<SongDTO> lsong = FirestoreService.Instance.Gets<SongDTO>(query);
-            if(lsong != null)
+            if (lsong != null)
             {
                 song = lsong[0];
                 return View(song);
