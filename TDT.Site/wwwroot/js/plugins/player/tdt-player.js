@@ -220,16 +220,29 @@ function start() {
             $(this).addClass('active');
             changeStack();
             sleep(1000).then(() => {
-                $('#queue_menu').click(function () {
+                $('#queue_menu').click(function (e) {
+                    e.stopPropagation();
                     if ($(this).find('.menu-settings').length > 0) {
                         $(this).find('.menu-settings').remove();
                     }
                     else {
                         $(this).find('button').after(menu_option_stack);
                         $(this).find('.menu-settings .menu-list li:eq(0)').click(function () {
-
+                            $.ajax({
+                                url: "/Player/ClearStack",
+                                success: function () {
+                                    showPlayer(false);
+                                }
+                            });
                         });
                     }
+                });
+                $('.player-queue__header .tab-bars .level-left .level-item').each(function (i, item) {
+                    $(item).click(function () {
+                        $(this).addClass('is-active');
+                        $(this).siblings().removeClass('is-active');
+                        changeStack();
+                    });
                 });
             });
         }
@@ -238,40 +251,41 @@ function start() {
 
 function changeStack() {
     if ($('.queue-expand-button').hasClass('active')) {
-        if ($('.now-playing-bar > .player-queue').length > 0) {
-            $.ajax({
-                url: "/Player/GetHtmlActiveInStack",
-                success: function (data) {
-                    $('.now-playing-bar > .player-queue .queue-item-pinned > .list-item').replaceWith(data);
-                }
-            });
-            $.ajax({
-                url: "/Player/GetHtmlHeaderNextSong",
-                success: function (data) {
-                    $('.now-playing-bar > .player-queue .queue-item-pinned > .next-songs').replaceWith(data);
-                }
-            });
-            $.ajax({
-                url: "/Player/GetHtmlSongsInStack",
-                success: function (data) {
-                    $('.now-playing-bar > .player-queue .player-queue__list > div[data-index]').parent('.player-queue__list').html(data);
-                    setEventSongsInStack();
-                }
+        if ($('.player-queue__header .tab-bars .level-left .level-item:eq(0).is-active').length > 0 || $('.player-queue').length <= 0) {
+            if ($('.now-playing-bar > .player-queue').length > 0) {
+                $.ajax({
+                    url: "/Player/GetHtmlChangeStack",
+                    success: function (data) {
+                        $('.player-queue__scroll').replaceWith(data);
+                        changeIconActionPlay();
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: "/Player/GetHtmlStack",
+                    success: function (data) {
+                        $('.now-playing-bar > .player-controls').before(data);
+                        sleep(200).then(() => {
+                            $('.player-queue').removeClass('player-queue-animation-exit player-queue-animation-exit-active').addClass('player-queue-animation-enter player-queue-animation-enter-active');
+                        });
+                        sleep(700).then(() => {
+                            $('.now-playing-bar > .player-queue').removeClass('player-queue-animation-enter player-queue-animation-enter-active').addClass('player-queue-animation-enter-done');
+                        });
+                        changeIconActionPlay();
+                        setEventSongsInStack();
+                    }
+                });
+            }
+            sleep(1500).then(() => {
+                $('#queue-scroll').scrollTop($('#queue-scroll div[data-index] .media').not('.is-pre').eq(0).position().top - 116);
             });
         }
         else {
             $.ajax({
-                url: "/Player/GetHtmlStack",
+                url: "/Player/GetHtmlHistory",
                 success: function (data) {
-                    $('.now-playing-bar > .player-controls').before(data);
-                    sleep(200).then(() => {
-                        $('.player-queue').removeClass('player-queue-animation-exit player-queue-animation-exit-active').addClass('player-queue-animation-enter player-queue-animation-enter-active');
-                    });
-                    sleep(700).then(() => {
-                        $('.now-playing-bar > .player-queue').removeClass('player-queue-animation-enter player-queue-animation-enter-active').addClass('player-queue-animation-enter-done');
-                    });
-                    changeIconActionPlay();
-                    setEventSongsInStack();
+                    $('.player-queue__scroll').replaceWith(data);
                 }
             });
         }
@@ -445,7 +459,9 @@ function importSong(type) {
         else {
             noti = false;
         }
-        changeStack();
+        if ($('.queue-expand-button.active').length > 0) {
+            changeStack();
+        }
         player.src = cur_song.Src;
         info_imgsong.src = cur_song.Thumbnail;
         info_nameSong.innerHTML = cur_song.Name;
@@ -457,7 +473,6 @@ function importSong(type) {
         updateTime();
     }
     else {
-        setPauseAll();
         showPlayer(false);
     }
 }
@@ -500,6 +515,7 @@ function showPlayer(show = true) {
         PlayerShowing = true;
     }
     else {
+        setPauseAll();
         hideStack();
         sleep(300).then(() => {
             cover.hide();
@@ -753,6 +769,9 @@ function sortHtmlPlaylist(arrId) {
 
 $(document).ready(function () {
     start();
+    $(document).click(function () {
+        $('#queue_menu .menu-settings').remove();
+    });
     $('.player-controls__container .media div, .player-controls__container .level-item, .player-controls__player-bar').click(function (e) {
         e.stopPropagation();
     });

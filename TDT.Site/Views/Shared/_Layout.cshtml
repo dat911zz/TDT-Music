@@ -15,12 +15,12 @@
     <meta name="keywords" content="">
     <link rel="shortcut icon" href="~/image/logo_TDT_Devil-circle.png" type="image/x-icon" />
     <style>
-        #body-scroll {
+        #body-scroll,
+        #queue-scroll {
             scroll-behavior: smooth;
         }
     </style>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="~/css/loading.css" />
     <link rel="stylesheet" type="text/css" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/main.css" />
@@ -585,11 +585,7 @@
             <div class="wrlvks_A" id="dTP-zone-2774115840800811806" z2-zoneid="2774115840800811806" z2-width="660"
                 z2-height="1" z2-type="popup" z2-sound="true" z2-autoscale="video" z2-responsive="true" z2-logo="no_fb"
                 z2-logo-position="bottom" z2-overlay="static" z2-close-freq="-1" z2-reqid="202704">
-                <iframe id="dTPIfrWrapper_2774115840800811806" scrolling="no" marginwidth="0" marginheight="0"
-                    frameborder="0" class="z2-zad-iframe"
-                    src="javascript:&quot;undefined<!DOCTYPE html><html><body style='background:transparent'></body></html>&quot;"
-                    style="border: 0px; display: none; overflow: hidden"></iframe>
-                <div id="dTPDivWrapper_2774115840800811806" style="display: none"></div>
+                
             </div>
         </div>
     </div>
@@ -597,14 +593,6 @@
     @Html.AddSharedScript("js/HoldOn.js")
     <script type="text/javascript" src="~/js/plugins/player/tdt-player.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="~/js/plugins/swiper/js/swiper.min.js"></script>
-    <script type="text/javascript" src="~/js/plugins/player/tdt-player.js"></script>
-    <script type="text/javascript" src="~/js/plugins/player/volume.js"></script>
-    <script type="text/javascript" src="~/js/plugins/nice_select/jquery.nice-select.min.js"></script>
-    <script type="text/javascript" src="~/js/plugins/scroll/jquery.mCustomScrollbar.js"></script>
-    <script type="text/javascript" src="~/js/custom.js"></script>*@
 
     <script>
         //https://codeseven.github.io/toastr/demo.html
@@ -651,8 +639,13 @@
         $('.add-playlist-sidebar').click(function () {
             $('body').append(`@Html.Raw(Generator.AddPlaylistModal)`);
             $('.close-btn').on('click', function () {
-                console.log("hêh")
                 $('#react-cool-portal').remove();
+            });
+            $('#form-add-playlist .option i').each(function (i, item) {
+                $(item).click(function () {
+                    $(this).addClass('is-hide');
+                    $(this).siblings().removeClass('is-hide');
+                });
             });
         });
         

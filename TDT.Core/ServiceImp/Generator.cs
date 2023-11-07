@@ -19,7 +19,7 @@ namespace TDT.Core.ServiceImp
                                         class=""zm-btn zm-tooltip-btn close-btn is-hover-circle button"" tabindex=""0""><i
                                             class=""icon ic-close""></i></button>
                                     <h3 class=""title"">Tạo playlist mới</h3>
-                                    <form><input class=""input"" placeholder=""Nhập tên playlist"" value="""">
+                                    <div id=""form-add-playlist""><input class=""input"" placeholder=""Nhập tên playlist"" value="""">
                                         <div class=""option"">
                                             <div>
                                                 <h3 class=""title"">Công khai</h3>
@@ -89,7 +89,7 @@ namespace TDT.Core.ServiceImp
                                                     </svg></i></div>
                                         </div><button class=""zm-btn mar-t-20 is-outlined active is-fullwidth is-upper button""
                                             tabindex=""-1"" disabled=""""><i class=""icon""></i><span>Tạo mới</span></button>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
