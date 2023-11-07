@@ -61,7 +61,15 @@ namespace TDT.CAdmin.Controllers
         public string LoadImg(string encodeID, string thumbnail)
         {
             string img;
-            img = FirebaseService.Instance.getStorage(thumbnail);
+            if (DataHelper.Instance.ThumbSong.Keys.Contains(encodeID))
+            {
+                img = DataHelper.Instance.ThumbSong[encodeID];
+            }
+            else
+            {
+                img = FirebaseService.Instance.getStorage(thumbnail);
+                DataHelper.Instance.ThumbSong.Add(encodeID, img);
+            }
             return img;
         }
         public IActionResult Create()
@@ -71,7 +79,7 @@ namespace TDT.CAdmin.Controllers
                 List<PlaylistDTO> albums = DataHelper.Instance.Playlists.Values.ToList();
 
                 // Giới hạn số ký tự trong tùy chọn của combobox
-                int maxCharacters = 30;
+                int maxCharacters = 50;
                 foreach (var album in albums)
                 {
                     if (album.title.Length > maxCharacters)
@@ -219,13 +227,10 @@ namespace TDT.CAdmin.Controllers
         }
         public IActionResult Details(string id)
         {
-            SongDTO song = new SongDTO();
-            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).WhereEqualTo("encodeId", id);
-            List<SongDTO> lsong = FirestoreService.Instance.Gets<SongDTO>(query);
-            if (lsong != null)
+            ResponseDataDTO<SongDTO> songdto = APICallHelper.Get<ResponseDataDTO<SongDTO>>($"Song/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
+            if (songdto != null)
             {
-                song = lsong[0];
-                return View(song);
+                return View(songdto.Data.FirstOrDefault());
             }
             return View();
         }

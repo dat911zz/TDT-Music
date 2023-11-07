@@ -8,6 +8,13 @@
     DateTime maxDate = DateTime.Now.AddDays(1);
     string maxDateString = maxDate.ToString("yyyy-MM-dd");
 }
+<style>
+    .select2-container .select2-selection--single {
+        height: auto; /* Sử dụng giá trị 'initial' để vô hiệu hóa height */
+    }
+
+</style>
+
 <h1 class="title-admin">TẠO BÀI HÁT</h1>
 
 <h4>Nhập giá trị của bài hát</h4>
@@ -61,7 +68,7 @@
                                     <input class="form-check-input" style=" opacity:1;" asp-for="isOffical" /> @Html.DisplayNameFor(model => model.isOffical)
                                 </label>
                             </div>
-                            <div class="form-group form-check">
+                            <div class="form-group form-check" hidden>
                                 <label class="form-check-label">
                                     <input class="form-check-input" style=" opacity:1;" asp-for="zingChoice" /> @Html.DisplayNameFor(model => model.zingChoice)
                                 </label>
@@ -83,7 +90,7 @@
                                     <input class="form-check-input" style=" opacity:1;" asp-for="isRBT" /> @Html.DisplayNameFor(model => model.isRBT)
                                 </label>
                             </div>
-                            <div class="form-group form-check">
+                            <div class="form-group form-check" hidden>
                                 <label class="form-check-label">
                                     <input class="form-check-input" style=" opacity:1;" asp-for="isIndie" /> @Html.DisplayNameFor(model => model.isIndie)
                                 </label>
@@ -102,6 +109,11 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
+                    <div class="form-group" >
+                        <label asp-for="album" class="control-label"></label>
+                        <select asp-for="album" asp-items="@ViewBag.Albums"class="form-control" id="albumSelect"></select>
+                        <span asp-validation-for="album" class="text-danger"></span>
+                    </div>
                     <div class="form-group">
                         <label asp-for="releaseDate" class="control-label"></label>
                         <input id="releaseDateInput" class="form-control" type="datetime-local"/>
@@ -128,11 +140,7 @@
                         <input asp-for="userid" class="form-control" />
                         <span asp-validation-for="userid" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="album" class="control-label"></label>
-                        <select asp-for="album" asp-items="@ViewBag.Albums" class="form-control" id="albumSelect"></select>
-                        <span asp-validation-for="album" class="text-danger"></span>
-                    </div>
+                   
 
                     <div class="form-group" hidden>
                     <label asp-for="like" class="control-label"></label>
@@ -200,8 +208,8 @@
     $(document).ready(function () {
         $('#albumSelect').select2({
             placeholder: 'Chọn album',
-            allowClear: true, // Thêm tùy chọn này để cho phép xóa lựa chọn
-            tags: true, // Cho phép thêm tùy chọn không có sẵn trong danh sách
+            // allowClear: true, // Thêm tùy chọn này để cho phép xóa lựa chọn
+            // tags: true, // Cho phép thêm tùy chọn không có sẵn trong danh sách
         });
     });
 </script>
