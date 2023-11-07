@@ -35,9 +35,9 @@ namespace TDT.Site.Controllers
             }
         }
         [HttpPost]
-        public void ChoosePlayer([FromForm] int index, string id)
+        public void ChoosePlayer([FromForm] int index, string id, bool isHistory = false)
         {
-            PlayerService.Instance.ChoosePlayer(index, id);
+            PlayerService.Instance.ChoosePlayer(index, id, isHistory);
         }
 
         [HttpPost]

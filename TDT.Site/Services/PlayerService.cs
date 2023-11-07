@@ -46,7 +46,36 @@ namespace TDT.Site.Services
         public string StackFrom = "";
         public string StackTitle = "";
         #endregion
-
+        private void AddStack(Player player)
+        {
+            Player pl = StackPlayer.Find(p => p.Id == player.Id);
+            if (pl != null)
+            {
+                StackPlayer.Remove(pl);
+            }
+            player.Listen = DateTime.Now;
+            StackPlayer.Insert(0, player);
+        }
+        private void AddPrev(Player player)
+        {
+            Player pl = PrevPlayer.Find(p => p.Id == player.Id);
+            if (pl != null)
+            {
+                PrevPlayer.Remove(pl);
+            }
+            player.Listen = DateTime.Now;
+            PrevPlayer.Add(player);
+        }
+        private void AddHistory(Player player)
+        {
+            Player pl = History.Find(p => p.Id == player.Id);
+            if (pl != null)
+            {
+                History.Remove(pl);
+            }
+            player.Listen = DateTime.Now;
+            History.Insert(0, player);
+        }
         public static Player NewPlayer(string songId, int index)
         {
             var song = DataHelper.GetSong(songId);
@@ -146,12 +175,17 @@ namespace TDT.Site.Services
                         return ChangeMusic();
                     }
                     return null;
-                }    
+                }
+                if(type != "init" && type != "cur")
+                {
+                    Player player = StackPlayer.First();
+                    AddHistory(player);
+                }
                 if(!IsRepeatOne)
                 {
                     if (type == "next")
                     {
-                        PrevPlayer.Add(StackPlayer.First());
+                        AddPrev(StackPlayer.First());
                         StackPlayer.RemoveAt(0);
                         return ChangeMusic();
                     }
@@ -159,7 +193,7 @@ namespace TDT.Site.Services
                     {
                         if (PrevPlayer.Count == 0)
                             return null;
-                        StackPlayer.Insert(0, PrevPlayer.Last());
+                        AddStack(PrevPlayer.Last());
                         PrevPlayer.RemoveAt(PrevPlayer.Count - 1);
                         return ChangeMusic();
                     }
@@ -171,8 +205,33 @@ namespace TDT.Site.Services
                 return null;
             }
         }
-        public void ChoosePlayer(int index, string id)
+        public void ChoosePlayer(int index, string id, bool isHistory = false)
         {
+            if(isHistory)
+            {
+                if(!StackIsEmpty())
+                {
+                    Player player = StackPlayer.First();
+                    AddPrev(player);
+                    AddHistory(player);
+                    StackPlayer.RemoveAt(0);
+                }
+                Player pl = PrevPlayer.Find(p => p.Id == id);
+                if (pl != null)
+                {
+                    PrevPlayer.Remove(pl);
+                    index = pl.Index;
+                }    
+                StackPlayer.Insert(0, NewPlayer(id, index));
+                Player plInHis = History.Find(p => p.Id == id);
+                if (plInHis != null)
+                {
+                    AddHistory(plInHis);
+                }
+                return;
+            }
+            if(!StackIsEmpty())
+                AddHistory(StackPlayer.First());
             int i = 0;
             bool containsStack = false;
             bool containsHistory = false;
@@ -203,7 +262,7 @@ namespace TDT.Site.Services
             {
                 for(int iS = 0; iS < i; iS++)
                 {
-                    PrevPlayer.Add(StackPlayer[iS]);
+                    AddPrev(StackPlayer[iS]);
                 }
                 StackPlayer.RemoveRange(0, i);
             }
@@ -211,7 +270,7 @@ namespace TDT.Site.Services
             {
                 for(int iH = PrevPlayer.Count - 1; iH >= i; iH--)
                 {
-                    StackPlayer.Insert(0, PrevPlayer[iH]);
+                    AddStack(PrevPlayer[iH]);
                 }
                 PrevPlayer.RemoveRange(i, PrevPlayer.Count - i);
             }
@@ -219,7 +278,7 @@ namespace TDT.Site.Services
             {
                 PrevPlayer.Clear();
                 StackPlayer.Clear();
-                StackPlayer.Add(NewPlayer(id, index));
+                AddStack(NewPlayer(id, index));
             }
         }
 
@@ -485,11 +544,11 @@ namespace TDT.Site.Services
         public string GetHtmlSongsInHistory()
         {
             string list = "";
-            for (int i = 1; i < History.Count; i++)
+            for (int i = 0; i < History.Count; i++)
             {
-                if (!string.IsNullOrEmpty(StackPlayer[i].Src))
+                if (!string.IsNullOrEmpty(History[i].Src))
                 {
-                    list += GetHtmlItemSongInHistory(StackPlayer[i]);
+                    list += GetHtmlItemSongInHistory(History[i]);
                 }
             }
             return list;
@@ -755,5 +814,6 @@ namespace TDT.Site.Services
         public string Src { get; set; }
         public string Artists { get; set; }
         public string UrlPlaylist { get; set; }
+        public DateTime Listen { get; set; } = DateTime.Now;
     }
 }

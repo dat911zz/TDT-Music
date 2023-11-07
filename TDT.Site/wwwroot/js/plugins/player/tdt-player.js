@@ -213,12 +213,18 @@ function start() {
     });
     $('.queue-expand-button').click(function () {
         if ($(this).hasClass('active')) {
+            $('header').removeClass('collapsed');
+            $('.zm-mainpage').removeClass('collapsed');
             $(this).removeClass('active');
             hideStack();
         }
         else {
             $(this).addClass('active');
             changeStack();
+            sleep(250).then(() => {
+                $('header').addClass('collapsed');
+                $('.zm-mainpage').addClass('collapsed');
+            });
             sleep(1000).then(() => {
                 $('#queue_menu').click(function (e) {
                     e.stopPropagation();
@@ -258,6 +264,8 @@ function changeStack() {
                     success: function (data) {
                         $('.player-queue__scroll').replaceWith(data);
                         changeIconActionPlay();
+                        $('#queue-scroll').scrollTop($('#queue-scroll div[data-index] .media').not('.is-pre').eq(0).position().top - 116);
+                        setEventSongsInStack();
                     }
                 });
             }
@@ -266,37 +274,36 @@ function changeStack() {
                     url: "/Player/GetHtmlStack",
                     success: function (data) {
                         $('.now-playing-bar > .player-controls').before(data);
-                        sleep(200).then(() => {
+                        sleep(100).then(() => {
                             $('.player-queue').removeClass('player-queue-animation-exit player-queue-animation-exit-active').addClass('player-queue-animation-enter player-queue-animation-enter-active');
                         });
-                        sleep(700).then(() => {
+                        sleep(400).then(() => {
                             $('.now-playing-bar > .player-queue').removeClass('player-queue-animation-enter player-queue-animation-enter-active').addClass('player-queue-animation-enter-done');
                         });
                         changeIconActionPlay();
+                        $('#queue-scroll').scrollTop($('#queue-scroll div[data-index] .media').not('.is-pre').eq(0).position().top - 116);
                         setEventSongsInStack();
                     }
                 });
             }
-            sleep(1500).then(() => {
-                $('#queue-scroll').scrollTop($('#queue-scroll div[data-index] .media').not('.is-pre').eq(0).position().top - 116);
-            });
         }
         else {
             $.ajax({
                 url: "/Player/GetHtmlHistory",
                 success: function (data) {
                     $('.player-queue__scroll').replaceWith(data);
+                    setEventSongsInStack(true);
                 }
             });
         }
     }
 }
 
-function setEventSongsInStack() {
+function setEventSongsInStack(isHistory = false) {
     $('.queue-item-pinned > .list-item button.action-play').click(function () {
         $(playPauseButton).trigger('click');
     });
-    $('.player-queue__list > div[data-index] .list-item button.action-play').each(function (i, item) {
+    $('.player-queue__list > div[data-index] button.action-play').each(function (i, item) {
         $(item).click(function () {
             playPauseButton.innerHTML = icon_await;
             var parent = $(this).parents('div[data-index]');
@@ -308,7 +315,8 @@ function setEventSongsInStack() {
                 url: "/Player/ChoosePlayer",
                 data: {
                     index: iSongStart,
-                    id: idSongStart
+                    id: idSongStart,
+                    isHistory: isHistory
                 },
                 success: function () {
                     changeMusic("cur");
