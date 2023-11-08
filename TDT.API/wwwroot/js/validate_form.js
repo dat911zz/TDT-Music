@@ -1,11 +1,12 @@
 ﻿//Chặn nhập ký tự đặc biệt:
-function validateNoSpecialChars(input) {
+function validateNoSpecialChars(input, this) {
     const inputValue = input.value;
     const regex = /^[a-zA-Z0-9]+$/;
     if (!regex.test(inputValue)) {
         alert("Không được nhập ký tự đặc biệt.");
     }
 }
+
 //Số ký tự hơn minLength:
 function validateMinLength(input, minLength) {
     const inputValue = input.value;
@@ -17,9 +18,15 @@ function validateMinLength(input, minLength) {
 function validateNonNegative(input) {
     const inputValue = input.value;
     if (parseInt(inputValue) < 0) {
-        alert("Không được nhập số âm.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi!',
+            text: 'Không được nhập số âm.',
+        });
+
     }
 }
+
 //Chặn nhập khoảng trắng không:
 function validateNoWhitespace(input) {
     const inputValue = input.value;

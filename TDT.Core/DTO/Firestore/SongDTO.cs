@@ -122,7 +122,7 @@ namespace TDT.Core.DTO.Firestore
         
         [Display(Name = "Có lời bài hát")]
         [FirestoreProperty] public bool hasLyric { get => _hasLyric; set => _hasLyric = value; }
-
+        [Required(ErrorMessage = "Vui lòng Nhập ID Người Dùng!")]
         [Display(Name = "ID người dùng")]
         [FirestoreProperty] public string userid { get => _userid; set => _userid = value; }
        

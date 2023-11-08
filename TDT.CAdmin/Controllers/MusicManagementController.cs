@@ -101,6 +101,7 @@ namespace TDT.CAdmin.Controllers
         [HttpPost]
         public IActionResult Create(SongDTO songdto, IFormFile uploadFile)
         {
+            ViewBag.Albums = SelectListPlayList(50);
             try
             {
                 if(uploadFile == null)
