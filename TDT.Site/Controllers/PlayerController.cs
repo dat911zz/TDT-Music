@@ -35,6 +35,11 @@ namespace TDT.Site.Controllers
             }
         }
         [HttpPost]
+        public int AddStack([FromForm] string[] list)
+        {
+            return PlayerService.Instance.AddStack(list.ToList());
+        }
+        [HttpPost]
         public void ChoosePlayer([FromForm] int index, string id, bool isHistory = false)
         {
             PlayerService.Instance.ChoosePlayer(index, id, isHistory);

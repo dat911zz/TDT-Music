@@ -254,9 +254,10 @@
                 },
                 complete: function () {
                     sortHtmlPlaylist(arrSongId);
-                    iComplete++;
-                    if (iComplete == max) {
-                        HoldOn.close();
+                    if (iComplete++ == max) {
+                        sleep(1000).then(() => {
+                            HoldOn.close();
+                        });
                     }
                 }
             });

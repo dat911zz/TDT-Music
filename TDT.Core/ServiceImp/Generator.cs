@@ -569,7 +569,7 @@ namespace TDT.Core.ServiceImp
                 ";
             }
             string format = @"
-                <div class=""select-item"" data-id=""{5}"">
+                <div class=""select-item {7}"" data-id=""{5}"">
                     <div class=""checkbox-wrapper"">
                         <label class=""checkbox""><input type=""checkbox"" /></label>
                     </div>
@@ -652,7 +652,7 @@ namespace TDT.Core.ServiceImp
                     </div>
                 </div>
             ";
-            return string.Format(format, song.title, img, song.GetHtmlArtist(), song.GetHtmlAlbum(), song.Duration(), song.encodeId, premium);
+            return string.Format(format, song.title, img, song.GetHtmlArtist(), song.GetHtmlAlbum(), song.Duration(), song.encodeId, premium, string.IsNullOrEmpty(premium) ? "" : "is-premium");
         }
         #endregion
 

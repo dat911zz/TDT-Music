@@ -1,4 +1,10 @@
-﻿const icon_await = `
+﻿const headerNoCheck = `
+        <div class="sort-wrapper"><div class="zm-dropdown zm-group-dropdown mar-r-10"><div class="zm-dropdown-trigger-btn"><button class="zm-btn button" tabindex="0"><i class="icon ic-24-Sort"></i></button></div><div class="zm-dropdown-content"><div class="zm-dropdown-list-item">Mặc định</div><div class="zm-dropdown-list-item">Tên bài hát (A-Z)</div><div class="zm-dropdown-list-item">Tên ca sĩ (A-Z)</div><div class="zm-dropdown-list-item">Tên Album (A-Z)</div></div></div><div class="column-text">Bài hát</div></div>
+    `;
+const headerCheck = `
+        <div class="actions"><label class="checkbox"><input type="checkbox"></label><button class="zm-btn action-btn add-queue-btn button" tabindex="0"><i class="icon ic-add-play-now"></i><span>Thêm vào danh sách phát</span></button><div id="select-menu-id" class="more-btn-wrapper"><button class="zm-btn action-btn more-btn button" tabindex="0"><i class="icon ic-more"></i></button></div></div>
+    `;
+const icon_await = `
     <i class="icon">
         <svg class="lds-spinner" width="40px" height="40px" fill="#f1f1f1" viewBox="0 0 100 100"
             preserveAspectRatio="xMidYMid" style="background: none;">
@@ -225,7 +231,7 @@ function start() {
                 $('header').addClass('collapsed');
                 $('.zm-mainpage').addClass('collapsed');
             });
-            sleep(1000).then(() => {
+            sleep(1500).then(() => {
                 $('#queue_menu').click(function (e) {
                     e.stopPropagation();
                     if ($(this).find('.menu-settings').length > 0) {
@@ -551,7 +557,7 @@ function changeIconActionPlay() {
     var icon = $('.header-thumbnail i.action-play');
     $('.select-item .list-item.active').removeClass('active');
     $('.select-item .list-item i.action-play.ic-gif-playing-white').removeClass('ic-gif-playing-white').addClass('ic-play');
-    if (cur_song != undefined && $('.select-item[data-index=' + cur_song.Index + '][data-id=' + cur_song.Id + '] .list-item').length > 0) { 
+    if (cur_song != undefined) { 
         $('.select-item[data-index=' + cur_song.Index + '][data-id=' + cur_song.Id + '] .list-item').addClass('active');
         let curElement = $('.select-item[data-index=' + cur_song.Index + '][data-id=' + cur_song.Id + ']');
         if (curElement.length > 0) {
@@ -585,6 +591,7 @@ function changeIconActionPlay() {
 }
 function setPauseAll() {
     player.pause();
+    $('.queue-expand-button').removeClass('active');
     $('.select-item .list-item.active').removeClass('active');
     $('.select-item .list-item i.action-play.ic-gif-playing-white').removeClass('ic-gif-playing-white').addClass('ic-play');
     playPauseButton.innerHTML = icon_play;
@@ -770,6 +777,7 @@ function sortHtmlPlaylist(arrId) {
                     $('#songs').append(item);
                 });
                 setEvent();
+                bindEvents();
             }
         }
     });
@@ -823,12 +831,6 @@ $('button.btn-play-all').click(function () {
 });
 
 function setEvent() {
-    var headerNoCheck = `
-        <div class="sort-wrapper"><div class="zm-dropdown zm-group-dropdown mar-r-10"><div class="zm-dropdown-trigger-btn"><button class="zm-btn button" tabindex="0"><i class="icon ic-24-Sort"></i></button></div><div class="zm-dropdown-content"><div class="zm-dropdown-list-item">Mặc định</div><div class="zm-dropdown-list-item">Tên bài hát (A-Z)</div><div class="zm-dropdown-list-item">Tên ca sĩ (A-Z)</div><div class="zm-dropdown-list-item">Tên Album (A-Z)</div></div></div><div class="column-text">Bài hát</div></div>
-    `;
-    var headerCheck = `
-        <div class="actions"><label class="checkbox"><input type="checkbox"></label><button class="zm-btn action-btn add-queue-btn button" tabindex="0"><i class="icon ic-add-play-now"></i><span>Thêm vào danh sách phát</span></button><div id="select-menu-id" class="more-btn-wrapper"><button class="zm-btn action-btn more-btn button" tabindex="0"><i class="icon ic-more"></i></button></div></div>
-    `;
     $('.select-item button.action-play').each(function (i, item) {
         $(item).click(function () {
             playPauseButton.innerHTML = icon_await;
@@ -858,7 +860,12 @@ function setEvent() {
             }
         });
     });
-    $('input[type=checkbox]').click(function () {
+    $('#songs input[type="checkbox"]').click(function () {
+        if ($(this).closest('div.is-premium').length > 0) {
+            $(this).prop("checked", false);
+            toastr.warning("Vui lòng nâng cấp Premium để được trải nghiệm");
+            return;
+        }
         var allCheckbox = $('input[type=checkbox]');
         if ($(this).is(':checked')) {
             $(this).parents().closest('.select-item').addClass('is-selected');
@@ -870,10 +877,71 @@ function setEvent() {
         if (isChecked) {
             $('.song-list-select').addClass('isChecked');
             $('.song-list-select .select-header > .media-left').html(headerCheck);
+            bindEvents();
         }
         else {
             $('.song-list-select').removeClass('isChecked');
             $('.song-list-select .select-header > .media-left').html(headerNoCheck);
         }
     });
+}
+
+function unbindEvents() {
+    $('.select-header .media-left input[type="checkbox"]').unbind();
+    $('.add-queue-btn').unbind();
+}
+
+function bindEvents() {
+    unbindEvents();
+    $('.select-header .media-left input[type="checkbox"]').bind("click", function () {
+        var v = false;
+        if ($(this).is(':checked')) {
+            v = true;
+        }
+        $('#songs input[type="checkbox"]').each(function (i, item) {
+            if ($(this).closest('div.is-premium').length > 0) {
+                toastr.warning("Vui lòng nâng cấp Premium để được trải nghiệm");
+                return;
+            }
+            $(item).prop("checked", v);
+            if (v) {
+                $(item).parents().closest('.select-item').addClass('is-selected');
+            }
+            else {
+                $(item).parents().closest('.select-item').removeClass('is-selected');
+                $('.song-list-select').removeClass('isChecked');
+                $('.song-list-select .select-header > .media-left').html(headerNoCheck);
+            }
+        });
+    });
+    $('.add-queue-btn').bind("click", function () {
+        var arrId = Array();
+        $('#songs input[type="checkbox"]').each(function (i, item) {
+            if ($(item).is(":checked") && $(item).closest('div.is-premium').length == 0) {
+                arrId.push($(item).parents('div[data-id]').attr('data-id'));
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "/Player/AddStack",
+            data: {
+                list: arrId
+            },
+            success: function (data) {
+                clearCheckbox();
+                if (data == "0") {
+                    toastr.error("Thêm vào danh sách phát thất bại");
+                }
+                else {
+                    toastr.info("Đã thêm " + data + " bài hát vào danh sách phát");
+                    changeStack();
+                }
+            }
+        });
+    });
+}
+function clearCheckbox() {
+    $('#songs input[type="checkbox"]').prop("checked", false).parents().closest('.select-item').removeClass('is-selected');
+    $('.song-list-select').removeClass('isChecked');
+    $('.song-list-select .select-header > .media-left').html(headerNoCheck);
 }

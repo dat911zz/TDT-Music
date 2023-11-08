@@ -76,6 +76,28 @@ namespace TDT.Site.Services
             player.Listen = DateTime.Now;
             History.Insert(0, player);
         }
+        public int AddStack(List<string> ids)
+        {
+            int i = 0;
+            try
+            {
+                foreach (var id in ids)
+                {
+                    Player pl = StackPlayer.Find(p => p.Id == id);
+                    if (pl != null)
+                    {
+                        StackPlayer.Add(NewPlayer(id, pl.Index));
+                    }
+                    else
+                    {
+                        StackPlayer.Add(NewPlayer(id, -1));
+                    }
+                    i++;
+                }
+            }
+            catch { }
+            return i;
+        }
         public static Player NewPlayer(string songId, int index)
         {
             var song = DataHelper.GetSong(songId);
@@ -104,8 +126,6 @@ namespace TDT.Site.Services
                 return;
             Player player = StackPlayer.First();
             StackPlayer.RemoveAt(0);
-            StackPlayer.AddRange(PrevPlayer);
-            PrevPlayer.Clear();
             if (IsShuffle)
             {
                 StackPlayer.Shuffle();
@@ -176,12 +196,9 @@ namespace TDT.Site.Services
                     }
                     return null;
                 }
-                if(type != "init" && type != "cur")
-                {
-                    Player player = StackPlayer.First();
-                    AddHistory(player);
-                }
-                if(!IsRepeatOne)
+                Player player = StackPlayer.First();
+                AddHistory(player);
+                if (!IsRepeatOne)
                 {
                     if (type == "next")
                     {
