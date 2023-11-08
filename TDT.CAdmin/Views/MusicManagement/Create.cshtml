@@ -20,7 +20,7 @@
     <div class="col-md-12">
         <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="row">
+            <div class="row" style="align-items:flex-start;">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label asp-for="title" class="control-label"></label>
@@ -43,11 +43,7 @@
                         <span asp-validation-for="artistsNames" class="text-danger"></span>
                     </div>
 
-                  <div class="form-group">
-                        <label asp-for="thumbnailM" class="control-label"></label>
-                        <input asp-for="thumbnailM" name="uploadFile" type="file" class="form-control" />
-                        <span asp-validation-for="thumbnailM" class="text-danger"></span>
-                    </div> 
+
                     <div class="form-group" hidden>
                         <label asp-for="link" class="control-label"></label>
                         <input asp-for="link" class="form-control" />
@@ -57,6 +53,23 @@
                         <label asp-for="duration" class="control-label"></label>
                         <input asp-for="duration" class="form-control" value="0"/>
                         <span asp-validation-for="duration" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="distributor" class="control-label"></label>
+                        <input asp-for="distributor" class="form-control" />
+                        <span asp-validation-for="distributor" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="streamingStatus" class="control-label"></label>
+                        <input asp-for="streamingStatus" class="form-control" />
+                        <span asp-validation-for="streamingStatus" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="userid" class="control-label"></label>
+                        <input asp-for="userid" class="form-control" />
+                        <span asp-validation-for="userid" class="text-danger"></span>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
@@ -81,6 +94,7 @@
                                 </label>
                             </div>
                         </div>
+
                         <div class="col-sm-6">
                             <div class="form-group form-check">
                                 <label class="form-check-label">
@@ -105,7 +119,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6" >
                     <div class="form-group" >
                         <label asp-for="album" class="control-label"></label>
                         <select asp-for="album" asp-items="@ViewBag.Albums"class="form-control" id="albumSelect"></select>
@@ -120,24 +134,23 @@
                         <input asp-for="releaseDate" class="form-control" type="number"  readonly />
                         <span asp-validation-for="releaseDate" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="distributor" class="control-label"></label>
-                        <input asp-for="distributor" class="form-control" />
-                        <span asp-validation-for="distributor" class="text-danger"></span>
-                    </div>
 
-                    <div class="form-group">
-                        <label asp-for="streamingStatus" class="control-label"></label>
-                        <input asp-for="streamingStatus" class="form-control" />
-                        <span asp-validation-for="streamingStatus" class="text-danger"></span>
+                    <div style="text-align:center; height:200px;">
+                        <p class="badge badge-primary">Ảnh Được chọn</p>
+                        <br />
+                        <img id="selectedImage" style="width: 94px;height: auto;" alt="Chọn Ảnh để xem" />
                     </div>
-
-                    <div class="form-group">
-                        <label asp-for="userid" class="control-label"></label>
-                        <input asp-for="userid" class="form-control" />
-                        <span asp-validation-for="userid" class="text-danger"></span>
+                    <div class="form-group custom-file mt-2">
+                        <input asp-for="thumbnailM" class="custom-file-input form-control" name="uploadFile" type="file" accept="image/*"/>
+                        <span class="text-info custom-file-label">Chọn File ảnh</span>
+                        @{
+                            if (ViewBag.File != null)
+                            {
+                                <span class="text-danger">@ViewBag.File</span>
+                            }
+                        }
+                        <span asp-validation-for="thumbnailM" class="text-danger"></span>
                     </div>
-                   
 
                     <div class="form-group" hidden>
                     <label asp-for="like" class="control-label"></label>
@@ -177,6 +190,14 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <script>
+    $(document).ready(function () {
+        $("#selectedImage").hide();
+        $('#albumSelect').select2({
+            placeholder: 'Chọn album',
+            // allowClear: true, // Thêm tùy chọn này để cho phép xóa lựa chọn
+            // tags: true, // Cho phép thêm tùy chọn không có sẵn trong danh sách
+        });
+    });
     document.addEventListener("DOMContentLoaded", function () {
         var releaseDateInput = document.querySelector('input[type="datetime-local"]');
         var releaseDateHiddenInput = document.querySelector('input[name="releaseDate"]');
@@ -200,13 +221,18 @@
             }
         });
 
-
+       
     });
-    $(document).ready(function () {
-        $('#albumSelect').select2({
-            placeholder: 'Chọn album',
-            // allowClear: true, // Thêm tùy chọn này để cho phép xóa lựa chọn
-            // tags: true, // Cho phép thêm tùy chọn không có sẵn trong danh sách
-        });
+    $("input[name='uploadFile']").change(function () {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#selectedImage").attr("src", e.target.result);
+                $("#selectedImage").show(); // Hiển thị hình ảnh khi có tệp được chọn
+            };
+            reader.readAsDataURL(this.files[0]);
+        } else {
+            $("#selectedImage").hide(); // Ẩn hình ảnh khi không có tệp nào được chọn
+        }
     });
 </script>

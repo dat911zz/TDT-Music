@@ -103,6 +103,11 @@ namespace TDT.CAdmin.Controllers
         {
             try
             {
+                if(uploadFile == null)
+                {
+                    ViewBag.File = "Vui lòng chọn file ảnh";
+                    return View();
+                }
                 string id = string.Empty;
                 do
                 {
@@ -173,6 +178,7 @@ namespace TDT.CAdmin.Controllers
                     Stream image = uploadFile.OpenReadStream();
                     string thumbnail = song.encodeId + "_" + DateTime.Now.ToString("yyyyMMddHHmmssfff").Replace("/", "_") + "." + uploadFile.FileName.Split('.').Last();
                     string url = FirebaseService.Instance.pushFile(image, "Images/Song/0/" + thumbnail).Result;
+                    DataHelper.Instance.ThumbSong.Remove(song.encodeId);
                     DataHelper.Instance.ThumbSong.Add(song.encodeId, url);
                     FirebaseService.Instance.pushFile(image, "Images/Song/1/" + thumbnail).Wait();
                     song.thumbnail = "Images/Song/0/" + thumbnail;

@@ -14,9 +14,9 @@
 <h1>Chỉnh sửa bài hát!</h1>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+<div >
+    <form asp-action="Edit" class="row" style="align-items:flex-start;" method="post" enctype="multipart/form-data">
+        <div class="col-md-8">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="encodeId" class="control-label"></label>
@@ -55,7 +55,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="thumbnailM" class="control-label"></label>
-                <input asp-for="thumbnailM" class="form-control" />
+                <input asp-for="thumbnailM" class="form-control" readonly />
                 <span asp-validation-for="thumbnailM" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -65,7 +65,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="thumbnail" class="control-label"></label>
-                <input asp-for="thumbnail" class="form-control" />
+                <input asp-for="thumbnail" class="form-control" readonly />
                 <span asp-validation-for="thumbnail" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -141,7 +141,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="listen" class="control-label"></label>
-                <input asp-for="listen" class="form-control" readonly  />
+                <input asp-for="listen" class="form-control" readonly />
                 <span asp-validation-for="listen" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -157,8 +157,22 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-        </form>
-    </div>
+
+        </div>
+        <div class="col-sm-4 text-center">
+            <p class="badge badge-primary">@Html.DisplayNameFor(model => model.thumbnailM)</p>
+            <p class="img_song img-fluid" encodeid="@Model.encodeId" thumbnail="@Model.thumbnailM"></p>
+
+            <p class="badge badge-primary">Ảnh Được chọn</p> </br>
+            <img id="selectedImage" style="width: 94px;height: auto;" alt="Chọn Ảnh để xem" />
+
+
+            <div class=" form-group custom-file mt-2">
+                <input type="file" class="custom-file-input" name="uploadFile" accept="image/*">
+                <label class="custom-file-label" for="uploadFile" >Chọn tệp</label>
+            </div>
+        </div>
+    </form>
 </div>
 
 <div>
@@ -166,12 +180,49 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 <script>
     $(document).ready(function () {
         $('#albumSelect').select2({
             placeholder: 'Chọn album',
         });
+        $("#selectedImage").hide();
     });
+    $(".img_song").each(function (e, val) {
+        var id = $(this).attr("encodeid");
+        var thumbnail = $(this).attr("thumbnail");
+        loadImg(this, id, thumbnail);
+        console.log(id, thumbnail);
+
+    })
+    function loadImg(that, _id, _thumbnail) {
+        $.ajax({
+            url: "/MusicManagement/LoadImg",
+            data: {
+                encodeID: _id,
+                thumbnail: _thumbnail
+            },
+            success: function (data) {
+                // $('#img_song').html(data);
+                $(that).html('<img style="width: 94px;height: auto;" class="thumbnail" src="' + data + '"/>');
+            }
+        });
+    }
+    $("input[name='uploadFile']").change(function () {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#selectedImage").attr("src", e.target.result);
+                $("#selectedImage").show(); // Hiển thị hình ảnh khi có tệp được chọn
+            };
+            reader.readAsDataURL(this.files[0]);
+        } else {
+            $("#selectedImage").hide(); // Ẩn hình ảnh khi không có tệp nào được chọn
+        }
+    });
+
+
 </script>
