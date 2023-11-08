@@ -18,15 +18,9 @@ function validateMinLength(input, minLength) {
 function validateNonNegative(input) {
     const inputValue = input.value;
     if (parseInt(inputValue) < 0) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Lỗi!',
-            text: 'Không được nhập số âm.',
-        });
-
+        alert("Không được nhập số âm.");
     }
 }
-
 //Chặn nhập khoảng trắng không:
 function validateNoWhitespace(input) {
     const inputValue = input.value;
