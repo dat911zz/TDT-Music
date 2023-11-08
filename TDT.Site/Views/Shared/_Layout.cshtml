@@ -1,4 +1,5 @@
-﻿@using TDT.Site.Services
+﻿@using TDT.Core.Extensions;
+@using TDT.Site.Services
 @using TDT.Core.ServiceImp
 @{
     var user = Context.User.Identity.Name == null ? "" : Context.User.Identity.Name;
@@ -13,21 +14,13 @@
     <meta name="description" content="Music">
     <meta name="keywords" content="">
     <link rel="shortcut icon" href="~/image/logo_TDT_Devil-circle.png" type="image/x-icon" />
+    <style>
+        #body-scroll,
+        #queue-scroll {
+            scroll-behavior: smooth;
+        }
+    </style>
 
-    @*<link rel="stylesheet" type="text/css" href="~/css/fonts.css">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" href="~/css/font-awesome.min.css">
-
-        <link rel="stylesheet" type="text/css" href="~/js/plugins/swiper/css/swiper.min.css">
-        <link rel="stylesheet" type="text/css" href="~/js/plugins/nice_select/nice-select.css">
-        <link rel="stylesheet" type="text/css" href="~/js/plugins/player/volume.css">
-        <link rel="stylesheet" type="text/css" href="~/js/plugins/scroll/jquery.mCustomScrollbar.css">
-
-        <link rel="stylesheet" type="text/css" href="~/css/style.css">
-
-        <link rel="stylesheet" href="~/css/site.css" />*@
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <link rel="stylesheet" href="~/css/loading.css" />
     <link rel="stylesheet" type="text/css" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/main.css" />
@@ -35,7 +28,7 @@
     <link rel="stylesheet" href="~/css/zplayer.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
-
+    @Html.AddSharedCSS("css/HoldOn.css")
     <style>
         .modal-content .close-btn {
             cursor:pointer;
@@ -391,16 +384,7 @@
             </header>
             <div class="zm-box zm-mainpage">
                 <div style="position: relative; overflow: hidden; width: 100%; height: 100%">
-                    <main class="zm-section" id="body-scroll" style="
-                position: absolute;
-                inset: 0px;
-                overflow: hidden scroll;
-                margin-right: -6px;
-                margin-bottom: 0px;
-              ">
-                        @RenderBody()
-                        <div id="zmp3_Player_Overlay" class="mar-b-30" style="bottom: 90px;"></div>
-                    </main>
+                    @RenderBody()
                     <div class="track-horizontal" style="
                 position: absolute;
                 height: 6px;
@@ -587,13 +571,11 @@
                             </div>
                         </div>
                     </div>
-                    <div id="cur_link_playlist" style="width:100%; height:100%;"></div>
                 </div>
             </div>
         </div>
         <div class="--z--player" data-player="" tabindex="1" style="width: 0; height: 0">
-            <audio data-html5-video="" preload="auto"
-                src="Test nè hehe"></audio>
+            <audio src=""></audio>
         </div>
         @* <div class="--z--player" data-player="" tabindex="1" style="width: 0; height: 0">
             <audio data-html5-video="" preload="auto"></audio>
@@ -603,27 +585,14 @@
             <div class="wrlvks_A" id="dTP-zone-2774115840800811806" z2-zoneid="2774115840800811806" z2-width="660"
                 z2-height="1" z2-type="popup" z2-sound="true" z2-autoscale="video" z2-responsive="true" z2-logo="no_fb"
                 z2-logo-position="bottom" z2-overlay="static" z2-close-freq="-1" z2-reqid="202704">
-                <iframe id="dTPIfrWrapper_2774115840800811806" scrolling="no" marginwidth="0" marginheight="0"
-                    frameborder="0" class="z2-zad-iframe"
-                    src="javascript:&quot;undefined<!DOCTYPE html><html><body style='background:transparent'></body></html>&quot;"
-                    style="border: 0px; display: none; overflow: hidden"></iframe>
-                <div id="dTPDivWrapper_2774115840800811806" style="display: none"></div>
+                
             </div>
         </div>
     </div>
 
-    @RenderBody()
-
+    @Html.AddSharedScript("js/HoldOn.js")
     <script type="text/javascript" src="~/js/plugins/player/tdt-player.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="~/js/plugins/swiper/js/swiper.min.js"></script>
-    <script type="text/javascript" src="~/js/plugins/player/tdt-player.js"></script>
-    <script type="text/javascript" src="~/js/plugins/player/volume.js"></script>
-    <script type="text/javascript" src="~/js/plugins/nice_select/jquery.nice-select.min.js"></script>
-    <script type="text/javascript" src="~/js/plugins/scroll/jquery.mCustomScrollbar.js"></script>
-    <script type="text/javascript" src="~/js/custom.js"></script>*@
 
     <script>
         //https://codeseven.github.io/toastr/demo.html
@@ -670,8 +639,13 @@
         $('.add-playlist-sidebar').click(function () {
             $('body').append(`@Html.Raw(Generator.AddPlaylistModal)`);
             $('.close-btn').on('click', function () {
-                console.log("hêh")
                 $('#react-cool-portal').remove();
+            });
+            $('#form-add-playlist .option i').each(function (i, item) {
+                $(item).click(function () {
+                    $(this).addClass('is-hide');
+                    $(this).siblings().removeClass('is-hide');
+                });
             });
         });
         

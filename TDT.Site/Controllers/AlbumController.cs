@@ -34,6 +34,8 @@ namespace TDT.Site.Controllers
             ViewData["thumbnail"] = DataHelper.GetThumbnailPlaylist(playlist);
             q = 0;
             d = 0;
+            ViewData["fromstack"] = playlist.isAlbum ? "album" : "playlist";
+            ViewData["titlestack"] = playlist.title;
             return View(playlist);
         }
 

@@ -6299,7 +6299,7 @@
 .player-queue__header {
     padding: 14px 0;
     position: relative;
-    z-index: 1000000
+    z-index: 10000000
 }
 
     .player-queue__header .tab-bars {
