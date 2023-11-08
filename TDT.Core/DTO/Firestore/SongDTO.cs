@@ -34,7 +34,7 @@ namespace TDT.Core.DTO.Firestore
         private int _streamingStatus;
         private bool _allowAudioAds;
         private bool _hasLyric;
-        private int _userid;
+        private string _userid;
         private List<string> _composers;
         private string _album;
         private bool _isRBT;
@@ -123,7 +123,7 @@ namespace TDT.Core.DTO.Firestore
         [FirestoreProperty] public bool hasLyric { get => _hasLyric; set => _hasLyric = value; }
 
         [Display(Name = "ID người dùng")]
-        [FirestoreProperty] public int userid { get => _userid; set => _userid = value; }
+        [FirestoreProperty] public string userid { get => _userid; set => _userid = value; }
        
         [Display(Name = "Danh sách nhạc sĩ")]
         [FirestoreProperty] public List<string> composers { get => _composers; set => _composers = value; }

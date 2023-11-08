@@ -85,9 +85,18 @@ namespace TDT.Core.Helper
                             }
                             else
                             {
-                                someObjectType
-                                 .GetProperty(item.Key)
-                                 .SetValue(res, int.Parse(item.Value.ToString()), null);
+                                if(someObjectType.GetProperty(item.Key).PropertyType.Name.ToLower().Contains("string"))
+                                {
+                                    someObjectType
+                                     .GetProperty(item.Key)
+                                     .SetValue(res, item.Value.ToString(), null);
+                                }
+                                else
+                                {
+                                    someObjectType
+                                     .GetProperty(item.Key)
+                                     .SetValue(res, int.Parse(item.Value.ToString()), null);
+                                }
                             }
                         }
                         else

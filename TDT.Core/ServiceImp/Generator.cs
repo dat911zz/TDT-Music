@@ -1,16 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
-using System.Collections.Generic;
-using System.Data.Linq.Mapping;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.WebSockets;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
 using TDT.Core.Ultils;
-using static Google.Cloud.Firestore.V1.StructuredAggregationQuery.Types.Aggregation.Types;
 
 namespace TDT.Core.ServiceImp
 {
@@ -26,7 +19,7 @@ namespace TDT.Core.ServiceImp
                                         class=""zm-btn zm-tooltip-btn close-btn is-hover-circle button"" tabindex=""0""><i
                                             class=""icon ic-close""></i></button>
                                     <h3 class=""title"">Tạo playlist mới</h3>
-                                    <form><input class=""input"" placeholder=""Nhập tên playlist"" value="""">
+                                    <div id=""form-add-playlist""><input class=""input"" placeholder=""Nhập tên playlist"" value="""">
                                         <div class=""option"">
                                             <div>
                                                 <h3 class=""title"">Công khai</h3>
@@ -96,7 +89,7 @@ namespace TDT.Core.ServiceImp
                                                     </svg></i></div>
                                         </div><button class=""zm-btn mar-t-20 is-outlined active is-fullwidth is-upper button""
                                             tabindex=""-1"" disabled=""""><i class=""icon""></i><span>Tạo mới</span></button>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -440,8 +433,6 @@ namespace TDT.Core.ServiceImp
             return str.ToString(); 
         }
 
-        
-
         public static string GenerateArtistInfo(ArtistDTO artist)
         {
             StringBuilder str = new StringBuilder();
@@ -578,7 +569,7 @@ namespace TDT.Core.ServiceImp
                 ";
             }
             string format = @"
-                <div class=""select-item"" data-id=""{5}"">
+                <div class=""select-item {7}"" data-id=""{5}"">
                     <div class=""checkbox-wrapper"">
                         <label class=""checkbox""><input type=""checkbox"" /></label>
                     </div>
@@ -661,7 +652,7 @@ namespace TDT.Core.ServiceImp
                     </div>
                 </div>
             ";
-            return string.Format(format, song.title, img, song.GetHtmlArtist(), song.GetHtmlAlbum(), song.Duration(), song.encodeId, premium);
+            return string.Format(format, song.title, img, song.GetHtmlArtist(), song.GetHtmlAlbum(), song.Duration(), song.encodeId, premium, string.IsNullOrEmpty(premium) ? "" : "is-premium");
         }
         #endregion
 
