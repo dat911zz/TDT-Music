@@ -746,10 +746,6 @@ function setCurPlaylist() {
     });
 }
 
-//function getIndexSong(id) {
-//    return songs.findIndex(function (item) { return item.Id == id })
-//}
-
 function sortHtmlPlaylist(arrId) {
     $.ajax({
         type: "POST",
@@ -889,6 +885,7 @@ function setEvent() {
 function unbindEvents() {
     $('.select-header .media-left input[type="checkbox"]').unbind();
     $('.add-queue-btn').unbind();
+    $('#select-menu-id > .more-btn').unbind();
 }
 
 function bindEvents() {
@@ -938,6 +935,32 @@ function bindEvents() {
                 }
             }
         });
+    });
+    $('#select-menu-id > .more-btn').bind("click", function () {
+        if ($(this).siblings().length > 0) {
+            $(this).siblings().remove();
+        }
+        else {
+            $(this).after(`
+                <div class="zm-contextmenu select-menu">
+                    <div>
+                        <div class="menu">
+                            <ul class="menu-list">
+                                <li>
+                                    <div class="menu-list--submenu"><button class="zm-btn button" tabindex="0"><i
+                                                class="icon ic-16-Add"></i><span>Thêm vào playlist</span><i
+                                                class="icon ic-go-right"></i></button></div>
+                                </li>
+                                <li></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `);
+            $(this).closest('#select-menu-id').find('.select-menu .menu-list li:eq(0)').hover(function () {
+                
+            });
+        }
     });
 }
 function clearCheckbox() {
