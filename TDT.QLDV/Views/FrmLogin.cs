@@ -25,6 +25,7 @@ namespace TDT.QLDV.Views
             this.ClientSize.Width / 2 - pnl.Size.Width / 2,
             this.ClientSize.Height / 2 - pnl.Size.Height / 2);
             pnl.Anchor = AnchorStyles.None;
+            txtUsername.Focus();
         }
         public FrmLoginBinding GetBindings()
         {

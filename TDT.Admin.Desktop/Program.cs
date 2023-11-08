@@ -25,12 +25,13 @@ namespace TDT.Admin.Desktop
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyExceptionHandler);
             frmConfig = new QLDV.Views.FrmConfig();
             frmLogin = new QLDV.Views.FrmLogin();
-            frmDashboard = new frmDashboard(frmLogin);
+            
 
             controller = QLDV.Controller.UserAuthController.Instance;
             //controller.SetConnStr(cfg.GetConnectionString("Admin"));
             controller.gotoDashborad = () =>
             {
+                frmDashboard = new frmDashboard(frmLogin);
                 frmDashboard.Show();
                 frmLogin.Hide();
             };
