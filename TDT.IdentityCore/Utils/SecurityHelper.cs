@@ -142,7 +142,6 @@ namespace TDT.IdentityCore.Utils
                 return null;
             }
             var tokenHandler = new JwtSecurityTokenHandler();
-            var secirityKey = Encoding.ASCII.GetBytes(Convert.ToString(_cfg["Jwt:Key"]));
             try
             {       
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
