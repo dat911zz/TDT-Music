@@ -18,70 +18,48 @@ namespace TDT.CAdmin.Controllers
 {
     public class PlaylistManagementController : Controller
     {
-        private List<PlaylistDTO> _playlists;
         public PlaylistManagementController()
         {
         }
-        //public void GetDataPlayList()
-        //{
-        //    if (DataHelper.Instance.Playlists.Count <= 0)
-        //    {
-        //        _playlists = APIHelper.Gets<PlaylistDTO>($"{FirestoreService.CL_Playlist}"+ "/Gets");
-
-        //        if (_playlists != null)
-        //        {
-        //            foreach (PlaylistDTO playlist in _playlists)
-        //            {
-        //                if (!DataHelper.Instance.Playlists.Keys.Contains(playlist.encodeId))
-        //                {
-        //                    DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        _playlists = DataHelper.Instance.Playlists.Values.ToList();
-        //    }
-        //}
-        //public IActionResult Index(string searchTerm, int? page)
-        //{
-        //    ViewBag.SearchTerm = "";
-        //    int pageSize = 6;
-        //    int pageNumber = (page ?? 1);
-        //    List<PlaylistDTO> lsong = _playlists;
-
-        //    if (DataHelper.Instance.Playlists.Count > 0)
-        //    {
-        //        if (!string.IsNullOrEmpty(searchTerm))
-        //        {
-        //            lsong = _playlists.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).ToList();
-        //            ViewBag.SearchTerm = searchTerm;
-        //            ViewBag.SoBH = lsong.Count;
-        //        }
-        //    }
-        //    IPagedList<PlaylistDTO> pagedList = lsong == null ? new List<PlaylistDTO>().ToPagedList() : lsong.OrderByDescending(o => o.releaseDate).ToPagedList(pageNumber, pageSize);
-        //    return View(pagedList);
-        //}
-
+        public bool IsIdInUse(string id)
+        {
+            PlaylistDTO playlist = DataHelper.GetPlaylist(id);
+            if (playlist != null)
+            {
+                return true;
+            }
+            return false;
+        }
         public IActionResult Index(string searchTerm, int? page)
         {
             ViewBag.SearchTerm = "";
-            int pageSize = 6;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
-            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Playlist).OrderByDescending("releaseDate").Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
-            List<PlaylistDTO> playlists = FirestoreService.Instance.Gets<PlaylistDTO>(query);
-            int soplist = (int)FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Playlist).Count().GetSnapshotAsync().Result.Count;
-            ViewBag.SoBH = soplist;
-            PageList<List<PlaylistDTO>> pageList = new PageList<List<PlaylistDTO>>(pageNumber, pageSize, soplist, playlists);
+            List<PlaylistDTO> playlists = null;
+            int sobs = 0;
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Playlist).Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
+                playlists = FirestoreService.Instance.Gets<PlaylistDTO>(query);
+                sobs = (int)FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Playlist).Count().GetSnapshotAsync().Result.Count;
+                ViewBag.SoBH = sobs;
+            }
+            else if (DataHelper.Instance.Playlists.Count > 0)
+            {
+                var _playlist = DataHelper.Instance.Playlists.Values.ToList();
+                playlists = _playlist.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).ToList();
+                ViewBag.SoBH = playlists.Count;
+                sobs = playlists.Count;
+                playlists = _playlist.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).Skip((int)((pageNumber - 1) * pageSize)).Take(pageSize).ToList();
+                ViewBag.SearchTerm = searchTerm;
+            }
+
+            PageList<List<PlaylistDTO>> pageList = new PageList<List<PlaylistDTO>>(pageNumber, pageSize, sobs, playlists);
             return View(pageList);
         }
         [HttpGet]
         public string LoadImg(string encodeID, string thumbnail)
         {
-            //string img;
-            //img = FirebaseService.Instance.getStorage(thumbnail);
-
             string img;
             if (DataHelper.Instance.ThumbPlaylist.Keys.Contains(encodeID))
             {
@@ -97,10 +75,6 @@ namespace TDT.CAdmin.Controllers
                 catch { }
             }
             return img;
-        }
-        public bool IsIdInUse(string id)
-        {
-            return _playlists.Any(pl => pl.encodeId == id);
         }
         public IActionResult Create()
         {
@@ -151,8 +125,6 @@ namespace TDT.CAdmin.Controllers
                 return View();
             }
         }
-
-
         public IActionResult Edit(string? id)
         {
             PlaylistDTO playlist = new PlaylistDTO();
@@ -168,12 +140,12 @@ namespace TDT.CAdmin.Controllers
         {
             try
             {
-                playlist.encodeId = "KG2WFIDW";
                 if (uploadFile != null)
                 {
                     Stream image = uploadFile.OpenReadStream();
                     string thumbnail = playlist.encodeId + "_" + DateTime.Now.ToString("yyyyMMddHHmmssfff").Replace("/", "_") + "." + uploadFile.FileName.Split('.').Last();
                     string url = FirebaseService.Instance.pushFile(image, "Images/Playlist/0/" + thumbnail).Result;
+                    DataHelper.Instance.ThumbSong.Remove(playlist.encodeId);
                     DataHelper.Instance.ThumbSong.Add(playlist.encodeId, url);
                     FirebaseService.Instance.pushFile(image, "Images/Playlist/1/" + thumbnail).Wait();
                     playlist.thumbnail = "Images/Playlist/0/" + thumbnail;
@@ -207,7 +179,6 @@ namespace TDT.CAdmin.Controllers
         [HttpPost]
         public IActionResult Delete(string id)
         {
-            id = "a";
             ResponseDataDTO<PlaylistDTO> playlistDTO = APICallHelper.Delete<ResponseDataDTO<PlaylistDTO>>($"Playlist/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             if (playlistDTO.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
