@@ -4,10 +4,15 @@
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .select2-container .select2-selection--single {
+        height: auto; /* Sử dụng giá trị 'initial' để vô hiệu hóa height */
+    }
 
-<h1>Edit</h1>
+</style>
 
-<h4>SongDTO</h4>
+<h1>Chỉnh sửa bài hát!</h1>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -85,9 +90,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="releaseDate" class="control-label"></label>
-                <input asp-for="releaseDate" class="form-control" />
+                <input asp-for="releaseDate" class="form-control" value="@Model.ReleaseDate().ToString("yyyy-MM-ddTHH:mm:ss")" />
                 <span asp-validation-for="releaseDate" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="distributor" class="control-label"></label>
                 <input asp-for="distributor" class="form-control" />
@@ -120,7 +126,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="album" class="control-label"></label>
-                <input asp-for="album" class="form-control" />
+                <select asp-for="album" asp-items="@ViewBag.Albums" class="form-control" id="albumSelect"></select>
                 <span asp-validation-for="album" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -130,22 +136,22 @@
             </div>
             <div class="form-group">
                 <label asp-for="like" class="control-label"></label>
-                <input asp-for="like" class="form-control" />
+                <input asp-for="like" class="form-control" readonly />
                 <span asp-validation-for="like" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="listen" class="control-label"></label>
-                <input asp-for="listen" class="form-control" />
+                <input asp-for="listen" class="form-control" readonly  />
                 <span asp-validation-for="listen" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="liked" /> @Html.DisplayNameFor(model => model.liked)
+                    <input class="form-check-input" asp-for="liked" readonly /> @Html.DisplayNameFor(model => model.liked)
                 </label>
             </div>
             <div class="form-group">
                 <label asp-for="comment" class="control-label"></label>
-                <input asp-for="comment" class="form-control" />
+                <input asp-for="comment" class="form-control" readonly />
                 <span asp-validation-for="comment" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -162,3 +168,10 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    $(document).ready(function () {
+        $('#albumSelect').select2({
+            placeholder: 'Chọn album',
+        });
+    });
+</script>

@@ -1,4 +1,5 @@
-﻿using Google.Cloud.Firestore;
+﻿using Castle.Components.DictionaryAdapter.Xml;
+using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -25,9 +26,11 @@ namespace TDT.CAdmin.Controllers
         }
         public bool IsIdInUse(string id)
         {
-            ResponseDataDTO<SongDTO> songdto = APICallHelper.Get<ResponseDataDTO<SongDTO>>($"Song/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
-            if (songdto != null)
+            SongDTO song = DataHelper.GetSong(id);
+            if (song != null)
+            {
                 return true;
+            }
             return false;
         }
         public IActionResult Index(string searchTerm, int? page)
@@ -72,14 +75,12 @@ namespace TDT.CAdmin.Controllers
             }
             return img;
         }
-        public IActionResult Create()
+        public SelectList SelectListPlayList(int sokitu)
         {
             if (DataHelper.Instance.Playlists.Count > 0)
             {
                 List<PlaylistDTO> albums = DataHelper.Instance.Playlists.Values.ToList();
-
-                // Giới hạn số ký tự trong tùy chọn của combobox
-                int maxCharacters = 50;
+                int maxCharacters = sokitu;
                 foreach (var album in albums)
                 {
                     if (album.title.Length > maxCharacters)
@@ -88,13 +89,15 @@ namespace TDT.CAdmin.Controllers
                     }
                 }
 
-                ViewBag.Albums = new SelectList(albums, "encodeId", "title");
+               return new SelectList(albums, "encodeId", "title");
             }
-
+            return null;
+        }
+        public IActionResult Create()
+        {
+            ViewBag.Albums = SelectListPlayList(50);
             return View();
         }
-
-
         [HttpPost]
         public IActionResult Create(SongDTO songdto, IFormFile uploadFile)
         {
@@ -149,6 +152,7 @@ namespace TDT.CAdmin.Controllers
         }
         public IActionResult Edit(string id)
         {
+            ViewBag.Albums = SelectListPlayList(50);
             SongDTO song = new SongDTO();
             Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).WhereEqualTo("encodeId", id);
             List<SongDTO> lsong = FirestoreService.Instance.Gets<SongDTO>(query);
@@ -227,10 +231,10 @@ namespace TDT.CAdmin.Controllers
         }
         public IActionResult Details(string id)
         {
-            ResponseDataDTO<SongDTO> songdto = APICallHelper.Get<ResponseDataDTO<SongDTO>>($"Song/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
-            if (songdto != null)
+            SongDTO song = DataHelper.GetSong(id);
+            if (song != null)
             {
-                return View(songdto.Data.FirstOrDefault());
+                return View(song);
             }
             return View();
         }

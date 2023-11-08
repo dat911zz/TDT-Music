@@ -155,11 +155,11 @@ namespace TDT.CAdmin.Controllers
 
         public IActionResult Edit(string? id)
         {
-            PlaylistDTO song = new PlaylistDTO();
+            PlaylistDTO playlist = new PlaylistDTO();
             if (id != null)
             {
-                song = _playlists.FirstOrDefault(s => s.encodeId.Equals(id));
-                return View(song);
+                playlist = DataHelper.GetPlaylist(id);
+                return View(playlist);
             }
             return View();
         }
@@ -224,7 +224,7 @@ namespace TDT.CAdmin.Controllers
             PlaylistDTO playlist = new PlaylistDTO();
             if (id != null)
             {
-                playlist = _playlists.FirstOrDefault(s => s.encodeId.Equals(id));
+                playlist = APIHelper.Get<PlaylistDTO>(FirestoreService.CL_Playlist, id);
                 return View(playlist);
 
             }

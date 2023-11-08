@@ -10,16 +10,13 @@
 }
 <style>
     .select2-container .select2-selection--single {
-        height: auto; /* Sử dụng giá trị 'initial' để vô hiệu hóa height */
-    }
+        height: auto; 
 
 </style>
 
 <h1 class="title-admin">TẠO BÀI HÁT</h1>
-
-<h4>Nhập giá trị của bài hát</h4>
 <hr />
-<div class="row">
+<div class="row" style="align-items:flex-start;">
     <div class="col-md-12">
         <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
