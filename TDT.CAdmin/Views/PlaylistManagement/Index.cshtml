@@ -95,7 +95,6 @@
                                 string truncatedArtistsNames;
                                 if (item.artistsNames == null)
                                 {
-
                                     truncatedArtistsNames = "--";
                                 }
                                 else
@@ -103,11 +102,9 @@
                                     truncatedArtistsNames = item.artistsNames.Length > maxLength
                                     ? item.artistsNames.Substring(0, maxLength) + "..."
                                     : item.artistsNames;
-
                                 }
                             }
                             @truncatedArtistsNames
-
                     </td>
                     <td>
                             @Html.DisplayFor(modelItem => item.uid)
