@@ -16,5 +16,16 @@ namespace TDT.QLDV.Views
         {
             InitializeComponent();
         }
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+
+        }
+
+        private void guna2Button1_Click(object sender, EventArgs e)
+        {
+            frmConfigNew frm = new frmConfigNew();
+            frm.ShowDialog();
+        }
     }
 }

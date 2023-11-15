@@ -78,6 +78,12 @@
     <Compile Include="Views\FrmConfig.Designer.cs">
       <DependentUpon>FrmConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\frmConfigNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\frmConfigNew.Designer.cs">
+      <DependentUpon>frmConfigNew.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\FrmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\FrmConfig.resx">
       <DependentUpon>FrmConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\frmConfigNew.resx">
+      <DependentUpon>frmConfigNew.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
