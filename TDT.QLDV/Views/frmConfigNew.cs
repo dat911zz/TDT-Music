@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TDT.QLDV.Controller;
 
 namespace TDT.QLDV.Views
 {
@@ -15,11 +16,6 @@ namespace TDT.QLDV.Views
         public frmConfigNew()
         {
             InitializeComponent();
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }

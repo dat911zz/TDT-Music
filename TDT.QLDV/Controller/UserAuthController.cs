@@ -11,6 +11,7 @@ using TDT.QLDV.Models;
 using TDT.QLDV.DTO;
 using TDT.Core.Ultils;
 using System.Windows.Forms;
+using Guna.UI2.WinForms;
 
 namespace TDT.QLDV.Controller
 {
@@ -251,6 +252,15 @@ namespace TDT.QLDV.Controller
             this.cboServer = cboServer;
             this.cboDB = cboDB;
         }
+        //public FrmConfigBinding(Guna2TextBox txtUsername, Guna2TextBox txtPass, Guna2Button btnSave, Guna2Button btnCancel, Guna2ComboBox cboServer, Guna2ComboBox cboDB)
+        //{
+        //    this.txtUsername = txtUsername;
+        //    this.txtPass = txtPass;
+        //    this.btnSave = btnSave;
+        //    this.btnCancel = btnCancel;
+        //    this.cboServer = cboServer;
+        //    this.cboDB = cboDB;
+        //}
     }
 }
 #pragma warning restore CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).

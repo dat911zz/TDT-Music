@@ -29,21 +29,21 @@ namespace TDT.Admin.Desktop
             frmLogin = new QLDV.Views.FrmLogin();
             frmDashboard = new frmDashboard(frmLogin);
             frmLoginNew = new QLDV.Views.frmLoginNew();
-            //controller = QLDV.Controller.UserAuthController.Instance;
-            ////controller.SetConnStr(cfg.GetConnectionString("Admin"));
-            //controller.gotoDashborad = () =>
-            //{
-            //    frmDashboard.Show();
-            //    frmLogin.Hide();
-            //};
-            //controller.saveConfig = (serverName, userName, pass, dbName) =>
-            //{
-            //    //ConfigHelper.SaveConfig("Admin", "Data Source=" + serverName + ";Initial Catalog=" + dbName + ";User ID=" + userName + ";pwd = " + pass + "");
-            //};
-            //controller.InitComponents(frmLogin, frmConfig, frmLogin.GetBindings(), frmConfig.GetBindings());
-            //Application.Run(frmLogin);
-            
-            Application.Run(frmLoginNew);
+            controller = QLDV.Controller.UserAuthController.Instance;
+            //controller.SetConnStr(cfg.GetConnectionString("Admin"));
+            controller.gotoDashborad = () =>
+            {
+                frmDashboard.Show();
+                frmLogin.Hide();
+            };
+            controller.saveConfig = (serverName, userName, pass, dbName) =>
+            {
+                //ConfigHelper.SaveConfig("Admin", "Data Source=" + serverName + ";Initial Catalog=" + dbName + ";User ID=" + userName + ";pwd = " + pass + "");
+            };
+            controller.InitComponents(frmLogin, frmConfig, frmLogin.GetBindings(), frmConfig.GetBindings());
+            Application.Run(frmLogin);
+
+            //Application.Run(frmLoginNew);
 
         }
         static void MyExceptionHandler(object sender, UnhandledExceptionEventArgs args)
