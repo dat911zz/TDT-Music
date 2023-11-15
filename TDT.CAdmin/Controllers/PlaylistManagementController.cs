@@ -67,12 +67,8 @@ namespace TDT.CAdmin.Controllers
             }
             else
             {
-                img = FirebaseService.Instance.getStorage( thumbnail);
-                try
-                {
-                    DataHelper.Instance.ThumbPlaylist.Add(encodeID, img);
-                }
-                catch { }
+                img = FirebaseService.Instance.getStorage(thumbnail);
+                DataHelper.Instance.ThumbPlaylist.Add(encodeID, img);
             }
             return img;
         }

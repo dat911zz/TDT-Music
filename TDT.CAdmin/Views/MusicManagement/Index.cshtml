@@ -148,12 +148,13 @@
 
         }
     </ul>
+    <div style="margin-left: auto; align-items: self-end !important;">
+        Đến Trang
+        <input type="text" id="pageInput" name="pageInput" style="width: 60px;"> / @Model.TotalPages
+        <div class="btn" id="goToPageButton">Đến</div>
+    </div>
 </div>
-<div>
-    Đến Trang
-    <input type="text" id="pageInput" name="pageInput" style="width: 60px;"> / @Model.TotalPages
-    <div class="btn" id="goToPageButton">Đến</div>
-</div>
+
 <script>
     $(".img_song").each(function (e, val) {
         var id = $(this).attr("encodeid");
