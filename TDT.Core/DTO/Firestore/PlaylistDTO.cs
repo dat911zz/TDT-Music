@@ -125,6 +125,10 @@ namespace TDT.Core.DTO.Firestore
         {
             return (new DateTime(1970, 1, 1, 0, 0, 0)).AddSeconds(this.contentLastUpdate);
         }
+        public DateTime ReleaseDate()
+        {
+            return (new DateTime(1970, 1, 1, 0, 0, 0)).AddSeconds(this.releaseDate);
+        }
         public string GetHtmlArtist()
         {
             return Generator.GenerateArtistLink(this.artists);
@@ -159,5 +163,6 @@ namespace TDT.Core.DTO.Firestore
             List<PlaylistDTO> playlists = DataHelper.GetPlaylistSuggest(this);
             return Generator.GeneratePlaylistsElement(playlists.Take(5).ToList());
         }
+
     }
 }

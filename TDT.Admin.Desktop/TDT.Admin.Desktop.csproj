@@ -35,8 +35,9 @@
     <Reference Include="Guna.UI">
       <HintPath>Lib\Guna.UI.dll</HintPath>
     </Reference>
-    <Reference Include="Guna.UI2">
-      <HintPath>Lib\Guna.UI2.dll</HintPath>
+    <Reference Include="Guna.UI2, Version=2.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TDT.QLDV\bin\Debug\Guna.UI2.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />

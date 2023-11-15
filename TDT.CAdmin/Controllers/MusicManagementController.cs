@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Castle.Components.DictionaryAdapter.Xml;
+using Google.Cloud.Firestore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -18,76 +20,45 @@ namespace TDT.CAdmin.Controllers
 {
     public class MusicManagementController : Controller
     {
-        private List<SongDTO> _songs;
-        private List<Genre> _genres;
-
         public MusicManagementController()
         {
-
-            GetDataMusic();
-            GetDataGenre();
+           
         }
-        public void GetDataMusic()
+        public bool IsIdInUse(string id)
         {
-            if (DataHelper.Instance.Songs.Count <= 0)
+            SongDTO song = DataHelper.GetSong(id);
+            if (song != null)
             {
-                _songs = APIHelper.Gets<SongDTO>($"{FirestoreService.CL_Song}");
-                if (_songs != null)
-                {
-                    foreach (SongDTO song in _songs)
-                    {
-                        if (!DataHelper.Instance.Songs.Keys.Contains(song.encodeId))
-                        {
-                            DataHelper.Instance.Songs.Add(song.encodeId, song);
-                        }
-                    }
-                }
+                return true;
             }
-            else
-            {
-                _songs = DataHelper.Instance.Songs.Values.ToList();
-            }
-        }
-        public void GetDataGenre()
-        {
-            if (DataHelper.Instance.Genres.Count <= 0)
-            {
-                _genres = APIHelper.Gets<Genre>($"{FirestoreService.CL_Genre}");
-                if (_genres != null)
-                {
-                    foreach (Genre genre in _genres)
-                    {
-                        if (!DataHelper.Instance.Genres.Keys.Contains(genre.id))
-                        {
-                            DataHelper.Instance.Genres.Add(genre.id, genre);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                _genres = DataHelper.Instance.Genres.Values.ToList();
-            }
+            return false;
         }
         public IActionResult Index(string searchTerm, int? page)
         {
             ViewBag.SearchTerm = "";
-            int pageSize = 6;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
-            List<SongDTO> lsong = _songs;
-
-            if (DataHelper.Instance.Songs.Count > 0)
+            List<SongDTO> lsong = null;
+            int sobs = 0;
+            if (string.IsNullOrEmpty(searchTerm))
             {
-                if (!string.IsNullOrEmpty(searchTerm))
-                {
-                    lsong = _songs.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).ToList();
-                    ViewBag.SearchTerm = searchTerm;
-                    //pageSize = lsong.Count;
-                    ViewBag.SoBH = lsong.Count;
-                }
+                Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Offset((int)((pageNumber - 1) * pageSize)).Limit(pageSize);
+                lsong = FirestoreService.Instance.Gets<SongDTO>(query);
+                sobs = (int)FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Count().GetSnapshotAsync().Result.Count;
+                ViewBag.SoBH = sobs;
             }
-            IPagedList<SongDTO> pagedList = lsong == null ? new List<SongDTO>().ToPagedList() : lsong.OrderByDescending(o => o.releaseDate).ToPagedList(pageNumber, pageSize);
-            return View(pagedList);
+            else if (DataHelper.Instance.Songs.Count > 0)
+            {
+                var _songs = DataHelper.Instance.Songs.Values.ToList();
+                lsong = _songs.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).ToList();
+                ViewBag.SoBH = lsong.Count;
+                sobs = lsong.Count;
+                lsong = _songs.Where(r => r.title.ToLower().Contains(searchTerm.ToLower())).Skip((int)((pageNumber - 1) * pageSize)).Take(pageSize).ToList();
+                ViewBag.SearchTerm = searchTerm;
+            }
+
+            PageList<List<SongDTO>> pageList = new PageList<List<SongDTO>>(pageNumber, pageSize, sobs, lsong);
+            return View(pageList);
         }
         [HttpGet]
         public string LoadImg(string encodeID, string thumbnail)
@@ -104,32 +75,45 @@ namespace TDT.CAdmin.Controllers
             }
             return img;
         }
-
-      
-        public bool IsIdInUse(string id)
+        public SelectList SelectListPlayList(int sokitu)
         {
-            return _songs.Any(song => song.encodeId == id);
+            if (DataHelper.Instance.Playlists.Count > 0)
+            {
+                List<PlaylistDTO> albums = DataHelper.Instance.Playlists.Values.ToList();
+                int maxCharacters = sokitu;
+                foreach (var album in albums)
+                {
+                    if (album.title.Length > maxCharacters)
+                    {
+                        album.title = album.title.Substring(0, maxCharacters); // Giới hạn ký tự
+                    }
+                }
+
+               return new SelectList(albums, "encodeId", "title");
+            }
+            return null;
         }
         public IActionResult Create()
         {
-            //    if (DataHelper.Instance.Genres.Count > 0)
-            //    {
-            //        ViewBag.MaGenre = new SelectList(_genres, "id", "name");
-            //    }
+            ViewBag.Albums = SelectListPlayList(50);
             return View();
         }
-
         [HttpPost]
         public IActionResult Create(SongDTO songdto, IFormFile uploadFile)
         {
+            ViewBag.Albums = SelectListPlayList(50);
             try
             {
-
+                if(uploadFile == null)
+                {
+                    ViewBag.File = "Vui lòng chọn file ảnh";
+                    return View();
+                }
                 string id = string.Empty;
                 do
                 {
                     id = HelperUtility.GenerateRandomString(8);
-                 
+
                 } while (IsIdInUse(id));
                 songdto.encodeId = id;
                 Stream image = uploadFile.OpenReadStream();
@@ -150,6 +134,14 @@ namespace TDT.CAdmin.Controllers
                 {
                     //FlashMessage để truyền message từ đây sang action hoặc controller khác
                     this.MessageContainer().AddFlashMessage("Tạo bài hát thành công!", ToastMessageType.Success);
+                    if (DataHelper.Instance.Songs.ContainsKey(songdto.encodeId))
+                    {
+                        DataHelper.Instance.Songs[songdto.encodeId] = songdto;
+                    }
+                    else
+                    {
+                        DataHelper.Instance.Songs.Add(songdto.encodeId, songdto);
+                    }
                 }
                 else
                 {
@@ -164,14 +156,15 @@ namespace TDT.CAdmin.Controllers
                 return View();
             }
         }
-
-
         public IActionResult Edit(string id)
         {
+            ViewBag.Albums = SelectListPlayList(50);
             SongDTO song = new SongDTO();
-            if (id != null)
+            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).WhereEqualTo("encodeId", id);
+            List<SongDTO> lsong = FirestoreService.Instance.Gets<SongDTO>(query);
+            if (lsong != null)
             {
-                song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
+                song = lsong[0];
                 return View(song);
             }
             return View();
@@ -181,10 +174,12 @@ namespace TDT.CAdmin.Controllers
         {
             try
             {
-                if(uploadFile != null) {
+                if (uploadFile != null)
+                {
                     Stream image = uploadFile.OpenReadStream();
                     string thumbnail = song.encodeId + "_" + DateTime.Now.ToString("yyyyMMddHHmmssfff").Replace("/", "_") + "." + uploadFile.FileName.Split('.').Last();
                     string url = FirebaseService.Instance.pushFile(image, "Images/Song/0/" + thumbnail).Result;
+                    DataHelper.Instance.ThumbSong.Remove(song.encodeId);
                     DataHelper.Instance.ThumbSong.Add(song.encodeId, url);
                     FirebaseService.Instance.pushFile(image, "Images/Song/1/" + thumbnail).Wait();
                     song.thumbnail = "Images/Song/0/" + thumbnail;
@@ -200,6 +195,14 @@ namespace TDT.CAdmin.Controllers
                 {
                     //FlashMessage để truyền message từ đây sang action hoặc controller khác
                     this.MessageContainer().AddFlashMessage("Sửa hát thành công!", ToastMessageType.Success);
+                    if(DataHelper.Instance.Songs.ContainsKey(song.encodeId))
+                    {
+                        DataHelper.Instance.Songs[song.encodeId] = song;
+                    }
+                    else
+                    {
+                        DataHelper.Instance.Songs.Add(song.encodeId, song);
+                    }
                 }
                 else
                 {
@@ -215,15 +218,17 @@ namespace TDT.CAdmin.Controllers
             }
         }
 
-
         [HttpPost]
         public IActionResult Delete(string id)
         {
-            id = "2123";
             ResponseDataDTO<SongDTO> songDTO = APICallHelper.Delete<ResponseDataDTO<SongDTO>>($"Song/{id}", token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
             if (songDTO.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
                 this.MessageContainer().AddFlashMessage("Xóa bài hát thành công!", ToastMessageType.Success);
+                if(DataHelper.Instance.Songs.ContainsKey(id))
+                {
+                    DataHelper.Instance.Songs.Remove(id);
+                }
             }
             else
             {
@@ -233,12 +238,10 @@ namespace TDT.CAdmin.Controllers
         }
         public IActionResult Details(string id)
         {
-            SongDTO song = new SongDTO();
-            if (id != null)
+            SongDTO song = DataHelper.GetSong(id);
+            if (song != null)
             {
-                song = _songs.FirstOrDefault(s => s.encodeId.Equals(id));
                 return View(song);
-
             }
             return View();
         }
