@@ -89,11 +89,20 @@ namespace TDT.Cadmin.Desktop.Views
         {
             ClearMDIForms();
 
+            frmRoles frm = new frmRoles();
+            frm.MdiParent = this;
+            //Fill form full khoảng trống
+            frm.Width = this.Width;
+            frm.Height = this.Height;
+
+            frm.Show();
+
         }
 
         private void btnMenu_Permission_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
+
 
         }
 
