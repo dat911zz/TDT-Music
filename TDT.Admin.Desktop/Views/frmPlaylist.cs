@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace TDT.Admin.Desktop.Views
 {
-    public partial class frmSong : Form
+    public partial class frmPlaylist : Form
     {
-        public frmSong()
+        public frmPlaylist()
         {
             InitializeComponent();
         }

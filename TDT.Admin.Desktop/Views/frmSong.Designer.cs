@@ -328,7 +328,6 @@
             this.txtArtists.SelectedText = "";
             this.txtArtists.Size = new System.Drawing.Size(181, 27);
             this.txtArtists.TabIndex = 88;
-            this.txtArtists.TextChanged += new System.EventHandler(this.guna2TextBox4_TextChanged);
             // 
             // label6
             // 
@@ -339,7 +338,6 @@
             this.label6.Size = new System.Drawing.Size(53, 17);
             this.label6.TabIndex = 87;
             this.label6.Text = "Nghệ sĩ";
-            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // txtArtistsNames
             // 
@@ -362,7 +360,6 @@
             this.txtArtistsNames.SelectedText = "";
             this.txtArtistsNames.Size = new System.Drawing.Size(181, 27);
             this.txtArtistsNames.TabIndex = 86;
-            this.txtArtistsNames.TextChanged += new System.EventHandler(this.guna2TextBox5_TextChanged);
             // 
             // label7
             // 
@@ -437,7 +434,6 @@
             this.txtDistributor.SelectedText = "";
             this.txtDistributor.Size = new System.Drawing.Size(181, 27);
             this.txtDistributor.TabIndex = 94;
-            this.txtDistributor.TextChanged += new System.EventHandler(this.guna2TextBox8_TextChanged);
             // 
             // txtDuration
             // 
@@ -450,7 +446,6 @@
             this.txtDuration.Name = "txtDuration";
             this.txtDuration.Size = new System.Drawing.Size(181, 30);
             this.txtDuration.TabIndex = 96;
-            this.txtDuration.ValueChanged += new System.EventHandler(this.guna2NumericUpDown1_ValueChanged);
             // 
             // label10
             // 
@@ -730,7 +725,6 @@
             this.Name = "frmSong";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmSong";
-            this.Load += new System.EventHandler(this.frmSong_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtgvSongDTO)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cpbThumbnail)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtDuration)).EndInit();
