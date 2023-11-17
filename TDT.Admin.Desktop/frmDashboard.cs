@@ -102,20 +102,35 @@ namespace TDT.Cadmin.Desktop.Views
         private void btnMenu_Permission_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
-
+            frmPermission frm = new frmPermission();
+            frm.MdiParent = this;
+            //Fill form full khoảng trống
+            frm.Width = this.Width;
+            frm.Height = this.Height;
+            frm.Show();
 
         }
 
         private void btnMenu_Group_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
-
+            frmGroup frm = new frmGroup();
+            frm.MdiParent = this;
+            //Fill form full khoảng trống
+            frm.Width = this.Width;
+            frm.Height = this.Height;
+            frm.Show();
         }
 
         private void btnMenu_Song_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
-
+            frmSong frm = new frmSong();
+            frm.MdiParent = this;
+            //Fill form full khoảng trống
+            frm.Width = this.Width;
+            frm.Height = this.Height;
+            frm.Show();
         }
 
         private void btnMenu_Playlist_Click(object sender, EventArgs e)
