@@ -297,6 +297,7 @@
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmPermission";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmPermission";
             ((System.ComponentModel.ISupportInitialize)(this.dtgvPermissionDTO)).EndInit();
             this.ResumeLayout(false);

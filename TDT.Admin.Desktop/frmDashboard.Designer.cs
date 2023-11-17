@@ -58,7 +58,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(200, 712);
+            this.panel1.Size = new System.Drawing.Size(200, 724);
             this.panel1.TabIndex = 0;
             // 
             // panel3
@@ -69,7 +69,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(200, 120);
+            this.panel3.Size = new System.Drawing.Size(200, 132);
             this.panel3.TabIndex = 2;
             // 
             // panel2
@@ -84,7 +84,7 @@
             this.panel2.Controls.Add(this.btnMenu_Account);
             this.panel2.Controls.Add(this.btnMenu_Home);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 120);
+            this.panel2.Location = new System.Drawing.Point(0, 132);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(200, 592);
             this.panel2.TabIndex = 1;
@@ -320,7 +320,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel4.Location = new System.Drawing.Point(200, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1149, 69);
+            this.panel4.Size = new System.Drawing.Size(1164, 69);
             this.panel4.TabIndex = 1;
             // 
             // btnUserProfile
@@ -336,7 +336,7 @@
             this.btnUserProfile.ForeColor = System.Drawing.Color.White;
             this.btnUserProfile.Image = global::TDT.Admin.Desktop.Properties.Resources.icons8_user_50;
             this.btnUserProfile.ImageSize = new System.Drawing.Size(52, 52);
-            this.btnUserProfile.Location = new System.Drawing.Point(1074, 0);
+            this.btnUserProfile.Location = new System.Drawing.Point(1089, 0);
             this.btnUserProfile.Name = "btnUserProfile";
             this.btnUserProfile.OnHoverBaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.btnUserProfile.OnHoverBorderColor = System.Drawing.Color.Black;
@@ -352,7 +352,7 @@
             this.pnlProfile.BackColor = System.Drawing.Color.Gray;
             this.pnlProfile.Controls.Add(this.btnLogout);
             this.pnlProfile.Controls.Add(this.btnUserName);
-            this.pnlProfile.Location = new System.Drawing.Point(1218, 75);
+            this.pnlProfile.Location = new System.Drawing.Point(1221, 75);
             this.pnlProfile.Name = "pnlProfile";
             this.pnlProfile.Size = new System.Drawing.Size(131, 90);
             this.pnlProfile.TabIndex = 2;
@@ -416,7 +416,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.ClientSize = new System.Drawing.Size(1349, 712);
+            this.ClientSize = new System.Drawing.Size(1364, 724);
             this.ControlBox = false;
             this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.panel4);
