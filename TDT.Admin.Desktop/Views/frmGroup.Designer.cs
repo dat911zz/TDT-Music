@@ -77,12 +77,12 @@
             this.dtgvGroupDTO.DefaultCellStyle = dataGridViewCellStyle3;
             this.dtgvGroupDTO.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dtgvGroupDTO.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.dtgvGroupDTO.Location = new System.Drawing.Point(0, 246);
+            this.dtgvGroupDTO.Location = new System.Drawing.Point(0, 320);
             this.dtgvGroupDTO.Name = "dtgvGroupDTO";
             this.dtgvGroupDTO.RowHeadersVisible = false;
             this.dtgvGroupDTO.RowHeadersWidth = 51;
             this.dtgvGroupDTO.RowTemplate.Height = 24;
-            this.dtgvGroupDTO.Size = new System.Drawing.Size(1042, 324);
+            this.dtgvGroupDTO.Size = new System.Drawing.Size(1065, 324);
             this.dtgvGroupDTO.TabIndex = 75;
             this.dtgvGroupDTO.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.dtgvGroupDTO.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -284,7 +284,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1042, 570);
+            this.ClientSize = new System.Drawing.Size(1065, 644);
             this.Controls.Add(this.dtgvGroupDTO);
             this.Controls.Add(this.dtpCreateDate);
             this.Controls.Add(this.label5);

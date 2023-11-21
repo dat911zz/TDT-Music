@@ -81,7 +81,7 @@
             this.dtgvGenreDTO.RowHeadersVisible = false;
             this.dtgvGenreDTO.RowHeadersWidth = 51;
             this.dtgvGenreDTO.RowTemplate.Height = 24;
-            this.dtgvGenreDTO.Size = new System.Drawing.Size(1042, 270);
+            this.dtgvGenreDTO.Size = new System.Drawing.Size(1065, 331);
             this.dtgvGenreDTO.TabIndex = 118;
             this.dtgvGenreDTO.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.dtgvGenreDTO.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -289,7 +289,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1042, 570);
+            this.ClientSize = new System.Drawing.Size(1065, 644);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtAlias);
             this.Controls.Add(this.label4);

@@ -227,12 +227,12 @@
             this.dtgvRoleDTO.DefaultCellStyle = dataGridViewCellStyle3;
             this.dtgvRoleDTO.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dtgvRoleDTO.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.dtgvRoleDTO.Location = new System.Drawing.Point(0, 246);
+            this.dtgvRoleDTO.Location = new System.Drawing.Point(0, 320);
             this.dtgvRoleDTO.Name = "dtgvRoleDTO";
             this.dtgvRoleDTO.RowHeadersVisible = false;
             this.dtgvRoleDTO.RowHeadersWidth = 51;
             this.dtgvRoleDTO.RowTemplate.Height = 24;
-            this.dtgvRoleDTO.Size = new System.Drawing.Size(1042, 324);
+            this.dtgvRoleDTO.Size = new System.Drawing.Size(1065, 324);
             this.dtgvRoleDTO.TabIndex = 65;
             this.dtgvRoleDTO.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.dtgvRoleDTO.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -284,7 +284,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1042, 570);
+            this.ClientSize = new System.Drawing.Size(1065, 644);
             this.Controls.Add(this.dtgvRoleDTO);
             this.Controls.Add(this.dtpCreateDate);
             this.Controls.Add(this.label5);

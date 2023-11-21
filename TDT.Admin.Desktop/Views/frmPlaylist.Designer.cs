@@ -491,13 +491,14 @@
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dtgvPlaylistDTO.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dtgvPlaylistDTO.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dtgvPlaylistDTO.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.dtgvPlaylistDTO.Location = new System.Drawing.Point(0, 293);
+            this.dtgvPlaylistDTO.Location = new System.Drawing.Point(0, 303);
             this.dtgvPlaylistDTO.Name = "dtgvPlaylistDTO";
             this.dtgvPlaylistDTO.RowHeadersVisible = false;
             this.dtgvPlaylistDTO.RowHeadersWidth = 51;
             this.dtgvPlaylistDTO.RowTemplate.Height = 24;
-            this.dtgvPlaylistDTO.Size = new System.Drawing.Size(1042, 270);
+            this.dtgvPlaylistDTO.Size = new System.Drawing.Size(1065, 341);
             this.dtgvPlaylistDTO.TabIndex = 118;
             this.dtgvPlaylistDTO.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.dtgvPlaylistDTO.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -726,7 +727,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1042, 570);
+            this.ClientSize = new System.Drawing.Size(1065, 644);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.txtDescription);
             this.Controls.Add(this.label13);

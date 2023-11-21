@@ -77,12 +77,12 @@
             this.dtgvPermissionDTO.DefaultCellStyle = dataGridViewCellStyle3;
             this.dtgvPermissionDTO.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dtgvPermissionDTO.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.dtgvPermissionDTO.Location = new System.Drawing.Point(0, 246);
+            this.dtgvPermissionDTO.Location = new System.Drawing.Point(0, 277);
             this.dtgvPermissionDTO.Name = "dtgvPermissionDTO";
             this.dtgvPermissionDTO.RowHeadersVisible = false;
             this.dtgvPermissionDTO.RowHeadersWidth = 51;
             this.dtgvPermissionDTO.RowTemplate.Height = 24;
-            this.dtgvPermissionDTO.Size = new System.Drawing.Size(1042, 324);
+            this.dtgvPermissionDTO.Size = new System.Drawing.Size(1065, 367);
             this.dtgvPermissionDTO.TabIndex = 75;
             this.dtgvPermissionDTO.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.dtgvPermissionDTO.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -284,7 +284,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1042, 570);
+            this.ClientSize = new System.Drawing.Size(1065, 644);
             this.Controls.Add(this.dtgvPermissionDTO);
             this.Controls.Add(this.dtpCreateDate);
             this.Controls.Add(this.label5);

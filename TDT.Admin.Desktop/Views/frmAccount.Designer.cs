@@ -460,12 +460,12 @@
             this.dtgvUserDTO.DefaultCellStyle = dataGridViewCellStyle3;
             this.dtgvUserDTO.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dtgvUserDTO.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.dtgvUserDTO.Location = new System.Drawing.Point(0, 266);
+            this.dtgvUserDTO.Location = new System.Drawing.Point(0, 340);
             this.dtgvUserDTO.Name = "dtgvUserDTO";
             this.dtgvUserDTO.RowHeadersVisible = false;
             this.dtgvUserDTO.RowHeadersWidth = 51;
             this.dtgvUserDTO.RowTemplate.Height = 24;
-            this.dtgvUserDTO.Size = new System.Drawing.Size(1042, 304);
+            this.dtgvUserDTO.Size = new System.Drawing.Size(1065, 304);
             this.dtgvUserDTO.TabIndex = 60;
             this.dtgvUserDTO.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.dtgvUserDTO.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -518,7 +518,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1042, 570);
+            this.ClientSize = new System.Drawing.Size(1065, 644);
             this.Controls.Add(this.dtgvUserDTO);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -546,6 +546,7 @@
             this.Name = "frmAccount";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmAccount";
+            this.Load += new System.EventHandler(this.frmAccount_Load);
             ((System.ComponentModel.ISupportInitialize)(this.txtAccessFailedCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtgvUserDTO)).EndInit();
             this.ResumeLayout(false);

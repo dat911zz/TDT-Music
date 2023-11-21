@@ -16,5 +16,10 @@ namespace TDT.Admin.Desktop.Views
         {
             InitializeComponent();
         }
+
+        private void frmAccount_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
