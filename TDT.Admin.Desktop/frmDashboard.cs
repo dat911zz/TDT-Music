@@ -75,16 +75,13 @@ namespace TDT.Cadmin.Desktop.Views
         private void btnMenu_Account_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
-
             frmAccount frm = new frmAccount();
             frm.MdiParent = this;
             //Fill form full khoảng trống
             frm.Width = this.Width;
             frm.Height = this.Height;
-
             frm.Show();
         }
-
         private void btnMenu_Role_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
@@ -98,7 +95,6 @@ namespace TDT.Cadmin.Desktop.Views
             frm.Show();
 
         }
-
         private void btnMenu_Permission_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
@@ -110,7 +106,6 @@ namespace TDT.Cadmin.Desktop.Views
             frm.Show();
 
         }
-
         private void btnMenu_Group_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
