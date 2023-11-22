@@ -32,8 +32,8 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.pnlProfile = new System.Windows.Forms.Panel();
-            this.btnUserName = new Guna.UI.WinForms.GunaButton();
             this.btnLogout = new Guna.UI.WinForms.GunaButton();
+            this.btnUserName = new Guna.UI.WinForms.GunaButton();
             this.btnUserProfile = new Guna.UI.WinForms.GunaCircleButton();
             this.panel3 = new System.Windows.Forms.Panel();
             this.btnMenu_Genre = new Guna.UI.WinForms.GunaButton();
@@ -58,12 +58,12 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(200, 661);
+            this.panel1.Size = new System.Drawing.Size(200, 724);
             this.panel1.TabIndex = 0;
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
             this.panel2.Controls.Add(this.btnMenu_Genre);
             this.panel2.Controls.Add(this.btnMenu_Playlist);
             this.panel2.Controls.Add(this.btnMenu_Song);
@@ -73,19 +73,19 @@
             this.panel2.Controls.Add(this.btnMenu_Account);
             this.panel2.Controls.Add(this.btnMenu_Home);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 69);
+            this.panel2.Location = new System.Drawing.Point(0, 132);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(200, 592);
             this.panel2.TabIndex = 1;
             // 
             // panel4
             // 
-            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
             this.panel4.Controls.Add(this.btnUserProfile);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel4.Location = new System.Drawing.Point(200, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1039, 69);
+            this.panel4.Size = new System.Drawing.Size(1164, 69);
             this.panel4.TabIndex = 1;
             // 
             // pnlProfile
@@ -93,37 +93,10 @@
             this.pnlProfile.BackColor = System.Drawing.Color.Gray;
             this.pnlProfile.Controls.Add(this.btnLogout);
             this.pnlProfile.Controls.Add(this.btnUserName);
-            this.pnlProfile.Location = new System.Drawing.Point(1102, 75);
+            this.pnlProfile.Location = new System.Drawing.Point(1221, 75);
             this.pnlProfile.Name = "pnlProfile";
             this.pnlProfile.Size = new System.Drawing.Size(131, 90);
             this.pnlProfile.TabIndex = 2;
-            // 
-            // btnUserName
-            // 
-            this.btnUserName.AnimationHoverSpeed = 0.07F;
-            this.btnUserName.AnimationSpeed = 0.03F;
-            this.btnUserName.BaseColor = System.Drawing.Color.White;
-            this.btnUserName.BorderColor = System.Drawing.Color.Black;
-            this.btnUserName.DialogResult = System.Windows.Forms.DialogResult.None;
-            this.btnUserName.Enabled = false;
-            this.btnUserName.FocusedColor = System.Drawing.Color.Empty;
-            this.btnUserName.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnUserName.ForeColor = System.Drawing.Color.Black;
-            this.btnUserName.Image = null;
-            this.btnUserName.ImageSize = new System.Drawing.Size(20, 20);
-            this.btnUserName.Location = new System.Drawing.Point(0, 0);
-            this.btnUserName.Margin = new System.Windows.Forms.Padding(5);
-            this.btnUserName.Name = "btnUserName";
-            this.btnUserName.OnHoverBaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(151)))), ((int)(((byte)(143)))), ((int)(((byte)(255)))));
-            this.btnUserName.OnHoverBorderColor = System.Drawing.Color.Black;
-            this.btnUserName.OnHoverForeColor = System.Drawing.Color.White;
-            this.btnUserName.OnHoverImage = null;
-            this.btnUserName.OnPressedColor = System.Drawing.Color.Black;
-            this.btnUserName.Padding = new System.Windows.Forms.Padding(10);
-            this.btnUserName.Size = new System.Drawing.Size(127, 42);
-            this.btnUserName.TabIndex = 8;
-            this.btnUserName.Text = "Username";
-            this.btnUserName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // btnLogout
             // 
@@ -152,6 +125,33 @@
             this.btnLogout.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
+            // btnUserName
+            // 
+            this.btnUserName.AnimationHoverSpeed = 0.07F;
+            this.btnUserName.AnimationSpeed = 0.03F;
+            this.btnUserName.BaseColor = System.Drawing.Color.White;
+            this.btnUserName.BorderColor = System.Drawing.Color.Black;
+            this.btnUserName.DialogResult = System.Windows.Forms.DialogResult.None;
+            this.btnUserName.Enabled = false;
+            this.btnUserName.FocusedColor = System.Drawing.Color.Empty;
+            this.btnUserName.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnUserName.ForeColor = System.Drawing.Color.Black;
+            this.btnUserName.Image = null;
+            this.btnUserName.ImageSize = new System.Drawing.Size(20, 20);
+            this.btnUserName.Location = new System.Drawing.Point(0, 0);
+            this.btnUserName.Margin = new System.Windows.Forms.Padding(5);
+            this.btnUserName.Name = "btnUserName";
+            this.btnUserName.OnHoverBaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(151)))), ((int)(((byte)(143)))), ((int)(((byte)(255)))));
+            this.btnUserName.OnHoverBorderColor = System.Drawing.Color.Black;
+            this.btnUserName.OnHoverForeColor = System.Drawing.Color.White;
+            this.btnUserName.OnHoverImage = null;
+            this.btnUserName.OnPressedColor = System.Drawing.Color.Black;
+            this.btnUserName.Padding = new System.Windows.Forms.Padding(10);
+            this.btnUserName.Size = new System.Drawing.Size(127, 42);
+            this.btnUserName.TabIndex = 8;
+            this.btnUserName.Text = "Username";
+            this.btnUserName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // btnUserProfile
             // 
             this.btnUserProfile.AnimationHoverSpeed = 0.07F;
@@ -165,7 +165,7 @@
             this.btnUserProfile.ForeColor = System.Drawing.Color.White;
             this.btnUserProfile.Image = global::TDT.Admin.Desktop.Properties.Resources.icons8_user_50;
             this.btnUserProfile.ImageSize = new System.Drawing.Size(52, 52);
-            this.btnUserProfile.Location = new System.Drawing.Point(964, 0);
+            this.btnUserProfile.Location = new System.Drawing.Point(1089, 0);
             this.btnUserProfile.Name = "btnUserProfile";
             this.btnUserProfile.OnHoverBaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.btnUserProfile.OnHoverBorderColor = System.Drawing.Color.Black;
@@ -178,20 +178,20 @@
             // 
             // panel3
             // 
-            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
             this.panel3.BackgroundImage = global::TDT.Admin.Desktop.Properties.Resources.logo_TDT_Devil_red;
             this.panel3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(200, 69);
+            this.panel3.Size = new System.Drawing.Size(200, 132);
             this.panel3.TabIndex = 2;
             // 
             // btnMenu_Genre
             // 
             this.btnMenu_Genre.AnimationHoverSpeed = 0.07F;
             this.btnMenu_Genre.AnimationSpeed = 0.03F;
-            this.btnMenu_Genre.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            this.btnMenu_Genre.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
             this.btnMenu_Genre.BorderColor = System.Drawing.Color.Black;
             this.btnMenu_Genre.DialogResult = System.Windows.Forms.DialogResult.None;
             this.btnMenu_Genre.FocusedColor = System.Drawing.Color.Empty;
@@ -219,7 +219,7 @@
             // 
             this.btnMenu_Playlist.AnimationHoverSpeed = 0.07F;
             this.btnMenu_Playlist.AnimationSpeed = 0.03F;
-            this.btnMenu_Playlist.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            this.btnMenu_Playlist.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
             this.btnMenu_Playlist.BorderColor = System.Drawing.Color.Black;
             this.btnMenu_Playlist.DialogResult = System.Windows.Forms.DialogResult.None;
             this.btnMenu_Playlist.FocusedColor = System.Drawing.Color.Empty;
@@ -247,7 +247,7 @@
             // 
             this.btnMenu_Song.AnimationHoverSpeed = 0.07F;
             this.btnMenu_Song.AnimationSpeed = 0.03F;
-            this.btnMenu_Song.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            this.btnMenu_Song.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
             this.btnMenu_Song.BorderColor = System.Drawing.Color.Black;
             this.btnMenu_Song.DialogResult = System.Windows.Forms.DialogResult.None;
             this.btnMenu_Song.FocusedColor = System.Drawing.Color.Empty;
@@ -275,7 +275,7 @@
             // 
             this.btnMenu_Group.AnimationHoverSpeed = 0.07F;
             this.btnMenu_Group.AnimationSpeed = 0.03F;
-            this.btnMenu_Group.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            this.btnMenu_Group.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
             this.btnMenu_Group.BorderColor = System.Drawing.Color.Black;
             this.btnMenu_Group.DialogResult = System.Windows.Forms.DialogResult.None;
             this.btnMenu_Group.FocusedColor = System.Drawing.Color.Empty;
@@ -303,7 +303,7 @@
             // 
             this.btnMenu_Permission.AnimationHoverSpeed = 0.07F;
             this.btnMenu_Permission.AnimationSpeed = 0.03F;
-            this.btnMenu_Permission.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            this.btnMenu_Permission.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
             this.btnMenu_Permission.BorderColor = System.Drawing.Color.Black;
             this.btnMenu_Permission.DialogResult = System.Windows.Forms.DialogResult.None;
             this.btnMenu_Permission.FocusedColor = System.Drawing.Color.Empty;
@@ -331,7 +331,7 @@
             // 
             this.btnMenu_Role.AnimationHoverSpeed = 0.07F;
             this.btnMenu_Role.AnimationSpeed = 0.03F;
-            this.btnMenu_Role.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            this.btnMenu_Role.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
             this.btnMenu_Role.BorderColor = System.Drawing.Color.Black;
             this.btnMenu_Role.DialogResult = System.Windows.Forms.DialogResult.None;
             this.btnMenu_Role.FocusedColor = System.Drawing.Color.Empty;
@@ -359,7 +359,7 @@
             // 
             this.btnMenu_Account.AnimationHoverSpeed = 0.07F;
             this.btnMenu_Account.AnimationSpeed = 0.03F;
-            this.btnMenu_Account.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            this.btnMenu_Account.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
             this.btnMenu_Account.BorderColor = System.Drawing.Color.Black;
             this.btnMenu_Account.DialogResult = System.Windows.Forms.DialogResult.None;
             this.btnMenu_Account.FocusedColor = System.Drawing.Color.Empty;
@@ -387,7 +387,7 @@
             // 
             this.btnMenu_Home.AnimationHoverSpeed = 0.07F;
             this.btnMenu_Home.AnimationSpeed = 0.03F;
-            this.btnMenu_Home.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            this.btnMenu_Home.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
             this.btnMenu_Home.BorderColor = System.Drawing.Color.Black;
             this.btnMenu_Home.DialogResult = System.Windows.Forms.DialogResult.None;
             this.btnMenu_Home.FocusedColor = System.Drawing.Color.Empty;
@@ -416,7 +416,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.ClientSize = new System.Drawing.Size(1239, 661);
+            this.ClientSize = new System.Drawing.Size(1364, 724);
             this.ControlBox = false;
             this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.panel4);

@@ -10,16 +10,11 @@ using System.Windows.Forms;
 
 namespace TDT.Admin.Desktop.Views
 {
-    public partial class frmAccount : Form
+    public partial class frmRoles : Form
     {
-        public frmAccount()
+        public frmRoles()
         {
             InitializeComponent();
-        }
-
-        private void frmAccount_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
