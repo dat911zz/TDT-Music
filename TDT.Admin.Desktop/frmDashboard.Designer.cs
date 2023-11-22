@@ -1,4 +1,6 @@
-﻿namespace TDT.Cadmin.Desktop.Views
+﻿using Guna.UI2.WinForms;
+
+namespace TDT.Cadmin.Desktop.Views
 {
     partial class frmDashboard
     {
