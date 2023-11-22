@@ -75,49 +75,80 @@ namespace TDT.Cadmin.Desktop.Views
         private void btnMenu_Account_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
-
             frmAccount frm = new frmAccount();
+            frm.MdiParent = this;
+            //Fill form full khoảng trống
+            frm.Width = this.Width;
+            frm.Height = this.Height;
+            frm.Show();
+        }
+        private void btnMenu_Role_Click(object sender, EventArgs e)
+        {
+            ClearMDIForms();
+
+            frmRoles frm = new frmRoles();
             frm.MdiParent = this;
             //Fill form full khoảng trống
             frm.Width = this.Width;
             frm.Height = this.Height;
 
             frm.Show();
-        }
-
-        private void btnMenu_Role_Click(object sender, EventArgs e)
-        {
-            ClearMDIForms();
 
         }
-
         private void btnMenu_Permission_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
+            frmPermission frm = new frmPermission();
+            frm.MdiParent = this;
+            //Fill form full khoảng trống
+            frm.Width = this.Width;
+            frm.Height = this.Height;
+            frm.Show();
 
         }
-
         private void btnMenu_Group_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
-
+            frmGroup frm = new frmGroup();
+            frm.MdiParent = this;
+            //Fill form full khoảng trống
+            frm.Width = this.Width;
+            frm.Height = this.Height;
+            frm.Show();
         }
 
         private void btnMenu_Song_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
-
+            frmSong frm = new frmSong();
+            frm.MdiParent = this;
+            //Fill form full khoảng trống
+            frm.Width = this.Width;
+            frm.Height = this.Height;
+            frm.Show();
         }
 
         private void btnMenu_Playlist_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
+            frmPlaylist frm = new frmPlaylist();
+            frm.MdiParent = this;
+            //Fill form full khoảng trống
+            frm.Width = this.Width;
+            frm.Height = this.Height;
+            frm.Show();
 
         }
 
         private void btnMenu_Genre_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
+            frmGenre frm = new frmGenre();
+            frm.MdiParent = this;
+            //Fill form full khoảng trống
+            frm.Width = this.Width;
+            frm.Height = this.Height;
+            frm.Show();
 
         }
     }

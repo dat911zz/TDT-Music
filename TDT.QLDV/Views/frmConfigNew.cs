@@ -7,19 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TDT.QLDV.Controller;
 
-namespace TDT.Admin.Desktop.Views
+namespace TDT.QLDV.Views
 {
-    public partial class frmAccount : Form
+    public partial class frmConfigNew : Form
     {
-        public frmAccount()
+        public frmConfigNew()
         {
             InitializeComponent();
-        }
-
-        private void frmAccount_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

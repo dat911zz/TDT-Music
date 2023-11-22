@@ -53,6 +53,7 @@ namespace TDT.Core.DTO.Firestore
         //[Required(ErrorMessage = "Nhập bí danh!")]
 
         [Display(Name = "Bí danh")]
+
         [FirestoreProperty] public string alias { get => _alias; set => _alias = value; }
 
         [Display(Name = "Làm chính thức")]
@@ -62,7 +63,7 @@ namespace TDT.Core.DTO.Firestore
         //[Required(ErrorMessage = "Vui lòng nhập tên người dùng!")]
         [FirestoreProperty] public string username { get => _username; set => _username = value; }
 
-        //[Required(ErrorMessage = "Vui nhập tên nghệ xĩ!")]
+        [Required(ErrorMessage = "Vui nhập tên nghệ sĩ!")]
         [Display(Name = "Tên nghệ sĩ")]
         [FirestoreProperty] public string artistsNames { get => _artistsNames; set => _artistsNames = value; }
 
@@ -70,7 +71,7 @@ namespace TDT.Core.DTO.Firestore
         [Display(Name = "Danh sách nghệ sĩ")]
         [FirestoreProperty] public List<string> artists { get => _artists; set => _artists = value; }
         
-        [Display(Name = "Là toàn cầu")]
+        [Display(Name = "Bản toàn cầu")]
         [FirestoreProperty] public bool isWorldWide { get => _isWorldWide; set => _isWorldWide = value; }
 
         //[Required(ErrorMessage = "Vui lòng chọn file ảnh M!")]
@@ -108,9 +109,8 @@ namespace TDT.Core.DTO.Firestore
         [FirestoreProperty] public string distributor { get => _distributor; set => _distributor = value; }
 
         [Display(Name = "Danh sách chỉ số")]
-
         [FirestoreProperty] public List<string> indicators { get => _indicators; set => _indicators = value; }
-        [Display(Name = "Là bản độc lập")]
+        [Display(Name = "Bản độc lập")]
         [FirestoreProperty] public bool isIndie { get => _isIndie; set => _isIndie = value; }
 
         [Display(Name = "Trạng thái phát sóng")]
@@ -122,6 +122,7 @@ namespace TDT.Core.DTO.Firestore
         [Display(Name = "Có lời bài hát")]
         [FirestoreProperty] public bool hasLyric { get => _hasLyric; set => _hasLyric = value; }
 
+        [Required(ErrorMessage = "Vui lòng Nhập ID Người Dùng!")]
         [Display(Name = "ID người dùng")]
         [FirestoreProperty] public string userid { get => _userid; set => _userid = value; }
        

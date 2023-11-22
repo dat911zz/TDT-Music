@@ -19453,8 +19453,8 @@ body.avgrund-active {
 .select2-container--default .select2-selection--single,
 .select2-container--default .select2-dropdown,
 .select2-container--default .select2-selection--multiple {
-  border-color: #2c2e33;
-  background: #000000; }
+/*  border-color: #2c2e33;
+  background: #000000;*/ }
   .select2-container--default .select2-selection--single .select2-search__field,
   .select2-container--default .select2-dropdown .select2-search__field,
   .select2-container--default .select2-selection--multiple .select2-search__field {

@@ -14,6 +14,8 @@ namespace TDT.Admin.Desktop
         public static QLDV.Controller.UserAuthController controller = null;
         public static QLDV.Views.FrmConfig frmConfig = null;
         public static QLDV.Views.FrmLogin frmLogin = null;
+        public static QLDV.Views.frmLoginNew frmLoginNew = null;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -25,13 +27,12 @@ namespace TDT.Admin.Desktop
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyExceptionHandler);
             frmConfig = new QLDV.Views.FrmConfig();
             frmLogin = new QLDV.Views.FrmLogin();
-            
-
+            frmDashboard = new frmDashboard(frmLogin);
+            frmLoginNew = new QLDV.Views.frmLoginNew();
             controller = QLDV.Controller.UserAuthController.Instance;
             //controller.SetConnStr(cfg.GetConnectionString("Admin"));
             controller.gotoDashborad = () =>
             {
-                frmDashboard = new frmDashboard(frmLogin);
                 frmDashboard.Show();
                 frmLogin.Hide();
             };
@@ -41,6 +42,9 @@ namespace TDT.Admin.Desktop
             };
             controller.InitComponents(frmLogin, frmConfig, frmLogin.GetBindings(), frmConfig.GetBindings());
             Application.Run(frmLogin);
+
+            //Application.Run(frmLoginNew);
+
         }
         static void MyExceptionHandler(object sender, UnhandledExceptionEventArgs args)
         {
