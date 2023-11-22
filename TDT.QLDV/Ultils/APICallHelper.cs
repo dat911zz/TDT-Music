@@ -14,8 +14,8 @@ namespace TDT.Core.Ultils
     public static class APICallHelper
     {
         private static readonly string VERSION = "1.0";
-        private static readonly string DOMAIN = $@"https://localhost:44300/api/v{VERSION}/";
-        //private static readonly string DOMAIN = $@"https://tdt-api.somee.com/api/v{VERSION}/";
+        //private static readonly string DOMAIN = $@"https://localhost:44300/api/v{VERSION}/";
+        private static readonly string DOMAIN = $@"https://tdt-api.somee.com/api/v{VERSION}/";
         private static HttpClient HTTP_CLIENT;
 
         public static async Task<T> Get<T>(string url = "", string requestBody = null, string token = null) where T : APIResponseModel
