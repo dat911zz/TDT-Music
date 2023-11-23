@@ -1,4 +1,6 @@
-﻿namespace TDT.Admin.Desktop.Views
+﻿using Guna.UI2.WinForms;
+
+namespace TDT.Admin.Desktop.Views
 {
     partial class frmAccount
     {
@@ -555,6 +557,7 @@
         }
 
         #endregion
+
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label6;

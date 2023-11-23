@@ -1,4 +1,6 @@
-﻿namespace TDT.QLDV.Views
+﻿using Guna.UI2.WinForms;
+
+namespace TDT.QLDV.Views
 {
     partial class frmLoginNew
     {
