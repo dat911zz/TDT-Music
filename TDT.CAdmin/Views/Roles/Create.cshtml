@@ -8,22 +8,22 @@
 
 <h2 class="title-admin">Tạo mới vai trò</h2>
 <hr />
-<form asp-action="Create" class="row" style="align-items: flex-start;">
+<form asp-action="Create" class="row" style="align-items: flex-start;" id="create-form">
     <div class="col-md-4">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="form-group">
             <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+            <input asp-for="Name" class="form-control" required oninput="validateName(this, 'name-message');" />
+            <span asp-validation-for="Name" class="text-danger" id="name-message"></span>
         </div>
         <div class="form-group">
             <label asp-for="Description" class="control-label"></label>
-            <input asp-for="Description" class="form-control" />
-            <span asp-validation-for="Description" class="text-danger"></span>
+            <input asp-for="Description" class="form-control" required oninput="validateDescription(this, 'description-message');" />
+            <span asp-validation-for="Description" class="text-danger" id="description-message"></span>
         </div>
         <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-primary" />
+            <input type="submit" id="submit-create" value="Create" class="btn btn-primary" />
         </div>
     </div>
     <div class="col-md-2"></div>
@@ -52,6 +52,28 @@
             checkboxs.prop('checked', false);
         }
     });
+    function validateName(input, messageSpanId) {
+        const errorMessage = validateNoSpecialChars(input) || validateMinLength(input, 4);
+        const messageSpan = document.getElementById(messageSpanId);
+        if (errorMessage) {
+            // Nếu có lỗi, thiết lập nội dung của span
+            messageSpan.textContent = errorMessage;
+        } else {
+            // Nếu không có lỗi, đặt nội dung span là trống
+            messageSpan.textContent = '';
+        }
+    }
+    function validateDescription(input, messageSpanId) {
+        const errorMessage =  validateMinLength(input, 10) ;
+        const messageSpan = document.getElementById(messageSpanId);
+        if (errorMessage) {
+            // Nếu có lỗi, thiết lập nội dung của span
+            messageSpan.textContent = errorMessage;
+        } else {
+            // Nếu không có lỗi, đặt nội dung span là trống
+            messageSpan.textContent = '';
+        }
+    }
 </script>
 <div>
     <a asp-action="Index">Trở về trang trước</a>
