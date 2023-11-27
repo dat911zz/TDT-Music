@@ -52,25 +52,23 @@
             checkboxs.prop('checked', false);
         }
     });
+
     function validateName(input, messageSpanId) {
         const errorMessage = validateNoSpecialChars(input) || validateMinLength(input, 4);
         const messageSpan = document.getElementById(messageSpanId);
         if (errorMessage) {
-            // Nếu có lỗi, thiết lập nội dung của span
             messageSpan.textContent = errorMessage;
         } else {
-            // Nếu không có lỗi, đặt nội dung span là trống
             messageSpan.textContent = '';
         }
     }
+
     function validateDescription(input, messageSpanId) {
         const errorMessage =  validateMinLength(input, 10) ;
         const messageSpan = document.getElementById(messageSpanId);
         if (errorMessage) {
-            // Nếu có lỗi, thiết lập nội dung của span
             messageSpan.textContent = errorMessage;
         } else {
-            // Nếu không có lỗi, đặt nội dung span là trống
             messageSpan.textContent = '';
         }
     }

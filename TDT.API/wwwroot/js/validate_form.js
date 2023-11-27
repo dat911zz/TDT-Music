@@ -52,9 +52,6 @@ function validateNotEmpty(input) {
     }
 }
 
-
-
-
 // Xét date thanh long
 function GetTicks(dateTime) {
     var totalSeconds = (dateTime - new Date(1970, 1, 1, 0, 0, 0)) / 1000;
