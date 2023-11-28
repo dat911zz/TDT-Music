@@ -8,18 +8,18 @@
 <h2 class="title-admin">Tạo mới Quyền</h2>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4" id="create-form" style="align-items: flex-start;">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger" ></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <input asp-for="Name" class="form-control" required oninput="validateName(this, 'name-message');" />
+                <span asp-validation-for="Name" class="text-danger" id="name-message" ></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <input asp-for="Description" class="form-control" oninput="validateDescription(this, 'description-message');" />
+                <span asp-validation-for="Description" class="text-danger" id="description-message"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -31,7 +31,38 @@
 <div>
     <a asp-action="Index">Trở về trang trước</a>
 </div>
+<script>
+    function validateName(input, messageSpanId) {
+        const errorMessage = validateNoSpecialCharsYesVI(input) || validateMinLength(input, 4);
+        const messageSpan = document.getElementById(messageSpanId);
+        if (errorMessage) {
+            messageSpan.textContent = errorMessage;
+            return false; // Có lỗi
+        } else {
+            messageSpan.textContent = '';
+            return true; // Không có lỗi
+        }
+    }
 
+    function validateDescription(input, messageSpanId) {
+        const errorMessage = validateMinLength(input, 10);
+        const messageSpan = document.getElementById(messageSpanId);
+        if (errorMessage) {
+            messageSpan.textContent = errorMessage;
+            return false; // Có lỗi
+        } else {
+            messageSpan.textContent = '';
+            return true; // Không có lỗi
+        }
+    }
+    document.getElementById("create-form").onsubmit = function () {
+        const isNameValid = validateName(document.getElementById("Name"), 'name-message');
+        const isDescriptionValid = validateDescription(document.getElementById("Description"), 'description-message');
+
+        return isNameValid && isDescriptionValid;
+    };
+
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

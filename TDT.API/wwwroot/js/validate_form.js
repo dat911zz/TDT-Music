@@ -3,11 +3,17 @@ function validateNoSpecialChars(input) {
     const inputValue = input.value;
     const regex = /^[a-zA-Z0-9\s]+$/;
         if (!regex.test(inputValue)) {
-            console.log("Script is running! Chặn nhập ký tự đặc biệt:");
             return String("Không được nhập ký tự đặc biệt.");
         }
 }
-
+// Chặn nhập ký tự đặc biệt nhưng được sử dụng tiếng việt:
+function validateNoSpecialCharsYesVI(input) {
+    const inputValue = input.value;
+    const regex = /^[a-zA-Z0-9\sÀ-ỹĂăÂâĐđÊêÔôƠơƯư]+$/;
+    if (!regex.test(inputValue)) {
+        return String("Không được nhập ký tự đặc biệt.");
+    }
+}
 // Số ký tự ít nhất minLength:
 function validateMinLength(input, minLength) {
     const inputValue = input.value;
