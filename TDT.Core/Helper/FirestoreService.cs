@@ -28,7 +28,7 @@ namespace TDT.Core.Helper
         public static string CL_GenreTest = "GenreTest";
         private static readonly string CONFIG_PATH = "/Config/cross-platform-music-firebase-adminsdk-6e112-689a7c7543.json";
         private FirestoreDb db;
-        private string PATH_CONFIG = CONFIG_PATH;
+        private string PATH_CONFIG = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.Parent.FullName + "\\TDT.Core\\" + CONFIG_PATH;
 
 
         private static FirestoreService _instance;
