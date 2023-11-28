@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/SplashScreen.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @Html.AddSharedCSS("css/HoldOn.css")
     @Html.AddSharedCSS("css/shared.css")
 </head>
@@ -85,7 +86,7 @@
                     <div class="collapse" id="auth">
                         <ul class="nav flex-column sub-menu">
                             <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index", "Permission")">Danh sách Quyền Truy Cập</a></li>
-                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create", "RolPermissiones")">Thêm Quyền Truy Cập</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Create", "Permission")">Thêm Quyền Truy Cập</a></li>
                         </ul>
                     </div>
                 </li>
@@ -175,9 +176,11 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="~/js/SplashScreen.js"></script>
     @Html.AddSharedScript("js/HoldOn.js")
     @Html.AddSharedScript("js/shared.js")
+    @Html.AddSharedScript("js/validate_form.js")
     <!--Start of Tawk.to Script-->
     @* <script type="text/javascript">
         var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();

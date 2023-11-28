@@ -13,7 +13,7 @@ namespace TDT.Site.Controllers
     {
         public bool CheckShowPlayer()
         {
-            return PlayerService.GetPlayers().Count > 0;
+            return !PlayerService.Instance.StackIsEmpty();
         }
         public string GetSrc()
         {
@@ -21,14 +21,35 @@ namespace TDT.Site.Controllers
         }
 
         [HttpPost]
-        public void SetSrc([FromForm] string[] list)
+        public void SetSrc([FromForm] string[] list, string from = null, string title = null, int? index = null, string id = null)
         {
-            PlayerService.SetPlayer(list.ToList());
+            PlayerService.Instance.SetPlayer(list.ToList());
+            if(index != null && !string.IsNullOrEmpty(id))
+            {
+                PlayerService.Instance.ChoosePlayer((int)index, id);
+            }
+            if(!string.IsNullOrEmpty(from) && !string.IsNullOrEmpty(title))
+            {
+                PlayerService.Instance.StackFrom = from;
+                PlayerService.Instance.StackTitle = title;
+            }
         }
+        [HttpPost]
+        public int AddStack([FromForm] string[] list)
+        {
+            return PlayerService.Instance.AddStack(list.ToList());
+        }
+        [HttpPost]
+        public void ChoosePlayer([FromForm] int index, string id, bool isHistory = false)
+        {
+            PlayerService.Instance.ChoosePlayer(index, id, isHistory);
+        }
+
         [HttpPost]
         public string GetSrc([FromForm] string[] list)
         {
             Dictionary<string, Player> temp = new Dictionary<string, Player>();
+            int i = 0;
             foreach (string songId in list)
             {
                 if (temp.ContainsKey(songId))
@@ -39,6 +60,7 @@ namespace TDT.Site.Controllers
                     temp.Add(song.encodeId, new Player
                     {
                         Id = song.encodeId,
+                        Index = i++,
                         Name = song.title,
                         Thumbnail = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail),
                         Src = DataHelper.GetMP3(song.encodeId),
@@ -49,6 +71,17 @@ namespace TDT.Site.Controllers
             return JsonConvert.SerializeObject(temp.Values.ToList());
         }
 
+        [HttpPost]
+        public JsonResult ChangeMusic([FromForm] string type)
+        {
+            Player player = PlayerService.Instance.ChangeMusic(type);
+            if(player == null)
+            {
+                return new JsonResult("");
+            }
+            return new JsonResult(JsonConvert.SerializeObject(player));
+        }
+
         public int GetCurIndex()
         {
             return PlayerService.CurIndex;
@@ -57,6 +90,16 @@ namespace TDT.Site.Controllers
         public void SetCurIndex([FromForm] int index)
         {
             PlayerService.CurIndex = index;
+            PlayerService.CurTime = 0;
+        }
+        public double GetCurTime()
+        {
+            return PlayerService.CurTime;
+        }
+        [HttpPost]
+        public void SetCurTime([FromForm] double time)
+        {
+            PlayerService.CurTime = time;
         }
 
         public bool GetIsShuffle()
@@ -67,6 +110,7 @@ namespace TDT.Site.Controllers
         public void SetIsShuffle([FromForm] bool value)
         {
             PlayerService.IsShuffle = value;
+            PlayerService.Instance.ShuffleStack();
         }
 
         public bool GetIsRepeat()
@@ -87,15 +131,40 @@ namespace TDT.Site.Controllers
         {
             PlayerService.IsRepeatOne = value;
         }
+        public bool GetIsPlaying()
+        {
+            return PlayerService.IsPlaying;
+        }
+        [HttpPost]
+        public void SetIsPlaying([FromForm] bool value)
+        {
+            PlayerService.IsPlaying = value;
+        }
 
         public string GetCurUrl()
         {
-            return PlayerService.CurUrl;
+            return PlayerService.UrlStack;
         }
         [HttpPost]
         public void SetCurUrl([FromForm] string url)
         {
-            PlayerService.CurUrl = url;
+            PlayerService.UrlStack = url;
+        }
+        public string GetHtmlStack()
+        {
+            return PlayerService.Instance.GetHtmlStack();
+        }
+        public string GetHtmlChangeStack()
+        {
+            return PlayerService.Instance.GetHtmlChangeStack();
+        }
+        public void ClearStack()
+        {
+            PlayerService.Instance.ClearStack();
+        }
+        public string GetHtmlHistory()
+        {
+            return PlayerService.Instance.GetHtmlHistory();
         }
     }
 }

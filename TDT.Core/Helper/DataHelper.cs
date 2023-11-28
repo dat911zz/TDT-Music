@@ -1,9 +1,6 @@
-﻿using Google.Cloud.Firestore;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Linq.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
 using TDT.Core.DTO.Firestore;
 using TDT.Core.Extensions;
 using TDT.Core.ServiceImp;
