@@ -791,7 +791,7 @@ $(document).ready(function () {
     start();
     $(document).click(function () {
         $('#queue_menu .menu-settings').remove();
-        $('#select-menu-id .select-menu').remove();
+        hideMenuAddPlaylist();
     });
     $('.player-controls__container .media div, .player-controls__container .level-item, .player-controls__player-bar').click(function (e) {
         e.stopPropagation();
@@ -968,9 +968,12 @@ function bindEvents() {
                 </div>
             `);
             $(this).closest('#select-menu-id').find('.select-menu .menu-list li:eq(0)').hover(function () {
-                $(this).css('color', 'red');
-            }, function () {
-                $(this).css('color', 'black');
+                showMenuUserPlaylist($(this));
+            }, () => { });
+            $(this).closest('#select-menu-id').find('.select-menu .menu-list li:eq(0)').click(function () {
+                if (!showMenuUserPlaylist($(this))) {
+                    window.location.href = '/Auth/Index?urlCallback=' + window.location.href;
+                }
             });
         }
     });
@@ -979,4 +982,25 @@ function clearCheckbox() {
     $('#songs input[type="checkbox"]').prop("checked", false).parents().closest('.select-item').removeClass('is-selected');
     $('.song-list-select').removeClass('isChecked');
     $('.song-list-select .select-header > .media-left').html(headerNoCheck);
+}
+function showMenuUserPlaylist(objTrigger) {
+    $.ajax({
+        url: "/User/GetHtmlMenuUserPlaylist",
+        success: function (data) {
+            if (data != '') {
+                $('#select-menu-id .add-playlist-content').remove();
+                $(objTrigger).find('button').after(data);
+                $('#select-menu-id .add-playlist-content').click(function (e) {
+                    e.stopPropagation();
+                });
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    });
+}
+function hideMenuAddPlaylist() {
+    $('#select-menu-id .select-menu').remove();
 }

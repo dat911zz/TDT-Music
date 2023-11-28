@@ -20,6 +20,18 @@
         #queue-scroll {
             scroll-behavior: smooth;
         }
+
+        .menu-list--submenu .submenu-content {
+            position: absolute;
+            width: 230px;
+            background-color: var(--primary-bg);
+            box-shadow: 0 0 5px 0 rgba(0,0,0,.2);
+            border-radius: 8px;
+            left: calc(100% - 15px);
+            top: -10px;
+            z-index: 1;
+            padding: 10px 0;
+        }
     </style>
 
     <link rel="stylesheet" href="~/css/loading.css" />
@@ -633,12 +645,8 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <partial name="_MessagesPartial" model="@ViewData["Messages"]"></partial>
     @await RenderSectionAsync("Scripts", required: false)
-
     <script>
-        $('.login-nav-container span').click(function () {
-            window.location = '/Auth';
-        });
-        $('.add-playlist-sidebar').click(function () {
+        function showAddPlaylist() {
             $('body').append(`@Html.Raw(Generator.AddPlaylistModal)`);
             $('.close-btn').on('click', function () {
                 $('#react-cool-portal').remove();
@@ -657,6 +665,14 @@
                     $('#form-add-playlist button').attr('disabled', 'disabled');
                 }
             });
+        }
+    </script>
+    <script>
+        $('.login-nav-container span').click(function () {
+            window.location = '/Auth/Index?urlCallback=' + window.location.href;
+        });
+        $('.add-playlist-sidebar').click(function () {
+            showAddPlaylist();
         });
         
         checkShowPlayer();
