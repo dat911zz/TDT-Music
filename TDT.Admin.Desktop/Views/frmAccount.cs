@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TDT.QLDV.Models;
 
 namespace TDT.Admin.Desktop.Views
 {
@@ -19,7 +20,9 @@ namespace TDT.Admin.Desktop.Views
 
         private void frmAccount_Load(object sender, EventArgs e)
         {
-
+            
+            //await DataBindings.Instance.LoadUsers(User.GetToken());
+            //var users = DataBindings.Instance.Users;
         }
     }
 }
