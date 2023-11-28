@@ -3,6 +3,7 @@
 @using TDT.Core.ServiceImp
 @{
     var user = Context.User.Identity.Name == null ? "" : Context.User.Identity.Name;
+    var logined = user != null;
 }
 <!DOCTYPE html>
 <html lang="vi" data-theme="purple">
@@ -307,6 +308,7 @@
                                         </li>
                                     </ul>
                                 </nav>
+                                <div class="sidebar-divide" id="divide-user"></div>
                             }
                         </div>
                         <div class="track-horizontal"
@@ -647,10 +649,30 @@
                     $(this).siblings().removeClass('is-hide');
                 });
             });
+            $('#form-add-playlist input').keyup(function () {
+                if ($(this).val().length > 0) {
+                    $('#form-add-playlist button').removeAttr('disabled');
+                }
+                else {
+                    $('#form-add-playlist button').attr('disabled', 'disabled');
+                }
+            });
         });
         
         checkShowPlayer();
         changeIconActionPlay();
+    </script>
+    <script>
+        $(document).ready(function () {
+            if ('@Html.Raw(logined)'.toLowerCase() == 'true') {
+                $.ajax({
+                    url: "/User/GetHtmlUserPlaylist",
+                    success: function(data) {
+                        $('#divide-user').after(data);
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
