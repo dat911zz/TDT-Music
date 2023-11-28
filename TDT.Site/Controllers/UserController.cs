@@ -151,5 +151,28 @@ namespace TDT.Site.Controllers
             }
             return "";
         }
+        public void InsertUserPlaylist(string title, bool isPublic, bool isSuffle)
+        {
+            if(HttpContext.User.Identity.Name != null)
+            {
+                PlaylistDTO playlist = new PlaylistDTO();
+                bool checkKey = false;
+                do
+                {
+                    playlist.encodeId = HelperUtility.GenerateRandomString(10);
+                    if (DataHelper.GetPlaylist(playlist.encodeId) != null)
+                        checkKey = true;
+                    else checkKey = false;
+                } while (checkKey);
+                playlist.title = title;
+                playlist.isPrivate = !isPublic;
+                playlist.isShuffle = isSuffle;
+
+            }
+            else
+            {
+                this.MessageContainer().AddFlashMessage("Phiên hết hạn", ToastMessageType.Error);
+            }
+        }
     }
 }

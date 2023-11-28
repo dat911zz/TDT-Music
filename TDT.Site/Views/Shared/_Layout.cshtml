@@ -665,6 +665,11 @@
                     $('#form-add-playlist button').attr('disabled', 'disabled');
                 }
             });
+            $('#form-add-playlist > button').click(function () {
+                var playlistIsPublic = $('#form-add-playlist .option:eq(0) > div:eq(1) > i:eq(0)').hasClass('is-hide');
+                var playlistIsSuffle = $('#form-add-playlist .option:eq(1) > div:eq(1) > i:eq(0)').hasClass('is-hide');
+                var playlistTitle = $('#form-add-playlist > input').val();
+            });
         }
     </script>
     <script>

@@ -970,10 +970,9 @@ function bindEvents() {
             $(this).closest('#select-menu-id').find('.select-menu .menu-list li:eq(0)').hover(function () {
                 showMenuUserPlaylist($(this));
             }, () => { });
-            $(this).closest('#select-menu-id').find('.select-menu .menu-list li:eq(0)').click(function () {
-                if (!showMenuUserPlaylist($(this))) {
-                    window.location.href = '/Auth/Index?urlCallback=' + window.location.href;
-                }
+            $(this).closest('#select-menu-id').find('.select-menu .menu-list li:eq(0)').click(function (e) {
+                e.stopPropagation();
+                showMenuUserPlaylist($(this), () => { window.location.href = '/Auth/Index?urlCallback=' + window.location.href; });
             });
         }
     });
@@ -983,7 +982,7 @@ function clearCheckbox() {
     $('.song-list-select').removeClass('isChecked');
     $('.song-list-select .select-header > .media-left').html(headerNoCheck);
 }
-function showMenuUserPlaylist(objTrigger) {
+function showMenuUserPlaylist(objTrigger, callback = null) {
     $.ajax({
         url: "/User/GetHtmlMenuUserPlaylist",
         success: function (data) {
@@ -993,10 +992,12 @@ function showMenuUserPlaylist(objTrigger) {
                 $('#select-menu-id .add-playlist-content').click(function (e) {
                     e.stopPropagation();
                 });
-                return true;
+                $('#select-menu-id .add-playlist-content ul.menu-list li:eq(1)').click(function () {
+                    showAddPlaylist();
+                });
             }
-            else {
-                return false;
+            else if(callback != null) {
+                callback();
             }
         }
     });

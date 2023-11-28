@@ -15,13 +15,13 @@ namespace TDT.Core.DTO.Firestore
     {
         private string _encodeId;
         private string _title;
-        private string _thumbnail;
+        private string _thumbnail = @"/Images/Playlist/album_default.png";
         private bool _isoffical;
         private string _link;
         private bool _isIndie;
-        private long _releaseDate;
+        private long _releaseDate = HelperUtility.GetTicks(DateTime.Now);
         private string _sortDescription;
-        private long _releasedAt;
+        private long _releasedAt = HelperUtility.GetTicks(DateTime.Now);
         private List<string> _genreIds;
         private bool _PR;
         private List<string> _artists;
@@ -30,7 +30,7 @@ namespace TDT.Core.DTO.Firestore
         private int _subType;
         private string _uid;
         private string _thumbnailM;
-        private bool _isShuffle;
+        private bool _isShuffle = false;
         private bool _isPrivate;
         private string _userName;
         private bool _isAlbum;

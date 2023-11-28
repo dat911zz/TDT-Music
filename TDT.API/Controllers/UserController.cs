@@ -8,6 +8,7 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using TDT.Core.DTO;
+using TDT.Core.DTO.Firestore;
 using TDT.Core.Enums;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
@@ -210,7 +211,7 @@ namespace TDT.API.Controllers
                 }
                 _db.ListeningHistories.DeleteOnSubmit(listened);
                 _db.SubmitChanges();
-                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa lịch sử nghe nhạc thành công");
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa lịch sử nghe nhạc");
             }
             catch (Exception ex)
             {
@@ -241,6 +242,21 @@ namespace TDT.API.Controllers
                 {
                     {"data", userPlaylists}
                 }, "Lấy dữ liệu");
+        }
+        [HttpPost("InsertPlaylist/{username}")]
+        public IActionResult InsertPlaylist(string username, [FromBody] PlaylistDTO model)
+        {
+            try
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "tạo playlist");
+            }
+            catch (Exception ex)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
+            }
         }
 
         private UserDTO GetUser(string username)
