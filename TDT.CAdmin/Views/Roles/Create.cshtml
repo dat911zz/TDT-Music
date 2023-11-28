@@ -52,26 +52,36 @@
             checkboxs.prop('checked', false);
         }
     });
-
     function validateName(input, messageSpanId) {
         const errorMessage = validateNoSpecialChars(input) || validateMinLength(input, 4);
         const messageSpan = document.getElementById(messageSpanId);
         if (errorMessage) {
             messageSpan.textContent = errorMessage;
+            return false; // Có lỗi
         } else {
             messageSpan.textContent = '';
+            return true; // Không có lỗi
         }
     }
 
     function validateDescription(input, messageSpanId) {
-        const errorMessage =  validateMinLength(input, 10) ;
+        const errorMessage = validateMinLength(input, 10);
         const messageSpan = document.getElementById(messageSpanId);
         if (errorMessage) {
             messageSpan.textContent = errorMessage;
+            return false; // Có lỗi
         } else {
             messageSpan.textContent = '';
+            return true; // Không có lỗi
         }
     }
+    document.getElementById("create-form").onsubmit = function () {
+        const isNameValid = validateName(document.getElementById("Name"), 'name-message');
+        const isDescriptionValid = validateDescription(document.getElementById("Description"), 'description-message');
+
+        return isNameValid && isDescriptionValid;
+    };
+
 </script>
 <div>
     <a asp-action="Index">Trở về trang trước</a>
