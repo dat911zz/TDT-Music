@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TDT.QLDV.Models
+namespace TDT.QLDV.DTO
 {
-    public class User
+    public class UserDTO
     {
         private System.Guid _Id;
 
@@ -24,14 +24,13 @@ namespace TDT.QLDV.Models
 
         private bool _PhoneNumberConfirmed;
 
-        private System.Nullable<System.DateTimeOffset> _LockoutEnd;
+        private System.DateTimeOffset? _LockoutEnd;
 
         private bool _LockoutEnabled;
 
         private int _AccessFailedCount;
 
-        private System.Nullable<System.DateTime> _CreateDate = default(System.Nullable<System.DateTime>);
-
+        private System.DateTime? _CreateDate;
         public Guid Id { get => _Id; set => _Id = value; }
         public string UserName { get => _UserName; set => _UserName = value; }
         public string Address { get => _Address; set => _Address = value; }

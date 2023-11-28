@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TDT.QLDV.Models;
 
-namespace TDT.Core.Ultils
+namespace TDT.QLDV.Ultils
 {
     public static class APICallHelper
     {
