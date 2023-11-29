@@ -1,15 +1,12 @@
 ﻿using Google.Cloud.Firestore;
 using Google.Cloud.Firestore.V1;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using TDT.Core.DTO.Firestore;
 using TDT.Core.Ultils;
 
 namespace TDT.Core.Helper
@@ -45,8 +42,12 @@ namespace TDT.Core.Helper
         }
         private FirestoreService()
         {
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", PATH_CONFIG);
-            db = FirestoreDb.Create("cross-platform-music");
+            //Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", PATH_CONFIG);
+            var credential = Properties.Resources.cross_platform_music_firebase_adminsdk_6e112_689a7c7543;
+
+            db = FirestoreDb.Create("cross-platform-music", new FirestoreClientBuilder() { 
+                JsonCredentials = Encoding.UTF8.GetString(credential)
+            }.Build());
             Console.WriteLine("**Init Firestore**");
         }
         public CollectionReference GetCollectionReference(string collectionName)

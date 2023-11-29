@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TDT.QLDV.Controller;
 
 namespace TDT.QLDV.Views
 {
@@ -15,6 +16,15 @@ namespace TDT.QLDV.Views
         public frmLoginNew()
         {
             InitializeComponent();
+        }
+        public FrmLoginBinding GetBindings()
+        {
+            return new FrmLoginBinding(
+                txtUsername,
+                txtPass,
+                btnLogin,
+                btnCancel
+                );
         }
         private void btnThoat_Click(object sender, EventArgs e)
         {
