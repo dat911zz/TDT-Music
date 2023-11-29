@@ -9,6 +9,8 @@ using TDT.Core.Ultils;
 using System.Collections.Generic;
 using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
+using Firebase.Auth;
+using TDT.Core.Enums;
 
 namespace TDT.Site.Controllers
 {
@@ -151,7 +153,7 @@ namespace TDT.Site.Controllers
             }
             return "";
         }
-        public void InsertUserPlaylist(string title, bool isPublic, bool isSuffle)
+        public JsonResult InsertUserPlaylist(string title, bool isPublic, bool isSuffle)
         {
             if(HttpContext.User.Identity.Name != null)
             {
@@ -167,11 +169,23 @@ namespace TDT.Site.Controllers
                 playlist.title = title;
                 playlist.isPrivate = !isPublic;
                 playlist.isShuffle = isSuffle;
-
+                ResponseDataDTO<PlaylistDTO> res = APICallHelper.Post<ResponseDataDTO<PlaylistDTO>>(
+                        $"User/InsertPlaylist/{HttpContext.User.Identity.Name}",
+                        token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+                        requestBody: JsonConvert.SerializeObject(playlist)
+                        ).Result;
+                if (res.Code == APIStatusCode.ActionSucceeded)
+                {
+                    return new JsonResult(new { msg = "Tạo playlist thành công", type = "success" });
+                }
+                else
+                {
+                    return new JsonResult(new { msg = res.Msg, type = "error" });
+                }
             }
             else
             {
-                this.MessageContainer().AddFlashMessage("Phiên hết hạn", ToastMessageType.Error);
+                return new JsonResult(new { msg = "Phiên hết hạn", type = "error" });
             }
         }
     }

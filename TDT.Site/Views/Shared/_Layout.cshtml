@@ -669,6 +669,21 @@
                 var playlistIsPublic = $('#form-add-playlist .option:eq(0) > div:eq(1) > i:eq(0)').hasClass('is-hide');
                 var playlistIsSuffle = $('#form-add-playlist .option:eq(1) > div:eq(1) > i:eq(0)').hasClass('is-hide');
                 var playlistTitle = $('#form-add-playlist > input').val();
+                $.ajax({
+                    url: "/User/InsertUserPlaylist?title=" + playlistTitle + "&isPublic=" + playlistIsPublic + "&isSuffle=" + playlistIsSuffle,
+                    success: function(data) {
+                        if(data.type == 'error') {
+                            toastr.error(data.msg);
+                        }
+                        else if (data.type == 'success') {
+                            toastr.success(data.msg);
+                        }
+                        else {
+                            toastr.info(data.msg);
+                        }
+                        $('#react-cool-portal').remove();
+                    }
+                });
             });
         }
     </script>
