@@ -107,6 +107,14 @@ namespace TDT.CAdmin.Controllers
                 {
                     //FlashMessage để truyền message từ đây sang action hoặc controller khác
                     this.MessageContainer().AddFlashMessage("Tạo playlist thành công!", ToastMessageType.Success);
+                    if (DataHelper.Instance.Playlists.ContainsKey(playlist.encodeId))
+                    {
+                        DataHelper.Instance.Playlists[playlist.encodeId] = playlist;
+                    }
+                    else
+                    {
+                        DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
+                    }
                 }
                 else
                 {
@@ -158,6 +166,14 @@ namespace TDT.CAdmin.Controllers
                 {
                     //FlashMessage để truyền message từ đây sang action hoặc controller khác
                     this.MessageContainer().AddFlashMessage("Sửa Play list thành công!", ToastMessageType.Success);
+                    if (DataHelper.Instance.Playlists.ContainsKey(playlist.encodeId))
+                    {
+                        DataHelper.Instance.Playlists[playlist.encodeId] = playlist;
+                    }
+                    else
+                    {
+                        DataHelper.Instance.Playlists.Add(playlist.encodeId, playlist);
+                    }
                 }
                 else
                 {
@@ -179,6 +195,10 @@ namespace TDT.CAdmin.Controllers
             if (playlistDTO.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
                 this.MessageContainer().AddFlashMessage("Xóa play list thành công!", ToastMessageType.Success);
+                if (DataHelper.Instance.Playlists.ContainsKey(id))
+                {
+                    DataHelper.Instance.Playlists.Remove(id);
+                }
             }
             else
             {

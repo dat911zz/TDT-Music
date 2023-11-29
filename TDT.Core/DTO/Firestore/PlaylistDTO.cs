@@ -170,6 +170,9 @@ namespace TDT.Core.DTO.Firestore
                 return "";
             return Generator.GeneratePlaylistsElement(playlists.Take(5).ToList());
         }
-
+        public DateTime ReleaseAt()
+        {
+            return (new DateTime(1970, 1, 1, 0, 0, 0)).AddSeconds(this.releasedAt);
+        }
     }
 }
