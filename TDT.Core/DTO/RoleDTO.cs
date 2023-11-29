@@ -22,11 +22,11 @@ namespace TDT.Core.DTO
         [Display(Name = "ID")]
         public int Id { get => _Id; set => _Id = value; }
         [Display(Name = "Tên Vai Trò")]
-        [Required(ErrorMessage = "Vui lòng nhập tên vai trò!")]
+        //[Required(ErrorMessage = "Vui lòng nhập tên vai trò!")]
 
         public string Name { get => _Name; set => _Name = value; }
         [Display(Name = "Miêu tả vai trò")]
-        [Required(ErrorMessage = "Vui lòng nhập giới thiệu vai trò!")]
+        //[Required(ErrorMessage = "Vui lòng nhập giới thiệu vai trò!")]
 
         public string Description { get => _Description; set => _Description = value; }
         [SwaggerSchema(ReadOnly = true)]
