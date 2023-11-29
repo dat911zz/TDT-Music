@@ -226,42 +226,47 @@ function start() {
         }
         else {
             $(this).addClass('active');
-            changeStack();
-            sleep(250).then(() => {
-                $('header').addClass('collapsed');
-                $('.zm-mainpage').addClass('collapsed');
-            });
-            sleep(1500).then(() => {
-                $('#queue_menu').click(function (e) {
-                    e.stopPropagation();
-                    if ($(this).find('.menu-settings').length > 0) {
-                        $(this).find('.menu-settings').remove();
-                    }
-                    else {
-                        $(this).find('button').after(menu_option_stack);
-                        $(this).find('.menu-settings .menu-list li:eq(0)').click(function () {
-                            $.ajax({
-                                url: "/Player/ClearStack",
-                                success: function () {
-                                    showPlayer(false);
-                                }
-                            });
-                        });
-                    }
+            changeStack(function () {
+                sleep(250).then(() => {
+                    $('header').addClass('collapsed');
+                    $('.zm-mainpage').addClass('collapsed');
                 });
-                $('.player-queue__header .tab-bars .level-left .level-item').each(function (i, item) {
-                    $(item).click(function () {
-                        $(this).addClass('is-active');
-                        $(this).siblings().removeClass('is-active');
-                        changeStack();
+                sleep(1500).then(() => {
+                    $('#queue_menu').click(function (e) {
+                        e.stopPropagation();
+                        if ($(this).find('.menu-settings').length > 0) {
+                            $(this).find('.menu-settings').remove();
+                        }
+                        else {
+                            $(this).find('button').after(menu_option_stack);
+                            $(this).find('.menu-settings .menu-list li:eq(0)').click(function () {
+                                $.ajax({
+                                    url: "/Player/ClearStack",
+                                    success: function () {
+                                        showPlayer(false);
+                                    }
+                                });
+                            });
+                        }
+                    });
+                    $('.player-queue__header .tab-bars .level-left .level-item').each(function (i, item) {
+                        $(item).click(function () {
+                            $(this).addClass('is-active');
+                            $(this).siblings().removeClass('is-active');
+                            changeStack();
+                        });
                     });
                 });
             });
+            
         }
     });
 }
 
-function changeStack() {
+function changeStack(callback = null) {
+    if (callback == null) {
+        callback = function () { };
+    }
     if ($('.queue-expand-button').hasClass('active')) {
         if ($('.player-queue__header .tab-bars .level-left .level-item:eq(0).is-active').length > 0 || $('.player-queue').length <= 0) {
             if ($('.now-playing-bar > .player-queue').length > 0) {
@@ -272,6 +277,7 @@ function changeStack() {
                         changeIconActionPlay();
                         $('#queue-scroll').scrollTop($('#queue-scroll div[data-index] .media').not('.is-pre').eq(0).position().top - 116);
                         setEventSongsInStack();
+                        callback();
                     }
                 });
             }
@@ -289,6 +295,7 @@ function changeStack() {
                         changeIconActionPlay();
                         $('#queue-scroll').scrollTop($('#queue-scroll div[data-index] .media').not('.is-pre').eq(0).position().top - 116);
                         setEventSongsInStack();
+                        callback();
                     }
                 });
             }
@@ -299,6 +306,7 @@ function changeStack() {
                 success: function (data) {
                     $('.player-queue__scroll').replaceWith(data);
                     setEventSongsInStack(true);
+                    callback();
                 }
             });
         }
@@ -783,6 +791,7 @@ $(document).ready(function () {
     start();
     $(document).click(function () {
         $('#queue_menu .menu-settings').remove();
+        hideMenuAddPlaylist();
     });
     $('.player-controls__container .media div, .player-controls__container .level-item, .player-controls__player-bar').click(function (e) {
         e.stopPropagation();
@@ -936,7 +945,8 @@ function bindEvents() {
             }
         });
     });
-    $('#select-menu-id > .more-btn').bind("click", function () {
+    $('#select-menu-id > .more-btn').bind("click", function (e) {
+        e.stopPropagation();
         if ($(this).siblings().length > 0) {
             $(this).siblings().remove();
         }
@@ -958,7 +968,11 @@ function bindEvents() {
                 </div>
             `);
             $(this).closest('#select-menu-id').find('.select-menu .menu-list li:eq(0)').hover(function () {
-                
+                showMenuUserPlaylist($(this));
+            }, () => { });
+            $(this).closest('#select-menu-id').find('.select-menu .menu-list li:eq(0)').click(function (e) {
+                e.stopPropagation();
+                showMenuUserPlaylist($(this), () => { window.location.href = '/Auth/Index?urlCallback=' + window.location.href; });
             });
         }
     });
@@ -967,4 +981,61 @@ function clearCheckbox() {
     $('#songs input[type="checkbox"]').prop("checked", false).parents().closest('.select-item').removeClass('is-selected');
     $('.song-list-select').removeClass('isChecked');
     $('.song-list-select .select-header > .media-left').html(headerNoCheck);
+}
+function showMenuUserPlaylist(objTrigger, callback = null) {
+    $.ajax({
+        url: "/User/GetHtmlMenuUserPlaylist",
+        success: function (data) {
+            if (data != '') {
+                $('#select-menu-id .add-playlist-content').remove();
+                $(objTrigger).find('button').after(data);
+                $('.add-playlist-content').hover(function (e) {
+                    e.stopPropagation();
+                });
+                $('.add-playlist-content .playlist-container ul.menu-list li button').click(function () {
+                    var arrId = Array();
+                    var idPlaylistUser = $(this).attr('data-id');
+                    $('#songs input[type="checkbox"]').each(function (i, item) {
+                        if ($(item).is(":checked") && $(item).closest('div.is-premium').length == 0) {
+                            arrId.push($(item).parents('div[data-id]').attr('data-id'));
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "/User/AddSongToPlaylist",
+                        data: {
+                            idPlaylist: idPlaylistUser,
+                            list: arrId
+                        },
+                        success: function (data) {
+                            clearCheckbox();
+                            if (data.type == 'error') {
+                                toastr.error(data.msg);
+                            }
+                            else if (data.type == 'success') {
+                                toastr.success(data.msg);
+                                showUserPlaylist();
+                            }
+                            else {
+                                toastr.info(data.msg);
+                            }
+                        }
+                    });
+                });
+                $('#select-menu-id .add-playlist-content').click(function (e) {
+                    e.stopPropagation();
+                });
+                $('#select-menu-id .add-playlist-content ul.menu-list li:eq(1)').click(function () {
+                    showAddPlaylist();
+                    showMenuUserPlaylist(objTrigger);
+                });
+            }
+            else if(callback != null) {
+                callback();
+            }
+        }
+    });
+}
+function hideMenuAddPlaylist() {
+    $('#select-menu-id .select-menu').remove();
 }

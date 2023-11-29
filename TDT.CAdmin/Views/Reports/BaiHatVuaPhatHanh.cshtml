@@ -1,0 +1,45 @@
+﻿@using TDT.Core.Enums;
+@{
+    ViewData["Title"] = "Báo Cáo";
+    var typeRelease = new List<object>
+    {
+        new
+        {
+            Text = "Việt Nam",
+            Value = (int)TypeRelease.VietNam
+        },
+        new
+        {
+            Text = "Tất cả",
+            Value = (int)TypeRelease.TatCa
+        }
+    };
+}
+
+<div style="width:60%; margin:0 auto; padding:30px; border-radius:10px; box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 0.55)">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-table"></i>&#160;<strong>Báo cáo tình hình phát hành bài hát</strong></h3>
+    </div>
+    <form id="ReportPrint" method="post" name="reportprint">
+        <div class="panel-body">
+            <div class="row" style="margin-top: 20px">
+                <div class="col-6">
+                    <div class="form-group row align-items-center">
+                        <label class="col-4 control-label">Loại báo cáo</label>
+                        @Html.DropDownList("typeRelease", new SelectList(typeRelease, "Value", "Text"))
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer text-center">
+            <button class="btn btn-primary element-center" type="submit"><span class="fa fa-check"></span>Xuất Excel</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(() => {
+        $(window).unbind('beforeunload');
+        HoldOn.close();
+    })
+</script>

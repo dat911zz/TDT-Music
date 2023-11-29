@@ -15,22 +15,22 @@ namespace TDT.Core.DTO.Firestore
     {
         private string _encodeId;
         private string _title;
-        private string _thumbnail;
+        private string _thumbnail = @"Images/Playlist/album_default.png";
         private bool _isoffical;
         private string _link;
         private bool _isIndie;
-        private long _releaseDate;
+        private long _releaseDate = HelperUtility.GetTicks(DateTime.Now);
         private string _sortDescription;
-        private long _releasedAt;
-        private List<string> _genreIds;
+        private long _releasedAt = HelperUtility.GetTicks(DateTime.Now);
+        private List<string> _genreIds = new List<string>();
         private bool _PR;
-        private List<string> _artists;
+        private List<string> _artists = new List<string>();
         private string _artistsNames;
         private int _playItemMode;
         private int _subType;
         private string _uid;
-        private string _thumbnailM;
-        private bool _isShuffle;
+        private string _thumbnailM = @"Images/Playlist/album_default.png";
+        private bool _isShuffle = false;
         private bool _isPrivate;
         private string _userName;
         private bool _isAlbum;
@@ -40,8 +40,8 @@ namespace TDT.Core.DTO.Firestore
         private string _description;
         private string _aliasTitle;
         private string _sectionId;
-        private long _contentLastUpdate;
-        private List<string> _songs;
+        private long _contentLastUpdate = HelperUtility.GetTicks(DateTime.Now);
+        private List<string> _songs = new List<string>();
         private object _bannerAdaptiveId;
         private int _like;
         private int _listen;
@@ -166,6 +166,8 @@ namespace TDT.Core.DTO.Firestore
         public string GetHtmlPlaylistSuggest()
         {
             List<PlaylistDTO> playlists = DataHelper.GetPlaylistSuggest(this);
+            if(playlists == null)
+                return "";
             return Generator.GeneratePlaylistsElement(playlists.Take(5).ToList());
         }
 
