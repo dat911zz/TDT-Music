@@ -343,52 +343,54 @@
         $('.genre_vn').click(function () {
             loadSongReleaseVN();
         });
-        loadSongReleaseVN();
-        $.ajax({
-            url: "/Share/GetHtmlPlaylistChill",
-            success: function (data) {
-                if (data == '') {
-                    return;
+        setTimeout(() => {
+            loadSongReleaseVN();
+            $.ajax({
+                url: "/Share/GetHtmlPlaylistChill",
+                success: function (data) {
+                    if (data == '') {
+                        return;
+                    }
+                    $('#playlist_chill').html(data);
                 }
-                $('#playlist_chill').html(data);
-            }
-        });
-        $.ajax({
-            url: "/Share/GetHtmlPlaylistYeuDoi",
-            success: function (data) {
-                if (data == '') {
-                    return;
+            });
+            $.ajax({
+                url: "/Share/GetHtmlPlaylistYeuDoi",
+                success: function (data) {
+                    if (data == '') {
+                        return;
+                    }
+                    $('#playlist_yeudoi').html(data);
                 }
-                $('#playlist_yeudoi').html(data);
-            }
-        });
-        $.ajax({
-            url: "/Share/GetHtmlPlaylistRemixDance",
-            success: function (data) {
-                if (data == '') {
-                    return;
+            });
+            $.ajax({
+                url: "/Share/GetHtmlPlaylistRemixDance",
+                success: function (data) {
+                    if (data == '') {
+                        return;
+                    }
+                    $('#playlist_remix_dance').html(data);
                 }
-                $('#playlist_remix_dance').html(data);
-            }
-        });
-        $.ajax({
-            url: "/Share/GetHtmlPlaylistTamTrang",
-            success: function (data) {
-                if (data == '') {
-                    return;
+            });
+            $.ajax({
+                url: "/Share/GetHtmlPlaylistTamTrang",
+                success: function (data) {
+                    if (data == '') {
+                        return;
+                    }
+                    $('#playlist_tam_trang').html(data);
                 }
-                $('#playlist_tam_trang').html(data);
-            }
-        });
-        $.ajax({
-            url: "/Share/GetHtmlArtistThinhHanh",
-            success: function (data) {
-                if (data == '') {
-                    return;
+            });
+            $.ajax({
+                url: "/Share/GetHtmlArtistThinhHanh",
+                success: function (data) {
+                    if (data == '') {
+                        return;
+                    }
+                    $('#artist_thinh_hanh').html(data);
                 }
-                $('#artist_thinh_hanh').html(data);
-            }
-        });
+            });
+        }, 1000);
         var change = true;
         var gal = $('.gallery-item');
         $i = 5;

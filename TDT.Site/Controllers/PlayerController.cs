@@ -57,15 +57,19 @@ namespace TDT.Site.Controllers
                 var song = DataHelper.GetSong(songId);
                 if (song != null)
                 {
-                    temp.Add(song.encodeId, new Player
+                    try
                     {
-                        Id = song.encodeId,
-                        Index = i++,
-                        Name = song.title,
-                        Thumbnail = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail),
-                        Src = DataHelper.GetMP3(song.encodeId),
-                        Artists = Generator.GenerateArtistLink(song.artists)
-                    });
+                        temp.Add(song.encodeId, new Player
+                        {
+                            Id = song.encodeId,
+                            Index = i++,
+                            Name = song.title,
+                            Thumbnail = DataHelper.GetThumbnailSong(song.encodeId, song.thumbnail),
+                            Src = DataHelper.GetMP3(song.encodeId),
+                            Artists = Generator.GenerateArtistLink(song.artists)
+                        });
+                    }
+                    catch { }
                 }
             }
             return JsonConvert.SerializeObject(temp.Values.ToList());

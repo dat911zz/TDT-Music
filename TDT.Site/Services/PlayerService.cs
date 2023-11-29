@@ -818,7 +818,10 @@ namespace TDT.Site.Services
             ";
             return string.Format(res, song.title, img, Generator.GenerateArtistLink(song.artists));
         }
-
+        public static string GetHtmlSubMenuAddToPlaylist()
+        {
+            return "";
+        }
         #endregion
     }
 

@@ -3,6 +3,7 @@
 @using TDT.Core.ServiceImp
 @{
     var user = Context.User.Identity.Name == null ? "" : Context.User.Identity.Name;
+    var logined = user != null;
 }
 <!DOCTYPE html>
 <html lang="vi" data-theme="purple">
@@ -18,6 +19,18 @@
         #body-scroll,
         #queue-scroll {
             scroll-behavior: smooth;
+        }
+
+        .menu-list--submenu .submenu-content {
+            position: absolute;
+            width: 230px;
+            background-color: var(--primary-bg);
+            box-shadow: 0 0 5px 0 rgba(0,0,0,.2);
+            border-radius: 8px;
+            left: calc(100% - 15px);
+            top: -10px;
+            z-index: 1;
+            padding: 10px 0;
         }
     </style>
 
@@ -307,6 +320,7 @@
                                         </li>
                                     </ul>
                                 </nav>
+                                <div class="sidebar-divide" id="divide-user"></div>
                             }
                         </div>
                         <div class="track-horizontal"
@@ -631,12 +645,8 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <partial name="_MessagesPartial" model="@ViewData["Messages"]"></partial>
     @await RenderSectionAsync("Scripts", required: false)
-
     <script>
-        $('.login-nav-container span').click(function () {
-            window.location = '/Auth';
-        });
-        $('.add-playlist-sidebar').click(function () {
+        function showAddPlaylist() {
             $('body').append(`@Html.Raw(Generator.AddPlaylistModal)`);
             $('.close-btn').on('click', function () {
                 $('#react-cool-portal').remove();
@@ -647,10 +657,63 @@
                     $(this).siblings().removeClass('is-hide');
                 });
             });
+            $('#form-add-playlist input').keyup(function () {
+                if ($(this).val().length > 0) {
+                    $('#form-add-playlist button').removeAttr('disabled');
+                }
+                else {
+                    $('#form-add-playlist button').attr('disabled', 'disabled');
+                }
+            });
+            $('#form-add-playlist > button').click(function () {
+                var playlistIsPublic = $('#form-add-playlist .option:eq(0) > div:eq(1) > i:eq(1)').hasClass('is-hide');
+                var playlistIsSuffle = $('#form-add-playlist .option:eq(1) > div:eq(1) > i:eq(1)').hasClass('is-hide');
+                var playlistTitle = $('#form-add-playlist > input').val();
+                $.ajax({
+                    url: "/User/InsertUserPlaylist?title=" + playlistTitle + "&isPublic=" + playlistIsPublic + "&isSuffle=" + playlistIsSuffle,
+                    success: function(data) {
+                        if(data.type == 'error') {
+                            toastr.error(data.msg);
+                        }
+                        else if (data.type == 'success') {
+                            toastr.success(data.msg);
+                            showUserPlaylist();
+                        }
+                        else {
+                            toastr.info(data.msg);
+                        }
+                        $('#react-cool-portal').remove();
+                    }
+                });
+            });
+        }
+    </script>
+    <script>
+        $('.login-nav-container span').click(function () {
+            window.location = '/Auth/Index?urlCallback=' + window.location.href;
+        });
+        $('.add-playlist-sidebar').click(function () {
+            showAddPlaylist();
         });
         
         checkShowPlayer();
         changeIconActionPlay();
+    </script>
+    <script>
+        $(document).ready(function () {
+            showUserPlaylist();
+        });
+        function showUserPlaylist() {
+            if ('@Html.Raw(logined)'.toLowerCase() == 'true') {
+                $.ajax({
+                    url: "/User/GetHtmlUserPlaylist",
+                    success: function (data) {
+                        $('#divide-user').siblings('.zm-navbar-my-playlist').remove();
+                        $('#divide-user').after(data);
+                    }
+                });
+            }
+        }
     </script>
 </body>
 </html>

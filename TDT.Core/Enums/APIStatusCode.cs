@@ -43,5 +43,7 @@ namespace TDT.Core.Enums
         AccountLockout,
         [Description("Dữ liệu đã tồn tại")]
         Exist,
+        [Description("Dữ liệu không tồn tại")]
+        NotExist,
     }
 }

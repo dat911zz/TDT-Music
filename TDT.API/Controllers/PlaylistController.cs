@@ -22,7 +22,7 @@ namespace TDT.API.Controllers
         [HttpGet]
         public JsonResult Load()
         {
-            Query query = FirestoreService.Instance.OrderByDescending(FirestoreService.CL_Playlist, "contentLastUpdate");
+            Query query = FirestoreService.Instance.WhereEqualTo(FirestoreService.CL_Playlist, "isPrivate", false).OrderByDescending("contentLastUpdate");
             List<PlaylistDTO> result = FirestoreService.Instance.Gets<PlaylistDTO>(query);
             return new JsonResult(result);
         }
