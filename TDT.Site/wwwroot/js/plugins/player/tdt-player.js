@@ -994,6 +994,7 @@ function showMenuUserPlaylist(objTrigger, callback = null) {
                 });
                 $('#select-menu-id .add-playlist-content ul.menu-list li:eq(1)').click(function () {
                     showAddPlaylist();
+                    showMenuUserPlaylist(objTrigger);
                 });
             }
             else if(callback != null) {

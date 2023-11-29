@@ -165,6 +165,7 @@ namespace TDT.Site.Controllers
                     if (DataHelper.GetPlaylist(playlist.encodeId) != null)
                         checkKey = true;
                     else checkKey = false;
+                    DataHelper.Instance.PlaylistsNull.Remove(playlist.encodeId);
                 } while (checkKey);
                 playlist.title = title;
                 playlist.isPrivate = !isPublic;

@@ -1,15 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TDT.Core.DTO;
 using TDT.Core.DTO.Firestore;
 using TDT.Core.Enums;
+using TDT.Core.Helper;
 using TDT.Core.Models;
 using TDT.Core.Ultils;
 using TDT.IdentityCore.Utils;
@@ -244,11 +247,21 @@ namespace TDT.API.Controllers
                 }, "Lấy dữ liệu");
         }
         [HttpPost("InsertPlaylist/{username}")]
-        public IActionResult InsertPlaylist(string username, [FromBody] PlaylistDTO model)
+        public IActionResult InsertPlaylist(string username, [FromBody] PlaylistDTO playlist)
         {
             try
             {
-                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "tạo playlist");
+                var user = _db.Users.Where(x => x.UserName == username).FirstOrDefault();
+                if(user != null)
+                {
+                    playlist.userName = user.UserName;
+                    playlist.uid = user.Id.ToString();
+                    FirestoreService.Instance.SetAsync(FirestoreService.CL_Playlist, playlist.encodeId, playlist).Wait();
+                    _db.UserPlaylists.InsertOnSubmit(new UserPlaylist { UserId = user.Id, PlaylistId = playlist.encodeId, CreateDate = DateTime.Now });
+                    _db.SubmitChanges();
+                    return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "tạo playlist");
+                }
+                return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "tạo playlist");
             }
             catch (Exception ex)
             {

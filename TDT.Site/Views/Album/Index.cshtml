@@ -5,6 +5,8 @@
     List<SongDTO> songs = ViewData["songs"] as List<SongDTO>;
     string imgPlaylist = ViewData["thumbnail"].ToString();
     string contentLastUpdate = Model.ContentLastUpdate().ToShortDateString();
+    string htmlArtistElement = Model.GetHtmlArtistElement();
+    string htmlPlaylistSuggest = Model.GetHtmlPlaylistSuggest();
 }
 
 <main class="zm-section" id="body-scroll"
@@ -184,36 +186,45 @@
                     </div>
                 </div>
             </div>
-            <div class="zm-section artist-section channel-section">
-                <div class="container">
-                    <h3 class="zm-section-title title is-2">Nghệ sĩ tham gia</h3>
-                    <div class="zm-carousel-wrapper">
-                        <div class="zm-carousel">
-                            <div class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px);">
-                                @Html.Raw(Model.GetHtmlArtistElement())
+            @if (!string.IsNullOrEmpty(htmlArtistElement))
+            {
+                <div class="zm-section artist-section channel-section">
+                    <div class="container">
+                        <h3 class="zm-section-title title is-2">Nghệ sĩ tham gia</h3>
+                        <div class="zm-carousel-wrapper">
+                            <div class="zm-carousel">
+                                <div class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px);">
+                                    @Html.Raw(htmlArtistElement)
+                                </div>
+                                <button class="zm-btn zm-carousel-control-prev zm-disabled is-hide button" tabindex="0"><i
+                                    class="icon ic-go-left"></i></button><button
+                                class="zm-btn zm-carousel-control-next is-hide button" tabindex="0"><i
+                                    class="icon ic-go-right"></i></button>
                             </div>
-                            <button class="zm-btn zm-carousel-control-prev zm-disabled is-hide button" tabindex="0"><i
-                                class="icon ic-go-left"></i></button><button
-                            class="zm-btn zm-carousel-control-next is-hide button" tabindex="0"><i
-                                class="icon ic-go-right"></i></button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="zm-section playlist-section channel-section">
-                <div class="container">
-                    <h3 class="zm-section-title title is-2">Có Thể Bạn Quan Tâm</h3>
-                    <div class="zm-carousel-wrapper">
-                        <div class="zm-carousel">
-                            <div class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px);">
-                                    @Html.Raw(Model.GetHtmlPlaylistSuggest())
+            }
+            @if (!string.IsNullOrEmpty(htmlArtistElement))
+            {
+                <div class="zm-section playlist-section channel-section">
+                    <div class="container">
+                        <h3 class="zm-section-title title is-2">Có Thể Bạn Quan Tâm</h3>
+                        <div class="zm-carousel-wrapper">
+                            <div class="zm-carousel">
+                                <div class="zm-carousel__container" style="transform: translate3d(0px, 0px, 0px);">
+                                    @Html.Raw(htmlPlaylistSuggest)
+                                </div>
+                                <button class="zm-btn zm-carousel-control-prev zm-disabled is-hide button" tabindex="0">
+                                    <i class="icon ic-go-left"></i>
+                                </button><button class="zm-btn zm-carousel-control-next is-hide button" tabindex="0">
+                                    <i class="icon ic-go-right"></i>
+                                </button>
                             </div>
-                            <button class="zm-btn zm-carousel-control-prev zm-disabled is-hide button" tabindex="0"><i
-                                class="icon ic-go-left"></i></button><button
-                            class="zm-btn zm-carousel-control-next is-hide button" tabindex="0"><i
-                                class="icon ic-go-right"></i></button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
     <div id="zmp3_Player_Overlay" class="mar-b-30" style="bottom: 90px;">
@@ -237,6 +248,17 @@
         var d = $('#sum-duration-song');
         var iComplete = 1;
         HoldOn.open();
+        if(max <= 0) {
+            $('#songs').parents('.playlist-content').html(`
+                    <div class="container user-songs-container">
+                        <div class="container no-content mar-0">
+                            <div class="no-content-box"><i class="icon main-icon ic-svg-music-icon"></i><span class="no-content-text">Không
+                                    có bài hát trong playlist của bạn</span></div>
+                        </div>
+                    </div>
+            `);
+            HoldOn.close();
+        }
         for(var i = 1; i <= max; i++) {
             $.ajax({
                 url: "/Album/GetHtmlSong?page=" + i + "&json=" + json,
