@@ -13,6 +13,7 @@ using TDT.QLDV.Extensions;
 using TDT.QLDV.Models;
 using TDT.QLDV.Ultils;
 using System.Web;
+using System.Collections;
 
 namespace TDT.Admin.Desktop.Views
 {
@@ -21,14 +22,21 @@ namespace TDT.Admin.Desktop.Views
         public frmAccount()
         {
             InitializeComponent();
+            InitializeAsync();
         }
-
-        private void frmAccount_Load(object sender, EventArgs e)
+        private async void InitializeAsync()
         {
+            IList<UserDTO> users = await loadDataUserAsync();
+            dtgvUserDTO.DataSource = users;
+        }
+        public static async Task<IList<UserDTO>> loadDataUserAsync()
+        {
+            string token = QLDV.Models.DataBindings.Instance.CurrentUserToken;
+            await QLDV.Models.DataBindings.Instance.LoadUsers(token);
+            var users = QLDV.Models.DataBindings.Instance.Users;
+            return users;
 
-            //ResponseDataDTO<UserDTO> users = APICallHelper.Get<ResponseDataDTO<UserDTO>>("user", User.GetToken()).Result;
-
-            //TDT.QLDV.Models.DataBindings.Instance.LoadUsers(User.GetToken());
         }
     }
 }
+ 

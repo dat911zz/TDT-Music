@@ -4,163 +4,211 @@
     ViewData["Title"] = "Tạo Playlist";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2 class="title-admin">Tạo mới playlist ++  </h2>
+@{
+    DateTime maxDate = DateTime.Now.AddDays(1);
+    string maxDateString = maxDate.ToString("yyyy-MM-dd");
+}
+<h2 class="title-admin">Tạo mới playlist</h2>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row" style="align-items:flex-start;">
+    <div class="col-md-12">
         <form asp-action="Create" method="post" enctype="multipart/form-data">
-            <div asp-validatádaion-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="encodeId" class="control-label"></label>
-                <input asp-for="encodeId" class="form-control" readonly />
-                <span asp-validation-for="encodeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="title" class="control-label"></label>
-                <input asp-for="title" class="form-control" />
-                <span asp-validation-for="title" class="text-danger"></span>
-            </div>
-@*             <div class="form-group">
-                <label asp-for="thumbnail" class="control-label"></label>
-                <input asp-for="thumbnail" class="form-control" />
-                <span asp-validation-for="thumbnail" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <label asp-for="link" class="control-label"></label>
-                <input asp-for="link" class="form-control" />
-                <span asp-validation-for="link" class="text-danger"></span>
-            </div>
+            <div class="row" style="align-items:flex-start;">
+              <div class="col-sm-6"> 
+                    <div asp-validatádaion-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group" hidden>
+                        <label asp-for="encodeId" class="control-label"></label>
+                        <input asp-for="encodeId" class="form-control" readonly />
+                        <span asp-validation-for="encodeId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="title" class="control-label"></label>
+                        <input asp-for="title" class="form-control" />
+                        <span asp-validation-for="title" class="text-danger"></span>
+                    </div>
+                    @*             <div class="form-group">
+                    <label asp-for="thumbnail" class="control-label"></label>
+                    <input asp-for="thumbnail" class="form-control" />
+                    <span asp-validation-for="thumbnail" class="text-danger"></span>
+                    </div> *@
+                    <div class="form-group">
+                        <label asp-for="link" class="control-label"></label>
+                        <input asp-for="link" class="form-control" />
+                        <span asp-validation-for="link" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group">
-                <label asp-for="releaseDate" class="control-label"></label>
-                <input asp-for="releaseDate" class="form-control" type="date" />
-                <span asp-validation-for="releaseDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="sortDescription" class="control-label"></label>
-                <input asp-for="sortDescription" class="form-control" />
-                <span asp-validation-for="sortDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="releasedAt" class="control-label"></label>
-                <input asp-for="releasedAt" class="form-control" />
-                <span asp-validation-for="releasedAt" class="text-danger"></span>
-            </div>
+                    @*             <div class="form-group">
+                    <label asp-for="releaseDate" class="control-label"></label>
+                    <input asp-for="releaseDate" class="form-control" type="date" />
+                    <span asp-validation-for="releaseDate" class="text-danger"></span>
+                    </div> *@
+                    @* / *@
+                    <div class="form-group">
+                        <label asp-for="releaseDate" class="control-label"></label>
+                        <input id="releaseDateInput" class="form-control" type="datetime-local" />
+                        <span id="releaseDateError" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" hidden>
+                        <input asp-for="releaseDate" class="form-control" type="number" readonly />
+                        <span asp-validation-for="releaseDate" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group">
-                <label asp-for="artistsNames" class="control-label"></label>
-                <input asp-for="artistsNames" class="form-control" />
-                <span asp-validation-for="artistsNames" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="playItemMode" class="control-label"></label>
-                <input asp-for="playItemMode" class="form-control" />
-                <span asp-validation-for="playItemMode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="subType" class="control-label"></label>
-                <input asp-for="subType" class="form-control" />
-                <span asp-validation-for="subType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="uid" class="control-label"></label>
-                <input asp-for="uid" class="form-control" />
-                <span asp-validation-for="uid" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="thumbnailM" class="control-label"></label>
-                <input asp-for="thumbnailM" class="form-control" type="file" name="uploadFile" />
-                <span asp-validation-for="thumbnailM" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="userName" class="control-label"></label>
-                <input asp-for="userName" class="form-control" />
-                <span asp-validation-for="userName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="textType" class="control-label"></label>
-                <input asp-for="textType" class="form-control" />
-                <span asp-validation-for="textType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="distributor" class="control-label"></label>
-                <input asp-for="distributor" class="form-control" />
-                <span asp-validation-for="distributor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="description" class="control-label"></label>
-                <input asp-for="description" class="form-control" />
-                <span asp-validation-for="description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="aliasTitle" class="control-label"></label>
-                <input asp-for="aliasTitle" class="form-control" />
-                <span asp-validation-for="aliasTitle" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="sectionId" class="control-label"></label>
-                <input asp-for="sectionId" class="form-control" />
-                <span asp-validation-for="sectionId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="contentLastUpdate" class="control-label"></label>
-                <input asp-for="contentLastUpdate" class="form-control" />
-                <span asp-validation-for="contentLastUpdate" class="text-danger"></span>
-            </div>
-             <div class="form-group">
-                <label asp-for="like" class="control-label"></label>
-                <input asp-for="like" class="form-control" readonly />
-                <span asp-validation-for="like" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="listen" class="control-label"></label>
-                <input asp-for="listen" class="form-control" readonly />
-                <span asp-validation-for="listen" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" readonely asp-for="liked" /> @Html.DisplayNameFor(model => model.liked)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isSingle" /> @Html.DisplayNameFor(model => model.isSingle)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isAlbum" /> @Html.DisplayNameFor(model => model.isAlbum)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isPrivate" /> @Html.DisplayNameFor(model => model.isPrivate)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="PR" /> @Html.DisplayNameFor(model => model.PR)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isShuffle" /> @Html.DisplayNameFor(model => model.isShuffle)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isoffical" /> @Html.DisplayNameFor(model => model.isoffical)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isIndie" /> @Html.DisplayNameFor(model => model.isIndie)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+                    @* / *@
+
+                    <div class="form-group">
+                        <label asp-for="sortDescription" class="control-label"></label>
+                        <input asp-for="sortDescription" class="form-control" />
+                        <span asp-validation-for="sortDescription" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="releasedAt" class="control-label"></label>
+                        <input asp-for="releasedAt" class="form-control" />
+                        <span asp-validation-for="releasedAt" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="artistsNames" class="control-label"></label>
+                        <input asp-for="artistsNames" class="form-control" />
+                        <span asp-validation-for="artistsNames" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="playItemMode" class="control-label"></label>
+                        <input asp-for="playItemMode" class="form-control" />
+                        <span asp-validation-for="playItemMode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="subType" class="control-label"></label>
+                        <input asp-for="subType" class="form-control" />
+                        <span asp-validation-for="subType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="uid" class="control-label"></label>
+                        <input asp-for="uid" class="form-control" />
+                        <span asp-validation-for="uid" class="text-danger"></span>
+                    </div>
+                    @*             <div class="form-group">
+                    <label asp-for="thumbnailM" class="control-label"></label>
+                    <input asp-for="thumbnailM" class="form-control" type="file" name="uploadFile" />
+                    <span asp-validation-for="thumbnailM" class="text-danger"></span>
+                    </div> *@
+                    <div class="form-group">
+                        <label asp-for="userName" class="control-label"></label>
+                        <input asp-for="userName" class="form-control" />
+                        <span asp-validation-for="userName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="textType" class="control-label"></label>
+                        <input asp-for="textType" class="form-control" />
+                        <span asp-validation-for="textType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="distributor" class="control-label"></label>
+                        <input asp-for="distributor" class="form-control" />
+                        <span asp-validation-for="distributor" class="text-danger"></span>
+                    </div>
+              </div>
+                <div class="col-sm-6">
+                  
+                    <div class="form-group">
+                        <label asp-for="description" class="control-label"></label>
+                        <input asp-for="description" class="form-control" />
+                        <span asp-validation-for="description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="aliasTitle" class="control-label"></label>
+                        <input asp-for="aliasTitle" class="form-control" />
+                        <span asp-validation-for="aliasTitle" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="sectionId" class="control-label"></label>
+                        <input asp-for="sectionId" class="form-control" />
+                        <span asp-validation-for="sectionId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="contentLastUpdate" class="control-label"></label>
+                        <input asp-for="contentLastUpdate" class="form-control" />
+                        <span asp-validation-for="contentLastUpdate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" hidden>
+                        <label asp-for="like" class="control-label"></label>
+                        <input asp-for="like" class="form-control" readonly />
+                        <span asp-validation-for="like" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" hidden>
+                        <label asp-for="listen" class="control-label"></label>
+                        <input asp-for="listen" class="form-control" readonly />
+                        <span asp-validation-for="listen" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" readonely asp-for="liked" /> @Html.DisplayNameFor(model => model.liked)
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="isSingle" /> @Html.DisplayNameFor(model => model.isSingle)
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="isAlbum" /> @Html.DisplayNameFor(model => model.isAlbum)
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="isPrivate" /> @Html.DisplayNameFor(model => model.isPrivate)
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="PR" /> @Html.DisplayNameFor(model => model.PR)
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="isShuffle" /> @Html.DisplayNameFor(model => model.isShuffle)
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="isoffical" /> @Html.DisplayNameFor(model => model.isoffical)
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="isIndie" /> @Html.DisplayNameFor(model => model.isIndie)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align:center; height:200px;">
+                        <p class="badge badge-primary">Ảnh Được chọn</p>
+                        <br />
+                        <img id="selectedImage" style="width: 94px;height: auto;" alt="Chọn Ảnh để xem" />
+                    </div>
+                    <div class="form-group custom-file mt-2">
+                        <input asp-for="thumbnailM" class="custom-file-input form-control" name="uploadFile" type="file" accept="image/*" />
+                        <span class="text-info custom-file-label">Chọn File ảnh</span>
+                        @{
+                            if (ViewBag.File != null)
+                            {
+                                <span class="text-danger">@ViewBag.File</span>
+                            }
+                        }
+                        <span asp-validation-for="thumbnailM" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </div>
+          </div>
+       
         </form>
     </div>
 </div>
@@ -172,3 +220,40 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var releaseDateInput = document.querySelector('input[type="datetime-local"]');
+        var releaseDateHiddenInput = document.querySelector('input[name="releaseDate"]');
+        var releaseDateError = document.getElementById("releaseDateError");
+
+        releaseDateInput.addEventListener("change", function () {
+            var selectedDate = new Date(releaseDateInput.value);
+            var longValue = GetTicks(selectedDate);
+
+            releaseDateHiddenInput.value = longValue;
+        });
+        // Kiểm tra date
+        releaseDateInput.addEventListener("change", function () {
+            var selectedDate = new Date(releaseDateInput.value);
+
+            // Kiểm tra xem ngày đã chọn hợp lệ hay không
+            if (selectedDate < new Date("1975-01-01T00:00") || selectedDate > new Date("@maxDateString")) {
+                releaseDateError.textContent = "Ngày không hợp lệ, Date trong khoảng 01-01-1975 < Date < Ngày hiện tại ";
+            } else {
+                releaseDateError.textContent = ""; // Xóa thông báo lỗi nếu ngày hợp lệ.
+            }
+        });
+    });
+    $("input[name='uploadFile']").change(function () {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#selectedImage").attr("src", e.target.result);
+                $("#selectedImage").show(); // Hiển thị hình ảnh khi có tệp được chọn
+            };
+            reader.readAsDataURL(this.files[0]);
+        } else {
+            $("#selectedImage").hide(); // Ẩn hình ảnh khi không có tệp nào được chọn
+        }
+    });
+</script>
