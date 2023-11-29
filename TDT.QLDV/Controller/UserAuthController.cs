@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TDT.QLDV.Models;
 using TDT.QLDV.DTO;
-using TDT.Core.Ultils;
+using TDT.QLDV.Ultils;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
 
