@@ -36,6 +36,8 @@ namespace TDT.QLDV.Models
         public IList<RoleDTO> Roles { get; set; }
         public IList<PermissionDTO> Permissions { get; set; }
         public IList<UserDTO> Users { get; set; }
+        public string CurrentUserToken { get; set; }
+        public string CurrentUser { get; set; }
 
         public string LoginAsAPI()
         {
@@ -46,6 +48,16 @@ namespace TDT.QLDV.Models
             }.ToString())).Result;
             var auth = request[0];
             return auth.Token;
+        }
+        public void LoadUserToken(string username, string pass)
+        {
+            var request = Task.WhenAll(APICallHelper.Post<AuthDTO>("auth/login?isCadmin=true", new LoginModel()
+            {
+                UserName = username,
+                Password = pass
+            }.ToString())).Result;
+            var auth = request[0];
+            CurrentUserToken = auth.Token;
         }
         public void LoadDataFromAPI(HttpContext context, ILogger logger)
         {

@@ -23,8 +23,8 @@ namespace TDT.QLDV.Controller
         private FrmLoginBinding loginBinding;
         private FrmConfigBinding configBinding;
         private static UserAuthController instance;
-        private FrmConfig frmConfig;
-        private FrmLogin frmLogin;
+        private frmConfigNew frmConfig;
+        private frmLoginNew frmLogin;
         public Action gotoDashborad;
         public Action<string, string, string, string> saveConfig;
         public static UserAuthController Instance
@@ -45,7 +45,7 @@ namespace TDT.QLDV.Controller
         {
             this.connStr = connStr;
         }
-        public void InitComponents(FrmLogin frmLogin, FrmConfig frmConfig, FrmLoginBinding loginBinding, FrmConfigBinding cfgBinding)
+        public void InitComponents(frmLoginNew frmLogin, frmConfigNew frmConfig, FrmLoginBinding loginBinding, FrmConfigBinding cfgBinding)
         {
             this.frmLogin = frmLogin;
             this.frmConfig = frmConfig;
@@ -123,14 +123,14 @@ namespace TDT.QLDV.Controller
             //        ProcessLogin();
             //        break;
             //    case ConnectionState.NotExist:
-            //        dig = MessageBox.Show("Tài khoản hoặc mật khẩu không đúng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        dig = MessageBox.Show("Tài khoản hoặc mật khẩu không đúng!", "Thông báo", MessageBoxGuna2Buttons.OK, MessageBoxIcon.Error);
             //        if (dig == DialogResult.OK)
             //        {
             //            ProcessConfig();
             //        }
             //        break;
             //    case ConnectionState.Invalid:
-            //        dig = MessageBox.Show("Cấu hình không hợp lệ hoặc kết nối thất bại, vui lòng kiểm tra lại kết nối!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        dig = MessageBox.Show("Cấu hình không hợp lệ hoặc kết nối thất bại, vui lòng kiểm tra lại kết nối!", "Thông báo", MessageBoxGuna2Buttons.OK, MessageBoxIcon.Error);
             //        if (dig == DialogResult.OK)
             //        {
             //            ProcessConfig();
@@ -174,6 +174,8 @@ namespace TDT.QLDV.Controller
                 }
                 //ResponseDataDTO<User> userDetail = APICallHelper.Get<ResponseDataDTO<User>>("user", token: auth.Token).Result;
                 //ResponseDataDTO<User> res = APICallHelper.Get<ResponseDataDTO<User>>($"user/{pUser}", token: auth.Token).Result;
+                DataBindings.Instance.LoadUserToken(pUser, pPass);
+                DataBindings.Instance.CurrentUser = pUser;
                 return LoginResult.Success;
             }
             catch (Exception ex)
@@ -223,11 +225,11 @@ namespace TDT.QLDV.Controller
     }
     public class FrmLoginBinding
     {
-        public TextBox txtUsername;
-        public TextBox txtPass;
-        public Button btnLogin;
-        public Button btnCancel;
-        public FrmLoginBinding(TextBox txtUsername, TextBox txtPass, Button btnLogin, Button btnCancel)
+        public Guna2TextBox txtUsername;
+        public Guna2TextBox txtPass;
+        public Guna2Button btnLogin;
+        public Guna2Button btnCancel;
+        public FrmLoginBinding(Guna2TextBox txtUsername, Guna2TextBox txtPass, Guna2Button btnLogin, Guna2Button btnCancel)
         {
             this.txtUsername = txtUsername;
             this.txtPass = txtPass;
@@ -237,13 +239,13 @@ namespace TDT.QLDV.Controller
     }
     public class FrmConfigBinding
     {
-        public TextBox txtUsername;
-        public TextBox txtPass;
-        public Button btnSave;
-        public Button btnCancel;
+        public Guna2TextBox txtUsername;
+        public Guna2TextBox txtPass;
+        public Guna2Button btnSave;
+        public Guna2Button btnCancel;
         public ComboBox cboServer;
         public ComboBox cboDB;
-        public FrmConfigBinding(TextBox txtUsername, TextBox txtPass, Button btnSave, Button btnCancel, ComboBox cboServer, ComboBox cboDB)
+        public FrmConfigBinding(Guna2TextBox txtUsername, Guna2TextBox txtPass, Guna2Button btnSave, Guna2Button btnCancel, ComboBox cboServer, ComboBox cboDB)
         {
             this.txtUsername = txtUsername;
             this.txtPass = txtPass;
@@ -252,7 +254,7 @@ namespace TDT.QLDV.Controller
             this.cboServer = cboServer;
             this.cboDB = cboDB;
         }
-        //public FrmConfigBinding(Guna2TextBox txtUsername, Guna2TextBox txtPass, Guna2Button btnSave, Guna2Button btnCancel, Guna2ComboBox cboServer, Guna2ComboBox cboDB)
+        //public FrmConfigBinding(Guna2Guna2TextBox txtUsername, Guna2Guna2TextBox txtPass, Guna2Guna2Button btnSave, Guna2Guna2Button btnCancel, Guna2ComboBox cboServer, Guna2ComboBox cboDB)
         //{
         //    this.txtUsername = txtUsername;
         //    this.txtPass = txtPass;

@@ -84,6 +84,7 @@ namespace TDT.QLDV.Views
             // 
             // txtPass
             // 
+            this.txtPass.AcceptsTab = true;
             this.txtPass.Animated = true;
             this.txtPass.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.txtPass.BorderRadius = 8;
@@ -118,6 +119,7 @@ namespace TDT.QLDV.Views
             this.btnLogin.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.btnLogin.CheckedState.Font = new System.Drawing.Font("Segoe UI", 10.8F);
             this.btnLogin.CheckedState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btnLogin.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLogin.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
             this.btnLogin.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.btnLogin.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
@@ -156,6 +158,7 @@ namespace TDT.QLDV.Views
             // 
             // txtUsername
             // 
+            this.txtUsername.AcceptsTab = true;
             this.txtUsername.Animated = true;
             this.txtUsername.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.txtUsername.BorderRadius = 6;

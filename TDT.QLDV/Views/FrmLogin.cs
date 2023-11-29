@@ -27,14 +27,14 @@ namespace TDT.QLDV.Views
             pnl.Anchor = AnchorStyles.None;
             txtUsername.Focus();
         }
-        public FrmLoginBinding GetBindings()
-        {
-            return new FrmLoginBinding(
-                txtUsername,
-                txtPass,
-                btnLogin,
-                btnCancel
-                );
-        }
+        //public FrmLoginBinding GetBindings()
+        //{
+        //    return new FrmLoginBinding(
+        //        txtUsername,
+        //        txtPass,
+        //        btnLogin,
+        //        btnCancel
+        //        );
+        //}
     }
 }
