@@ -34,17 +34,20 @@ namespace TDT_Music.Controllers
 			_securityHelper = securityHelper;
 			_mailSender = mailSender;
 		}
-		public IActionResult Index(UserIdentiyModel? model, int mode = 0)
+		public IActionResult Index(string urlCallback, UserIdentiyModel? model, int mode = 0)
 		{
 			ViewBag.mode = mode;
+			ViewBag.urlCallback = urlCallback;
 			return View(model);
 		}
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
 		[HttpPost]
-		public async Task<IActionResult> Login(LoginModel model, string urlCallback = "")
+		public async Task<IActionResult> Login(LoginModel model, string urlCallback)
 		{
-			if (ModelState.IsValid)
+			if (string.IsNullOrEmpty(urlCallback))
+				urlCallback = "/Home/Index";
+            if (ModelState.IsValid)
 			{
 				var auth = APICallHelper.Post<AuthDTO>("auth/login?isCadmin=false", new LoginModel()
 				{
@@ -54,7 +57,7 @@ namespace TDT_Music.Controllers
 				if (string.IsNullOrEmpty(auth.Token))
 				{
 					this.MessageContainer().AddFlashMessage(auth.Msg, ToastMessageType.Error);
-					return RedirectToAction("Index");
+					return Redirect(urlCallback);
 				}
 				var claims = _securityHelper.ValidateToken(auth.Token);
 				var listAddClaim = claims.ToList();
@@ -66,11 +69,11 @@ namespace TDT_Music.Controllers
 					CookieAuthenticationDefaults.AuthenticationScheme,
 					new ClaimsPrincipal(identity));
 				this.MessageContainer().AddFlashMessage("Chào mừng bạn đã trở lại!", ToastMessageType.Success);
-				return RedirectToAction("Index", "Home", null);
-			}
+                return Redirect(urlCallback);
+            }
 			this.MessageContainer().AddFlashMessage("Vui lòng điền đầy đủ thông tin!", ToastMessageType.Warning);
-			return RedirectToAction("Index");
-		}
+            return Redirect(urlCallback);
+        }
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost]

@@ -1,0 +1,75 @@
+﻿@model List<TDT.Core.DTO.Firestore.PlaylistDTO>;
+@using TDT.Core.Helper;
+
+<link href="~/css/library.css" rel="stylesheet" />
+<main class="zm-section" id="body-scroll"
+      style="position: absolute; inset: 0px; overflow: hidden scroll; margin-right: -6px; margin-bottom: 0px;">
+    <div class="container zm-my-music">
+        <nav class="zm-navbar zm-navbar-wrap">
+            <div class="zm-narbar-container">
+                <h3 class="title">Playlist</h3>
+                <ul class="zm-navbar-menu">
+                    <li class="zm-navbar-item is-active">
+                        <div class="navbar-link"><a class="">Tất cả</a></div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="columns is-multiline">
+                <div class="column mar-b-30 is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
+                    <div class="empty-playlist" id="add-playlist-lib">
+                        <div class="content"><i class="icon ic-24-Add"></i><span>Tạo playlist mới</span></div>
+                    </div>
+                </div>
+                @foreach (var item in Model)
+                {
+                    string img = DataHelper.GetThumbnailPlaylist(item);
+
+                    <div class="column mar-b-30 is-fullhd-20 is-widescreen-20 is-desktop-3 is-touch-3 is-tablet-3">
+                        <div class="library-playlist-item">
+                            <div class="zm-card">
+                                <a class="" title="Like" href="/Album/Index?encodeId=@item.encodeId">
+                                    <div class="zm-card-image">
+                                        <div class="zm-actions-container">
+                                            <div class="zm-box zm-actions playlist-actions">
+                                                <button class="zm-btn zm-tooltip-btn is-hover-circle button" tabindex="0">
+                                                    <i class="icon ic-close"></i>
+                                                </button><button class="zm-btn action-play  button" tabindex="0">
+                                                    <i class="icon action-play ic-svg-play-circle"></i>
+                                                </button><button class="zm-btn zm-tooltip-btn is-hover-circle button" tabindex="0">
+                                                    <i class="icon ic-more"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <figure class="image is-48x48">
+                                            <img src="@img" alt="@item.title">
+                                        </figure>
+                                        <div class="opacity "></div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="zm-card-content">
+                                <h4 class="title is-6">
+                                    <a class="" title="@item.title"
+                                       href="/Album/Index?encodeId=@item.encodeId">
+                                        <span>
+                                            <span><span>@item.title</span></span><span style="position: fixed; visibility: hidden; top: 0px; left: 0px;">…</span>
+                                        </span>
+                                    </a>
+                                </h4>
+                                <h3 class="mt-10 subtitle">@item.userName</h3>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    $('#add-playlist-lib').click(function () {
+        showAddPlaylist(true);
+    });
+</script>

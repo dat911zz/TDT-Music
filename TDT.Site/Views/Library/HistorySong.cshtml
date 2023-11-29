@@ -1,0 +1,120 @@
+﻿@model List<TDT.Core.DTO.Firestore.SongDTO>;
+@using TDT.Core.Helper;
+
+<link href="~/css/library.css" rel="stylesheet" />
+<main class="zm-section" id="body-scroll"
+      style="position: absolute; inset: 0px; overflow: hidden scroll; margin-right: -6px; margin-bottom: 0px;">
+    <div class="container zm-my-music">
+        <nav class="zm-navbar zm-navbar-wrap">
+            <div class="zm-narbar-container">
+                <h3 class="title">Phát gần đây</h3>
+                <ul class="zm-navbar-menu">
+                    <li class="zm-navbar-item is-active">
+                        <div class="navbar-link"><a class="" href="/mymusic/history/song">Bài hát</a></div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div id="zmp3_Top" class="mar-b-30 mar-b-30"></div>
+        <div class="container">
+            <div class="list list-border">
+                @foreach(var item in Model) {
+                    string img = DataHelper.GetThumbnailSong(item.encodeId, item.thumbnailM);
+                    <div class="list-item media-item hide-right">
+                        <div class="media">
+                            <div class="media-left">
+                                <div class="song-thumb">
+                                    <figure class="image is-40x40" title="@item.title">
+                                        <img src="@img" alt="@item.title">
+                                    </figure>
+                                    <div class="opacity "></div>
+                                    <div class="zm-actions-container">
+                                        <div class="zm-box zm-actions">
+                                            <button class="zm-btn zm-tooltip-btn animation-like is-hidden active is-hover-circle button"
+                                                    tabindex="0">
+                                                <i class="icon ic-like"></i><i class="icon ic-like-full"></i>
+                                            </button><button class="zm-btn action-play  button" tabindex="0">
+                                                <i class="icon action-play ic-play"></i>
+                                            </button><button class="zm-btn zm-tooltip-btn is-hidden is-hover-circle button"
+                                                             tabindex="0">
+                                                <i class="icon ic-more"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-info">
+                                    <div class="title-wrapper">
+                                        <span class="item-title title">
+                                            <span>
+                                                <span>
+                                                    <span>
+                                                        @item.title
+                                                    </span>
+                                                </span><span style="position: fixed; visibility: hidden; top: 0px; left: 0px;">…</span>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <h3 class="is-one-line is-truncate subtitle">
+                                        @Html.Raw(item.GetHtmlArtist())
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="media-content">
+                                <div class="album-info">
+                                    @Html.Raw(item.GetHtmlAlbum())
+                                </div>
+                            </div>
+                            <div class="media-right">
+                                <div class="hover-items">
+                                    <div class="level">
+                                        <div class="level-item">
+                                            <button class="zm-btn zm-tooltip-btn is-hover-circle button"
+                                                    tabindex="0">
+                                                <i class="icon ic-mv"></i>
+                                            </button>
+                                        </div>
+                                        <div class="level-item">
+                                            <button class="zm-btn zm-tooltip-btn is-hover-circle button"
+                                                    tabindex="0">
+                                                <i class="icon ic-karaoke"></i>
+                                            </button>
+                                        </div>
+                                        <div class="level-item">
+                                            <button class="zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button"
+                                                    tabindex="0">
+                                                <i class="icon ic-like"></i><i class="icon ic-like-full"></i>
+                                            </button>
+                                        </div>
+                                        <div class="level-item">
+                                            <button class="zm-btn zm-tooltip-btn is-hover-circle button"
+                                                    tabindex="0">
+                                                <i class="icon ic-more"></i>
+                                            </button>
+                                        </div>
+                                        <div class="level-item">
+                                            <button class="zm-btn zm-tooltip-btn is-hover-circle button"
+                                                    tabindex="0">
+                                                <i class="icon ic-close"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="action-items">
+                                    <div class="level">
+                                        <div class="level-item">
+                                            <button class="zm-btn zm-tooltip-btn animation-like undefined active is-hover-circle button"
+                                                    tabindex="0">
+                                                <i class="icon ic-like"></i><i class="icon ic-like-full"></i>
+                                            </button>
+                                        </div>
+                                        <div class="level-item duration">@item.Duration()</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</main>

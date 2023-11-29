@@ -25,7 +25,7 @@ namespace TDT.Core.ServiceImp
                                                 <h3 class=""title"">Công khai</h3>
                                                 <h3 class=""subtitle"">Mọi người có thể nhìn thấy playlist này</h3>
                                             </div>
-                                            <div><i class=""icon ic-svg-switch""><svg id=""Layer_1"" x=""0px"" y=""0px"" width=""24px""
+                                            <div><i class=""icon ic-svg-switch is-hide""><svg id=""Layer_1"" x=""0px"" y=""0px"" width=""24px""
                                                         height=""15px"" viewBox=""0 0 24 15"" xml:space=""preserve"">
                                                         <style type=""text/css"">
                                                             .st1 {
@@ -38,7 +38,7 @@ namespace TDT.Core.ServiceImp
                                                             d=""M16.5,0h-9C3.4,0,0,3.4,0,7.5l0,0C0,11.6,3.4,15,7.5,15h9c4.1,0,7.5-3.4,7.5-7.5l0,0 C24,3.4,20.6,0,16.5,0z"">
                                                         </path>
                                                         <circle id=""Oval-2"" class=""st1"" cx=""16.5"" cy=""7.5"" r=""6.5""></circle>
-                                                    </svg></i><i class=""icon ic-svg-switch zm-switch-off is-hide""><svg id=""Layer_1""
+                                                    </svg></i><i class=""icon ic-svg-switch zm-switch-off""><svg id=""Layer_1""
                                                         x=""0px"" y=""0px"" width=""24px"" height=""15px"" viewBox=""0 0 24 15""
                                                         xml:space=""preserve"">
                                                         <style type=""text/css"">
@@ -59,7 +59,7 @@ namespace TDT.Core.ServiceImp
                                                 <h3 class=""title"">Phát ngẫu nhiên</h3>
                                                 <h3 class=""subtitle"">Luôn phát ngẫu nhiên tất cả bài hát</h3>
                                             </div>
-                                            <div><i class=""icon ic-svg-switch""><svg id=""Layer_1"" x=""0px"" y=""0px"" width=""24px""
+                                            <div><i class=""icon ic-svg-switch is-hide""><svg id=""Layer_1"" x=""0px"" y=""0px"" width=""24px""
                                                         height=""15px"" viewBox=""0 0 24 15"" xml:space=""preserve"">
                                                         <style type=""text/css"">
                                                             .st1 {
@@ -72,7 +72,7 @@ namespace TDT.Core.ServiceImp
                                                             d=""M16.5,0h-9C3.4,0,0,3.4,0,7.5l0,0C0,11.6,3.4,15,7.5,15h9c4.1,0,7.5-3.4,7.5-7.5l0,0 C24,3.4,20.6,0,16.5,0z"">
                                                         </path>
                                                         <circle id=""Oval-2"" class=""st1"" cx=""16.5"" cy=""7.5"" r=""6.5""></circle>
-                                                    </svg></i><i class=""icon ic-svg-switch zm-switch-off is-hide""><svg id=""Layer_1""
+                                                    </svg></i><i class=""icon ic-svg-switch zm-switch-off""><svg id=""Layer_1""
                                                         x=""0px"" y=""0px"" width=""24px"" height=""15px"" viewBox=""0 0 24 15""
                                                         xml:space=""preserve"">
                                                         <style type=""text/css"">
