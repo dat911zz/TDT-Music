@@ -37,13 +37,22 @@
                     <div class="media-content">
                         <div class="content-top">
                             <h3 class="title">@Model.title</h3>
-                            @if(!string.IsNullOrEmpty(contentLastUpdate)) {
-                                <div class="release">Cập nhật: @Model.ContentLastUpdate().ToShortDateString()</div>
-                            }
                             <div class="artists">
                                 @Html.Raw(Model.GetHtmlArtist())
                             </div>
-                            <div class="like">@Model.GetLike() người yêu thích</div>
+                            @if (!Model.isPrivate)
+                            {
+                                @if (!string.IsNullOrEmpty(contentLastUpdate))
+                                {
+                                    <div class="release">Cập nhật: @Model.ContentLastUpdate().ToShortDateString()</div>
+                                }
+                                <div class="like">@Model.GetLike() người yêu thích</div>
+                            }
+                            else
+                            {
+                                <div class="created-by">Tạo bởi <span>@Model.userName</span></div>
+                                <h3 class="subtitle">Riêng tư</h3>
+                            }
                         </div>
                         <div class="actions"><button
                                 class="zm-btn btn-play-all is-outlined active is-medium is-upper button" tabindex="0"><i

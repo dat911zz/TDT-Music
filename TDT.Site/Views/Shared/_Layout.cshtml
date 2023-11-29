@@ -677,6 +677,7 @@
                         }
                         else if (data.type == 'success') {
                             toastr.success(data.msg);
+                            showUserPlaylist();
                         }
                         else {
                             toastr.info(data.msg);

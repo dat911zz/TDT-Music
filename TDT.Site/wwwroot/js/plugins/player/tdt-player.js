@@ -989,6 +989,39 @@ function showMenuUserPlaylist(objTrigger, callback = null) {
             if (data != '') {
                 $('#select-menu-id .add-playlist-content').remove();
                 $(objTrigger).find('button').after(data);
+                $('.add-playlist-content').hover(function (e) {
+                    e.stopPropagation();
+                });
+                $('.add-playlist-content .playlist-container ul.menu-list li button').click(function () {
+                    var arrId = Array();
+                    var idPlaylistUser = $(this).attr('data-id');
+                    $('#songs input[type="checkbox"]').each(function (i, item) {
+                        if ($(item).is(":checked") && $(item).closest('div.is-premium').length == 0) {
+                            arrId.push($(item).parents('div[data-id]').attr('data-id'));
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "/User/AddSongToPlaylist",
+                        data: {
+                            idPlaylist: idPlaylistUser,
+                            list: arrId
+                        },
+                        success: function (data) {
+                            clearCheckbox();
+                            if (data.type == 'error') {
+                                toastr.error(data.msg);
+                            }
+                            else if (data.type == 'success') {
+                                toastr.success(data.msg);
+                                showUserPlaylist();
+                            }
+                            else {
+                                toastr.info(data.msg);
+                            }
+                        }
+                    });
+                });
                 $('#select-menu-id .add-playlist-content').click(function (e) {
                     e.stopPropagation();
                 });

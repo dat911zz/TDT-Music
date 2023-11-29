@@ -11,6 +11,7 @@ using TDT.Core.DTO.Firestore;
 using TDT.Core.Helper;
 using Firebase.Auth;
 using TDT.Core.Enums;
+using TDT.Site.Services;
 
 namespace TDT.Site.Controllers
 {
@@ -187,6 +188,33 @@ namespace TDT.Site.Controllers
             else
             {
                 return new JsonResult(new { msg = "Phiên hết hạn", type = "error" });
+            }
+        }
+        [HttpPost]
+        public JsonResult AddSongToPlaylist([FromForm] string idPlaylist, List<string> list)
+        {
+            PlaylistDTO playlist = DataHelper.GetPlaylist(idPlaylist);
+            foreach (var item in list)
+            {
+                if(!playlist.songs.Contains(item))
+                {
+                    playlist.songs.Add(item);
+                }
+            }
+            PlaylistDTO playlistRes = APICallHelper.Post<PlaylistDTO>(
+                $"Playlist/InsertOrUpdate",
+                token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
+                requestBody: JsonConvert.SerializeObject(playlist)
+                ).Result;
+
+            if (playlistRes.Code == Core.Enums.APIStatusCode.ActionSucceeded)
+            {
+                DataHelper.Instance.Playlists[playlist.encodeId] = playlist;
+                return new JsonResult(new { msg = "Thêm vào playlist thành công", type = "success" });
+            }
+            else
+            {
+                return new JsonResult(new { msg = "Thêm vào playlist thất bại", type = "error" });
             }
         }
     }
