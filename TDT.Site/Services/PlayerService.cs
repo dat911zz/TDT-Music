@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Resources;
+using TDT.Core.DTO;
 using TDT.Core.DTO.Firestore;
 using TDT.Core.Extensions;
 using TDT.Core.Helper;
 using TDT.Core.ServiceImp;
+using TDT.Core.Ultils;
 
 namespace TDT.Site.Services
 {
@@ -46,6 +50,10 @@ namespace TDT.Site.Services
         public string StackFrom = "";
         public string StackTitle = "";
         #endregion
+
+        string userId = "";
+        string userName = "";
+        string token = "";
         private void AddStack(Player player)
         {
             Player pl = StackPlayer.Find(p => p.Id == player.Id);
@@ -53,7 +61,7 @@ namespace TDT.Site.Services
             {
                 StackPlayer.Remove(pl);
             }
-            player.Listen = DateTime.Now;
+            player.Listen = DateTime.UtcNow;
             StackPlayer.Insert(0, player);
         }
         private void AddPrev(Player player)
@@ -63,7 +71,7 @@ namespace TDT.Site.Services
             {
                 PrevPlayer.Remove(pl);
             }
-            player.Listen = DateTime.Now;
+            player.Listen = DateTime.UtcNow;
             PrevPlayer.Add(player);
         }
         private void AddHistory(Player player)
@@ -73,8 +81,28 @@ namespace TDT.Site.Services
             {
                 History.Remove(pl);
             }
-            player.Listen = DateTime.Now;
+            player.Listen = DateTime.UtcNow;
             History.Insert(0, player);
+            ResponseDataDTO<ListenedDTO> res_one = APICallHelper.Post<ResponseDataDTO<ListenedDTO>>(
+                        $"User/GetListened?username={this.userName}&songid={player.Id}").Result;
+            var listened = res_one.Data?.FirstOrDefault();
+            if (listened == null)
+            {
+                ResponseDataDTO<ListenedDTO> res = APICallHelper.Post<ResponseDataDTO<ListenedDTO>>(
+                            $"User/InsertListened",
+                            token: this.token,
+                            requestBody: JsonConvert.SerializeObject(new ListenedDTO() { UserId = new Guid(this.userId), SongId = player.Id, AccessDate = DateTime.UtcNow })
+                            ).Result;
+            }
+            else
+            {
+                listened.AccessDate = DateTime.UtcNow;
+                ResponseDataDTO<ListenedDTO> res = APICallHelper.Post<ResponseDataDTO<ListenedDTO>>(
+                            $"User/UpdateListened/{this.userName}",
+                            token: this.token,
+                            requestBody: JsonConvert.SerializeObject(listened)
+                            ).Result;
+            }
         }
         public int AddStack(List<string> ids)
         {
@@ -147,23 +175,26 @@ namespace TDT.Site.Services
             int i = 0;
             foreach (string songId in songIds)
             {
-                Player player = null;
-                if (players.ContainsKey(songId))
+                if(songId != null)
                 {
-                    if(!temp.ContainsKey(songId))
+                    Player player = null;
+                    if (players.ContainsKey(songId))
                     {
-                        player = players[songId];
-                        player.Index = i++;
-                        temp.Add(songId, player);
+                        if (!temp.ContainsKey(songId))
+                        {
+                            player = players[songId];
+                            player.Index = i++;
+                            temp.Add(songId, player);
+                        }
+                        continue;
                     }
-                    continue;
-                }
-                player = NewPlayer(songId, i);
-                if (player != null)
-                {
-                    i++;
-                    players.Add(songId, player);
-                    temp.Add(songId, players[songId]);
+                    player = NewPlayer(songId, i);
+                    if (player != null)
+                    {
+                        i++;
+                        players.Add(songId, player);
+                        temp.Add(songId, players[songId]);
+                    }
                 }
             }
             if(temp.Count > 0)
@@ -182,17 +213,20 @@ namespace TDT.Site.Services
         {
             return History.Count == 0;
         }
-        public Player ChangeMusic(string type = "init")
+        public Player ChangeMusic(string userId, string userName, string token, string type = "init")
         {
             try
             {
+                this.userId = userId;
+                this.userName = userName;
+                this.token = token;
                 if(StackIsEmpty())
                 {
                     if(IsRepeat)
                     {
                         StackPlayer.AddRange(PrevPlayer);
                         PrevPlayer.Clear();
-                        return ChangeMusic();
+                        return ChangeMusic(userId, userName, token);
                     }
                     return null;
                 }
@@ -204,7 +238,7 @@ namespace TDT.Site.Services
                     {
                         AddPrev(StackPlayer.First());
                         StackPlayer.RemoveAt(0);
-                        return ChangeMusic();
+                        return ChangeMusic(userId, userName, token);
                     }
                     if (type == "prev")
                     {
@@ -212,7 +246,7 @@ namespace TDT.Site.Services
                             return null;
                         AddStack(PrevPlayer.Last());
                         PrevPlayer.RemoveAt(PrevPlayer.Count - 1);
-                        return ChangeMusic();
+                        return ChangeMusic(userId, userName, token);
                     }
                 }
                 return StackPlayer.First();
@@ -834,6 +868,6 @@ namespace TDT.Site.Services
         public string Src { get; set; }
         public string Artists { get; set; }
         public string UrlPlaylist { get; set; }
-        public DateTime Listen { get; set; } = DateTime.Now;
+        public DateTime Listen { get; set; } = DateTime.UtcNow;
     }
 }

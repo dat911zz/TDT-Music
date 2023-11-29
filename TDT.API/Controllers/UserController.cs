@@ -147,7 +147,28 @@ namespace TDT.API.Controllers
                 }, "Lấy dữ liệu");
         }
 
-        [HttpPost]
+        [HttpGet("GetListened")]
+        [AllowAnonymous]
+        public JsonResult GetListened(string username, string songid)
+        {
+            var user = GetUser(username);
+            if (user == null)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.InvalidAccount);
+            }
+            ListenedDTO listened = _db.ListeningHistories.Where(l => l.UserId == user.Id && l.SongId == songid).Select(l => new ListenedDTO
+            {
+                UserId = l.UserId,
+                SongId = l.SongId,
+                AccessDate = l.AccessDate
+            }).FirstOrDefault();
+            return APIHelper.GetJsonResult(APIStatusCode.Succeeded, new Dictionary<string, object>()
+                {
+                    {"data", new List<ListenedDTO> { listened } }
+                }, "Lấy dữ liệu");
+        }
+
+        [HttpPost("InsertListened")]
         public IActionResult InsertListened([FromBody] ListenedDTO model)
         {
             try
@@ -174,7 +195,7 @@ namespace TDT.API.Controllers
             }
         }
 
-        [HttpPut("UpdateListened")]
+        [HttpPut("UpdateListened/{username}")]
         public IActionResult UpdateListened(string username, [FromBody] ListenedDTO model)
         {
             try
@@ -262,6 +283,34 @@ namespace TDT.API.Controllers
                     return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "tạo playlist");
                 }
                 return APIHelper.GetJsonResult(APIStatusCode.ActionFailed, formatValue: "tạo playlist");
+            }
+            catch (Exception ex)
+            {
+                return APIHelper.GetJsonResult(APIStatusCode.RequestFailed, new Dictionary<string, object>()
+                    {
+                        {"exception", ex.Message}
+                    });
+            }
+        }
+
+        [HttpDelete("DeletePlaylist")]
+        public IActionResult DeletePlaylist(string username, string playlistId)
+        {
+            try
+            {
+                UserDTO user = GetUser(username);
+                if (user == null)
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.InvalidAccount);
+                }
+                var playlist = _db.UserPlaylists.Where(l => l.UserId == user.Id && l.PlaylistId == playlistId).FirstOrDefault();
+                if (playlist == null)
+                {
+                    return APIHelper.GetJsonResult(APIStatusCode.NotExist);
+                }
+                _db.UserPlaylists.DeleteOnSubmit(playlist);
+                _db.SubmitChanges();
+                return APIHelper.GetJsonResult(APIStatusCode.ActionSucceeded, formatValue: "xóa playlist nghe nhạc");
             }
             catch (Exception ex)
             {
