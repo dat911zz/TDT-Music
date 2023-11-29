@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TDT.Admin.Desktop.Views;
+using TDT.QLDV.Models;
 using TDT.QLDV.Views;
 
 namespace TDT.Cadmin.Desktop.Views
@@ -46,7 +47,18 @@ namespace TDT.Cadmin.Desktop.Views
 
         private void frmDashboard_Load(object sender, EventArgs e)
         {
+            btnUserName.Text = QLDV.Models.DataBindings.Instance.CurrentUser;
+            string token = QLDV.Models.DataBindings.Instance.CurrentUserToken;
+
             pnlProfile.Visible = false;
+
+            ClearMDIForms();
+            frmDashboardInner frm = new frmDashboardInner();
+            frm.MdiParent = this;
+            //Fill form full khoảng trống
+            frm.Width = this.Width;
+            frm.Height = this.Height;
+            frm.Show();
 
         }
         private void ClearMDIForms()
@@ -70,6 +82,12 @@ namespace TDT.Cadmin.Desktop.Views
         private void btnMenu_Home_Click(object sender, EventArgs e)
         {
             ClearMDIForms();
+            frmDashboardInner frm = new frmDashboardInner();
+            frm.MdiParent = this;
+            //Fill form full khoảng trống
+            frm.Width = this.Width;
+            frm.Height = this.Height;
+            frm.Show();
         }
 
         private void btnMenu_Account_Click(object sender, EventArgs e)
@@ -150,6 +168,11 @@ namespace TDT.Cadmin.Desktop.Views
             frm.Height = this.Height;
             frm.Show();
 
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            _prevFrm.Close();
         }
     }
 }
