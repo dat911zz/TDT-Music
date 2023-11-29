@@ -199,7 +199,7 @@
                                 <nav class="zm-navbar zm-navbar-my-music pad-t-15">
                                     <ul class="zm-navbar-menu library-personal">
                                         <li class="zm-navbar-item">
-                                            <a class="" href="">
+                                            <a class="" href="/Library/HistorySong">
                                                 <i class="icon">
                                                     <svg width="24" height="24"
                                                          viewBox="0 0 24 24" fill="none">
@@ -246,7 +246,7 @@
                                             </a>
                                         </li>
                                         <li class="zm-navbar-item">
-                                            <a class="" href="#">
+                                            <a class="" href="/Library/Playlist">
                                                 <i class="icon">
                                                     <svg width="24"
                                                          height="24" viewBox="0 0 24 24" fill="none">
@@ -273,7 +273,7 @@
                                                 </i><span>Playlist</span>
                                             </a>
                                         </li>
-                                        <li class="zm-navbar-item">
+                                        <li class="zm-navbar-item disabled">
                                             <a class="" href="#">
                                                 <i class="icon">
                                                     <svg width="24" height="24"
@@ -295,7 +295,7 @@
                                                 </i><span>Album</span>
                                             </a>
                                         </li>
-                                        <li class="zm-navbar-item">
+                                        <li class="zm-navbar-item disabled">
                                             <a class="upload-btn" href="#">
                                                 <div class="left">
                                                     <i class="icon">
@@ -646,7 +646,7 @@
     <partial name="_MessagesPartial" model="@ViewData["Messages"]"></partial>
     @await RenderSectionAsync("Scripts", required: false)
     <script>
-        function showAddPlaylist() {
+        function showAddPlaylist(reload = false) {
             $('body').append(`@Html.Raw(Generator.AddPlaylistModal)`);
             $('.close-btn').on('click', function () {
                 $('#react-cool-portal').remove();
@@ -683,6 +683,9 @@
                             toastr.info(data.msg);
                         }
                         $('#react-cool-portal').remove();
+                        if (reload) {
+                            document.location.reload();
+                        }
                     }
                 });
             });

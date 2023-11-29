@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using TDT.Core.DTO;
 using TDT.Core.Helper;
+using TDT.Core.Models;
 using TDT.Core.ServiceImp;
+using TDT.Core.Ultils;
 using TDT.Site.Services;
 
 namespace TDT.Site.Controllers
@@ -78,7 +81,22 @@ namespace TDT.Site.Controllers
         [HttpPost]
         public JsonResult ChangeMusic([FromForm] string type)
         {
-            Player player = PlayerService.Instance.ChangeMusic(type);
+            string username = HttpContext.User.Identity.Name ?? "";
+            string userId = "";
+            string token = "";
+            if(!string.IsNullOrEmpty(username))
+            {
+                string t = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value;
+                ResponseDataDTO<UserDTO> res = APICallHelper.Get<ResponseDataDTO<UserDTO>>(
+                        $"User/{username}", token: t).Result;
+                var u = res.Data.FirstOrDefault();
+                if (u != null)
+                {
+                    userId = u.Id.ToString();
+                    token = t;
+                }
+            }
+            Player player = PlayerService.Instance.ChangeMusic(userId, username, token, type);
             if(player == null)
             {
                 return new JsonResult("");
