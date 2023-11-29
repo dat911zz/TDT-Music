@@ -38,13 +38,8 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        alert("Your page is loaded");
+    $(document).ready(() => {
+        $(window).unbind('beforeunload');
         HoldOn.close();
-    });
-    $('#ReportPrint button').on('click', function(){
-        setTimeout(() => {
-            HoldOn.close();
-        }, 10000);
-    });
+    })
 </script>
