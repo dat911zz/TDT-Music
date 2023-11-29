@@ -17,5 +17,16 @@ namespace TDT.QLDV.Views
         {
             InitializeComponent();
         }
+        public FrmConfigBinding GetBindings()
+        {
+            return new FrmConfigBinding(
+                txtUsername,
+                txtPass,
+                btnSave,
+                btnCancel,
+                cboServer,
+                cboDB
+                );
+        }
     }
 }

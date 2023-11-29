@@ -39,15 +39,18 @@
       <HintPath>..\TDT.Admin.Desktop\Lib\Guna.UI2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -60,11 +63,24 @@
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="Controller\UserAuthController.cs" />
     <Compile Include="DTO\AuthDTO.cs" />
+    <Compile Include="DTO\PermissionDTO.cs" />
     <Compile Include="DTO\ResponseDataDTO.cs" />
+    <Compile Include="DTO\RoleDTO.cs" />
+    <Compile Include="DTO\UserDTO.cs" />
+    <Compile Include="Extensions\ClaimsPrincipalExtension.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Models\APIResponseModel.cs" />
+    <Compile Include="Models\DataBindings.cs" />
     <Compile Include="Models\LoginModel.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\QLDVModel.cs">
+      <DependentUpon>QLDVModel.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QLDVModel.designer.cs" />
+    <Compile Include="Models\QLDVModel1.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QLDVModel.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -99,6 +115,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Models\QLDVModel.dbml.layout">
+      <DependentUpon>QLDVModel.dbml</DependentUpon>
+    </None>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -117,6 +136,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Models\QLDVModel.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>QLDVModel1.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +151,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\backgroup_dep2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using TDT.QLDV.Extensions;
 
-namespace TDT.Core.Ultils
+namespace TDT.QLDV.Ultils
 {
     public static class APIHelper
     {

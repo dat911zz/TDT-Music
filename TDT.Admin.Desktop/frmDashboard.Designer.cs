@@ -31,13 +31,8 @@ namespace TDT.Cadmin.Desktop.Views
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.pnlProfile = new System.Windows.Forms.Panel();
-            this.btnLogout = new Guna.UI.WinForms.GunaButton();
-            this.btnUserName = new Guna.UI.WinForms.GunaButton();
-            this.btnUserProfile = new Guna.UI.WinForms.GunaCircleButton();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.btnMenu_Genre = new Guna.UI.WinForms.GunaButton();
             this.btnMenu_Playlist = new Guna.UI.WinForms.GunaButton();
             this.btnMenu_Song = new Guna.UI.WinForms.GunaButton();
@@ -46,6 +41,12 @@ namespace TDT.Cadmin.Desktop.Views
             this.btnMenu_Role = new Guna.UI.WinForms.GunaButton();
             this.btnMenu_Account = new Guna.UI.WinForms.GunaButton();
             this.btnMenu_Home = new Guna.UI.WinForms.GunaButton();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.btnUserProfile = new Guna.UI.WinForms.GunaCircleButton();
+            this.pnlProfile = new System.Windows.Forms.Panel();
+            this.btnLogout = new Guna.UI.WinForms.GunaButton();
+            this.btnUserName = new Guna.UI.WinForms.GunaButton();
+            this.btnExit = new Guna.UI.WinForms.GunaButton();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -63,6 +64,17 @@ namespace TDT.Cadmin.Desktop.Views
             this.panel1.Size = new System.Drawing.Size(200, 724);
             this.panel1.TabIndex = 0;
             // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
+            this.panel3.BackgroundImage = global::TDT.Admin.Desktop.Properties.Resources.logo_TDT_Devil_red;
+            this.panel3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(0, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(200, 132);
+            this.panel3.TabIndex = 2;
+            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
@@ -79,115 +91,6 @@ namespace TDT.Cadmin.Desktop.Views
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(200, 592);
             this.panel2.TabIndex = 1;
-            // 
-            // panel4
-            // 
-            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
-            this.panel4.Controls.Add(this.btnUserProfile);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(200, 0);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1164, 69);
-            this.panel4.TabIndex = 1;
-            // 
-            // pnlProfile
-            // 
-            this.pnlProfile.BackColor = System.Drawing.Color.Gray;
-            this.pnlProfile.Controls.Add(this.btnLogout);
-            this.pnlProfile.Controls.Add(this.btnUserName);
-            this.pnlProfile.Location = new System.Drawing.Point(1221, 75);
-            this.pnlProfile.Name = "pnlProfile";
-            this.pnlProfile.Size = new System.Drawing.Size(131, 90);
-            this.pnlProfile.TabIndex = 2;
-            // 
-            // btnLogout
-            // 
-            this.btnLogout.AnimationHoverSpeed = 0.07F;
-            this.btnLogout.AnimationSpeed = 0.03F;
-            this.btnLogout.BaseColor = System.Drawing.Color.White;
-            this.btnLogout.BorderColor = System.Drawing.Color.Black;
-            this.btnLogout.DialogResult = System.Windows.Forms.DialogResult.None;
-            this.btnLogout.FocusedColor = System.Drawing.Color.Empty;
-            this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnLogout.ForeColor = System.Drawing.Color.Black;
-            this.btnLogout.Image = null;
-            this.btnLogout.ImageSize = new System.Drawing.Size(20, 20);
-            this.btnLogout.Location = new System.Drawing.Point(0, 43);
-            this.btnLogout.Margin = new System.Windows.Forms.Padding(5);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.OnHoverBaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(151)))), ((int)(((byte)(143)))), ((int)(((byte)(255)))));
-            this.btnLogout.OnHoverBorderColor = System.Drawing.Color.Black;
-            this.btnLogout.OnHoverForeColor = System.Drawing.Color.White;
-            this.btnLogout.OnHoverImage = null;
-            this.btnLogout.OnPressedColor = System.Drawing.Color.Black;
-            this.btnLogout.Padding = new System.Windows.Forms.Padding(10);
-            this.btnLogout.Size = new System.Drawing.Size(127, 42);
-            this.btnLogout.TabIndex = 9;
-            this.btnLogout.Text = "Đăng Xuất";
-            this.btnLogout.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
-            // 
-            // btnUserName
-            // 
-            this.btnUserName.AnimationHoverSpeed = 0.07F;
-            this.btnUserName.AnimationSpeed = 0.03F;
-            this.btnUserName.BaseColor = System.Drawing.Color.White;
-            this.btnUserName.BorderColor = System.Drawing.Color.Black;
-            this.btnUserName.DialogResult = System.Windows.Forms.DialogResult.None;
-            this.btnUserName.Enabled = false;
-            this.btnUserName.FocusedColor = System.Drawing.Color.Empty;
-            this.btnUserName.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnUserName.ForeColor = System.Drawing.Color.Black;
-            this.btnUserName.Image = null;
-            this.btnUserName.ImageSize = new System.Drawing.Size(20, 20);
-            this.btnUserName.Location = new System.Drawing.Point(0, 0);
-            this.btnUserName.Margin = new System.Windows.Forms.Padding(5);
-            this.btnUserName.Name = "btnUserName";
-            this.btnUserName.OnHoverBaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(151)))), ((int)(((byte)(143)))), ((int)(((byte)(255)))));
-            this.btnUserName.OnHoverBorderColor = System.Drawing.Color.Black;
-            this.btnUserName.OnHoverForeColor = System.Drawing.Color.White;
-            this.btnUserName.OnHoverImage = null;
-            this.btnUserName.OnPressedColor = System.Drawing.Color.Black;
-            this.btnUserName.Padding = new System.Windows.Forms.Padding(10);
-            this.btnUserName.Size = new System.Drawing.Size(127, 42);
-            this.btnUserName.TabIndex = 8;
-            this.btnUserName.Text = "Username";
-            this.btnUserName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // btnUserProfile
-            // 
-            this.btnUserProfile.AnimationHoverSpeed = 0.07F;
-            this.btnUserProfile.AnimationSpeed = 0.03F;
-            this.btnUserProfile.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnUserProfile.BorderColor = System.Drawing.Color.Black;
-            this.btnUserProfile.DialogResult = System.Windows.Forms.DialogResult.None;
-            this.btnUserProfile.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnUserProfile.FocusedColor = System.Drawing.Color.Empty;
-            this.btnUserProfile.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnUserProfile.ForeColor = System.Drawing.Color.White;
-            this.btnUserProfile.Image = global::TDT.Admin.Desktop.Properties.Resources.icons8_user_50;
-            this.btnUserProfile.ImageSize = new System.Drawing.Size(52, 52);
-            this.btnUserProfile.Location = new System.Drawing.Point(1089, 0);
-            this.btnUserProfile.Name = "btnUserProfile";
-            this.btnUserProfile.OnHoverBaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnUserProfile.OnHoverBorderColor = System.Drawing.Color.Black;
-            this.btnUserProfile.OnHoverForeColor = System.Drawing.Color.White;
-            this.btnUserProfile.OnHoverImage = null;
-            this.btnUserProfile.OnPressedColor = System.Drawing.Color.Black;
-            this.btnUserProfile.Size = new System.Drawing.Size(75, 69);
-            this.btnUserProfile.TabIndex = 0;
-            this.btnUserProfile.Click += new System.EventHandler(this.btnUserProfile_Click);
-            // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
-            this.panel3.BackgroundImage = global::TDT.Admin.Desktop.Properties.Resources.logo_TDT_Devil_red;
-            this.panel3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 0);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(200, 132);
-            this.panel3.TabIndex = 2;
             // 
             // btnMenu_Genre
             // 
@@ -413,6 +316,132 @@ namespace TDT.Cadmin.Desktop.Views
             this.btnMenu_Home.TextOffsetX = 15;
             this.btnMenu_Home.Click += new System.EventHandler(this.btnMenu_Home_Click);
             // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
+            this.panel4.Controls.Add(this.btnUserProfile);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel4.Location = new System.Drawing.Point(200, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(1164, 69);
+            this.panel4.TabIndex = 1;
+            // 
+            // btnUserProfile
+            // 
+            this.btnUserProfile.AnimationHoverSpeed = 0.07F;
+            this.btnUserProfile.AnimationSpeed = 0.03F;
+            this.btnUserProfile.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnUserProfile.BorderColor = System.Drawing.Color.Black;
+            this.btnUserProfile.DialogResult = System.Windows.Forms.DialogResult.None;
+            this.btnUserProfile.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnUserProfile.FocusedColor = System.Drawing.Color.Empty;
+            this.btnUserProfile.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnUserProfile.ForeColor = System.Drawing.Color.White;
+            this.btnUserProfile.Image = global::TDT.Admin.Desktop.Properties.Resources.icons8_user_50;
+            this.btnUserProfile.ImageSize = new System.Drawing.Size(52, 52);
+            this.btnUserProfile.Location = new System.Drawing.Point(1089, 0);
+            this.btnUserProfile.Name = "btnUserProfile";
+            this.btnUserProfile.OnHoverBaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnUserProfile.OnHoverBorderColor = System.Drawing.Color.Black;
+            this.btnUserProfile.OnHoverForeColor = System.Drawing.Color.White;
+            this.btnUserProfile.OnHoverImage = null;
+            this.btnUserProfile.OnPressedColor = System.Drawing.Color.Black;
+            this.btnUserProfile.Size = new System.Drawing.Size(75, 69);
+            this.btnUserProfile.TabIndex = 0;
+            this.btnUserProfile.Click += new System.EventHandler(this.btnUserProfile_Click);
+            // 
+            // pnlProfile
+            // 
+            this.pnlProfile.BackColor = System.Drawing.Color.Gray;
+            this.pnlProfile.Controls.Add(this.btnExit);
+            this.pnlProfile.Controls.Add(this.btnLogout);
+            this.pnlProfile.Controls.Add(this.btnUserName);
+            this.pnlProfile.Location = new System.Drawing.Point(1221, 75);
+            this.pnlProfile.Name = "pnlProfile";
+            this.pnlProfile.Size = new System.Drawing.Size(131, 133);
+            this.pnlProfile.TabIndex = 2;
+            // 
+            // btnLogout
+            // 
+            this.btnLogout.AnimationHoverSpeed = 0.07F;
+            this.btnLogout.AnimationSpeed = 0.03F;
+            this.btnLogout.BaseColor = System.Drawing.Color.White;
+            this.btnLogout.BorderColor = System.Drawing.Color.Black;
+            this.btnLogout.DialogResult = System.Windows.Forms.DialogResult.None;
+            this.btnLogout.FocusedColor = System.Drawing.Color.Empty;
+            this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnLogout.ForeColor = System.Drawing.Color.Black;
+            this.btnLogout.Image = null;
+            this.btnLogout.ImageSize = new System.Drawing.Size(20, 20);
+            this.btnLogout.Location = new System.Drawing.Point(0, 43);
+            this.btnLogout.Margin = new System.Windows.Forms.Padding(5);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.OnHoverBaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(151)))), ((int)(((byte)(143)))), ((int)(((byte)(255)))));
+            this.btnLogout.OnHoverBorderColor = System.Drawing.Color.Black;
+            this.btnLogout.OnHoverForeColor = System.Drawing.Color.White;
+            this.btnLogout.OnHoverImage = null;
+            this.btnLogout.OnPressedColor = System.Drawing.Color.Black;
+            this.btnLogout.Padding = new System.Windows.Forms.Padding(10);
+            this.btnLogout.Size = new System.Drawing.Size(127, 42);
+            this.btnLogout.TabIndex = 9;
+            this.btnLogout.Text = "Đăng Xuất";
+            this.btnLogout.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+            // 
+            // btnUserName
+            // 
+            this.btnUserName.AnimationHoverSpeed = 0.07F;
+            this.btnUserName.AnimationSpeed = 0.03F;
+            this.btnUserName.BaseColor = System.Drawing.Color.White;
+            this.btnUserName.BorderColor = System.Drawing.Color.Black;
+            this.btnUserName.DialogResult = System.Windows.Forms.DialogResult.None;
+            this.btnUserName.Enabled = false;
+            this.btnUserName.FocusedColor = System.Drawing.Color.Empty;
+            this.btnUserName.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnUserName.ForeColor = System.Drawing.Color.Black;
+            this.btnUserName.Image = null;
+            this.btnUserName.ImageSize = new System.Drawing.Size(20, 20);
+            this.btnUserName.Location = new System.Drawing.Point(0, 0);
+            this.btnUserName.Margin = new System.Windows.Forms.Padding(5);
+            this.btnUserName.Name = "btnUserName";
+            this.btnUserName.OnHoverBaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(151)))), ((int)(((byte)(143)))), ((int)(((byte)(255)))));
+            this.btnUserName.OnHoverBorderColor = System.Drawing.Color.Black;
+            this.btnUserName.OnHoverForeColor = System.Drawing.Color.White;
+            this.btnUserName.OnHoverImage = null;
+            this.btnUserName.OnPressedColor = System.Drawing.Color.Black;
+            this.btnUserName.Padding = new System.Windows.Forms.Padding(10);
+            this.btnUserName.Size = new System.Drawing.Size(127, 42);
+            this.btnUserName.TabIndex = 8;
+            this.btnUserName.Text = "Username";
+            this.btnUserName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // btnExit
+            // 
+            this.btnExit.AnimationHoverSpeed = 0.07F;
+            this.btnExit.AnimationSpeed = 0.03F;
+            this.btnExit.BaseColor = System.Drawing.Color.White;
+            this.btnExit.BorderColor = System.Drawing.Color.Black;
+            this.btnExit.DialogResult = System.Windows.Forms.DialogResult.None;
+            this.btnExit.FocusedColor = System.Drawing.Color.Empty;
+            this.btnExit.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnExit.ForeColor = System.Drawing.Color.Black;
+            this.btnExit.Image = null;
+            this.btnExit.ImageSize = new System.Drawing.Size(20, 20);
+            this.btnExit.Location = new System.Drawing.Point(0, 86);
+            this.btnExit.Margin = new System.Windows.Forms.Padding(5);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.OnHoverBaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(151)))), ((int)(((byte)(143)))), ((int)(((byte)(255)))));
+            this.btnExit.OnHoverBorderColor = System.Drawing.Color.Black;
+            this.btnExit.OnHoverForeColor = System.Drawing.Color.White;
+            this.btnExit.OnHoverImage = null;
+            this.btnExit.OnPressedColor = System.Drawing.Color.Black;
+            this.btnExit.Padding = new System.Windows.Forms.Padding(10);
+            this.btnExit.Size = new System.Drawing.Size(127, 42);
+            this.btnExit.TabIndex = 10;
+            this.btnExit.Text = "Thoát";
+            this.btnExit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
             // frmDashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -423,7 +452,7 @@ namespace TDT.Cadmin.Desktop.Views
             this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.IsMdiContainer = true;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "frmDashboard";
@@ -456,5 +485,6 @@ namespace TDT.Cadmin.Desktop.Views
         private System.Windows.Forms.Panel pnlProfile;
         private Guna.UI.WinForms.GunaButton btnUserName;
         private Guna.UI.WinForms.GunaButton btnLogout;
+        private Guna.UI.WinForms.GunaButton btnExit;
     }
 }

@@ -31,6 +31,7 @@ namespace TDT.Site.Controllers
                 this.MessageContainer().AddFlashMessage("Playlist không tồn tại", TDT.Core.Ultils.MVCMessage.ToastMessageType.Error);
                 return Redirect("/");
             }
+            ViewData["songs"] = playlist.songs;
             ViewData["thumbnail"] = DataHelper.GetThumbnailPlaylist(playlist);
             q = 0;
             d = 0;

@@ -17,6 +17,11 @@ const validatePhone = (phone) => {
         /^[0-9]{10,11}$/
     )
 }
+
+const validateUsername = (user) => {
+    return String(user)
+        .match(/^[a-zA-Z0-9]+$/)
+}
 $().ready(function (){
     $('#btn-login').click(function (e) {
         const email = $(this).parents("#login-form").find('input[name="username"]');
@@ -56,6 +61,8 @@ $().ready(function (){
         if (!username[0].checkValidity()) {
             if (!username.val()) {
                 username[0].setCustomValidity('Vui lòng nhập trường này!');
+            } else if (!validateUsername(username.val())) {
+                username[0].setCustomValidity('Tên đăng nhập không được chứa kí tự đặc biệt và khoảng trắng!');
             }
         }
         if (!phone[0].checkValidity()) {

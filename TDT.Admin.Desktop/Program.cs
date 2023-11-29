@@ -12,9 +12,8 @@ namespace TDT.Admin.Desktop
         //public static IConfiguration? cfg = null;
         public static frmDashboard frmDashboard = null;
         public static QLDV.Controller.UserAuthController controller = null;
-        public static QLDV.Views.FrmConfig frmConfig = null;
-        public static QLDV.Views.FrmLogin frmLogin = null;
-        public static QLDV.Views.frmLoginNew frmLoginNew = null;
+        public static QLDV.Views.frmConfigNew frmConfig = null;
+        public static QLDV.Views.frmLoginNew frmLogin = null;
 
         /// <summary>
         /// The main entry point for the application.
@@ -25,14 +24,13 @@ namespace TDT.Admin.Desktop
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyExceptionHandler);
-            frmConfig = new QLDV.Views.FrmConfig();
-            frmLogin = new QLDV.Views.FrmLogin();
-            frmDashboard = new frmDashboard(frmLogin);
-            frmLoginNew = new QLDV.Views.frmLoginNew();
+            frmConfig = new QLDV.Views.frmConfigNew();
+            frmLogin = new QLDV.Views.frmLoginNew();
             controller = QLDV.Controller.UserAuthController.Instance;
             //controller.SetConnStr(cfg.GetConnectionString("Admin"));
             controller.gotoDashborad = () =>
             {
+                frmDashboard = new frmDashboard(frmLogin);
                 frmDashboard.Show();
                 frmLogin.Hide();
             };
