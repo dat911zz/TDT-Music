@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Cloud.Firestore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace TDT.Site.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        int size_ajax = 50;
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -43,45 +45,54 @@ namespace TDT.Site.Controllers
                 return Redirect("/");
             }
             ViewData["key"] = key;
+            ViewData["SongSize"] = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Count().GetSnapshotAsync().Result.Count;
+            ViewData["PlaylistSize"] = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Playlist).Count().GetSnapshotAsync().Result.Count;
+            ViewData["ArtistSize"] = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Artist).Count().GetSnapshotAsync().Result.Count;
+            ViewData["SizeAjax"] = size_ajax;
             return View();
         }
 
         [HttpPost]
-        public string GetHtmlSong([FromForm] string key)
+        public string GetHtmlSong([FromForm] string key, int s)
         {
             if(string.IsNullOrEmpty(key))
             {
                 return "";
             }
             string alias = HelperUtility.GetAlias(key);
-            string genVN = FirestoreService.Instance.GetIdGenre("Việt Nam");
-            List<SongDTO> list = DataHelper.Instance.Songs.Values.OrderByDescending(x => x.ReleaseDate())
-                .Where(x => x.genreIds != null && x.genreIds.Contains(genVN) && !string.IsNullOrEmpty(x.alias) && x.alias.ToLower().Contains(alias)).Take(30).ToList();
-            return Generator.GeneratePageSong(list);
+            string title = HelperUtility.GetTitleWithRemoveVietnamese(key);
+            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Song).Offset((int)((s - 1) * size_ajax)).Limit(size_ajax);
+            List<SongDTO> list = FirestoreService.Instance.Gets<SongDTO>(query);
+            var res = list.Where(x => (!string.IsNullOrEmpty(x.title) && HelperUtility.GetTitleWithRemoveVietnamese(x.title).Contains(title)) || (!string.IsNullOrEmpty(x.alias) && x.alias.ToLower().Contains(alias))).ToList();
+            return Generator.GeneratePageSong(res);
         }
         [HttpPost]
-        public string GetHtmlPlaylist([FromForm] string key)
+        public string GetHtmlPlaylist([FromForm] string key, int s)
         {
             if (string.IsNullOrEmpty(key))
             {
                 return "";
             }
             string alias = HelperUtility.GetAlias(key);
-            List<PlaylistDTO> list = DataHelper.Instance.Playlists.Values.OrderByDescending(x => x.releaseDate)
-                .Where(x => !string.IsNullOrEmpty(x.aliasTitle) && x.aliasTitle.ToLower().Contains(alias)).Take(30).ToList();
-            return Generator.GeneratePlaylistsElement(list, true);
+            string title = HelperUtility.GetTitleWithRemoveVietnamese(key);
+            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Playlist).Offset((int)((s - 1) * size_ajax)).Limit(size_ajax);
+            List<PlaylistDTO> list = FirestoreService.Instance.Gets<PlaylistDTO>(query);
+            var res = list.Where(x => (!string.IsNullOrEmpty(x.title) && HelperUtility.GetTitleWithRemoveVietnamese(x.title).Contains(title)) || (!string.IsNullOrEmpty(x.aliasTitle) && x.aliasTitle.ToLower().Contains(alias))).ToList();
+            return Generator.GeneratePlaylistsElement(res, true);
         }
         [HttpPost]
-        public string GetHtmlArtist([FromForm] string key)
+        public string GetHtmlArtist([FromForm] string key, int s)
         {
             if (string.IsNullOrEmpty(key))
             {
                 return "";
             }
             string alias = HelperUtility.GetAlias(key);
-            List<ArtistDTO> list = DataHelper.Instance.Artists.Values.OrderByDescending(x => x.totalFollow)
-                .Where(x => !string.IsNullOrEmpty(x.alias) && x.alias.ToLower().Contains(alias)).Take(30).ToList();
-            return Generator.GenerateArtistsElement(list);
+            string name = HelperUtility.GetTitleWithRemoveVietnamese(key);
+            Query query = FirestoreService.Instance.GetCollectionReference(FirestoreService.CL_Artist).Offset((int)((s - 1) * size_ajax)).Limit(size_ajax);
+            List<ArtistDTO> list = FirestoreService.Instance.Gets<ArtistDTO>(query);
+            var res = list.Where(x => (!string.IsNullOrEmpty(x.name) && HelperUtility.GetTitleWithRemoveVietnamese(x.name).Contains(name)) || (!string.IsNullOrEmpty(x.alias) && x.alias.ToLower().Contains(alias))).ToList();
+            return Generator.GenerateArtistsElement(res);
         }
 
         [HttpPost]
