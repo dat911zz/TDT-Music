@@ -37,6 +37,13 @@ namespace TDT.Admin.Desktop.Views
             return users;
 
         }
+
+        private void dtgvUserDTO_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.RowIndex == 0 && e.RowIndex < dtgvUserDTO.Rows.Count - 1) { 
+                
+            }
+        }
     }
 }
  
