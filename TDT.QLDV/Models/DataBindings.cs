@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Forms;
 using TDT.QLDV.DTO;
 using TDT.QLDV.Ultils;
 
@@ -38,6 +39,10 @@ namespace TDT.QLDV.Models
         public IList<UserDTO> Users { get; set; }
         public string CurrentUserToken { get; set; }
         public string CurrentUser { get; set; }
+        public DataGridView dgvPredict { get; set; }
+        public string FileImportData { get; set; }
+        public string FileModelData { get; set; }
+        public ProgressBar progressBar { get; set; }
 
         public string LoginAsAPI()
         {
