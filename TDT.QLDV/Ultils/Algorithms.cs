@@ -18,6 +18,7 @@ using System.IO;
 using Microsoft.SqlServer.Server;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using Accord.IO;
 
 namespace TDT.QLDV.Ultils
 {
@@ -35,15 +36,16 @@ namespace TDT.QLDV.Ultils
             private static int[] outputs;
 
             public static void ProcessingData()
-            {              
+            {
+                codebook = new Codification(data);
                 ReloadDataCodebook();
             }
             public static void ReloadDataCodebook()
             {
-                codebook = new Codification(data);
+                //codebook = new Codification(data);
 
                 // Translate our training data into integer symbols using our codebook:
-                data.PrimaryKey = null;
+                //data.PrimaryKey = null;
                 symbols = codebook.Apply(data);
                 inputs = symbols.ToJagged<int>("msg");
                 outputs = symbols.ToArray<int>("violate");
@@ -80,7 +82,7 @@ namespace TDT.QLDV.Ultils
             {
                 try
                 {
-                    ReloadDataCodebook();
+                    //ReloadDataCodebook();
 
                     // The tree can now be queried for new examples through 
                     // its decide method. For example, we can create a query
@@ -106,6 +108,14 @@ namespace TDT.QLDV.Ultils
                 return new[,]{
                         {"msg", msg.ToString()}
                     };
+            }
+            public static void SaveCodebook(string filePath)
+            {
+                codebook.Save(filePath);
+            }
+            public static void ImportCodebook(string filePath)
+            {
+                codebook = Accord.IO.Serializer.Load<Codification>(filePath);
             }
             public static void SaveModel()
             {

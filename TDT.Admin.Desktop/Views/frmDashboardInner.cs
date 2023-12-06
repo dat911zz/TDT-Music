@@ -39,7 +39,7 @@ namespace TDT.Admin.Desktop.Views
         {
             if (string.IsNullOrEmpty(_bindings.FileImportData))
             {
-                MessageDialog.Show("Vui lòng chọn file dữ liệu để train!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Error);
+                MessageDialog.Show("Vui lòng chọn file dữ liệu!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Error);
                 return;
             }
             Algorithms.DecisionTree_ID3.TrainingData();
@@ -48,9 +48,14 @@ namespace TDT.Admin.Desktop.Views
 
         private void btnDecide_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(_bindings.FileImportData))
+            //if (string.IsNullOrEmpty(_bindings.FileImportData))
+            //{
+            //    MessageDialog.Show("Vui lòng chọn file dữ liệu!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Error);
+            //    return;
+            //}
+            if (Algorithms.DecisionTree_ID3.codebook == null)
             {
-                MessageDialog.Show("Vui lòng chọn file dữ liệu!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Error);
+                MessageDialog.Show("Vui lòng import codebook trước khi train!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Error);
                 return;
             }
             bool flag = false;
@@ -97,7 +102,7 @@ namespace TDT.Admin.Desktop.Views
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 txtFileModel.Text = _bindings.FileModelData = openFileDialog1.FileName;
-                MessageDialog.Show("Đang tải dữ liệu lên, vui lòng đợi...", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
+                //MessageDialog.Show("Đang tải dữ liệu lên, vui lòng đợi...", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
                 Algorithms.DecisionTree_ID3.ImportModel(openFileDialog1.FileName);
                 MessageDialog.Show("Đã nạp file dữ liệu!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
             }
@@ -119,6 +124,7 @@ namespace TDT.Admin.Desktop.Views
                 CheckPathExists = true,
 
                 Filter = "txt files (*.txt)|*.txt |*.csv |*.xlsx",
+
                 FilterIndex = 2,
                 RestoreDirectory = true,
 
@@ -129,7 +135,7 @@ namespace TDT.Admin.Desktop.Views
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 txtFileImport.Text = _bindings.FileImportData = openFileDialog1.FileName;
-                MessageDialog.Show("Đang tải dữ liệu lên, vui lòng đợi...", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
+                //MessageDialog.Show("Đang tải dữ liệu lên, vui lòng đợi...", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
 
                 Algorithms.DecisionTree_ID3.data = Algorithms.DecisionTree_ID3.GetDataTableFromExcel(_bindings.FileImportData);
                 _bindings.progressBar.Value = 0;
@@ -139,6 +145,41 @@ namespace TDT.Admin.Desktop.Views
                 }));
                 MessageDialog.Show("Đã nạp file dữ liệu!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
             }
-        }        
+        }
+
+        private void guna2Button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                InitialDirectory = @"D:\HK\HK7",
+                Title = "Tìm file dữ liệu",
+
+                CheckFileExists = true,
+                CheckPathExists = true,
+
+                Filter = "Model File |*.accord",
+
+                FilterIndex = 2,
+                RestoreDirectory = true,
+
+                ReadOnlyChecked = true,
+                ShowReadOnly = true
+            };
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //txtFileImport.Text = _bindings.FileImportData = openFileDialog1.FileName;
+                //MessageDialog.Show("Đang tải dữ liệu lên, vui lòng đợi...", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
+
+                Algorithms.DecisionTree_ID3.ImportCodebook(openFileDialog1.FileName);
+                MessageDialog.Show("Đã nạp file dữ liệu!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
+            }
+        }
+
+        private void btnSaveCodebook_Click(object sender, EventArgs e)
+        {
+            string filePath = @"D:\HK\HK7\codebook_id3_" + DateTime.Now.ToFileTime() + ".accord";
+            Algorithms.DecisionTree_ID3.SaveCodebook(filePath);
+        }
     }
 }
