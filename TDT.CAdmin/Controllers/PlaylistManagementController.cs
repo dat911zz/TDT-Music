@@ -134,7 +134,7 @@ namespace TDT.CAdmin.Controllers
             PlaylistDTO playlist = new PlaylistDTO();
             if (id != null)
             {
-                playlist = DataHelper.GetPlaylist(id);
+                playlist = APIHelper.Get<PlaylistDTO>(FirestoreService.CL_Playlist, id);
                 return View(playlist);
             }
             return View();
