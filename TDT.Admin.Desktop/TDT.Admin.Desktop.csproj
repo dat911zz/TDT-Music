@@ -151,6 +151,15 @@
     <EmbeddedResource Include="Views\frmSong.resx">
       <DependentUpon>frmSong.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="DataSample\codebook_id3_133464151531309209.accord">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSample\CSPC2.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSample\model_id3_133463583459328469.accord">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

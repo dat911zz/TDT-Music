@@ -32,6 +32,9 @@ namespace TDT.Admin.Desktop.Views
             _bindings.dgvPredict = dgv;
             _bindings.progressBar = progressBar1;
             _bindings.progressBar.Minimum = 0;
+
+            btnSaveCodebook.Enabled = btnSaveModel.Enabled = false;
+            txtFileImport.ReadOnly = txtFileCodebook.ReadOnly = txtFileModel.ReadOnly = true;
             //dgv.DataSource = QLDV.Ultils.Algorithms.DecisionTree_ID3.data;
         }
 
@@ -44,6 +47,7 @@ namespace TDT.Admin.Desktop.Views
             }
             Algorithms.DecisionTree_ID3.TrainingData();
             MessageDialog.Show("Đã train thành công!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
+            btnSaveCodebook.Enabled = btnSaveModel.Enabled = true;
         }
 
         private void btnDecide_Click(object sender, EventArgs e)
@@ -101,16 +105,40 @@ namespace TDT.Admin.Desktop.Views
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                txtFileModel.Text = _bindings.FileModelData = openFileDialog1.FileName;
                 //MessageDialog.Show("Đang tải dữ liệu lên, vui lòng đợi...", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
-                Algorithms.DecisionTree_ID3.ImportModel(openFileDialog1.FileName);
+                try
+                {
+                    Algorithms.DecisionTree_ID3.ImportModel(openFileDialog1.FileName);
+                }
+                catch (Exception)
+                {
+                    MessageDialog.Show("File model không hợp lệ!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Error);
+                    return;
+                }
+                txtFileModel.Text = _bindings.FileModelData = openFileDialog1.FileName;
+
                 MessageDialog.Show("Đã nạp file dữ liệu!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
             }
         }
 
         private void btnSaveModel_Click(object sender, EventArgs e)
         {
-            Algorithms.DecisionTree_ID3.SaveModel();
+            string fileName = "model_id3_" + DateTime.Now.ToFileTime() + ".accord";
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Title = "Save text Files";
+            saveFileDialog1.CheckPathExists = true;
+            saveFileDialog1.DefaultExt = "txt";
+            saveFileDialog1.Filter = "Model File |*.accord";
+            saveFileDialog1.FileName = fileName;
+            saveFileDialog1.FilterIndex = 2;
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //textBox1.Text = saveFileDialog1.FileName;
+                Algorithms.DecisionTree_ID3.SaveModel(saveFileDialog1.FileName);
+                string path = saveFileDialog1.FileName;
+                MessageDialog.Show("Đã lưu model thành công!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
+            }           
         }
 
         private void btnImportData_Click(object sender, EventArgs e)
@@ -171,15 +199,37 @@ namespace TDT.Admin.Desktop.Views
                 //txtFileImport.Text = _bindings.FileImportData = openFileDialog1.FileName;
                 //MessageDialog.Show("Đang tải dữ liệu lên, vui lòng đợi...", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
 
-                Algorithms.DecisionTree_ID3.ImportCodebook(openFileDialog1.FileName);
+                try
+                {
+                    Algorithms.DecisionTree_ID3.ImportCodebook(openFileDialog1.FileName);
+                }
+                catch (Exception)
+                {
+                    MessageDialog.Show("File codebook không hợp lệ!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Error);
+                    return;
+                }
+                txtFileCodebook.Text = openFileDialog1.FileName;
                 MessageDialog.Show("Đã nạp file dữ liệu!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
             }
         }
 
         private void btnSaveCodebook_Click(object sender, EventArgs e)
         {
-            string filePath = @"D:\HK\HK7\codebook_id3_" + DateTime.Now.ToFileTime() + ".accord";
-            Algorithms.DecisionTree_ID3.SaveCodebook(filePath);
+            string fileName = @"codebook_id3_" + DateTime.Now.ToFileTime() + ".accord";
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Title = "Save text Files";
+            saveFileDialog1.CheckPathExists = true;
+            saveFileDialog1.DefaultExt = "txt";
+            saveFileDialog1.Filter = "Codebook File |*.accord";
+            saveFileDialog1.FileName = fileName;
+            saveFileDialog1.FilterIndex = 2;
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //textBox1.Text = saveFileDialog1.FileName;
+                Algorithms.DecisionTree_ID3.SaveCodebook(saveFileDialog1.FileName);
+                MessageDialog.Show("Đã lưu codebook thành công!", "Hệ thống", MessageDialogButtons.OK, MessageDialogIcon.Information);
+            }
+            
         }
     }
 }
