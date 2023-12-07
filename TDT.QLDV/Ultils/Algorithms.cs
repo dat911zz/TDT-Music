@@ -117,9 +117,8 @@ namespace TDT.QLDV.Ultils
             {
                 codebook = Accord.IO.Serializer.Load<Codification>(filePath);
             }
-            public static void SaveModel()
-            {
-                string filePath = @"D:\HK\HK7\model_id3_" + DateTime.Now.ToFileTime() + ".accord";
+            public static void SaveModel(string filePath)
+            {                
                 // Serialize the tree
                 BinaryFormatter formatter = new BinaryFormatter();
                 using (FileStream stream = new FileStream(filePath, FileMode.Create))
