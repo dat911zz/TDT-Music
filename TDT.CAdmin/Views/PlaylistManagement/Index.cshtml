@@ -107,7 +107,16 @@
                             @truncatedArtistsNames
                     </td>
                     <td>
-                            @Html.DisplayFor(modelItem => item.uid)
+                            @{
+                                string truncateduid = "--";
+                                if (item.uid != null)
+                                {
+                                    truncateduid = item.uid.Length > 10
+                                    ? item.uid.Substring(0, 10) + "..."
+                                    : item.uid;
+                                }
+                            }
+                            @truncateduid
                     </td>
                     <td class="btn-control">
                         <a title="Chi tiết" href="@Url.Action("Details", "PlaylistManagement", new { id = item.encodeId})">
