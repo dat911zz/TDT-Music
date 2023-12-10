@@ -30,7 +30,7 @@
                 <dd class="col-sm-10">@Html.DisplayFor(model => model.isIndie)</dd>
 
                 <dt class="col-sm-2">@Html.DisplayNameFor(model => model.releaseDate)</dt>
-                <dd class="col-sm-10">@Html.DisplayFor(model => model.releaseDate)</dd>
+                <dd class="col-sm-10" @Model.ReleaseDate().ToString("yyyy-MM-ddTHH:mm:ss")</dd>
 
                 <dt class="col-sm-2">@Html.DisplayNameFor(model => model.sortDescription)</dt>
                 <dd class="col-sm-10">@Html.DisplayFor(model => model.sortDescription)</dd>
@@ -87,7 +87,7 @@
                 <dd class="col-sm-10">@Html.DisplayFor(model => model.sectionId)</dd>
 
                 <dt class="col-sm-2">@Html.DisplayNameFor(model => model.contentLastUpdate)</dt>
-                <dd class="col-sm-10">@Html.DisplayFor(model => model.contentLastUpdate)</dd>
+                <dd class="col-sm-10">@Model.ContentLastUpdate().ToString("yyyy-MM-ddTHH:mm:ss")</dd>
 
                 <dt class="col-sm-2">@Html.DisplayNameFor(model => model.like)</dt>
                 <dd class="col-sm-10">@Html.DisplayFor(model => model.like)</dd>

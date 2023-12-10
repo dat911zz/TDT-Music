@@ -51,18 +51,7 @@
                 <input asp-for="releaseDate" class="form-control" type="number" readonly />
                 <span asp-validation-for="releaseDate" class="text-danger"></span>
             </div>
-            @* / *@
-            @* /-- *@
-            <div class="form-group">
-                <label asp-for="releasedAt" class="control-label"></label>
-                <input id="releasedAtInput" class="form-control" type="datetime-local" value="@Model.ReleaseAt().ToString("yyyy-MM-ddTHH:mm:ss")" />
-                <span id="releasedAtError" class="text-danger"></span>
-            </div>
-            <div class="form-group" hidden>
-                <input asp-for="releasedAt" class="form-control" type="number" readonly />
-                <span asp-validation-for="releasedAt" class="text-danger"></span>
-            </div>
-            @* / *@
+            @* / *@           
             <div class="form-group">
                 <label asp-for="sortDescription" class="control-label"></label>
                 <input asp-for="sortDescription" class="form-control" />
