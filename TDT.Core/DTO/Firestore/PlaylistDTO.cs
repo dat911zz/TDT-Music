@@ -81,21 +81,36 @@ namespace TDT.Core.DTO.Firestore
         [FirestoreProperty] public string uid { get => _uid; set => _uid = value; }
         [Display(Name = "Ảnh ThumbanilM")]
         [FirestoreProperty] public string thumbnailM { get => _thumbnailM; set => _thumbnailM = value; }
+        [Display(Name = "Là Trộn bài")]
         [FirestoreProperty] public bool isShuffle { get => _isShuffle; set => _isShuffle = value; }
+        [Display(Name = "Là Riêng Tư")]
         [FirestoreProperty] public bool isPrivate { get => _isPrivate; set => _isPrivate = value; }
         [FirestoreProperty] public string userName { get => _userName; set => _userName = value; }
+        [Display(Name = "Là Album")]
         [FirestoreProperty] public bool isAlbum { get => _isAlbum; set => _isAlbum = value; }
+        [Display(Name = "Là Dạng Test")]
         [FirestoreProperty] public string textType { get => _textType; set => _textType = value; }
+        [Display(Name = "Là Bảng Riêng Lê")]
         [FirestoreProperty] public bool isSingle { get => _isSingle; set => _isSingle = value; }
+        [Display(Name = "Nhà Sản Xuất")]
         [FirestoreProperty] public string distributor { get => _distributor; set => _distributor = value; }
+        [Display(Name = "Sự miêu tả")]
         [FirestoreProperty] public string description { get => _description; set => _description = value; }
+        [Display(Name = "Bí Danh Tiêu Đề")]
         [FirestoreProperty] public string aliasTitle { get => _aliasTitle; set => _aliasTitle = value; }
+        [Display(Name = "SelectionID")]
         [FirestoreProperty] public string sectionId { get => _sectionId; set => _sectionId = value; }
+        [Display(Name = "Nội dung cập nhật cuối")]
         [FirestoreProperty] public long contentLastUpdate { get => _contentLastUpdate; set => _contentLastUpdate = value; }
+        [Display(Name = "List Song")]
         [FirestoreProperty] public List<string> songs { get => _songs; set => _songs = value; }
+        [Display(Name = "BannerAdaptiveId")]
         [FirestoreProperty] public object bannerAdaptiveId { get => _bannerAdaptiveId; set => _bannerAdaptiveId = value; }
+        [Display(Name = "Số like")]
         [FirestoreProperty] public int like { get => _like; set => _like = value; }
+        [Display(Name = "Số lượt nghe")]
         [FirestoreProperty] public int listen { get => _listen; set => _listen = value; }
+        [Display(Name = "Like")]
         [FirestoreProperty] public bool liked { get => _liked; set => _liked = value; }
 
         public bool compare(PlaylistDTO other)
@@ -155,6 +170,9 @@ namespace TDT.Core.DTO.Firestore
                 return "";
             return Generator.GeneratePlaylistsElement(playlists.Take(5).ToList());
         }
-
+        public DateTime ReleaseAt()
+        {
+            return (new DateTime(1970, 1, 1, 0, 0, 0)).AddSeconds(this.releasedAt);
+        }
     }
 }

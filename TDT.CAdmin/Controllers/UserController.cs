@@ -1,4 +1,4 @@
-﻿using Firebase.Auth;
+﻿    using Firebase.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
