@@ -95,7 +95,7 @@ namespace TDT.CAdmin.Controllers
                 } while (IsIdInUse(id));
 
                 genre.id = id;
-                await FirestoreService.Instance.SetAsync(FirestoreService.CL_GenreTest, genre.id, genre);
+                await FirestoreService.Instance.SetAsync(FirestoreService.CL_Genre, genre.id, genre);
 
                 if (file != null)
                 {
@@ -118,6 +118,7 @@ namespace TDT.CAdmin.Controllers
                 }
                 else
                 {
+                     GetDataGenre();
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -125,6 +126,7 @@ namespace TDT.CAdmin.Controllers
             {
                 return View();
             }
+
         }
 
         [HttpGet]
