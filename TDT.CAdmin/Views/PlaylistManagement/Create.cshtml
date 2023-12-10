@@ -73,17 +73,17 @@
                         <input asp-for="artistsNames" class="form-control" oninput="validateEmtiy(this, 'artistsNames-message');" onblur="validateEmtiy(this, 'artistsNames-message');" />
                         <span asp-validation-for="artistsNames" class="text-danger" id="artistsNames-message"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label asp-for="playItemMode" class="control-label"></label>
-                        <input asp-for="playItemMode" class="form-control" />
+                        <input asp-for="playItemMode" class="form-control" value="0" />
                         <span asp-validation-for="playItemMode" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label asp-for="subType" class="control-label"></label>
-                        <input asp-for="subType" class="form-control" />
+                        <input asp-for="subType" class="form-control" value="0" />
                         <span asp-validation-for="subType" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label asp-for="uid" class="control-label"></label>
                         <input asp-for="uid" class="form-control" />
                         <span asp-validation-for="uid" class="text-danger"></span>
@@ -98,9 +98,9 @@
                         <input asp-for="userName" class="form-control" />
                         <span asp-validation-for="userName" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label asp-for="textType" class="control-label"></label>
-                        <input asp-for="textType" class="form-control" />
+                        <input asp-for="textType" class="form-control" value="0" />
                         <span asp-validation-for="textType" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -133,7 +133,7 @@
                     </div>
                     <div class="form-group" hidden>
                         <label asp-for="like" class="control-label"></label>
-                        <input asp-for="like" class="form-control" readonly />
+                        <input asp-for="like" class="form-control" readonly value="0" />
                         <span asp-validation-for="like" class="text-danger"></span>
                     </div>
                     <div class="form-group" hidden>
