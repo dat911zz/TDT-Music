@@ -72,6 +72,7 @@ namespace TDT.QLDV.Views
             // 
             // guna2PictureBox2
             // 
+            this.guna2PictureBox2.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.guna2PictureBox2.Image = global::TDT.QLDV.Properties.Resources.logo_TDT_Devil_red;
             this.guna2PictureBox2.ImageRotate = 0F;
             this.guna2PictureBox2.Location = new System.Drawing.Point(111, 75);
@@ -80,7 +81,6 @@ namespace TDT.QLDV.Views
             this.guna2PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.guna2PictureBox2.TabIndex = 0;
             this.guna2PictureBox2.TabStop = false;
-            this.guna2PictureBox2.UseWaitCursor = true;
             // 
             // txtPass
             // 
@@ -162,7 +162,7 @@ namespace TDT.QLDV.Views
             this.txtUsername.Animated = true;
             this.txtUsername.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.txtUsername.BorderRadius = 6;
-            this.txtUsername.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            this.txtUsername.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtUsername.DefaultText = "";
             this.txtUsername.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
             this.txtUsername.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
@@ -180,7 +180,6 @@ namespace TDT.QLDV.Views
             this.txtUsername.SelectedText = "";
             this.txtUsername.Size = new System.Drawing.Size(279, 36);
             this.txtUsername.TabIndex = 1;
-            this.txtUsername.UseWaitCursor = true;
             // 
             // guna2Elipse1
             // 

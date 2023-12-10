@@ -63,6 +63,16 @@ namespace TDT.Admin.Desktop.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _405939729_746391557518149_6177620978712546601_n {
+            get {
+                object obj = ResourceManager.GetObject("405939729_746391557518149_6177620978712546601_n", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_genre_24 {
             get {
                 object obj = ResourceManager.GetObject("icons8-genre-24", resourceCulture);
