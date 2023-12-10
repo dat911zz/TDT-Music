@@ -22,8 +22,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="title" class="control-label"></label>
-                <input asp-for="title" class="form-control" />
-                <span asp-validation-for="title" class="text-danger"></span>
+                <input asp-for="title" class="form-control" oninput="validateEmtiy(this, 'title-message');" onblur="validateEmtiy(this, 'title-message');" />
+                <span asp-validation-for="title" class="text-danger" id="title-message"></span>
             </div>
 
             <div class="form-group form-check">
@@ -64,8 +64,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="artistsNames" class="control-label"></label>
-                <input asp-for="artistsNames" class="form-control" />
-                <span asp-validation-for="artistsNames" class="text-danger"></span>
+                <input asp-for="artistsNames" class="form-control" oninput="validateEmtiy(this, 'artistsNames-message');" onblur="validateEmtiy(this, 'artistsNames-message');" />
+                <span asp-validation-for="artistsNames" class="text-danger" id="artistsNames-message"></span>
             </div>
             <div class="form-group">
                 <label asp-for="playItemMode" class="control-label"></label>
@@ -183,7 +183,7 @@
         </div>
     </div>
     <div class="form-group">
-        <input type="submit" value="Lưu" class="btn btn-primary" />
+        <input type="submit" value="Lưu" id="submit-create" class="btn btn-primary" />
     </div>
 </form>
 
@@ -267,4 +267,21 @@
 
 
     });
+    function validateEmtiy(input, messageSpanId) {
+        const errorMessage = validateNotEmpty(input) || validateNotMoiKhoangTrang(input);
+        const messageSpan = document.getElementById(messageSpanId);
+        if (errorMessage) {
+            messageSpan.textContent = errorMessage;
+            return false; // Có lỗi
+        } else {
+            messageSpan.textContent = '';
+            return true; // Không có lỗi
+        }
+    }
+    document.getElementById("create-form").onsubmit = function () {
+        const isTitleValid = validateEmtiy(document.getElementById("title"), 'title-message');
+        const artistsNames = validateEmtiy(document.getElementById("artistsNames"), 'artistsNames-message');
+
+        return isTitleValid && && artistsNames;
+    };
 </script>
