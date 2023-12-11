@@ -56,10 +56,6 @@ namespace TDT.Admin.Desktop.Views
             this.txtPasswordHash = new Guna.UI2.WinForms.Guna2TextBox();
             this.txtPhoneNumber = new Guna.UI2.WinForms.Guna2TextBox();
             this.dtgvUserDTO = new Guna.UI2.WinForms.Guna2DataGridView();
-            this.tEST = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.txtAccessFailedCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtgvUserDTO)).BeginInit();
             this.SuspendLayout();
@@ -435,6 +431,8 @@ namespace TDT.Admin.Desktop.Views
             // 
             // dtgvUserDTO
             // 
+            this.dtgvUserDTO.AllowUserToAddRows = false;
+            this.dtgvUserDTO.AllowUserToDeleteRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
             this.dtgvUserDTO.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -447,11 +445,6 @@ namespace TDT.Admin.Desktop.Views
             this.dtgvUserDTO.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dtgvUserDTO.ColumnHeadersHeight = 18;
             this.dtgvUserDTO.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            this.dtgvUserDTO.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.tEST,
-            this.Column1,
-            this.Column2,
-            this.Column3});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
@@ -462,12 +455,13 @@ namespace TDT.Admin.Desktop.Views
             this.dtgvUserDTO.DefaultCellStyle = dataGridViewCellStyle3;
             this.dtgvUserDTO.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dtgvUserDTO.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.dtgvUserDTO.Location = new System.Drawing.Point(0, 265);
+            this.dtgvUserDTO.Location = new System.Drawing.Point(0, 300);
             this.dtgvUserDTO.Name = "dtgvUserDTO";
+            this.dtgvUserDTO.ReadOnly = true;
             this.dtgvUserDTO.RowHeadersVisible = false;
             this.dtgvUserDTO.RowHeadersWidth = 51;
             this.dtgvUserDTO.RowTemplate.Height = 24;
-            this.dtgvUserDTO.Size = new System.Drawing.Size(1065, 379);
+            this.dtgvUserDTO.Size = new System.Drawing.Size(1065, 344);
             this.dtgvUserDTO.TabIndex = 60;
             this.dtgvUserDTO.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.dtgvUserDTO.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -482,7 +476,7 @@ namespace TDT.Admin.Desktop.Views
             this.dtgvUserDTO.ThemeStyle.HeaderStyle.ForeColor = System.Drawing.Color.White;
             this.dtgvUserDTO.ThemeStyle.HeaderStyle.HeaightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
             this.dtgvUserDTO.ThemeStyle.HeaderStyle.Height = 18;
-            this.dtgvUserDTO.ThemeStyle.ReadOnly = false;
+            this.dtgvUserDTO.ThemeStyle.ReadOnly = true;
             this.dtgvUserDTO.ThemeStyle.RowsStyle.BackColor = System.Drawing.Color.White;
             this.dtgvUserDTO.ThemeStyle.RowsStyle.BorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dtgvUserDTO.ThemeStyle.RowsStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
@@ -490,30 +484,7 @@ namespace TDT.Admin.Desktop.Views
             this.dtgvUserDTO.ThemeStyle.RowsStyle.Height = 24;
             this.dtgvUserDTO.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
             this.dtgvUserDTO.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            // 
-            // tEST
-            // 
-            this.tEST.HeaderText = "Column1";
-            this.tEST.MinimumWidth = 6;
-            this.tEST.Name = "tEST";
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Column1";
-            this.Column1.MinimumWidth = 6;
-            this.Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Column2";
-            this.Column2.MinimumWidth = 6;
-            this.Column2.Name = "Column2";
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Column3";
-            this.Column3.MinimumWidth = 6;
-            this.Column3.Name = "Column3";
+            this.dtgvUserDTO.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgvUserDTO_CellClick);
             // 
             // frmAccount
             // 
@@ -548,7 +519,6 @@ namespace TDT.Admin.Desktop.Views
             this.Name = "frmAccount";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmAccount";
-            this.Load += new System.EventHandler(this.frmAccount_Load);
             ((System.ComponentModel.ISupportInitialize)(this.txtAccessFailedCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtgvUserDTO)).EndInit();
             this.ResumeLayout(false);
@@ -582,9 +552,5 @@ namespace TDT.Admin.Desktop.Views
         private Guna.UI2.WinForms.Guna2TextBox txtPasswordHash;
         private Guna.UI2.WinForms.Guna2TextBox txtPhoneNumber;
         private Guna.UI2.WinForms.Guna2DataGridView dtgvUserDTO;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tEST;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
     }
 }

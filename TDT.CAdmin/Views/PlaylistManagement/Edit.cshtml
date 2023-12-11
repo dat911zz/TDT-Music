@@ -1,10 +1,13 @@
 ﻿@model TDT.Core.DTO.Firestore.PlaylistDTO
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Playlist";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@{
+    DateTime maxDate = DateTime.Now.AddDays(1);
+    string maxDateString = maxDate.ToString("yyyy-MM-dd");
+}
 <h2 class="title-admin">Chỉnh sửa thông tin playlist</h2>
 <hr />
 
@@ -19,8 +22,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="title" class="control-label"></label>
-                <input asp-for="title" class="form-control" />
-                <span asp-validation-for="title" class="text-danger"></span>
+                <input asp-for="title" class="form-control" oninput="validateEmtiy(this, 'title-message');" onblur="validateEmtiy(this, 'title-message');" />
+                <span asp-validation-for="title" class="text-danger" id="title-message"></span>
             </div>
 
             <div class="form-group form-check">
@@ -38,20 +41,21 @@
                     <input class="form-check-input" asp-for="isIndie" /> @Html.DisplayNameFor(model => model.isIndie)
                 </label>
             </div>
+            @* / *@
             <div class="form-group">
                 <label asp-for="releaseDate" class="control-label"></label>
-                <input asp-for="releaseDate" class="form-control" />
+                <input id="releaseDateInput" class="form-control" type="datetime-local" value="@Model.ReleaseDate().ToString("yyyy-MM-ddTHH:mm:ss")" />
+                <span id="releaseDateError" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <input asp-for="releaseDate" class="form-control" type="number" readonly />
                 <span asp-validation-for="releaseDate" class="text-danger"></span>
             </div>
+            @* / *@           
             <div class="form-group">
                 <label asp-for="sortDescription" class="control-label"></label>
                 <input asp-for="sortDescription" class="form-control" />
                 <span asp-validation-for="sortDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="releasedAt" class="control-label"></label>
-                <input asp-for="releasedAt" class="form-control" />
-                <span asp-validation-for="releasedAt" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
@@ -60,8 +64,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="artistsNames" class="control-label"></label>
-                <input asp-for="artistsNames" class="form-control" />
-                <span asp-validation-for="artistsNames" class="text-danger"></span>
+                <input asp-for="artistsNames" class="form-control" oninput="validateEmtiy(this, 'artistsNames-message');" onblur="validateEmtiy(this, 'artistsNames-message');" />
+                <span asp-validation-for="artistsNames" class="text-danger" id="artistsNames-message"></span>
             </div>
             <div class="form-group">
                 <label asp-for="playItemMode" class="control-label"></label>
@@ -131,7 +135,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="contentLastUpdate" class="control-label"></label>
-                <input asp-for="contentLastUpdate" class="form-control" />
+                <input class="form-control" type="datetime-local" readonly value="@Model.ContentLastUpdate().ToString("yyyy-MM-ddTHH:mm:ss")" />
+                <span asp-validation-for="contentLastUpdate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <input asp-for="contentLastUpdate" id="contentLastUpdateInput" class="form-control" type="number" readonly />
                 <span asp-validation-for="contentLastUpdate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -175,12 +183,9 @@
         </div>
     </div>
     <div class="form-group">
-        <input type="submit" value="Lưu" class="btn btn-primary" />
+        <input type="submit" value="Lưu" id="submit-create" class="btn btn-primary" />
     </div>
 </form>
-
-
-
 
 <div>
     <a asp-action="Index">Back to List</a>
@@ -212,5 +217,71 @@
             }
         });
     }
+    document.addEventListener("DOMContentLoaded", function () {
+        var releaseDateInput = document.getElementById('releaseDateInput');
+        var releaseDateHiddenInput = document.querySelector('input[name="releaseDate"]');
+        var releaseDateError = document.getElementById("releaseDateError");
+        //---
+        releaseDateInput.addEventListener("change", function () {
+            var selectedDate = new Date(releaseDateInput.value);
+            var longValue = GetTicks(selectedDate);
+            releaseDateHiddenInput.value = longValue;
+        });
+        // Kiểm tra date
+        releaseDateInput.addEventListener("change", function () {
+            var selectedDate = new Date(releaseDateInput.value);
 
+            // Kiểm tra xem ngày đã chọn hợp lệ hay không
+            if (selectedDate < new Date("1975-01-01T00:00") || selectedDate > new Date("@maxDateString")) {
+                releaseDateError.textContent = "Ngày không hợp lệ, Date trong khoảng 01-01-1975 < Date < Ngày hiện tại ";
+            } else {
+                releaseDateError.textContent = ""; // Xóa thông báo lỗi nếu ngày hợp lệ.
+            }
+        });
+
+        var releasedAtInput = document.getElementById('releasedAtInput');
+        var releasedAtHiddenInput = document.querySelector('input[name="releasedAt"]');
+        var releasedAtError = document.getElementById("releasedAtError");
+        releasedAtInput.addEventListener("change", function () {
+            var selectedDate = new Date(releasedAtInput.value);
+            var longValue = GetTicks(selectedDate);
+            releasedAtHiddenInput.value = selectedDate;
+        });
+        //--
+        // Kiểm tra date
+        releasedAtInput.addEventListener("change", function () {
+            var selectedDate = new Date(releasedAtInput.value);
+
+            // Kiểm tra xem ngày đã chọn hợp lệ hay không
+            if (selectedDate < new Date("1975-01-01T00:00") || selectedDate > new Date("@maxDateString")) {
+                releasedAtError.textContent = "Ngày không hợp lệ, Date trong khoảng 01-01-1975 < Date < Ngày hiện tại ";
+            } else {
+                releasedAtError.textContent = ""; // Xóa thông báo lỗi nếu ngày hợp lệ.
+            }
+        });
+        //-------
+        var contentLastUpdateInput = document.getElementById("contentLastUpdateInput");
+        var datetime = new Date();
+        var longValue = GetTicks(datetime);
+        contentLastUpdateInput.value = longValue;
+
+
+    });
+    function validateEmtiy(input, messageSpanId) {
+        const errorMessage = validateNotEmpty(input) || validateNotMoiKhoangTrang(input);
+        const messageSpan = document.getElementById(messageSpanId);
+        if (errorMessage) {
+            messageSpan.textContent = errorMessage;
+            return false; // Có lỗi
+        } else {
+            messageSpan.textContent = '';
+            return true; // Không có lỗi
+        }
+    }
+    document.getElementById("create-form").onsubmit = function () {
+        const isTitleValid = validateEmtiy(document.getElementById("title"), 'title-message');
+        const artistsNames = validateEmtiy(document.getElementById("artistsNames"), 'artistsNames-message');
+
+        return isTitleValid && && artistsNames;
+    };
 </script>

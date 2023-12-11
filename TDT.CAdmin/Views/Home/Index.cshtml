@@ -1,7 +1,466 @@
 ﻿@{
     ViewData["Title"] = "Hệ thống quản trị lùa gà 2.0";
 }
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> Dashboard </title>
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-icons.css">
+    <link rel="stylesheet" href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-svg.css">
+    @* <link rel="stylesheet" href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/soft-ui-dashboard.min.css?v=1.0.2"> *@
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    @*  <link rel="stylesheet" href="./assets/css/theme.css"> *@
+    @* <link rel="stylesheet" href="./assets/css/loopple/loopple.css"> *@
+</head>
+@{
+    var topLikedSongsStats = ViewBag.TopLikedSongsStats as List<Tuple<string, int>>;
+}
+<style>
+    h2 {
+        text-align: center;
+    }
 
-<div class="text-center">
-    <h1 class="display-4">Hệ thống quản trị Lùa Gà 2.0</h1>
-</div>
+    table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        width: 80%;
+        max-width: 600px;
+        background-color: #f8f8f8;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    th {
+        background-color: #333;
+        color: #fff;
+        font-weight: bold;
+        padding: 10px;
+        text-align: left;
+    }
+
+    td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #e0e0e0;
+    }
+</style>
+<body class="g-sidenav-show">
+    <div class="main-content" id="panel">
+        <div class="container-fluid pt-3">
+            <div class="row removable">
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card mb-4">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-capitalize font-weight-bold tahoma">Tổng số lượng bài hát:</p>
+                                        <h5 class="font-weight-bolder mb-0 tahoma">
+                                            @ViewBag.TotalSongs
+                                            <span class="text-success text-sm font-weight-bolder tahoma">bài</span>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card mb-4">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-capitalize font-weight-bold tahoma">Tổng số lượng thể loại:</p>
+                                        <h5 class="font-weight-bolder mb-0 tahoma">
+                                            @ViewBag.TotalGenres
+                                            <span class="text-success text-sm font-weight-bolder tahoma"> thể loại </span>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card mb-4">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-capitalize font-weight-bold tahoma">Tổng số lượng nghệ sĩ:</p>
+                                        <h5 class="font-weight-bolder mb-0 tahoma">
+                                            @ViewBag.TotalArtists
+                                            <span class="text-success text-sm font-weight-bolder tahoma"> người </span>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card mb-4">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-capitalize font-weight-bold tahoma">Tổng số lượng bình luận:</p>
+                                        <h5 class="font-weight-bolder mb-0 tahoma">
+                                            @ViewBag.TotalComments
+                                            <span class="text-success text-sm font-weight-bolder tahoma"> lượt </span>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row removable">
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card bg-gradient-dark mb-4">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-capitalize text-white font-weight-bold tahoma">Tổng số lượng lượt thích:</p>
+                                        <h5 class="font-weight-bolder text-white mb-0 tahoma">
+                                            @ViewBag.TotalLikes
+                                            <span class="text-success text-sm font-weight-bolder tahoma"> lượt </span>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card bg-gradient-dark mb-4">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <style>
+                                        .tahoma {
+                                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                                            font-weight: normal;
+                                        }
+                                    </style>
+
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-capitalize text-white font-weight-bold tahoma">Tổng số lượng nghe</p>
+                                        <h5 class="font-weight-bolder text-white mb-0 tahoma">
+                                            @ViewBag.TotalListens
+                                            <span class="text-success text-sm font-weight-bolder tahoma">lượt</span>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card bg-gradient-dark mb-4">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-capitalize text-white font-weight-bold tahoma">Số lượng nhà phân phối</p>
+                                        <h5 class="font-weight-bolder text-white mb-0 tahoma">
+                                            @ViewBag.TotalDistributors
+                                            <span class="text-success text-sm font-weight-bolder tahoma"> nhà </span>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card bg-gradient-dark mb-4">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-capitalize text-white font-weight-bold tahoma">Tổng số lượng playlist</p>
+                                        <h5 class="font-weight-bolder text-white mb-0 tahoma">
+                                            @ViewBag.TotalPlaylist
+                                            <span class="text-success text-sm font-weight-bolder tahoma"> playlist </span>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4 removable">
+                <div class="col-lg-5">
+                    <div class="card mb-4">
+                        <div class="card-body p-3">
+                            <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3">
+                                <canvas id="chart-bars" class="chart-canvas chartjs-render-monitor" height="170" style="display: block; height: 170px; width: 495px; box-sizing: border-box;" width="495"></canvas>
+
+                            </div>
+                            <h6 class="ms-2 mt-4 mb-0"> Top bài hát được nghe nhiều nhất </h6>
+                            <p class="text-sm ms-2"> (<span class="font-weight-bolder tahoma">+23%</span>) trong tuần qua </p>
+                            <div class="container border-radius-lg">
+                                <div class="row">
+                                    <div class="col-3 py-3 ps-0">
+                                        <div class="d-flex mb-2">
+                                            <p class="text-xs mt-1 mb-0 font-weight-bold tahoma">Lượt thích</p>
+                                        </div>
+                                        <h4 class="font-weight-bolder tahoma">36K</h4>
+                                    </div>
+                                    <div class="col-3 py-3 ps-0">
+                                        <div class="d-flex mb-2">
+                                            <p class="text-xs mt-1 mb-0 font-weight-bold tahoma">Số lượng</p>
+                                        </div>
+                                        <h4 class="font-weight-bolder tahoma">2m</h4>
+                                    </div>
+                                    <div class="col-3 py-3 ps-0">
+                                        <div class="d-flex mb-2">
+                                            <p class="text-xs mt-1 mb-0 font-weight-bold tahoma">Thể loại</p>
+                                        </div>
+                                        <h4 class="font-weight-bolder tahoma">5k</h4>
+                                    </div>
+                                    <div class="col-3 py-3 ps-0">
+                                        <div class="d-flex mb-2">
+                                            <p class="text-xs mt-1 mb-0 font-weight-bold tahoma">Lượt nghe</p>
+                                        </div>
+                                        <h4 class="font-weight-bolder tahoma">43000</h4>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="card mb-4">
+                        <div class="card-header pb-0 tahoma">
+                            <h6>Thống kê lượt thích</h6>
+                            <p class="text-sm">
+                                <i class="fa fa-arrow-up text-success" aria-hidden="true"></i>
+                                <span class="font-weight-bold">4% more</span> in 2021
+                            </p>
+                        </div>
+                        <div class="card-body p-3">
+                            <canvas id="chart-line" class="chart-canvas chartjs-render-monitor" height="300" width="721" style="display: block; height: 300px; width: 721px; box-sizing: border-box;"></canvas>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        h2, th, td {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+            font-weight: normal;
+        }
+    </style>
+
+    <h2>Top 5 bài hát được yêu thích nhất</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Top</th>
+                <th>Tên bài hát</th>
+                <th>Số lượt thích</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (index, stats) in topLikedSongsStats.Take(5).Select((value, index) => (index + 1, value)))
+            {
+                <tr>
+                    <td>Top @index</td>
+                    <td>@stats.Item1</td>
+                    <td>@stats.Item2</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/core/popper.min.js"></script>
+    <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/core/bootstrap.min.js"></script>
+    <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/plugins/chartjs.min.js"></script>
+    <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/plugins/Chart.extension.js"></script>
+    <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/soft-ui-dashboard.min.js?v=1.0.2"></script>
+    <script>
+        if (document.querySelector("#chart-bars")) {
+            var ctx = document.getElementById("chart-bars").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    datasets: [{
+                        label: "Sales",
+                        tension: 0.4,
+                        borderWidth: 0,
+                        borderRadius: 4,
+                        borderSkipped: false,
+                        backgroundColor: "#fff",
+                        data: [450, 200, 100, 220, 500, 100, 400, 230, 500],
+                        maxBarThickness: 6
+                    },],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                drawBorder: false,
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false,
+                            },
+                            ticks: {
+                                suggestedMin: 0,
+                                suggestedMax: 500,
+                                beginAtZero: true,
+                                padding: 15,
+                                font: {
+                                    size: 14,
+                                    family: "Open Sans",
+                                    style: 'normal',
+                                    lineHeight: 2
+                                },
+                                color: "#fff"
+                            },
+                        },
+                        x: {
+                            grid: {
+                                drawBorder: false,
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false
+                            },
+                            ticks: {
+                                display: false
+                            },
+                        },
+                    },
+                },
+            });
+
+        };
+        if (document.querySelector("#chart-line")) {
+            var ctx2 = document.getElementById("chart-line").getContext("2d");
+
+            var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
+            gradientStroke1.addColorStop(1, "rgba(203,12,159,0.2)");
+            gradientStroke1.addColorStop(0.2, "rgba(72,72,176,0.0)");
+            gradientStroke1.addColorStop(0, "rgba(203,12,159,0)");
+            var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
+            gradientStroke2.addColorStop(1, "rgba(20,23,39,0.2)");
+            gradientStroke2.addColorStop(0.2, "rgba(72,72,176,0.0)");
+            gradientStroke2.addColorStop(0, "rgba(20,23,39,0)");
+            new Chart(ctx2, {
+                type: "line",
+                data: {
+                    labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    datasets: [{
+                        label: "Mobile apps",
+                        tension: 0.4,
+                        borderWidth: 0,
+                        pointRadius: 0,
+                        borderColor: "#cb0c9f",
+                        borderWidth: 3,
+                        backgroundColor: gradientStroke1,
+                        fill: true,
+                        data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+                        maxBarThickness: 6
+
+                    },
+                    {
+                        label: "Websites",
+                        tension: 0.4,
+                        borderWidth: 0,
+                        pointRadius: 0,
+                        borderColor: "#3A416F",
+                        borderWidth: 3,
+                        backgroundColor: gradientStroke2,
+                        fill: true,
+                        data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
+                        maxBarThickness: 6
+                    },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                drawBorder: false,
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: false,
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                display: true,
+                                padding: 10,
+                                color: '#b2b9bf',
+                                font: {
+                                    size: 11,
+                                    family: "Open Sans",
+                                    style: 'normal',
+                                    lineHeight: 2
+                                },
+                            }
+                        },
+                        x: {
+                            grid: {
+                                drawBorder: false,
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false,
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                display: true,
+                                color: '#b2b9bf',
+                                padding: 20,
+                                font: {
+                                    size: 11,
+                                    family: "Open Sans",
+                                    style: 'normal',
+                                    lineHeight: 2
+                                },
+                            }
+                        },
+                    },
+                },
+            });
+        };
+    </script>
+    @* <script src="./assets/js/loopple/loopple.js"></script> *@
+</body>
