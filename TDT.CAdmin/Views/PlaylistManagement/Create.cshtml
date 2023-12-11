@@ -23,8 +23,8 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="title" class="control-label"></label>
-                        <input asp-for="title" class="form-control" />
-                        <span asp-validation-for="title" class="text-danger"></span>
+                        <input asp-for="title" class="form-control" oninput="validateEmtiy(this, 'title-message');" onblur="validateEmtiy(this, 'title-message');" />
+                        <span asp-validation-for="title" class="text-danger" id="title-message"></span>
                     </div>
                     @*             <div class="form-group">
                     <label asp-for="thumbnail" class="control-label"></label>
@@ -70,20 +70,20 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="artistsNames" class="control-label"></label>
-                        <input asp-for="artistsNames" class="form-control" />
-                        <span asp-validation-for="artistsNames" class="text-danger"></span>
+                        <input asp-for="artistsNames" class="form-control" oninput="validateEmtiy(this, 'artistsNames-message');" onblur="validateEmtiy(this, 'artistsNames-message');" />
+                        <span asp-validation-for="artistsNames" class="text-danger" id="artistsNames-message"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label asp-for="playItemMode" class="control-label"></label>
-                        <input asp-for="playItemMode" class="form-control" />
+                        <input asp-for="playItemMode" class="form-control" value="0" />
                         <span asp-validation-for="playItemMode" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label asp-for="subType" class="control-label"></label>
-                        <input asp-for="subType" class="form-control" />
+                        <input asp-for="subType" class="form-control" value="0" />
                         <span asp-validation-for="subType" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label asp-for="uid" class="control-label"></label>
                         <input asp-for="uid" class="form-control" />
                         <span asp-validation-for="uid" class="text-danger"></span>
@@ -98,9 +98,9 @@
                         <input asp-for="userName" class="form-control" />
                         <span asp-validation-for="userName" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label asp-for="textType" class="control-label"></label>
-                        <input asp-for="textType" class="form-control" />
+                        <input asp-for="textType" class="form-control" value="0" />
                         <span asp-validation-for="textType" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -126,14 +126,14 @@
                         <input asp-for="sectionId" class="form-control" />
                         <span asp-validation-for="sectionId" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label asp-for="contentLastUpdate" class="control-label"></label>
                         <input id="contentLastUpdateInput" readonly asp-for="contentLastUpdate" class="form-control" />
                         <span asp-validation-for="contentLastUpdate" class="text-danger"></span>
                     </div>
                     <div class="form-group" hidden>
                         <label asp-for="like" class="control-label"></label>
-                        <input asp-for="like" class="form-control" readonly />
+                        <input asp-for="like" class="form-control" readonly value="0" />
                         <span asp-validation-for="like" class="text-danger"></span>
                     </div>
                     <div class="form-group" hidden>
@@ -206,7 +206,7 @@
                         <span asp-validation-for="thumbnailM" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <input type="submit" id="submit-create" value="Create" class="btn btn-primary" />
                     </div>
                 </div>
           </div>
@@ -285,4 +285,25 @@
             $("#selectedImage").hide(); // Ẩn hình ảnh khi không có tệp nào được chọn
         }
     });
+
+    ///-----------------------------------
+    function validateEmtiy(input, messageSpanId) {
+        const errorMessage = validateNotEmpty(input) || validateNotMoiKhoangTrang(input);
+        const messageSpan = document.getElementById(messageSpanId);
+        if (errorMessage) {
+            messageSpan.textContent = errorMessage;
+            return false; // Có lỗi
+        } else {
+            messageSpan.textContent = '';
+            return true; // Không có lỗi
+        }
+    }
+
+    document.getElementById("create-form").onsubmit = function () {
+        const isTitleValid = validateEmtiy(document.getElementById("title"), 'title-message');
+        const artistsNames = validateEmtiy(document.getElementById("artistsNames"), 'artistsNames-message');
+
+        return isTitleValid && && artistsNames ;
+    };
+
 </script>

@@ -29,13 +29,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="title" class="control-label"></label>
-                <input asp-for="title" class="form-control" />
-                <span asp-validation-for="title" class="text-danger"></span>
+                <input asp-for="title" class="form-control" oninput="validateEmtiy(this, 'title-message');" onblur="validateEmtiy(this, 'title-message');" />
+                <span asp-validation-for="title" class="text-danger" id="title-message"></span>
             </div>
             <div class="form-group">
                 <label asp-for="alias" class="control-label"></label>
-                <input asp-for="alias" class="form-control" />
-                <span asp-validation-for="alias" class="text-danger"></span>
+                <input asp-for="alias" class="form-control" oninput="validateEmtiy(this, 'alias-message');" onblur="validateEmtiy(this, 'alias-message');" />
+                <span asp-validation-for="alias" class="text-danger" id="alias-message"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
@@ -49,8 +49,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="artistsNames" class="control-label"></label>
-                <input asp-for="artistsNames" class="form-control" />
-                <span asp-validation-for="artistsNames" class="text-danger"></span>
+                <input asp-for="artistsNames" class="form-control" oninput="validateEmtiy(this, 'artistsNames-message');" onblur="validateEmtiy(this, 'artistsNames-message');" />
+                <span asp-validation-for="artistsNames" class="text-danger" id="artistsNames-message"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
@@ -74,8 +74,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="duration" class="control-label"></label>
-                <input asp-for="duration" class="form-control" />
-                <span asp-validation-for="duration" class="text-danger"></span>
+                <input asp-for="duration" class="form-control" oninput="validateSoDuong(this, 'duration-message');" onblur="validateSoDuong(this, 'duration-message');" />
+                <span asp-validation-for="duration" class="text-danger" id="duration-message"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
@@ -164,9 +164,7 @@
                 <input asp-for="comment" class="form-control" readonly />
                 <span asp-validation-for="comment" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+          
 
         </div>
         <div class="col-sm-4 text-center">
@@ -180,6 +178,9 @@
             <div class=" form-group custom-file mt-2">
                 <input type="file" class="custom-file-input" name="uploadFile" accept="image/*">
                 <label class="custom-file-label" for="uploadFile" >Chọn tệp</label>
+            </div>
+            <div class="form-group">
+                <input type="submit" id="submit-create" value="Save" class="btn btn-primary" />
             </div>
         </div>
     </form>
@@ -256,5 +257,36 @@
             }
         });
     });
+    ///-----------------------------------
+    function validateEmtiy(input, messageSpanId) {
+        const errorMessage = validateNotEmpty(input) || validateNotMoiKhoangTrang(input);
+        const messageSpan = document.getElementById(messageSpanId);
+        if (errorMessage) {
+            messageSpan.textContent = errorMessage;
+            return false; // Có lỗi
+        } else {
+            messageSpan.textContent = '';
+            return true; // Không có lỗi
+        }
+    }
+    function validateSoDuong(input, messageSpanId) {
+        const errorMessage = validatePositiveNumber(input);
+        const messageSpan = document.getElementById(messageSpanId);
+        if (errorMessage) {
+            messageSpan.textContent = errorMessage;
+            return false; // Có lỗi
+        } else {
+            messageSpan.textContent = '';
+            return true; // Không có lỗi
+        }
+    }
+    document.getElementById("create-form").onsubmit = function () {
+        const isTitleValid = validateEmtiy(document.getElementById("title"), 'title-message');
+        const alias = validateEmtiy(document.getElementById("alias"), 'alias-message');
+        const artistsNames = validateEmtiy(document.getElementById("artistsNames"), 'artistsNames-message');
+        const duration = validateSoDuong(document.getElementById("duration"), 'duration-message');
+
+        return isTitleValid && alias && artistsNames && duration;
+    };
 
 </script>

@@ -53,7 +53,6 @@ namespace TDT.Core.DTO.Firestore
         //[Required(ErrorMessage = "Nhập bí danh!")]
 
         [Display(Name = "Bí danh")]
-
         [FirestoreProperty] public string alias { get => _alias; set => _alias = value; }
 
         [Display(Name = "Làm chính thức")]
@@ -122,7 +121,7 @@ namespace TDT.Core.DTO.Firestore
         [Display(Name = "Có lời bài hát")]
         [FirestoreProperty] public bool hasLyric { get => _hasLyric; set => _hasLyric = value; }
 
-        [Required(ErrorMessage = "Vui lòng Nhập ID Người Dùng!")]
+        //[Required(ErrorMessage = "Vui lòng Nhập ID Người Dùng!")]
         [Display(Name = "ID người dùng")]
         [FirestoreProperty] public string userid { get => _userid; set => _userid = value; }
        
