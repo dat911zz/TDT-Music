@@ -40,10 +40,13 @@ namespace TDT.CAdmin.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            GetDataSongs();
-            GetDataGenre();
-            GetDataArtist();
-            GetDataPlaylist();
+            new Thread(() => { 
+                GetDataSongs();
+                GetDataGenre();
+                GetDataArtist();
+                GetDataPlaylist();      
+                LoadDataIfNeeded();
+            }).Start();
             #region Load all data if newer
             DataBindings.Instance.LoadDataFromAPI(HttpContext, _logger);
             #endregion
@@ -79,6 +82,34 @@ namespace TDT.CAdmin.Controllers
         //    //ResponseDataDTO<User> res = APICallHelper.Get<ResponseDataDTO<User>>($"user/{pUser}", token: auth.Token).Result;
         //    return View();
         //}
+        public IActionResult Index()
+        {
+            new Thread(() =>
+            {
+                SecurityHelper.ImportControllerAction(Assembly.GetExecutingAssembly().GetAllControllerAction());
+            }).Start();
+            _logger.LogInformation("Start session");
+            int totalSongs = DataHelper.Instance.Songs.Count;
+            int totalGenres = DataHelper.Instance.Genres.Count;
+            int totalArtists = DataHelper.Instance.Artists.Count;
+            int totalPlaylist = DataHelper.Instance.Playlists.Count;
+            int totalComments = DataHelper.Instance.Songs.Values.Sum(song => song.comment);
+            int totalLikes = DataHelper.Instance.Songs.Values.Sum(song => song.like);
+            int totalListens = DataHelper.Instance.Songs.Values.Sum(song => song.listen);
+            int totalDistributors = DataHelper.Instance.Songs.Select(song => song.Value.distributor).Distinct().Count();
+            ViewBag.TotalSongs = totalSongs;
+            ViewBag.TotalGenres = totalGenres;
+            ViewBag.TotalArtists = totalArtists;
+            ViewBag.TotalPlaylist = totalPlaylist;
+            ViewBag.TotalComments = totalComments;
+            ViewBag.TotalLikes = totalLikes;
+            ViewBag.TotalListens = totalListens;
+            ViewBag.TotalDistributors = totalDistributors;
+            var topLikedSongsStats = GetTopLikedSongsStats();
+            ViewBag.TopLikedSongsStats = topLikedSongsStats;
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
@@ -209,29 +240,6 @@ namespace TDT.CAdmin.Controllers
                 likeStatsList.Add(likeStats);
             }
             return likeStatsList;
-        }
-        public IActionResult Index()
-        {
-            LoadDataIfNeeded();
-            int totalSongs = DataHelper.Instance.Songs.Count;
-            int totalGenres = DataHelper.Instance.Genres.Count;
-            int totalArtists = DataHelper.Instance.Artists.Count;
-            int totalPlaylist = DataHelper.Instance.Playlists.Count;
-            int totalComments = DataHelper.Instance.Songs.Values.Sum(song => song.comment);
-            int totalLikes = DataHelper.Instance.Songs.Values.Sum(song => song.like);
-            int totalListens = DataHelper.Instance.Songs.Values.Sum(song => song.listen);
-            int totalDistributors = DataHelper.Instance.Songs.Select(song => song.Value.distributor).Distinct().Count();
-            ViewBag.TotalSongs = totalSongs;
-            ViewBag.TotalGenres = totalGenres;
-            ViewBag.TotalArtists = totalArtists;
-            ViewBag.TotalPlaylist = totalPlaylist;
-            ViewBag.TotalComments = totalComments;
-            ViewBag.TotalLikes = totalLikes;
-            ViewBag.TotalListens = totalListens;
-            ViewBag.TotalDistributors = totalDistributors;
-            var topLikedSongsStats = GetTopLikedSongsStats();
-            ViewBag.TopLikedSongsStats = topLikedSongsStats;
-            return View();
         }
     }
 }

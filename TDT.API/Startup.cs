@@ -102,7 +102,7 @@ namespace TDT.API
             });
             services.AddTransient<IEmailSender, MailingService>();
             services.AddTransient<ISecurityHelper, SecurityHelper>();
-            services.AddTransient(provider => new QLDVModelDataContext(Configuration.GetConnectionString("AdminConnection")));
+            services.AddTransient(provider => new QLDVModelDataContext(Configuration.GetConnectionString("Local")));
             //services.AddSingleton(new QLDVModelDataContext(Configuration.GetConnectionString("AdminConnection")));
         }
 
