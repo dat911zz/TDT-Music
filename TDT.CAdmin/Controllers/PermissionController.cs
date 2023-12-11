@@ -127,6 +127,9 @@ namespace TDT.CAdmin.Controllers
                         ).Result;
                     if (res.Code == Core.Enums.APIStatusCode.ActionSucceeded)
                     {
+                        var perm = DataBindings.Instance.Permissions.FirstOrDefault(p => p.Id == permission.Id);
+                        perm.Name = permission.Name;
+                        perm.Description = permission.Description;
                         //FlashMessage để truyền message từ đây sang action hoặc controller khác
                         this.MessageContainer().AddFlashMessage("Sửa quyền thành công!", ToastMessageType.Success);
                     }

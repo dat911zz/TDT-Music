@@ -20,6 +20,7 @@ namespace TDT.Core.Ultils
     {
         private static readonly string VERSION = "1";
         public static readonly string DOMAIN = @$"https://localhost:44300/api/v{VERSION}/";
+        //public static readonly string DOMAIN = @$"https://tdt-api.somee.com/api/v{VERSION}/";
 
         public static async Task<T> Get<T>(string url = "", string requestBody = null, string token = null) where T : APIResponseModel
         {

@@ -161,7 +161,6 @@ namespace TDT.CAdmin.Controllers
                 return View();
             }
             await DataBindings.Instance.LoadUsers(HttpContext.User.GetToken());
-            var users = DataBindings.Instance.Users;
             if (res.Code != APIStatusCode.ActionSucceeded)
             {
                 //FlashMessage để truyền message từ đây sang action hoặc controller khác
@@ -193,6 +192,8 @@ namespace TDT.CAdmin.Controllers
                     token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
                 }
             }
+            UserDTO user = DataBindings.Instance.Users.FirstOrDefault(u => u.UserName.Equals(model.UserName));
+            user.Email = model.Email;        
             this.MessageContainer().AddFlashMessage($"Đã cập nhật thông tin cho tài khoản {model.UserName}!", ToastMessageType.Success);
             return RedirectToAction("Index");
         }

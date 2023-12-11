@@ -159,7 +159,7 @@ namespace TDT.CAdmin.Controllers
                         ).Result;
                     if (res.Code != APIStatusCode.ActionSucceeded)
                     {
-                        this.MessageContainer().AddMessage(res.Msg, ToastMessageType.Error);
+                        this.MessageContainer().AddMessage(res.Msg, ToastMessageType.Error);                       
                         return View();
                     }
                     foreach (var perm in DataBindings.Instance.Permissions)
@@ -185,6 +185,9 @@ namespace TDT.CAdmin.Controllers
                             token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value).Result;
                         }
                     }
+                    var item = DataBindings.Instance.Roles.FirstOrDefault(r => r.Id == id);
+                    item.Name = role.Name;
+                    item.Description = role.Description;
                     this.MessageContainer().AddFlashMessage($"Đã cập nhật thông tin cho vai trò {role.Name}!", ToastMessageType.Success);
                     return RedirectToAction("Index");
                 }
