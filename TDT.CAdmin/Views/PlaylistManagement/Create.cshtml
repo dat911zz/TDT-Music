@@ -299,11 +299,11 @@
         }
     }
 
-    document.getElementById("create-form").onsubmit = function () {
+    document.getElementById("submit-create").onsubmit = function () {
         const isTitleValid = validateEmtiy(document.getElementById("title"), 'title-message');
         const artistsNames = validateEmtiy(document.getElementById("artistsNames"), 'artistsNames-message');
 
-        return isTitleValid && && artistsNames ;
+        return isTitleValid && artistsNames ;
     };
 
 </script>

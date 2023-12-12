@@ -253,7 +253,7 @@
             return true; // Không có lỗi
         }
     }
-    document.getElementById("create-form").onsubmit = function () {
+    document.getElementById("submit-create").onsubmit = function () {
         const isTitleValid = validateEmtiy(document.getElementById("title"), 'title-message');
         const alias = validateEmtiy(document.getElementById("alias"), 'alias-message');
         const artistsNames = validateEmtiy(document.getElementById("artistsNames"), 'artistsNames-message');

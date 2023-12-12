@@ -79,6 +79,7 @@ namespace TDT.Core.DTO.Firestore
         [FirestoreProperty] public int subType { get => _subType; set => _subType = value; }
         [Display(Name = "uid")]
         [FirestoreProperty] public string uid { get => _uid; set => _uid = value; }
+        [Required(ErrorMessage = "Vui lòng chọn file ảnh!")]
         [Display(Name = "Ảnh ThumbanilM")]
         [FirestoreProperty] public string thumbnailM { get => _thumbnailM; set => _thumbnailM = value; }
         [Display(Name = "Là Trộn bài")]
