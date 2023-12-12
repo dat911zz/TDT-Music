@@ -79,6 +79,18 @@ namespace TDT.CAdmin.Controllers
             }
             return View();
         }
+        private void AddOrUpdateGenreToDataHelper(Genre genre)
+        {
+            if (!DataHelper.Instance.Genres.ContainsKey(genre.id))
+            {
+                DataHelper.Instance.Genres.Add(genre.id, genre);
+            }
+            else
+            {
+                DataHelper.Instance.Genres[genre.id] = genre;
+            }
+        }
+       
         [HttpPost]
         public async Task<IActionResult> Create(Genre genre, IFormFile file)
         {
@@ -99,7 +111,7 @@ namespace TDT.CAdmin.Controllers
 
                 if (file != null)
                 {
-                    var apiResponse = APICallHelper.Post<Genre>(
+                    Genre apiResponse = APICallHelper.Post<Genre>(
                         "Genre/InsertOrUpdate",
                         token: HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("token")).Value,
                         requestBody: JsonConvert.SerializeObject(genre)
@@ -108,6 +120,7 @@ namespace TDT.CAdmin.Controllers
                     if (apiResponse.Code == Core.Enums.APIStatusCode.ActionSucceeded)
                     {
                         this.MessageContainer().AddFlashMessage("Tạo Chủ Đề thành công!", ToastMessageType.Success);
+                        AddOrUpdateGenreToDataHelper(genre);
                         return RedirectToAction(nameof(Index));
                     }
                     else
@@ -118,7 +131,7 @@ namespace TDT.CAdmin.Controllers
                 }
                 else
                 {
-                     GetDataGenre();
+                    AddOrUpdateGenreToDataHelper(genre);
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -165,7 +178,7 @@ namespace TDT.CAdmin.Controllers
                     if (apiResponse.Code == Core.Enums.APIStatusCode.ActionSucceeded)
                     {
                         this.MessageContainer().AddFlashMessage("Cập nhật Chủ Đề thành công!", ToastMessageType.Success);
-
+                        AddOrUpdateGenreToDataHelper(genre);
                         return RedirectToAction(nameof(Index)); 
                     }
                     else
@@ -176,11 +189,13 @@ namespace TDT.CAdmin.Controllers
                 }
                 else
                 {
+                    AddOrUpdateGenreToDataHelper(genre);
                     return RedirectToAction(nameof(Index)); 
                 }
             }
             catch
             {
+                AddOrUpdateGenreToDataHelper(genre);
                 return View();
             }
         }
@@ -189,7 +204,13 @@ namespace TDT.CAdmin.Controllers
             return _genres.Any(genre => genre.id == id);
         }
 
-      
+        private void Remove(string genreId)
+        {
+            if (DataHelper.Instance.Genres.ContainsKey(genreId))
+            {
+                DataHelper.Instance.Genres.Remove(genreId);
+            }
+        }
         [HttpPost]
         public IActionResult Delete(string id)
         {
@@ -197,6 +218,7 @@ namespace TDT.CAdmin.Controllers
             if (genre.Code == Core.Enums.APIStatusCode.ActionSucceeded)
             {
                 this.MessageContainer().AddFlashMessage("Xóa chủ đề thành công!", ToastMessageType.Success);
+                Remove(id);
             }
             else
             {
